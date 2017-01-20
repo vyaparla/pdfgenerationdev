@@ -4,7 +4,7 @@ Rails.application.routes.draw do
 
   # You can have the root of your site routed with "root"
  
-  match '/api/save_pdf' => 'api#save_pdf', via:[:get]
+  match '/api/save_pdf' => 'api#save_pdf', via:[:post]
   root 'pdfjobs#index'
 
   # Example of regular route:
