@@ -2,7 +2,7 @@
 lock "3.7.1"
 
 set :application, "pdfgenerationdev"
-set :repo_url, 'git@github.com:devdatta/contactbook.git' # Edit this to match your repository
+set :repo_url, 'git@github.com:vyaparla/pdfgenerationdev.git' # Edit this to match your repository
 set :branch, :master
 set :deploy_to, '/home/pdfgenerationdev'
 set :pty, true
