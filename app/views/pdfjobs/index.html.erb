@@ -11,6 +11,7 @@
     </tr>
     <% @pdfjobs.each do |job| %>
       <tr>
+        <td><%= job.sys_id %></td>
         <td><%= job.u_job_id %></td>
         <td><%= job.u_pdf_number %></td>
         <td><%= image_tag("data:image/jpeg;base64,#{job.u_openimage_base64code}", size: "100") %></td>
