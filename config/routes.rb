@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   match '/api/save_pdf' => 'api#save_pdf', via:[:post]
   #match '/api/update_pdf' => 'api#update_pdf', via:[:put]
   
-  resources :pdfjobs
+  resources :pdfjobs, only: [:index, :destroy]
 
   root 'pdfjobs#index'
 
