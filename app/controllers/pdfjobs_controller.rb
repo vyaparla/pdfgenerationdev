@@ -6,7 +6,7 @@ class PdfjobsController < ApplicationController
 
   def destroy
   	@pdfjob = Pdfjob.find(params[:id])
-    @pdfjob.destroy
+    @pdfjob.delete
     redirect_to root_path
   end
 
