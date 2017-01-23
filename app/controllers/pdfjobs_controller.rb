@@ -2,6 +2,7 @@ class PdfjobsController < ApplicationController
 
   def index
   	@pdfjobs = Pdfjob.all
+  	@pdfjobs_count = Pdfjob.count
   end
 
   def destroy
