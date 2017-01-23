@@ -4,6 +4,9 @@ class PdfjobsController < ApplicationController
   	@pdfjobs = Pdfjob.all
   end
 
+  def show
+  end
+
   def destroy
   	@pdfjob = Pdfjob.find(params[:id])
     @pdfjob.delete
