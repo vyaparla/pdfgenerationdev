@@ -30,6 +30,17 @@ class ApiController < ApplicationController
   #   end
   # end
 
+
+  def pdf_generation
+  	@pdfjob = Pdfjob.find_by(sys_id: params[:sys_id])
+    unless @pdfjob.blank?
+      ReportGeneration.new(@pdfjob).generate_full_report
+  	  render json: {message: "Success"}
+    else
+      render json: {message: "Unsuccess"}
+    end
+  end
+
   private
 
   def pdfjob_params

@@ -5,10 +5,18 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
  
   match '/api/save_pdf' => 'api#save_pdf', via:[:post]
+  match 'api/pdf_generation' => 'api#pdf_generation', via:[:get]
   #match '/api/update_pdf' => 'api#update_pdf', via:[:put]
-  
-  resources :pdfjobs, only: [:index, :destroy]
 
+  resources :pdfjobs do
+    collection do
+      get 'generate_full_pdf_report'
+      get 'download_full_pdf_report'
+    end
+  end
+
+
+  
   root 'pdfjobs#index'
 
   # Example of regular route:

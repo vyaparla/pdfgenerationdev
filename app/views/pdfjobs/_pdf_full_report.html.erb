@@ -1,0 +1,5 @@
+<% if owner.has_full_report? %>
+  <td><%= link_to "Download Report", send(full_download_path, owner) %>|</td>
+<% else %>
+  <td><%= link_to "Generate Report", send(full_generate_path, owner) %></td>
+<% end %>
