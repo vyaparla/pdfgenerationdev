@@ -41,6 +41,16 @@ class ApiController < ApplicationController
     end
   end
 
+  def download_full_pdf_report
+    @pdfjob = Pdfjob.find_by(sys_id: params[:sys_id])
+    if @pdfjob.has_full_report?
+      @outputfile = @pdfjob.u_job_id + "_" + Time.now.strftime("%m-%d-%Y-%r").gsub(/\s+/, "_") + "_" + "full_report"
+      send_file @pdfjob.full_report_path, :type => 'application/pdf', :disposition =>  "attachment; filename=\"#{@outputfile}.pdf\""
+    else
+      render json: {message: "The PDF yet not generated to download the full pdf report"}
+    end
+  end
+
   private
 
   def pdfjob_params

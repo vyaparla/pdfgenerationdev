@@ -28,4 +28,12 @@ class PdfjobsController < ApplicationController
     send_file @pdfjob.full_report_path, :type => 'application/pdf', :disposition =>  "attachment; filename=\"#{@outputfile}.pdf\""
   end
 
+  def clear_index_list_view
+    @pdfjobs = Pdfjob.all
+    @pdfjobs.each do |job|
+      job.delete
+    end
+    redirect_to root_path
+  end
+
 end
