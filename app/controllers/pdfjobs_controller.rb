@@ -13,7 +13,7 @@ class PdfjobsController < ApplicationController
 
   def generate_full_pdf_report
     @pdfjob = Pdfjob.find(params[:id])
-    unless @pdfjob.valid?
+    unless @pdfjob.blank?
       ReportGeneration.new(@pdfjob).generate_full_report
       flash[:success] = "Successfull to generate the Full PDF Report"
     else
