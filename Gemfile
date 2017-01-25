@@ -59,3 +59,7 @@ end
 gem 'prawn', '~> 2.0.1'
 gem 'prawn-fast-png', '~> 0.2.3'
 gem 'prawn-table', '~> 0.2.1'
+
+group :production do
+  gem 'daemons'
+end

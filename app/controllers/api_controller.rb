@@ -1,22 +1,43 @@
 class ApiController < ApplicationController
   
+  # def save_pdf
+  #   if params[:status] == "insert"
+  #     @pdfjob = Pdfjob.new(pdfjob_params)
+  # 	  @pdfjob.save
+  # 	  render json: {message: "Save Success"}
+  #   else
+  #     if params[:status] == "update"
+  #     	@pdfjob = Pdfjob.find_by(sys_id: params[:sys_id])
+  #     	if @pdfjob.update(pdfjob_params)
+  #     	  render json: {message: "Update Success"}
+  #     	else
+  #     	  render json: {message: "Unable to Update the record!"}
+  #       end
+  #     else
+  #     	@pdfjob = Pdfjob.find_by(sys_id: params[:sys_id])
+  #     	@pdfjob.destroy
+  #     	render json: {message: "Delete Success"}
+  #     end
+  #   end
+  # end
+
   def save_pdf
     if params[:status] == "insert"
-      @pdfjob = Pdfjob.new(pdfjob_params)
-  	  @pdfjob.save
-  	  render json: {message: "Save Success"}
+      @pdfjob = Lsspdfasset.new(lssassets_job)
+      @pdfjob.save
+      render json: {message: "Save Success"}
     else
       if params[:status] == "update"
-      	@pdfjob = Pdfjob.find_by(sys_id: params[:sys_id])
-      	if @pdfjob.update(pdfjob_params)
-      	  render json: {message: "Update Success"}
-      	else
-      	  render json: {message: "Unable to Update the record!"}
+        @pdfjob = Lsspdfasset.find_by(sys_id: params[:sys_id])
+        if @pdfjob.update(lssassets_job)
+          render json: {message: "Update Success"}
+        else
+          render json: {message: "Unable to Update the record!"}
         end
       else
-      	@pdfjob = Pdfjob.find_by(sys_id: params[:sys_id])
-      	@pdfjob.destroy
-      	render json: {message: "Delete Success"}
+        @pdfjob = Lsspdfasset.find_by(sys_id: params[:sys_id])
+        @pdfjob.destroy
+        render json: {message: "Delete Success"}
       end
     end
   end
@@ -53,7 +74,13 @@ class ApiController < ApplicationController
 
   private
 
-  def pdfjob_params
-    params.require(:api).permit(:sys_id, :u_job_id, :u_pdf_number, :u_openimage_base64code, :u_close_image_base64code)
+  # def pdfjob_params
+  #   params.require(:api).permit(:sys_id, :u_job_id, :u_pdf_number, :u_openimage_base64code, :u_close_image_base64code)
+  # end
+
+  def lssassets_job
+    params.require(:api).permit(:sys_id, :u_job_id, :u_asset_id, :u_service_id, :u_location_desc, :u_status, :u_type, :u_floor, 
+      :u_tag, :u_image1, :u_image2, :u_image3, :u_image4, :u_image5)
   end
+
 end
