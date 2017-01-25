@@ -1,12 +1,12 @@
 class PdfjobsController < ApplicationController
 
   def index
-  	@pdfjobs = Pdfjob.all
-  	@pdfjobs_count = Pdfjob.count
+  	@pdfjobs = Lsspdfasset.all
+  	@pdfjobs_count = Lsspdfasset.count
   end
 
   def destroy
-  	@pdfjob = Pdfjob.find(params[:id])
+  	@pdfjob = Lsspdfasset.find(params[:id])
     @pdfjob.delete
     redirect_to root_path
   end
