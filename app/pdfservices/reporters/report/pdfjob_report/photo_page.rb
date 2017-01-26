@@ -10,6 +10,10 @@ module PdfjobReport
       super
       pdf.indent(250) do
       	draw_location_description(pdf)
+        draw_damper_tag(pdf)
+        draw_damper_type(pdf)
+        draw_floor(pdf)
+        draw_status(pdf)
       end
       draw_open_image(pdf)
       draw_closed_image(pdf)
@@ -27,7 +31,7 @@ module PdfjobReport
           at: [15 - pdf.bounds.absolute_left, 771 - top_margin_pic_offset]
         )
 
-        pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_openimage_base64code}")[:data])), at: [30 - pdf.bounds.absolute_left, 756 - top_margin_pic_offset], fit: [225, 225]
+        pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_image1}")[:data])), at: [30 - pdf.bounds.absolute_left, 756 - top_margin_pic_offset], fit: [225, 225]
       end
 
       def draw_closed_image(pdf)
@@ -39,7 +43,7 @@ module PdfjobReport
           at: [15 - pdf.bounds.absolute_left, 496 - top_margin_pic_offset]
         )
 
-        pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_close_image_base64code}")[:data])), at:  [30 - pdf.bounds.absolute_left, 481 - top_margin_pic_offset], fit: [225, 225]
+        pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_image2}")[:data])), at:  [30 - pdf.bounds.absolute_left, 481 - top_margin_pic_offset], fit: [225, 225]
       end
 
       def draw_actuator_image(pdf)
@@ -51,16 +55,38 @@ module PdfjobReport
           at: [275 - pdf.bounds.absolute_left, 496 - top_margin_pic_offset]
         )
 
-        pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_openimage_base64code}")[:data])), at:  [290 - pdf.bounds.absolute_left, 481 - top_margin_pic_offset], fit: [225, 225]
+        pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_image3}")[:data])), at:  [290 - pdf.bounds.absolute_left, 481 - top_margin_pic_offset], fit: [225, 225]
       end
   
       def draw_location_description(pdf)
         pdf.font_size 20
-        pdf.text(@record.sys_id, inline_format: true)
+        pdf.text(@record.u_location_desc, inline_format: true)
         pdf.move_down 25
-        pdf.text(@record.u_pdf_number, inline_format: true)
+        #pdf.text(@record.u_pdf_number, inline_format: true)
       end
 
+      def draw_damper_tag(pdf)
+        pdf.font_size 15
+        #pdf.text("<b>#{label(:tag_number)}:</b> #{@record.u_tag}", inline_format: true)
+        pdf.text("<b>Tag:</b> #{@record.u_tag}", inline_format: true)
+      end
+
+      def draw_damper_type(pdf)
+        #pdf.text("<b>#{label(:damper_type)}:</b> #{@record.u_type}", inline_format: true)
+        pdf.text("<b>Type:</b> #{@record.u_type}", inline_format: true)
+      end
+
+      def draw_floor(pdf)
+        #pdf.text("<b>#{label(:floor)}:</b> #{@record.u_floor}", inline_format: true)
+        pdf.text("<b>Floor:</b> #{@record.u_floor}", inline_format: true)
+      end
+
+      def draw_status(pdf)
+        pdf.fill_color 'c1171d'
+        #pdf.text("<b>#{label(:status)}:</b> #{@record.u_status}",inline_format: true)
+        pdf.text("<b>status:</b> #{@record.u_status}", inline_format: true)
+        pdf.fill_color '202020'
+      end
 
       def splitBase64(uri)
         if uri.match(%r{^data:(.*?);(.*?),(.*)$})

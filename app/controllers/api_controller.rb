@@ -53,7 +53,7 @@ class ApiController < ApplicationController
 
 
   def pdf_generation
-  	@pdfjob = Pdfjob.find_by(sys_id: params[:sys_id])
+  	@pdfjob = Lsspdfasset.find_by(sys_id: params[:sys_id])
     unless @pdfjob.blank?
       ReportGeneration.new(@pdfjob).generate_full_report
   	  render json: {message: "Success"}
@@ -63,7 +63,7 @@ class ApiController < ApplicationController
   end
 
   def download_full_pdf_report
-    @pdfjob = Pdfjob.find_by(sys_id: params[:sys_id])
+    @pdfjob = Lsspdfasset.find_by(sys_id: params[:sys_id])
     if @pdfjob.has_full_report?
       @outputfile = @pdfjob.u_job_id + "_" + Time.now.strftime("%m-%d-%Y-%r").gsub(/\s+/, "_") + "_" + "full_report"
       send_file @pdfjob.full_report_path, :type => 'application/pdf', :disposition =>  "attachment; filename=\"#{@outputfile}.pdf\""
