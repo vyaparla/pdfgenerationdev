@@ -29,7 +29,7 @@ class PdfjobsController < ApplicationController
   end
 
   def clear_index_list_view
-    @pdfjobs = Pdfjob.all
+    @pdfjobs = Lsspdfasset.all
     @pdfjobs.each do |job|
       job.delete
     end
