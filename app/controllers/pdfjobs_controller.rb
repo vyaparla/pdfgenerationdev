@@ -30,9 +30,11 @@ class PdfjobsController < ApplicationController
 
   def clear_index_list_view
     @pdfjobs = Lsspdfasset.all
-    @pdfjobs.each do |job|
-      job.delete
-    end
+    # @pdfjobs.each do |job|
+    #   job.delete
+    # end
+    @pdfjobs.destroy_all
+
     redirect_to root_path
   end
 
