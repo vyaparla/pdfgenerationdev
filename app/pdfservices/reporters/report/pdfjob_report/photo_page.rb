@@ -31,10 +31,9 @@ module PdfjobReport
           at: [15 - pdf.bounds.absolute_left, 771 - top_margin_pic_offset]
         )
         
-        if @record.u_image1.blank?
+        unless @record.u_image1.blank?
           pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_image1}")[:data])), at: [30 - pdf.bounds.absolute_left, 756 - top_margin_pic_offset], fit: [225, 225]
         else
-
         end
       end
 
@@ -47,7 +46,7 @@ module PdfjobReport
           at: [15 - pdf.bounds.absolute_left, 496 - top_margin_pic_offset]
         )
         
-        if @record.u_image2.blank?
+        unless @record.u_image2.blank?
           pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_image2}")[:data])), at:  [30 - pdf.bounds.absolute_left, 481 - top_margin_pic_offset], fit: [225, 225]
         else
         end
@@ -61,7 +60,8 @@ module PdfjobReport
           "#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png",
           at: [275 - pdf.bounds.absolute_left, 496 - top_margin_pic_offset]
         )
-        if @record.u_image3.blank?
+
+        unless @record.u_image3.blank?
           pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_image3}")[:data])), at:  [290 - pdf.bounds.absolute_left, 481 - top_margin_pic_offset], fit: [225, 225]
         else
         end
