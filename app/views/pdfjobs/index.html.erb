@@ -20,9 +20,10 @@
         <td><%= job.sys_id %></td>
         <td><%= job.u_job_id %></td>
         <td><%= job.u_floor %></td>
+        <td><%= job.u_location_desc %></td>
         <!--<td><%#= job.u_pdf_number %></td>-->
-        <!-- <td><%#= image_tag("data:image/jpeg;base64,#{job.u_openimage_base64code}", size: "100") %></td>
-        <td><%#= image_tag("data:image/jpeg;base64,#{job.u_close_image_base64code}", size: "100") %></td> -->
+        <!--<td><%#= image_tag("data:image/jpeg;base64,#{job.image1}", size: "100") %></td>-->
+        <!--<td><%#= image_tag("data:image/jpeg;base64,#{job.u_close_image_base64code}", size: "100") %></td> -->
         <td><%= job.created_at %></td>
         <td><%= job.updated_at %></td>
         <td><%= link_to 'Delete', pdfjob_path(job),  method: :delete, 
