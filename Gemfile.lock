@@ -39,6 +39,7 @@ GEM
     airbrussh (1.1.2)
       sshkit (>= 1.6.1, != 1.7.0)
     arel (6.0.4)
+    awesome_print (1.7.0)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
     builder (3.2.3)
@@ -62,6 +63,7 @@ GEM
     capistrano3-puma (1.2.1)
       capistrano (~> 3.0)
       puma (>= 2.6)
+    coderay (1.1.1)
     coffee-rails (4.1.1)
       coffee-script (>= 2.2.0)
       railties (>= 4.0.0, < 5.1.x)
@@ -70,6 +72,8 @@ GEM
       execjs
     coffee-script-source (1.12.2)
     concurrent-ruby (1.0.4)
+    coolline (0.5.0)
+      unicode_utils (~> 1.4)
     daemons (1.2.4)
     debug_inspector (0.0.2)
     erubis (2.7.0)
@@ -78,6 +82,8 @@ GEM
       thor (~> 0.14)
     globalid (0.3.7)
       activesupport (>= 4.1.0)
+    gruff (0.5.1)
+      rmagick
     i18n (0.7.0)
     jbuilder (2.6.1)
       activesupport (>= 3.0.0, < 5.1)
@@ -92,6 +98,7 @@ GEM
       nokogiri (>= 1.5.9)
     mail (2.6.4)
       mime-types (>= 1.16, < 4)
+    method_source (0.8.2)
     mime-types (3.1)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2016.0521)
@@ -113,6 +120,16 @@ GEM
       rmagick
     prawn-table (0.2.2)
       prawn (>= 1.3.0, < 3.0.0)
+    pry (0.10.4)
+      coderay (~> 1.1.0)
+      method_source (~> 0.8.1)
+      slop (~> 3.4)
+    pry-coolline (0.2.5)
+      coolline (~> 0.5)
+    pry-rails (0.3.4)
+      pry (>= 0.9.10)
+    pry-theme (1.2.0)
+      coderay (~> 1.1)
     puma (3.6.2)
     rack (1.6.5)
     rack-test (0.6.3)
@@ -144,6 +161,8 @@ GEM
     rake (12.0.0)
     rdoc (4.3.0)
     ref (2.0.0)
+    responders (2.3.0)
+      railties (>= 4.2.0, < 5.1)
     rmagick (2.16.0)
     sass (3.4.23)
     sass-rails (5.0.6)
@@ -155,6 +174,7 @@ GEM
     sdoc (0.4.2)
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
+    slop (3.6.0)
     spring (2.0.0)
       activesupport (>= 4.2)
     sprockets (3.7.1)
@@ -181,16 +201,19 @@ GEM
       thread_safe (~> 0.1)
     uglifier (3.0.4)
       execjs (>= 0.3.0, < 3)
+    unicode_utils (1.4.0)
     web-console (2.3.0)
       activemodel (>= 4.0)
       binding_of_caller (>= 0.7.2)
       railties (>= 4.0)
       sprockets-rails (>= 2.0, < 4.0)
+    wirble (0.1.3)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  awesome_print
   byebug
   capistrano
   capistrano-bundler
@@ -200,14 +223,19 @@ DEPENDENCIES
   coffee-rails (~> 4.1.0)
   daemons
   figaro
+  gruff (~> 0.5.1)
   jbuilder (~> 2.0)
   jquery-rails
   pg (~> 0.15)
   prawn (~> 2.0.1)
   prawn-fast-png (~> 0.2.3)
   prawn-table (~> 0.2.1)
+  pry-coolline
+  pry-rails
+  pry-theme
   puma
   rails (= 4.2.7.1)
+  responders
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
   spring
@@ -215,3 +243,4 @@ DEPENDENCIES
   turbolinks
   uglifier (>= 1.3.0)
   web-console (~> 2.0)
+  wirble

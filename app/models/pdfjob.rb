@@ -1,21 +1,21 @@
 class Pdfjob < ActiveRecord::Base
-  include Reportable
+  #include Reportable
 
-  class << self
-    def reporter_class
-      #DamperInspectionReporter
-      #PdfGenerationReporter
-      PdfjobReporter
-    end
-  end
+  # class << self
+  #   def reporter_class
+  #     #DamperInspectionReporter
+  #     #PdfGenerationReporter
+  #     PdfjobReporter
+  #   end
+  # end
 
-  def full_report_path
-    File.join(pdf_path, 'inspection_report.pdf')
-  end
+  # def full_report_path
+  #   File.join(pdf_path, 'inspection_report.pdf')
+  # end
 
-  private
+  # private
 
-  def pdf_path
-    File.join(Rails.root, %w(public content pdfjobs pdf_reports), "#{sys_id}")
-  end
+  # def pdf_path
+  #   File.join(Rails.root, %w(public content pdfjobs pdf_reports), "#{id}")
+  # end
 end

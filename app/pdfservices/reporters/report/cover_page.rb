@@ -2,8 +2,14 @@ module Report
   class CoverPage
   	include PageWritable
 
-    def initialize(owner)
+    def initialize(owner, model_name)
       @owner = owner
+      @model_name = model_name
+      # @group_name = group_name
+      # @facility_name = facility_name
+      # @group_url = group_url
+      # @facility_url = facility_url
+      # @nfpa_url = nfpa_url
     end
 
     def write(pdf)
@@ -17,7 +23,13 @@ module Report
       pdf.indent 40 do
         pdf.move_down 300
         pdf.font_size 30
-        pdf.text("<b><i>Damper Inspection Job</i></b>", :inline_format => true)
+        if @model_name == "DAMPERINSPECTION"
+          pdf.text("<b><i>Damper Inspection Report</i></b>", :inline_format => true)
+        elsif @model_name == "DAMPERREPAIR"
+          pdf.text("<b><i>Damper Repair Report</i></b>", :inline_format => true)
+        elsif @model_name == "FIREDOORINSPECTION"
+          pdf.text("<b><i>Fire Door Inspection Report</i></b>", :inline_format => true)
+        end
         pdf.move_down 25
       end
     end
@@ -26,12 +38,13 @@ module Report
       pdf.indent 40 do
         pdf.font_size 25
         pdf.fill_color 'c6171e'
-        pdf.text("<b><i>#{@owner.u_job_id}</i></b>", :inline_format => true)
+        #pdf.text("<b><i>#{@owner.u_job_id}</i></b>", :inline_format => true)
+        pdf.text("<b><i>#{@owner.u_group_name} : #{@owner.u_facility_name}</i></b>", :inline_format => true) 
       end
     end
 
     def relative_background_path
-      'three_hundred_dpi/final_report_cover.jpg'
+      'three_hundred_dpi/final_report_cover_new.jpg'
     end
   end
 end

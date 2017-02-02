@@ -5,7 +5,7 @@ module Report
   private
 
     def relative_background_path
-      'three_hundred_dpi/final_back_cover.jpg'
+      'three_hundred_dpi/final_back_cover_new.jpg'
     end
   end
 end

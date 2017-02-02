@@ -46,6 +46,16 @@ group :development do
 end
 
 gem 'puma'
+gem "responders"
+gem 'gruff', '~> 0.5.1'
+
+group :development do
+  gem 'awesome_print'
+  gem 'pry-coolline'
+  gem 'pry-rails'
+  gem 'pry-theme'
+  gem 'wirble'
+end
 
 gem 'figaro'
 group :development do

@@ -6,27 +6,30 @@
 <table style="border: 1px solid #cacaca;" width="80%" align="top" cellpadding="0" cellspacing="0">
   <tbody>
     <tr>
-      <th>Sys ID</th>
       <th>Job ID</th>
-      <th>Floor</th>
+      <th>Service ID</th>
       <th>Location</th>
-      <!-- <th>Open Image</th>
-      <th>Close Image</th> -->
-      <th>Created At</th>
-      <th>Updated At</th>
+      <th>Bulding</th>
+      <th>Floor</th>
+      <th>Damper Type</th>
+      <th>Damper Name</th>
+      <th>Result</th>
       <th>Action</th>
     </tr>
     <% @pdfjobs.each do |job| %>
       <tr>
-        <td><%= job.sys_id %></td>
         <td><%= job.u_job_id %></td>
-        <td><%= job.u_floor %></td>
+        <td><%= job.u_service_id %></td>
         <td><%= job.u_location_desc %></td>
+        <td><%= job.u_building %></td>
+        <td><%= job.u_floor %></td>
+        <td><%= job.u_type %></td>
+        <td><%= job.u_damper_name %></td>
+        <td><%= job.u_status %></td>
+       
         <!--<td><%#= job.u_pdf_number %></td>-->
         <!--<td><%#= image_tag("data:image/jpeg;base64,#{job.image1}", size: "100") %></td>-->
         <!--<td><%#= image_tag("data:image/jpeg;base64,#{job.u_close_image_base64code}", size: "100") %></td> -->
-        <td><%= job.created_at %></td>
-        <td><%= job.updated_at %></td>
         <td><%= link_to 'Delete', pdfjob_path(job),  method: :delete, 
         data: { confirm: 'Are you sure?' } %></td>
         <%# if job.has_full_report? %>
