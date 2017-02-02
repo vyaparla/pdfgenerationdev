@@ -2,9 +2,10 @@ module DamperInspectionReport
   class TabularBreakdownPage
   	include Report::InspectionDataPageWritable
    
-    def initialize(records, damper_type)
+    def initialize(records, damper_type, building_section)
       @records = records
       @damper_type = damper_type
+      @building_section = building_section
     end
 
     def write(pdf)
@@ -23,7 +24,7 @@ module DamperInspectionReport
     end
 
     def building
-      @building ||= @records.first
+      @building ||= @building_section
     end
 
     def title

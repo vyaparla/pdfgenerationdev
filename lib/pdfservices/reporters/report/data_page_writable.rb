@@ -45,7 +45,7 @@ module Report
 
     def place_name
       if respond_to?(:building, true)
-        "#{owner.u_building} . #{owner.u_facility_name}"
+        "#{building} . #{owner.u_facility_name}"
       else
         owner.u_facility_name
       end

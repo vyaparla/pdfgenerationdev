@@ -5,6 +5,7 @@ module DamperInspectionReport
     def initialize(job, building)
       @job = job
       @building = building
+      #Rails.logger.debug("BuildingSummary : #{@building.inspect}")
     end
 
     def write(pdf)
