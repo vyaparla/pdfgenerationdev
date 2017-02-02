@@ -10,10 +10,10 @@ module Report
       draw_type_graph(pdf)
       draw_result_graph(pdf)
       @naRecords = Lsspdfasset.select(:u_non_accessible_reasons).where("u_service_id =? AND u_non_accessible_reasons IS NOT NULL", @owner.u_service_id).group(["u_non_accessible_reasons"]).count(:u_non_accessible_reasons)
-      unless @naRecords.blank?
-        draw_na_reason_graph(pdf)
-      else
+      if @naRecords.blank?
         draw_na_reason_placeholder(pdf)
+      else
+        draw_na_reason_graph(pdf)
       end
     end
 
