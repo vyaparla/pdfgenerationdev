@@ -84,7 +84,8 @@ module Report
           @na_graph << [key1,  ((value1.to_f * 100) / @na_graph_total)]
         end
         generate_pie_graph(I18n.t('ui.graphs.na_reasons.title'), @na_graph, @owner.graph_na_reasons_path)
-      end    
+      else  
+      end   
     end
 
     def generate_graph(title, data, file)
