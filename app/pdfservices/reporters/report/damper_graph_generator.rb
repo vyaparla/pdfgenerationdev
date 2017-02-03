@@ -85,6 +85,7 @@ module Report
         end
         generate_pie_graph(I18n.t('ui.graphs.na_reasons.title'), @na_graph, @owner.graph_na_reasons_path)
       else
+        generate_pie_graph(I18n.t('ui.graphs.na_reasons.title'), 0, @owner.graph_na_reasons_path)
       end   
     end
 
