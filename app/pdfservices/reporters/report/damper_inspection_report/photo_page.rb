@@ -9,31 +9,36 @@ module DamperInspectionReport
     end
 
     def write(pdf)
-      super
-      pdf.indent(250) do
-      	draw_location_description(pdf)
-        draw_damper_tag(pdf)
-        draw_damper_type(pdf)
-        draw_floor(pdf)
-        draw_access_door_installation(pdf) unless @record.u_access_size.blank?
-        draw_status(pdf)
-        if @record.u_status == "Fail"
-          draw_failure_reasons(pdf)
-        end
-      end
-      if @record.u_status != "Fail"
-      	draw_open_image(pdf)
-        draw_closed_image(pdf)
+      
+      if @record.u_status == "Removed"
       else
-      	if @record.u_type.upcase != "FD"
+        super
+        pdf.indent(250) do
+      	  draw_location_description(pdf)
+          draw_damper_tag(pdf)
+          draw_damper_type(pdf)
+          draw_floor(pdf)
+          draw_access_door_installation(pdf) unless @record.u_access_size.blank?
+          draw_status(pdf)
+          if @record.u_status == "Fail"
+            draw_failure_reasons(pdf)
+          end
+        end
+
+        if @record.u_status != "Fail"
       	  draw_open_image(pdf)
           draw_closed_image(pdf)
-          draw_actuator_image(pdf)
         else
-          draw_open_image(pdf)
-          draw_closed_image(pdf)
+      	  if @record.u_type.upcase != "FD"
+      	    draw_open_image(pdf)
+            draw_closed_image(pdf)
+            draw_actuator_image(pdf)
+          else
+            draw_open_image(pdf)
+            draw_closed_image(pdf)
+          end
         end
-      end
+      end  
     end
 
     private
