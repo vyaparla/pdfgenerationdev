@@ -14,6 +14,9 @@
       <th>Damper Type</th>
       <th>Damper Name</th>
       <th>Result</th>
+      <th>Job Start Date</th>
+      <th>Job End Data</th>
+      <th>Inspected ON</th>
       <th>Action</th>
     </tr>
     <% @pdfjobs.each do |job| %>
@@ -26,6 +29,9 @@
         <td><%= job.u_type %></td>
         <td><%= job.u_damper_name %></td>
         <td><%= job.u_status %></td>
+        <td><%= job.u_job_start_date %></td>
+        <td><%= job.u_job_end_date %></td>
+        <td><%= job.u_inspected_on %></td>
        
         <!--<td><%#= job.u_pdf_number %></td>-->
         <!--<td><%#= image_tag("data:image/jpeg;base64,#{job.image1}", size: "100") %></td>-->
