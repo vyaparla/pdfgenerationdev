@@ -62,7 +62,7 @@ class ApiController < ApplicationController
     @address       = params[:address]
     @facility_type = params[:facilitytype]
   
-  	@pdfjob = Lsspdfasset.find_by(u_service_id: params[:serviceID])
+  	@pdfjob = Lsspdfasset.where(u_service_id: params[:serviceID]).first
     unless @pdfjob.blank?
       #ReportGeneration.new(@pdfjob, @group_name, @facility_name, @group_url, @facility_url).generate_full_report
       ReportGeneration.new(@pdfjob, @model_name, @address, @facility_type).generate_full_report
@@ -73,7 +73,7 @@ class ApiController < ApplicationController
   end
 
   def download_full_pdf_report
-    @pdfjob = Lsspdfasset.find_by(u_service_id: params[:serviceID])
+    @pdfjob = Lsspdfasset.where(u_service_id: params[:serviceID]).first
     if @pdfjob.has_full_report?
       @outputfile = @pdfjob.u_job_id + "_" + Time.now.strftime("%m-%d-%Y-%r").gsub(/\s+/, "_") + "_" + "full_report"
       send_file @pdfjob.full_report_path, :type => 'application/pdf', :disposition =>  "attachment; filename=\"#{@outputfile}.pdf\""

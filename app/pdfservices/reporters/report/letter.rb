@@ -26,7 +26,8 @@ module Report
       I18n.t("pdf.letter_page.#{@i18n_key}.certified_content",
              :address          => complete_physical_address,
              :technician_list  => @owner.u_job_scale_rep,
-             :work_dates       => "#{@owner.u_job_start_date.strftime(I18n.t('date.formats.long'))} - #{@owner.u_job_start_date.strftime(I18n.t('date.formats.long'))}")
+             :work_dates       => @owner.work_dates)
+             #:work_dates       => "#{@owner.u_job_start_date.strftime(I18n.t('date.formats.long'))} - #{@owner.u_job_start_date.strftime(I18n.t('date.formats.long'))}")
     end
 
     def complete_physical_address
@@ -66,7 +67,7 @@ module Report
       I18n.t("pdf.letter_page.#{@i18n_key}.content",
              :location_name    => @owner.u_facility_name,
              :pm_name          => "#{@owner.u_job_scale_rep}",
-             :work_dates       => "#{@owner.u_job_start_date.strftime(I18n.t('date.formats.long'))} - #{@owner.u_job_start_date.strftime(I18n.t('date.formats.long'))}",
+             :work_dates       => @owner.work_dates,
              :qa_inspected_by  => "#{@owner.u_job_scale_rep}")
     end
 
