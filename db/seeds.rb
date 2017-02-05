@@ -152,19 +152,19 @@ Lsspdfasset.create(u_job_id: "KK-22-FSI", u_asset_id: "10005", u_service_id: "20
 	               u_tag: "1-FD-16-001", u_image1: @openimage_base64code, u_image2: @close_image_base64code, u_image3: @openimage_base64code, 
 	               u_job_start_date: "2017-01-27", u_job_end_date: "2017-01-27", u_job_scale_rep: "Raja", u_building: "Incro9", u_reason: "", 
 	               u_access_size: "", u_inspected_on: "2017-01-27", u_inspector: "Ajay", u_group_name: "Vsoft", u_facility_name: "Consulting", 
-	               u_penetration_type: "200' Joint", u_barrier_type: "Gypsum Board Wal", u_service_type: "Fixed ON Site", 
+	               u_penetration_type: "200' Joint", u_barrier_type: "Gypsum Board Wal", u_service_type: "Fixed On Site", 
 	               u_issue_type: "Improperly Sealed Construction Joint", u_corrected_url_system: "UL system: HW-D-0491")
 Lsspdfasset.create(u_job_id: "KK-22-FSI", u_asset_id: "10005", u_service_id: "2002", u_location_desc: "Test", u_status: "", u_type: "", u_floor: "1", 
 	               u_tag: "1-FD-16-001", u_image1: @openimage_base64code, u_image2: @close_image_base64code, u_image3: @openimage_base64code, 
 	               u_job_start_date: "2017-01-27", u_job_end_date: "2017-01-27", u_job_scale_rep: "Raja", u_building: "Incro9", u_reason: "", 
 	               u_access_size: "", u_inspected_on: "2017-01-27", u_inspector: "Ajay", u_group_name: "Vsoft", u_facility_name: "Consulting", 
-	               u_penetration_type: "200' Joint", u_barrier_type: "Gypsum Board Wal", u_service_type: "Fixed ON Site", 
+	               u_penetration_type: "200' Joint", u_barrier_type: "Gypsum Board Wal", u_service_type: "Fixed On Site", 
 	               u_issue_type: "Improperly Sealed Construction Joint", u_corrected_url_system: "UL system: HW-D-0491")
 Lsspdfasset.create(u_job_id: "KK-22-FSI", u_asset_id: "10005", u_service_id: "2002", u_location_desc: "Test", u_status: "", u_type: "", u_floor: "1", 
 	               u_tag: "1-FD-16-001", u_image1: @openimage_base64code, u_image2: @close_image_base64code, u_image3: @openimage_base64code, 
 	               u_job_start_date: "2017-01-27", u_job_end_date: "2017-01-27", u_job_scale_rep: "Raja", u_building: "Incro9", u_reason: "", 
 	               u_access_size: "", u_inspected_on: "2017-01-27", u_inspector: "Ajay", u_group_name: "Vsoft", u_facility_name: "Consulting", 
-	               u_penetration_type: "200' Joint", u_barrier_type: "Gypsum Board Wal", u_service_type: "Fixed ON Site", 
+	               u_penetration_type: "200' Joint", u_barrier_type: "Gypsum Board Wal", u_service_type: "Fixed On Site", 
 	               u_issue_type: "Improperly Sealed Construction Joint", u_corrected_url_system: "UL system: HW-D-0491")
 
 
