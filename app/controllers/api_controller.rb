@@ -66,7 +66,7 @@ class ApiController < ApplicationController
     unless @pdfjob.blank?
       #ReportGeneration.new(@pdfjob, @group_name, @facility_name, @group_url, @facility_url).generate_full_report
       ReportGeneration.new(@pdfjob, @model_name, @address, @facility_type).generate_full_report
-  	  #render json: {message: "Success"}
+  	  render json: {message: "Success"}
     else
       render json: {message: "Unsuccess"}
     end
