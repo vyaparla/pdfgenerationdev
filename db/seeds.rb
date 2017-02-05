@@ -20,35 +20,35 @@
 #   Pdfjob.create(sys_id: "SYSID000#{i}", u_job_id: "JOBID00#{i}", u_pdf_number: "PDFNumber00#{i}", u_openimage_base64code: @openimage_base64code, u_close_image_base64code: @close_image_base64code)
 # end
 
-# Lsspdfasset.create(u_job_id: "TEST-2001", u_asset_id: "2001", u_service_id: "2001", u_location_desc: "Test", u_status: "Pass", u_type: "Fire", u_floor: "1", 
-# 	               u_tag: "1-FD-16-001", u_image1: @openimage_base64code, u_image2: @close_image_base64code, u_image3: @openimage_base64code, 
-# 	               u_job_start_date: "2017-01-27", u_job_end_date: "2017-01-27", u_job_scale_rep: "Raja", u_building: "Incro9", u_reason: "Damper Damper", 
-# 	               u_access_size: "200X500", u_inspected_on: "2017-01-27", u_inspector: "Ajay", u_group_name: "Vsoft", u_facility_name: "Consulting")
+Lsspdfasset.create(u_job_id: "TEST-2001", u_asset_id: "2001", u_service_id: "2001", u_location_desc: "Test", u_status: "Pass", u_type: "Fire", u_floor: "1", 
+	               u_tag: "1-FD-16-001", u_image1: @openimage_base64code, u_image2: @close_image_base64code, u_image3: @openimage_base64code, 
+	               u_job_start_date: "2017-01-27", u_job_end_date: "2017-01-27", u_job_scale_rep: "Raja", u_building: "Incro9", u_reason: "Damper Damper", 
+	               u_access_size: "200X500", u_inspected_on: "2017-01-27", u_inspector: "Ajay", u_group_name: "Vsoft", u_facility_name: "Consulting")
 
-# Lsspdfasset.create(u_job_id: "TEST-2001", u_asset_id: "2002", u_service_id: "2001", u_location_desc: "Test", u_status: "Pass", u_type: "Smoke", u_floor: "2", 
-# 	               u_tag: "1-FD-16-001", u_image1: @openimage_base64code, u_image2: @close_image_base64code, u_image3: @openimage_base64code, 
-# 	               u_job_start_date: "2017-01-27", u_job_end_date: "2017-01-27", u_job_scale_rep: "Raja", u_building: "Incro9", u_reason: "Damper Damper", 
-# 	               u_access_size: "200X500", u_inspected_on: "2017-01-27", u_inspector: "Ajay", u_group_name: "Vsoft", u_facility_name: "Consulting")
+Lsspdfasset.create(u_job_id: "TEST-2001", u_asset_id: "2002", u_service_id: "2001", u_location_desc: "Test", u_status: "Pass", u_type: "Smoke", u_floor: "2", 
+	               u_tag: "1-FD-16-001", u_image1: @openimage_base64code, u_image2: @close_image_base64code, u_image3: @openimage_base64code, 
+	               u_job_start_date: "2017-01-27", u_job_end_date: "2017-01-27", u_job_scale_rep: "Raja", u_building: "Incro9", u_reason: "Damper Damper", 
+	               u_access_size: "200X500", u_inspected_on: "2017-01-27", u_inspector: "Ajay", u_group_name: "Vsoft", u_facility_name: "Consulting")
 
-# Lsspdfasset.create(u_job_id: "TEST-2001", u_asset_id: "2003", u_service_id: "2001", u_location_desc: "Test", u_status: "Pass", u_type: "Fire/Smoke(FSD)", u_floor: "3", 
-# 	               u_tag: "1-FD-16-001", u_image1: @openimage_base64code, u_image2: @close_image_base64code, u_image3: @openimage_base64code, 
-# 	               u_job_start_date: "2017-01-27", u_job_end_date: "2017-01-27", u_job_scale_rep: "Raja", u_building: "Incro9", u_reason: "Damper Damper", 
-# 	               u_access_size: "200X500", u_inspected_on: "2017-01-27", u_inspector: "Ajay", u_group_name: "Vsoft", u_facility_name: "Consulting")
+Lsspdfasset.create(u_job_id: "TEST-2001", u_asset_id: "2003", u_service_id: "2001", u_location_desc: "Test", u_status: "Pass", u_type: "Fire/Smoke(FSD)", u_floor: "3", 
+	               u_tag: "1-FD-16-001", u_image1: @openimage_base64code, u_image2: @close_image_base64code, u_image3: @openimage_base64code, 
+	               u_job_start_date: "2017-01-27", u_job_end_date: "2017-01-27", u_job_scale_rep: "Raja", u_building: "Incro9", u_reason: "Damper Damper", 
+	               u_access_size: "200X500", u_inspected_on: "2017-01-27", u_inspector: "Ajay", u_group_name: "Vsoft", u_facility_name: "Consulting")
 
-# Lsspdfasset.create(u_job_id: "TEST-2001", u_asset_id: "2003", u_service_id: "2001", u_location_desc: "Test", u_status: "Fail", u_type: "Fire", u_floor: "4", 
-# 	               u_tag: "1-FD-16-001", u_image1: @openimage_base64code, u_image2: @close_image_base64code, u_image3: @openimage_base64code, 
-# 	               u_job_start_date: "2017-01-27", u_job_end_date: "2017-01-27", u_job_scale_rep: "Raja", u_building: "Incro9", u_reason: "Damper Damper", 
-# 	               u_access_size: "200X500", u_inspected_on: "2017-01-27", u_inspector: "Ajay", u_group_name: "Vsoft", u_facility_name: "Consulting")
+Lsspdfasset.create(u_job_id: "TEST-2001", u_asset_id: "2003", u_service_id: "2001", u_location_desc: "Test", u_status: "Fail", u_type: "Fire", u_floor: "4", 
+	               u_tag: "1-FD-16-001", u_image1: @openimage_base64code, u_image2: @close_image_base64code, u_image3: @openimage_base64code, 
+	               u_job_start_date: "2017-01-27", u_job_end_date: "2017-01-27", u_job_scale_rep: "Raja", u_building: "Incro9", u_reason: "Damper Damper", 
+	               u_access_size: "200X500", u_inspected_on: "2017-01-27", u_inspector: "Ajay", u_group_name: "Vsoft", u_facility_name: "Consulting")
 
-# Lsspdfasset.create(u_job_id: "TEST-2001", u_asset_id: "2003", u_service_id: "2001", u_location_desc: "Test", u_status: "Pass", u_type: "Fire", u_floor: "1", 
-# 	               u_tag: "1-FD-16-001", u_image1: @openimage_base64code, u_image2: @close_image_base64code, u_image3: @openimage_base64code, 
-# 	               u_job_start_date: "2017-01-27", u_job_end_date: "2017-01-27", u_job_scale_rep: "Raja", u_building: "Vsoft Building", u_reason: "Damper Damper", 
-# 	               u_access_size: "200X500", u_inspected_on: "2017-01-27", u_inspector: "Ajay", u_group_name: "Vsoft", u_facility_name: "Consulting")
+Lsspdfasset.create(u_job_id: "TEST-2001", u_asset_id: "2003", u_service_id: "2001", u_location_desc: "Test", u_status: "Pass", u_type: "Fire", u_floor: "1", 
+	               u_tag: "1-FD-16-001", u_image1: @openimage_base64code, u_image2: @close_image_base64code, u_image3: @openimage_base64code, 
+	               u_job_start_date: "2017-01-27", u_job_end_date: "2017-01-27", u_job_scale_rep: "Raja", u_building: "Vsoft Building", u_reason: "Damper Damper", 
+	               u_access_size: "200X500", u_inspected_on: "2017-01-27", u_inspector: "Ajay", u_group_name: "Vsoft", u_facility_name: "Consulting")
 
-# Lsspdfasset.create(u_job_id: "TEST-2001", u_asset_id: "2003", u_service_id: "2001", u_location_desc: "Test", u_status: "Fail", u_type: "Smoke", u_floor: "2", 
-# 	               u_tag: "1-FD-16-001", u_image1: @openimage_base64code, u_image2: @close_image_base64code, u_image3: @openimage_base64code, 
-# 	               u_job_start_date: "2017-01-27", u_job_end_date: "2017-01-27", u_job_scale_rep: "Raja", u_building: "Vsoft Building", u_reason: "Damper Damper", 
-# 	               u_access_size: "200X500", u_inspected_on: "2017-01-27", u_inspector: "Ajay", u_group_name: "Vsoft", u_facility_name: "Consulting")
+Lsspdfasset.create(u_job_id: "TEST-2001", u_asset_id: "2003", u_service_id: "2001", u_location_desc: "Test", u_status: "Fail", u_type: "Smoke", u_floor: "2", 
+	               u_tag: "1-FD-16-001", u_image1: @openimage_base64code, u_image2: @close_image_base64code, u_image3: @openimage_base64code, 
+	               u_job_start_date: "2017-01-27", u_job_end_date: "2017-01-27", u_job_scale_rep: "Raja", u_building: "Vsoft Building", u_reason: "Damper Damper", 
+	               u_access_size: "200X500", u_inspected_on: "2017-01-27", u_inspector: "Ajay", u_group_name: "Vsoft", u_facility_name: "Consulting")
 
 
 Lsspdfasset.create(u_job_id: "TEST-2001", u_asset_id: "2001", u_service_id: "2001", u_location_desc: "Test", u_status: "Pass", u_type: "FD", u_floor: "1", 
@@ -143,7 +143,46 @@ Lsspdfasset.create(u_job_id: "TEST-2001", u_asset_id: "2001", u_service_id: "200
 	               u_tag: "1-FD-16-001", u_image1: @openimage_base64code, u_image2: @close_image_base64code, u_image3: @openimage_base64code, 
 	               u_job_start_date: "2017-01-27", u_job_end_date: "2017-01-27", u_job_scale_rep: "Raja", u_building: "Incro9", u_reason: "Damper Damper", 
 	               u_access_size: "200X500", u_inspected_on: "2017-01-27", u_inspector: "Ajay", u_group_name: "Vsoft", u_facility_name: "Consulting")
-Lsspdfasset.create(u_job_id: "TEST-2001", u_asset_id: "2001", u_service_id: "2001", u_location_desc: "Test", u_status: "NA", u_type: "FSD", u_floor: "1", 
-	               u_tag: "1-FD-16-001", u_image1: @openimage_base64code, u_image2: @close_image_base64code, u_image3: @openimage_base64code, 
-	               u_job_start_date: "2017-01-27", u_job_end_date: "2017-01-27", u_job_scale_rep: "Raja", u_building: "Incro9", u_reason: "Damper Damper", 
+Lsspdfasset.create(u_job_id: "TEST-2001", u_asset_id: "2001", u_service_id: "2001", u_location_desc: "Test", u_status: "Removed", u_type: "FSD", u_floor: "1", 
+	               u_tag: "1-FD-16-001", u_image1: "", u_image2: "", u_image3: "", 
+	               u_job_start_date: "2017-01-27", u_job_end_date: "", u_job_scale_rep: "Raja", u_building: "Incro9", u_reason: "Damper Damper", 
 	               u_access_size: "200X500", u_inspected_on: "2017-01-27", u_inspector: "Ajay", u_group_name: "Vsoft", u_facility_name: "Consulting")
+
+Lsspdfasset.create(u_job_id: "KK-22-FSI", u_asset_id: "10005", u_service_id: "2002", u_location_desc: "Test", u_status: "", u_type: "", u_floor: "1", 
+	               u_tag: "1-FD-16-001", u_image1: @openimage_base64code, u_image2: @close_image_base64code, u_image3: @openimage_base64code, 
+	               u_job_start_date: "2017-01-27", u_job_end_date: "2017-01-27", u_job_scale_rep: "Raja", u_building: "Incro9", u_reason: "", 
+	               u_access_size: "", u_inspected_on: "2017-01-27", u_inspector: "Ajay", u_group_name: "Vsoft", u_facility_name: "Consulting", 
+	               u_penetration_type: "200' Joint", u_barrier_type: "Gypsum Board Wal", u_service_type: "Fixed ON Site", 
+	               u_issue_type: "Improperly Sealed Construction Joint", u_corrected_url_system: "UL system: HW-D-0491")
+Lsspdfasset.create(u_job_id: "KK-22-FSI", u_asset_id: "10005", u_service_id: "2002", u_location_desc: "Test", u_status: "", u_type: "", u_floor: "1", 
+	               u_tag: "1-FD-16-001", u_image1: @openimage_base64code, u_image2: @close_image_base64code, u_image3: @openimage_base64code, 
+	               u_job_start_date: "2017-01-27", u_job_end_date: "2017-01-27", u_job_scale_rep: "Raja", u_building: "Incro9", u_reason: "", 
+	               u_access_size: "", u_inspected_on: "2017-01-27", u_inspector: "Ajay", u_group_name: "Vsoft", u_facility_name: "Consulting", 
+	               u_penetration_type: "200' Joint", u_barrier_type: "Gypsum Board Wal", u_service_type: "Fixed ON Site", 
+	               u_issue_type: "Improperly Sealed Construction Joint", u_corrected_url_system: "UL system: HW-D-0491")
+Lsspdfasset.create(u_job_id: "KK-22-FSI", u_asset_id: "10005", u_service_id: "2002", u_location_desc: "Test", u_status: "", u_type: "", u_floor: "1", 
+	               u_tag: "1-FD-16-001", u_image1: @openimage_base64code, u_image2: @close_image_base64code, u_image3: @openimage_base64code, 
+	               u_job_start_date: "2017-01-27", u_job_end_date: "2017-01-27", u_job_scale_rep: "Raja", u_building: "Incro9", u_reason: "", 
+	               u_access_size: "", u_inspected_on: "2017-01-27", u_inspector: "Ajay", u_group_name: "Vsoft", u_facility_name: "Consulting", 
+	               u_penetration_type: "200' Joint", u_barrier_type: "Gypsum Board Wal", u_service_type: "Fixed ON Site", 
+	               u_issue_type: "Improperly Sealed Construction Joint", u_corrected_url_system: "UL system: HW-D-0491")
+
+
+Lsspdfasset.create(u_job_id: "KK-22-FSI", u_asset_id: "10005", u_service_id: "2002", u_location_desc: "Test", u_status: "", u_type: "", u_floor: "1", 
+	               u_tag: "1-FD-16-001", u_image1: @openimage_base64code, u_image2: @close_image_base64code, u_image3: @openimage_base64code, 
+	               u_job_start_date: "2017-01-27", u_job_end_date: "2017-01-27", u_job_scale_rep: "Raja", u_building: "Incro9", u_reason: "", 
+	               u_access_size: "", u_inspected_on: "2017-01-27", u_inspector: "Ajay", u_group_name: "Vsoft", u_facility_name: "Consulting", 
+	               u_penetration_type: "200' Joint", u_barrier_type: "Gypsum Board Wal", u_service_type: "Survey Only", 
+	               u_issue_type: "Improperly Sealed Construction Joint", u_corrected_url_system: "UL system: HW-D-0491")
+Lsspdfasset.create(u_job_id: "KK-22-FSI", u_asset_id: "10005", u_service_id: "2002", u_location_desc: "Test", u_status: "", u_type: "", u_floor: "1", 
+	               u_tag: "1-FD-16-001", u_image1: @openimage_base64code, u_image2: @close_image_base64code, u_image3: @openimage_base64code, 
+	               u_job_start_date: "2017-01-27", u_job_end_date: "2017-01-27", u_job_scale_rep: "Raja", u_building: "Incro9", u_reason: "", 
+	               u_access_size: "", u_inspected_on: "2017-01-27", u_inspector: "Ajay", u_group_name: "Vsoft", u_facility_name: "Consulting", 
+	               u_penetration_type: "200' Joint", u_barrier_type: "Gypsum Board Wal", u_service_type: "Survey Only", 
+	               u_issue_type: "Improperly Sealed Construction Joint", u_corrected_url_system: "UL system: HW-D-0491")
+Lsspdfasset.create(u_job_id: "KK-22-FSI", u_asset_id: "10005", u_service_id: "2002", u_location_desc: "Test", u_status: "", u_type: "", u_floor: "1", 
+	               u_tag: "1-FD-16-001", u_image1: @openimage_base64code, u_image2: @close_image_base64code, u_image3: @openimage_base64code, 
+	               u_job_start_date: "2017-01-27", u_job_end_date: "2017-01-27", u_job_scale_rep: "Raja", u_building: "Incro9", u_reason: "", 
+	               u_access_size: "", u_inspected_on: "2017-01-27", u_inspector: "Ajay", u_group_name: "Vsoft", u_facility_name: "Consulting", 
+	               u_penetration_type: "200' Joint", u_barrier_type: "Gypsum Board Wal", u_service_type: "Survey Only", 
+	               u_issue_type: "Improperly Sealed Construction Joint", u_corrected_url_system: "UL system: HW-D-0491")

@@ -10,11 +10,11 @@ class CreateLsspdfassets < ActiveRecord::Migration
       t.string   :u_type
       t.string   :u_floor
       t.string   :u_tag
-      t.text     :u_image1, :limit => 1073741823
-      t.text     :u_image2, :limit => 1073741823
-      t.text     :u_image3, :limit => 1073741823
-      t.text     :u_image4, :limit => 1073741823
-      t.text     :u_image5, :limit => 1073741823
+      t.text     :u_image1, :limit => 4294967295
+      t.text     :u_image2, :limit => 4294967295
+      t.text     :u_image3, :limit => 4294967295
+      t.text     :u_image4, :limit => 4294967295
+      t.text     :u_image5, :limit => 4294967295
       t.timestamps null: false
     end
   end

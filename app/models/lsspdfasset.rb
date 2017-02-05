@@ -15,13 +15,14 @@ class Lsspdfasset < ActiveRecord::Base
   # # alias_attribute :records, :lsspdfassets
   # belongs_to :lsspdfasset, :foreign_key => 'lsspdfasset_id'
 
-  def building_records(building)
-    #Rails.logger.debug("Asset: #{building.inspect}")
-    Lsspdfasset.where(:u_building => building)
-  end
 
   def buildings(serviceID)
     Lsspdfasset.where(:u_service_id => serviceID).pluck('DISTINCT u_building')
+  end
+
+  def building_records(building, service_ID)
+    #Rails.logger.debug("Asset: #{building.inspect}")
+    Lsspdfasset.where(:u_building => building, :u_service_id => service_ID)
   end
 
   def full_report_path
@@ -42,6 +43,10 @@ class Lsspdfasset < ActiveRecord::Base
 
   def graph_na_reasons_path
     File.join(graph_path, 'graph_na_reasons.png')
+  end
+
+  def graph_top_issues_path
+    File.join(graph_path, 'graph_top_issues.png')
   end
 
   def work_dates

@@ -36,6 +36,10 @@ class ReportGeneration
       DamperRepairJob.reporter_class.new
     elsif @model_name == "FIREDOORINSPECTION"
       DoorInspectionJob.reporter_class.new
+    elsif @model_name == "FIRESTOPINSTALLATION"
+      FirestopInstallationJob.reporter_class.new
+    elsif @model_name == "FIRESTOPSURVEY"
+      FirestopSurveyJob.reporter_class.new
     end
   end
 

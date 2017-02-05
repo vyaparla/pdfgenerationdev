@@ -74,7 +74,7 @@ module Report
     def generate_na_reason_graph
       #@naRecords = Lsspdfasset.select(:u_non_accessible_reasons).where("u_service_id =? AND u_non_accessible_reasons IS NOT NULL", @owner.u_service_id).group(["u_non_accessible_reasons"]).count(:u_non_accessible_reasons)
       @naRecords = Lsspdfasset.select(:u_non_accessible_reasons).where(u_service_id: @owner.u_service_id).where.not(u_non_accessible_reasons: "").group(["u_non_accessible_reasons"]).count(:u_non_accessible_reasons)
-      Rails.logger.debug("NA Records Length : #{@naRecords.length.inspect}")   
+      #Rails.logger.debug("NA Records Length : #{@naRecords.length.inspect}")   
       if @naRecords.length != 0
         Rails.logger.debug("IF Condition NA Records : #{@naRecords.inspect}")
         @na_graph = []
