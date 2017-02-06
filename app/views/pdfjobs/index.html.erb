@@ -1,7 +1,7 @@
 <%= @pdfjobs_count %><br/>
 
 <p style="color:red;"><%= flash[:success] %></p>
-<p style="margin: 0 0 0 943px;"><%= link_to "Delete All",  clear_index_list_view_pdfjobs_path %></p>
+<p style="float:right;"><%= link_to "Delete All",  clear_index_list_view_pdfjobs_path %></p>
 
 <table style="border: 1px solid #cacaca;" width="80%" align="top" cellpadding="0" cellspacing="0">
   <tbody>
@@ -19,6 +19,15 @@
       <th>Inspected ON</th>
       <th>Scale REP</th>
       <th>NA Reason</th>
+      <th>Penetration Type</th>
+      <th>Barrier Type</th>
+      <th>Service Type</th>
+      <th>Issue Type</th>
+      <th>Corrected URL System</th>
+      <th>Suggested UL System</th>
+      <th>Repair Action Performed</th>
+      <th>Active</th>
+      <th>Delete</th>
       <th>Action</th>
     </tr>
     <% @pdfjobs.each do |job| %>
@@ -36,6 +45,16 @@
         <td><%= job.u_inspected_on %></td>
         <td><%= job.u_job_scale_rep %></td>
         <td><%= job.u_non_accessible_reasons %></td>
+        <td><%= job.u_penetration_type %></td>
+        <td><%= job.u_barrier_type %></td>
+        <td><%= job.u_service_type %></td>
+        <td><%= job.u_issue_type %></td>
+        <td><%= job.u_corrected_url_system %></td>
+        <td><%= job.u_suggested_ul_system %></td>
+        <td><%= job.u_repair_action_performed %></td>
+        <td><%= job.u_active %></td>
+        <td><%= job.u_delete %></td>
+
         <!--<td><%#= job.u_pdf_number %></td>-->
         <!--<td><%#= image_tag("data:image/jpeg;base64,#{job.image1}", size: "100") %></td>-->
         <!--<td><%#= image_tag("data:image/jpeg;base64,#{job.u_close_image_base64code}", size: "100") %></td> -->
