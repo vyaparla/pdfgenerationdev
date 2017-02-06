@@ -2,8 +2,9 @@ module DoorInspectionReport
   class TablePage
     include Report::InspectionDataPageWritable
 
-    def initialize(records)
+    def initialize(records, building_section)
       @records = records
+      @building_section = building_section
     end
 
     def write (pdf)
@@ -61,8 +62,12 @@ module DoorInspectionReport
       @job ||= @records.first
     end
 
+    # def building
+    #   @building ||= @records.first
+    # end
+
     def building
-      @building ||= @records.first
+      @building ||= @building_section
     end
   end
 end

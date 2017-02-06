@@ -4,7 +4,7 @@ module DoorInspectionReport
 
     def write(pdf)
       return if records.empty?
-      TablePage.new(records).write(pdf)
+      TablePage.new(records, building_section).write(pdf)
       records.each { |r| PhotoPage.new(r).write(pdf) }
     end
   end
