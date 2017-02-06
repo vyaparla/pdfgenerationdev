@@ -1,7 +1,8 @@
 module Report
   class Letter
-  	def initialize(owner, address, facility_type, i18n_key)
+  	def initialize(owner, model, address, facility_type, i18n_key)
       @owner = owner
+      @model = model
       # @group_name = group_name
       # @facility_name = facility_name
       @address = address.split("_")
@@ -27,6 +28,7 @@ module Report
              :address          => complete_physical_address,
              :technician_list  => @owner.u_job_scale_rep,
              :work_dates       => @owner.work_dates)
+      
              #:work_dates       => "#{@owner.u_job_start_date.strftime(I18n.t('date.formats.long'))} - #{@owner.u_job_start_date.strftime(I18n.t('date.formats.long'))}")
     end
 
@@ -43,10 +45,17 @@ module Report
     def draw_letter_body(pdf)
       if certified?
         pdf.font_size 10
-        pdf.text(certified_letter_copy, :align => :center)
+        if @model == "FIREDOORINSPECTION"
+          pdf.text letter_copy
+        else
+          pdf.text(certified_letter_copy(), :align => :center)
+        end
         pdf.move_down 50
         pdf.font_size 10
-        pdf.text certified_closing
+        if @model == "FIREDOORINSPECTION"
+        else
+          pdf.text certified_closing
+        end
       else
         pdf.font_size 12
         pdf.text letter_copy
