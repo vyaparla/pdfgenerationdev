@@ -68,17 +68,6 @@ module FirestopInstallationReport
       pdf.draw_text("After Installation", at: [30 - pdf.bounds.absolute_left, 8])
     end
 
-    def draw_before_image(pdf)
-      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [15 - pdf.bounds.absolute_left, 536])
-
-      unless @record.u_image2.blank?
-      	pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64, #{@record.u_image2}")[:data])), at:  [30 - pdf.bounds.absolute_left, 521], fit: [225, 225]
-      else
-        pdf.draw_text('Photo Unavailable', style: :bold, size:  12,  at: [90 - pdf.bounds.absolute_left, 404])
-      end
-      pdf.draw_text("Before Installation", at: [30 - pdf.bounds.absolute_left, 283])
-    end
-
     def splitBase64(uri)
       if uri.match(%r{^data:(.*?);(.*?),(.*)$})
         return {
