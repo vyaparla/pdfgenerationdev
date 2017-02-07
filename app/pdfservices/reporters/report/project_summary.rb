@@ -51,7 +51,7 @@ module Report
     end
 
     def project_summary_table_data
-      @serviceInfo = Lsspdfasset.select(:u_building, :u_type, :u_status).where(:u_service_id => @owner.u_service_id).group(["u_building", "u_type","u_status"]).count(:u_status)
+      @serviceInfo = Lsspdfasset.select(:u_building, :u_type, :u_status).where(:u_service_id => @owner.u_service_id, :u_delete => false).group(["u_building", "u_type","u_status"]).count(:u_status)
       @buildingInfo = []
       @serviceInfo.each do |key,value|
         building_json = {}

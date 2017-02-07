@@ -16,7 +16,7 @@ module Report
   private
 
     def generate_building_graph
-      @serviceRecords = Lsspdfasset.select(:u_building).where(:u_service_id => @owner.u_service_id).group(["u_building"]).count(:u_type)
+      @serviceRecords = Lsspdfasset.select(:u_building).where(:u_service_id => @owner.u_service_id, :u_delete => false).group(["u_building"]).count(:u_type)
       @building_graph = []
       @graph_count = 0
       @serviceRecords.each do |key, value|
@@ -30,7 +30,7 @@ module Report
     end
 
     def generate_type_graph
-      @typeRecords = Lsspdfasset.select(:u_type).where(:u_service_id => @owner.u_service_id).group(["u_type"]).count(:u_type)
+      @typeRecords = Lsspdfasset.select(:u_type).where(:u_service_id => @owner.u_service_id, :u_delete => false).group(["u_type"]).count(:u_type)
       @type_graph = []
       @type_graph_count = 0
       @typeRecords.each do |key, value|
@@ -51,7 +51,7 @@ module Report
     end
 
     def generate_result_graph
-      @resultRecords = Lsspdfasset.select(:u_status).where(:u_service_id => @owner.u_service_id).group(["u_status"]).count(:u_status)
+      @resultRecords = Lsspdfasset.select(:u_status).where(:u_service_id => @owner.u_service_id, :u_delete => false).group(["u_status"]).count(:u_status)
       @result_graph = []
       @result_graph_count = 0
       @resultRecords.each do |key, value|
@@ -73,7 +73,7 @@ module Report
 
     def generate_na_reason_graph
       #@naRecords = Lsspdfasset.select(:u_non_accessible_reasons).where("u_service_id =? AND u_non_accessible_reasons IS NOT NULL", @owner.u_service_id).group(["u_non_accessible_reasons"]).count(:u_non_accessible_reasons)
-      @naRecords = Lsspdfasset.select(:u_non_accessible_reasons).where(u_service_id: @owner.u_service_id).where.not(u_non_accessible_reasons: "").group(["u_non_accessible_reasons"]).count(:u_non_accessible_reasons)
+      @naRecords = Lsspdfasset.select(:u_non_accessible_reasons).where(u_service_id: @owner.u_service_id, :u_delete => false).where.not(u_non_accessible_reasons: "").group(["u_non_accessible_reasons"]).count(:u_non_accessible_reasons)
       #Rails.logger.debug("NA Records Length : #{@naRecords.length.inspect}")   
       if @naRecords.length != 0
         Rails.logger.debug("IF Condition NA Records : #{@naRecords.inspect}")

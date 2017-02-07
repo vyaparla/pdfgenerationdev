@@ -17,12 +17,12 @@ class Lsspdfasset < ActiveRecord::Base
 
 
   def buildings(serviceID)
-    Lsspdfasset.where(:u_service_id => serviceID).pluck('DISTINCT u_building')
+    Lsspdfasset.where(:u_service_id => serviceID, :u_delete => false).pluck('DISTINCT u_building')
   end
 
   def building_records(building, service_ID)
     #Rails.logger.debug("Asset: #{building.inspect}")
-    Lsspdfasset.where(:u_building => building, :u_service_id => service_ID)
+    Lsspdfasset.where(:u_building => building, :u_service_id => service_ID, :u_delete => false)
   end
 
   def full_report_path

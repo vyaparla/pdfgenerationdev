@@ -1,8 +1,8 @@
 class PdfjobsController < ApplicationController
 
   def index
-  	@pdfjobs = Lsspdfasset.all
-  	@pdfjobs_count = Lsspdfasset.count
+  	@pdfjobs = Lsspdfasset.all.where(:u_delete => false)
+  	@pdfjobs_count = Lsspdfasset.where(:u_delete => false).count
   end
 
   def destroy

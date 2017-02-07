@@ -49,11 +49,8 @@ module Report
           pdf.text letter_copy
         else
           pdf.text(certified_letter_copy(), :align => :center)
-        end
-        pdf.move_down 50
-        pdf.font_size 10
-        if @model == "FIREDOORINSPECTION"
-        else
+          pdf.move_down 50
+          pdf.font_size 10
           pdf.text certified_closing
         end
       else
