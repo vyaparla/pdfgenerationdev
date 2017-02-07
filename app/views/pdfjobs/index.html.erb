@@ -13,6 +13,7 @@
       <th>Image3</th>
       <th>Image4</th>
       <th>Tag</th>
+      <th>Service Type</th>
       <!--<th>Location</th>
       <th>Bulding</th>
       <th>Floor</th>
@@ -44,6 +45,7 @@
         <td><%= image_tag("data:image/jpeg;base64,#{job.u_image3}", size: "100") %></td>
         <td><%= image_tag("data:image/jpeg;base64,#{job.u_image4}", size: "100") %></td>
         <td><%= job.u_tag %><td>
+        <td><%= job.u_report_type %></td>
         <!--<td><%#= job.u_location_desc %></td>
         <td><%#= job.u_building %></td>
         <td><%#= job.u_floor %></td>

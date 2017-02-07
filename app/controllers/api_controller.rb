@@ -94,6 +94,6 @@ class ApiController < ApplicationController
       :u_building, :u_reason, :u_access_size, :u_inspected_on, :u_inspector, :u_group_name, :u_facility_name, :u_damper_name, 
       :u_non_accessible_reasons, :u_penetration_type, :u_barrier_type, :u_service_type, :u_issue_type, 
       :u_corrected_url_system, :u_active, :u_delete, :u_suggested_ul_system, :u_repair_action_performed, :u_door_category,
-      :u_fire_rating, :u_door_inspection_result, :u_door_type)
+      :u_fire_rating, :u_door_inspection_result, :u_door_type, :u_report_type)
   end
 end
