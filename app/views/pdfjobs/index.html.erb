@@ -7,8 +7,11 @@
   <tbody>
     <tr>
       <th>Job ID</th>
-      <th>Service ID</th>
-      <th>Location</th>
+      <th>Image1</th>
+      <th>Image2 ID</th>
+      <th>Image3 ID</th>
+      <th>Image4 ID</th>
+      <!--<th>Location</th>
       <th>Bulding</th>
       <th>Floor</th>
       <th>Damper Type</th>
@@ -25,7 +28,7 @@
       <th>Issue Type</th>
       <th>Corrected URL System</th>
       <th>Suggested UL System</th>
-      <th>Repair Action Performed</th>
+      <th>Repair Action Performed</th>-->
       <th>Active</th>
       <th>Delete</th>
       <th>Action</th>
@@ -34,24 +37,28 @@
       <tr>
         <td><%= job.u_job_id %></td>
         <td><%= job.u_service_id %></td>
-        <td><%= job.u_location_desc %></td>
-        <td><%= job.u_building %></td>
-        <td><%= job.u_floor %></td>
-        <td><%= job.u_type %></td>
-        <td><%= job.u_damper_name %></td>
-        <td><%= job.u_status %></td>
-        <td><%= job.u_job_start_date %></td>
-        <td><%= job.u_job_end_date %></td>
-        <td><%= job.u_inspected_on %></td>
-        <td><%= job.u_job_scale_rep %></td>
-        <td><%= job.u_non_accessible_reasons %></td>
-        <td><%= job.u_penetration_type %></td>
-        <td><%= job.u_barrier_type %></td>
-        <td><%= job.u_service_type %></td>
-        <td><%= job.u_issue_type %></td>
-        <td><%= job.u_corrected_url_system %></td>
-        <td><%= job.u_suggested_ul_system %></td>
-        <td><%= job.u_repair_action_performed %></td>
+        <td><%= image_tag("data:image/jpeg;base64,#{job.u_image1}", size: 100) %></td>
+        <td><%= image_tag("data:image/jpeg;base64,#{job.u_image2}", size: 100) %></td>
+        <td><%= image_tag("data:image/jpeg;base64,#{job.u_image3}", size: 100) %></td>
+        <td><%= image_tag("data:image/jpeg;base64,#{job.u_image4}", size: 100) %></td>
+        <!--<td><%#= job.u_location_desc %></td>
+        <td><%#= job.u_building %></td>
+        <td><%#= job.u_floor %></td>
+        <td><%#= job.u_type %></td>
+        <td><%#= job.u_damper_name %></td>
+        <td><%#= job.u_status %></td>
+        <td><%#= job.u_job_start_date %></td>
+        <td><%#= job.u_job_end_date %></td>
+        <td><%#= job.u_inspected_on %></td>
+        <td><%#= job.u_job_scale_rep %></td>
+        <td><%#= job.u_non_accessible_reasons %></td>
+        <td><%#= job.u_penetration_type %></td>
+        <td><%#= job.u_barrier_type %></td>
+        <td><%#= job.u_service_type %></td>
+        <td><%#= job.u_issue_type %></td>
+        <td><%#= job.u_corrected_url_system %></td>
+        <td><%#= job.u_suggested_ul_system %></td>
+        <td><%#= job.u_repair_action_performed %></td>-->
         <td><%= job.u_active %></td>
         <td><%= job.u_delete %></td>
 
