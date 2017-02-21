@@ -49,6 +49,8 @@ end
 gem 'puma'
 gem "responders"
 gem 'gruff', '~> 0.5.1'
+gem 'will_paginate'
+
 
 group :development do
   gem 'awesome_print'

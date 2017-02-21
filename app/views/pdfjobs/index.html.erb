@@ -3,6 +3,8 @@
 <p style="color:red;"><%= flash[:success] %></p>
 <p style="float:right;"><%= link_to "Delete All",  clear_index_list_view_pdfjobs_path %></p>
 
+<%= will_paginate @pdfjobs %><br/>
+
 <table style="border: 1px solid #cacaca;" width="80%" align="top" cellpadding="0" cellspacing="0">
   <tbody>
     <tr>

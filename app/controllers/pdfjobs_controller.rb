@@ -1,7 +1,7 @@
 class PdfjobsController < ApplicationController
 
   def index
-  	@pdfjobs = Lsspdfasset.all.where(:u_delete => false)
+  	@pdfjobs = Lsspdfasset.all.where(:u_delete => false).order('created_at DESC').paginate(:page => params[:page], :per_page => 30)
   	@pdfjobs_count = Lsspdfasset.where(:u_delete => false).count
   end
 
