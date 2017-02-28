@@ -2,9 +2,11 @@ module Report
   class CoverPage
   	include PageWritable
 
-    def initialize(owner, model_name)
+    def initialize(owner, model_name, address)
       @owner = owner
-      @model_name = model_name
+      @model_name = model_name      
+      @address = address.split("_")
+      
       # @group_name = group_name
       # @facility_name = facility_name
       # @group_url = group_url
@@ -43,7 +45,13 @@ module Report
         pdf.font_size 25
         pdf.fill_color 'c6171e'
         #pdf.text("<b><i>#{@owner.u_job_id}</i></b>", :inline_format => true)
-        pdf.text("<b><i>#{@owner.u_group_name} : #{@owner.u_facility_name}</i></b>", :inline_format => true) 
+        pdf.text("<b><i>#{@owner.u_facility_name}</i></b>", :inline_format => true)
+        pdf.move_down 20
+        unless @address.blank?
+          pdf.text("<b><i>#{@address[0]}, #{@address[1]}, #{@address[2]}</i></b>", :inline_format => true)
+          pdf.text("<b><i>#{@address[3]}, #{@address[4]}</i></b>", :inline_format => true)
+          pdf.text("<b><i>United States</i></b>", :inline_format => true)
+        end
       end
     end
 

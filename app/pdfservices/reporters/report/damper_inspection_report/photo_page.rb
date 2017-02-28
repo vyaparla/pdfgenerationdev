@@ -99,8 +99,15 @@ module DamperInspectionReport
         pdf.font_size 12
         pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [15 - pdf.bounds.absolute_left, 771 - top_margin_pic_offset])
 
-        unless @record.u_image1.blank?
-          pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_image1}")[:data])), at: [30 - pdf.bounds.absolute_left, 756 - top_margin_pic_offset], fit: [225, 225]
+        # unless @record.u_image1.blank?
+        #   pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_image1}")[:data])), at: [30 - pdf.bounds.absolute_left, 756 - top_margin_pic_offset], fit: [225, 225]
+        # else
+        #   pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at:  [90 - pdf.bounds.absolute_left, 639 - top_margin_pic_offset])
+        # end
+
+        image_data = @record.pdf_image1.path(:pdf)
+        if image_data
+          pdf.image(image_data, at: [30 - pdf.bounds.absolute_left, 756 - top_margin_pic_offset], fit: [225, 225])
         else
           pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at:  [90 - pdf.bounds.absolute_left, 639 - top_margin_pic_offset])
         end
@@ -113,8 +120,15 @@ module DamperInspectionReport
         pdf.font_size 12
         pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [15 - pdf.bounds.absolute_left, 496 - top_margin_pic_offset])
 
-        unless @record.u_image2.blank?
-          pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_image2}")[:data])), at:  [30 - pdf.bounds.absolute_left, 481 - top_margin_pic_offset], fit: [225, 225]
+        # unless @record.u_image2.blank?
+        #   pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_image2}")[:data])), at:  [30 - pdf.bounds.absolute_left, 481 - top_margin_pic_offset], fit: [225, 225]
+        # else
+        #   pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at: [90 - pdf.bounds.absolute_left, 364 - top_margin_pic_offset])
+        # end
+        
+        image_data = @record.pdf_image2.path(:pdf)
+        if image_data
+          pdf.image(image_data, at:  [30 - pdf.bounds.absolute_left, 481 - top_margin_pic_offset], fit: [225, 225])
         else
           pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at: [90 - pdf.bounds.absolute_left, 364 - top_margin_pic_offset])
         end
@@ -126,29 +140,35 @@ module DamperInspectionReport
       	top_margin_pic_offset = 235
         pdf.fill_color '202020'
         pdf.font_size 12
-        if @record.u_image2
+        if @record.u_image3
           pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [275 - pdf.bounds.absolute_left, 496 - top_margin_pic_offset])
         end
    
-        unless @record.u_image2.blank?
-          pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_image3}")[:data])), at:  [290 - pdf.bounds.absolute_left, 481 - top_margin_pic_offset], fit: [225, 225]
+        # unless @record.u_image2.blank?
+        #   pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_image3}")[:data])), at:  [290 - pdf.bounds.absolute_left, 481 - top_margin_pic_offset], fit: [225, 225]
+        # else
+        #   pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at:  [350 - pdf.bounds.absolute_left, 364 - top_margin_pic_offset])
+        # end
+        image_data = @record.pdf_image3.path(:pdf)
+        if image_data
+          pdf.image(image_data, at:  [290 - pdf.bounds.absolute_left, 481 - top_margin_pic_offset], fit: [225, 225])
         else
           pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at:  [350 - pdf.bounds.absolute_left, 364 - top_margin_pic_offset])
-        end
+        end          
         pdf.move_down 100
         pdf.draw_text(DamperInspectionReporting.translate(:actuator), at: [290 - pdf.bounds.absolute_left, 243 - top_margin_pic_offset])
       end
 
-      def splitBase64(uri)
-        if uri.match(%r{^data:(.*?);(.*?),(.*)$})
-          return {
-            type:      $1, # "image/png"
-            encoder:   $2, # "base64"
-            data:      $3, # data string
-            extension: $1.split('/')[1] # "png"
-          }
-        end
-      end
+      # def splitBase64(uri)
+      #   if uri.match(%r{^data:(.*?);(.*?),(.*)$})
+      #     return {
+      #       type:      $1, # "image/png"
+      #       encoder:   $2, # "base64"
+      #       data:      $3, # data string
+      #       extension: $1.split('/')[1] # "png"
+      #     }
+      #   end
+      # end
     
       def comprehensive?
         @options[:comprehensive] == true

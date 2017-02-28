@@ -6,7 +6,7 @@ module Report
       # @group_name = group_name
       # @facility_name = facility_name
       @address = address.split("_")
-      @facility_type = facility_type 
+      @facility_type = facility_type
       @i18n_key = i18n_key
     end
 

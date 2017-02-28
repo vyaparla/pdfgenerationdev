@@ -19,7 +19,7 @@ module Report
         [[:contracted_by, owner.u_group_name],
          [place_key     , place_name],
          [date_key      , owner.work_dates],
-         [technician_key, owner.u_job_scale_rep]].each do |key, value|
+         [technician_key, technician]].each do |key, value|
            pdf.move_down 3
            pdf.text("#{label(key)} #{value}", :inline_format => true)
         end 
@@ -37,6 +37,10 @@ module Report
 
     def owner
       @job
+    end
+
+    def technician
+      @tech
     end
 
     def place_key

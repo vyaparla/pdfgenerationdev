@@ -25,11 +25,79 @@ class ApiController < ApplicationController
     if params[:status] == "insert"
       @pdfjob = Lsspdfasset.new(lssassets_job)
       @pdfjob.save
+      
+      unless @pdfjob.u_image1.blank?
+        @pdf_image1 = StringIO.open(Base64.decode64(@pdfjob.u_image1))
+        @pdf_image1.class.class_eval { attr_accessor :original_filename, :content_type }
+        @pdf_image1.original_filename = "#{params[:image_file_name1]}.jpg"      
+        @pdf_image1.content_type = "image/jpeg"
+        @pdfjob.pdf_image1 = @pdf_image1
+      end
+
+      unless @pdfjob.u_image2.blank?
+        @pdf_image2 = StringIO.open(Base64.decode64(@pdfjob.u_image2))
+        @pdf_image2.class.class_eval { attr_accessor :original_filename, :content_type }
+        @pdf_image2.original_filename = "#{params[:image_file_name2]}.jpg"        
+        @pdf_image2.content_type = "image/jpeg"
+        @pdfjob.pdf_image2 = @pdf_image2
+      end
+      
+      unless @pdfjob.u_image3.blank?
+        @pdf_image3 = StringIO.open(Base64.decode64(@pdfjob.u_image3))
+        @pdf_image3.class.class_eval { attr_accessor :original_filename, :content_type }
+        @pdf_image3.original_filename = "#{params[:image_file_name3]}.jpg"        
+        @pdf_image3.content_type = "image/jpeg"
+        @pdfjob.pdf_image3 = @pdf_image3
+      end
+
+      unless @pdfjob.u_image4.blank?
+        @pdf_image4 = StringIO.open(Base64.decode64(@pdfjob.u_image4))
+        @pdf_image4.class.class_eval { attr_accessor :original_filename, :content_type }
+        @pdf_image4.original_filename = "#{params[:image_file_name4]}.jpg"        
+        @pdf_image4.content_type = "image/jpeg"
+        @pdfjob.pdf_image4 = @pdf_image4
+      end
+      
+      @pdfjob.save
+
       render json: {message: "Save Success"}
     else
       if params[:status] == "update"
         @pdfjob = Lsspdfasset.find_by(u_asset_id: params[:u_asset_id])
         if @pdfjob.update(lssassets_job)
+          
+          unless @pdfjob.u_image1.blank?
+            @pdf_image1 = StringIO.open(Base64.decode64(@pdfjob.u_image1))
+            @pdf_image1.class.class_eval { attr_accessor :original_filename, :content_type }
+            @pdf_image1.original_filename = "#{params[:image_file_name1]}.jpg"      
+            @pdf_image1.content_type = "image/jpeg"          
+            @pdfjob.update_attribute(:pdf_image1, @pdf_image1)
+          end
+
+          unless @pdfjob.u_image2.blank?
+            @pdf_image2 = StringIO.open(Base64.decode64(@pdfjob.u_image2))
+            @pdf_image2.class.class_eval { attr_accessor :original_filename, :content_type }
+            @pdf_image2.original_filename = "#{params[:image_file_name2]}.jpg"        
+            @pdf_image2.content_type = "image/jpeg"            
+            @pdfjob.update_attribute(:pdf_image2, @pdf_image2)
+          end
+      
+          unless @pdfjob.u_image3.blank?
+            @pdf_image3 = StringIO.open(Base64.decode64(@pdfjob.u_image3))
+            @pdf_image3.class.class_eval { attr_accessor :original_filename, :content_type }
+            @pdf_image3.original_filename = "#{params[:image_file_name3]}.jpg"        
+            @pdf_image3.content_type = "image/jpeg"            
+            @pdfjob.update_attribute(:pdf_image3, @pdf_image3)
+          end
+
+          unless @pdfjob.u_image4.blank?
+            @pdf_image4 = StringIO.open(Base64.decode64(@pdfjob.u_image4))
+            @pdf_image4.class.class_eval { attr_accessor :original_filename, :content_type }
+            @pdf_image4.original_filename = "#{params[:image_file_name4]}.jpg"        
+            @pdf_image4.content_type = "image/jpeg"            
+            @pdfjob.update_attribute(:pdf_image4, @pdf_image4)
+          end
+          
           render json: {message: "Update Success"}
         else
           render json: {message: "Unable to Update the record!"}
@@ -61,11 +129,12 @@ class ApiController < ApplicationController
     @model_name    = params[:service].delete(' ').upcase + params[:type].upcase
     @address       = params[:address]
     @facility_type = params[:facilitytype]
+    @tech          = params[:tech]
   
   	@pdfjob = Lsspdfasset.where(u_service_id: params[:serviceID], :u_delete => false).first
     unless @pdfjob.blank?
       #ReportGeneration.new(@pdfjob, @group_name, @facility_name, @group_url, @facility_url).generate_full_report
-      ReportGeneration.new(@pdfjob, @model_name, @address, @facility_type).generate_full_report
+      ReportGeneration.new(@pdfjob, @model_name, @address, @facility_type, @tech).generate_full_report
   	  render json: {message: "Success"}
     else
       render json: {message: "Unsuccess"}
@@ -82,6 +151,18 @@ class ApiController < ApplicationController
     end
   end
 
+  def summary_report
+    @model_name    = params[:service].delete(' ').upcase + params[:type].upcase
+    @address       = params[:address]
+    @facility_type = params[:facilitytype]
+    @tech          = params[:tech]
+     
+    @pdfjob = Lsspdfasset.where(u_service_id: params[:serviceID], :u_delete => false).first
+    ReportGeneration.new(@pdfjob, @model_name, @address, @facility_type, @tech).generate_summary_report
+    @outputfile = @pdfjob.u_job_id + "_" + Time.now.strftime("%m-%d-%Y-%r").gsub(/\s+/, "_") + "_" + "summary_report"
+    send_file @pdfjob.summary_report_path, :type => 'application/pdf', :disposition =>  "attachment; filename=\"#{@outputfile}.pdf\""
+  end
+
   private
 
   # def pdfjob_params
@@ -94,6 +175,6 @@ class ApiController < ApplicationController
       :u_building, :u_reason, :u_access_size, :u_inspected_on, :u_inspector, :u_group_name, :u_facility_name, :u_damper_name, 
       :u_non_accessible_reasons, :u_penetration_type, :u_barrier_type, :u_service_type, :u_issue_type, 
       :u_corrected_url_system, :u_active, :u_delete, :u_suggested_ul_system, :u_repair_action_performed, :u_door_category,
-      :u_fire_rating, :u_door_inspection_result, :u_door_type, :u_report_type)
+      :u_fire_rating, :u_door_inspection_result, :u_door_type, :u_report_type, :pdf_image1, :pdf_image2, :pdf_image3, :pdf_image4)
   end
 end

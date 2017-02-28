@@ -2,10 +2,11 @@ module DamperInspectionReport
   class TabularBreakdownPage
   	include Report::InspectionDataPageWritable
    
-    def initialize(records, damper_type, building_section)
+    def initialize(records, damper_type, building_section, tech)
       @records = records
       @damper_type = damper_type
       @building_section = building_section
+      @tech = tech
     end
 
     def write(pdf)
@@ -32,21 +33,21 @@ module DamperInspectionReport
     end
 
     def contains_all_results
-      @damper_type == :all_dampers
+      @damper_type == :pass_dampers
     end
 
     def summary_table_attributes
       attributes = []
       attributes += [[:date, nil], 
-                     [:technician, nil]]
+                     [:damper_number, nil]]
 
       attributes += [[:floor, nil],
-                     [:damper_number, nil],
-                     [:damper_type, 55],
-                     [:damper_location, contains_all_results ? 85 : 60]]
+                     [:damper_location, contains_all_results ? 85 : 60],
+                     [:damper_type, 55]]
 
-      attributes   <<  [:inspection_result, 60] 
-      attributes   <<  [:reason_for_fail_or_na, 75]
+      attributes   <<  [:service_type, 60] 
+      attributes   <<  [:deficiency, 75]
+      attributes   <<  [:current_status, 60]
         # attributes <<  [:fpm_reading, 60]
         # attributes += [[:corrective_action, 60],
         #                  [:forty_five_days, 29],
@@ -62,14 +63,17 @@ module DamperInspectionReport
       end] +
       @records.map do |record|
       	  data = {
-      	    :date              => record.u_inspected_on.strftime(I18n.t('time.formats.mdY')),
-      	    :technician        => record.u_inspector,
-      	    :floor             => record.u_floor,
-      	    :damper_number     => record.u_damper_name,
+      	    :date              => record.u_inspected_on.strftime(I18n.t('time.formats.mdY')),      	    
+            :damper_number     => record.u_tag,
+      	    :floor             => record.u_floor,   
+            :damper_location   => record.u_location_desc,
       	    :damper_type       => record.u_type,
-      	    :damper_location   => record.u_location_desc,
-      	    :inspection_result => record.u_status,
-      	    :reason_for_fail_or_na => record.u_reason
+            :service_type      => "Inspection",
+            :deficiency        => "Issue",
+            :current_status    => record.u_status
+
+      	    # :inspection_result => record.u_status,
+      	    # :reason_for_fail_or_na => record.u_reason
             # :fpm_reading           => '  ',
             # :corrective_action     => '  ',
             # :forty_five_days       => '  ',

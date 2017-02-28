@@ -142,14 +142,17 @@
           test_result: 'Test Result',
           damper_number: 'Damper Number',
           damper_type: 'Damper Type',
-          damper_location: 'Damper Location',
+          damper_location: 'Location',
           inspection_result: 'Inspection Result',
           reason_for_fail_or_na: 'Reason for Failure or Inaccessibility',
           fpm_reading: 'FPM Reading',
           corrective_action: 'Corrective Action',
           forty_five_days: '45 Days',
           pfi: 'PFI',
-          ilsm: 'ILSM'
+          ilsm: 'ILSM',
+          service_type: 'Service Type',
+          deficiency: 'Deficiency',
+          current_status: 'Current Status'
         },
         report_data_pages: {
           heading: 'FIRE AND SMOKE DAMPER INSPECTION REPORT',
@@ -168,6 +171,7 @@
           failure_reasons: 'Reason',
           reason_for_na: 'Reason',
           all_dampers: 'All Dampers',
+          pass_dampers: 'Pass Dampers',
           failed_dampers: 'Failed Dampers',
           na_dampers: 'Non-Accessible Dampers',
           removed_dampers: 'Removed Dampers',

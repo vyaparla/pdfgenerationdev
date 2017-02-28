@@ -2,9 +2,10 @@ module DamperInspectionReport
   class BuildingSummaryPage
   	include Report::InspectionDataPageWritable
 
-    def initialize(job, building)
+    def initialize(job, building, tech)
       @job = job
       @building = building
+      @tech = tech
       #Rails.logger.debug("BuildingSummary : #{@building.inspect}")
     end
 

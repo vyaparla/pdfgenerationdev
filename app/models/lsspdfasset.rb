@@ -11,6 +11,16 @@ class Lsspdfasset < ActiveRecord::Base
     end
   end
 
+  has_attached_file :pdf_image1, styles: { large: "5000x500>", thumb: "50x50#", pdf: "500x500#" }
+  has_attached_file :pdf_image2, styles: { large: "5000x500>", thumb: "50x50#", pdf: "500x500#" }
+  has_attached_file :pdf_image3, styles: { large: "5000x500>", thumb: "50x50#", pdf: "500x500#" }
+  has_attached_file :pdf_image4, styles: { large: "5000x500>", thumb: "50x50#", pdf: "500x500#" }
+
+  validates_attachment :pdf_image1, content_type: { content_type: ["image/jpg", "image/jpeg", "image/png", "image/gif"] }
+  validates_attachment :pdf_image2, content_type: { content_type: ["image/jpg", "image/jpeg", "image/png", "image/gif"] }
+  validates_attachment :pdf_image3, content_type: { content_type: ["image/jpg", "image/jpeg", "image/png", "image/gif"] }
+  validates_attachment :pdf_image4, content_type: { content_type: ["image/jpg", "image/jpeg", "image/png", "image/gif"] }
+
   # # has_many :lsspdfassets
   # # alias_attribute :records, :lsspdfassets
   # belongs_to :lsspdfasset, :foreign_key => 'lsspdfasset_id'
@@ -27,6 +37,10 @@ class Lsspdfasset < ActiveRecord::Base
 
   def full_report_path
     File.join(pdf_path, 'inspection_report.pdf')
+  end
+
+  def summary_report_path
+    File.join(pdf_path, 'summary_report.pdf')
   end
 
   def graph_by_building_path

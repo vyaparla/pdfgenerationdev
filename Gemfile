@@ -50,7 +50,7 @@ gem 'puma'
 gem "responders"
 gem 'gruff', '~> 0.5.1'
 gem 'will_paginate'
-
+gem 'paperclip', '~> 4.2.2'
 
 group :development do
   gem 'awesome_print'

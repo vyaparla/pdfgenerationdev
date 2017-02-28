@@ -2,8 +2,9 @@ module DamperInspectionReport
   class ProjectSummaryPage
   	include Report::InspectionDataPageWritable
 
-    def initialize(job)
+    def initialize(job, tech)
       @job = job
+      @tech = tech
     end
 
     def write(pdf)

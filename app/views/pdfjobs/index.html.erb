@@ -42,10 +42,16 @@
       <tr>
         <td><%= job.u_job_id %></td>
         <td><%= job.u_service_id %></td>
-        <td><%= image_tag("data:image/jpeg;base64,#{job.u_image1}", size: "100") %></td>
-        <td><%= image_tag("data:image/jpeg;base64,#{job.u_image2}", size: "100") %></td>
-        <td><%= image_tag("data:image/jpeg;base64,#{job.u_image3}", size: "100") %></td>
-        <td><%= image_tag("data:image/jpeg;base64,#{job.u_image4}", size: "100") %></td>
+
+        <!-- <td><%#= image_tag("data:image/jpeg;base64,#{job.u_image1}", size: "100") %></td>
+        <td><%#= image_tag("data:image/jpeg;base64,#{job.u_image2}", size: "100") %></td>
+        <td><%#= image_tag("data:image/jpeg;base64,#{job.u_image3}", size: "100") %></td>
+        <td><%#= image_tag("data:image/jpeg;base64,#{job.u_image4}", size: "100") %></td> -->
+
+        <td><%= image_tag job.pdf_image1.url(:thumb) %></td>
+        <td><%= image_tag job.pdf_image2.url(:thumb) %></td>
+        <td><%= image_tag job.pdf_image3.url(:thumb) %></td>
+        <td><%= image_tag job.pdf_image4.url(:thumb) %></td>
         <td><%= job.u_tag %><td>
         <td><%= job.u_report_type %></td>
         <!--<td><%#= job.u_location_desc %></td>

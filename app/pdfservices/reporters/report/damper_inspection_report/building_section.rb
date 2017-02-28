@@ -4,12 +4,16 @@ module DamperInspectionReport
     
     def write(pdf)
       return if records.empty?
-      BuildingSummaryPage.new(@job, @building).write(pdf)
-      write_breakdown_pages(pdf, building_section)
+      BuildingSummaryPage.new(@job, @building, @tech).write(pdf)
+      write_breakdown_pages(pdf, building_section, @tech)
       records.each { |r| PhotoPage.new(r).write(pdf)}
     end
 
   private
+
+    def pass_records
+      @pass_records ||= records.where(:u_status => "Pass")
+    end
 
     def failed_records
       @failed_records ||= records.where(:u_status => "Fail")
@@ -23,11 +27,11 @@ module DamperInspectionReport
       @remove_records ||= records.where(:u_status => "Removed")
     end
 
-    def write_breakdown_pages(pdf, building_section)
-      TabularBreakdownPage.new(records, :all_dampers, building_section).write(pdf)
-      TabularBreakdownPage.new(failed_records, :failed_dampers, building_section).write(pdf)
-      TabularBreakdownPage.new(na_records, :na_dampers, building_section).write(pdf)
-      TabularBreakdownPage.new(remove_records, :removed_dampers, building_section).write(pdf)
+    def write_breakdown_pages(pdf, building_section, tech)
+      TabularBreakdownPage.new(pass_records, :pass_dampers, building_section, tech).write(pdf)
+      TabularBreakdownPage.new(failed_records, :failed_dampers, building_section, tech).write(pdf)
+      TabularBreakdownPage.new(na_records, :na_dampers, building_section, tech).write(pdf)
+      TabularBreakdownPage.new(remove_records, :removed_dampers, building_section, tech).write(pdf)
     end
   end
 end

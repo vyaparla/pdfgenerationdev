@@ -16,7 +16,7 @@ module Report
   private
 
     def generate_building_graph
-      @serviceRecords = Lsspdfasset.select(:u_building).where(:u_service_id => @owner.u_service_id, :u_delete => false).group(["u_building"]).count(:u_type)
+      @serviceRecords = Lsspdfasset.select(:u_building).where(:u_service_id => @owner.u_service_id, :u_delete => false).where("u_status !=?", "Removed").group(["u_building"]).count(:u_type)
       @building_graph = []
       @graph_count = 0
       @serviceRecords.each do |key, value|
@@ -30,11 +30,11 @@ module Report
     end
 
     def generate_type_graph
-      @typeRecords = Lsspdfasset.select(:u_type).where(:u_service_id => @owner.u_service_id, :u_delete => false).group(["u_type"]).count(:u_type)
+      @typeRecords = Lsspdfasset.select(:u_type).where(:u_service_id => @owner.u_service_id, :u_delete => false).where("u_status !=?", "Removed").group(["u_type"]).count(:u_type)
       @type_graph = []
       @type_graph_count = 0
       @typeRecords.each do |key, value|
-        @type_graph_count += value
+        @type_graph_count += value        
       end
       
       @typeRecords.each do |key1, value1|
@@ -45,17 +45,17 @@ module Report
         else
           @gtype = "Smoke Damper"
         end
-        @type_graph << [@gtype, ((value1.to_f * 100) / @type_graph_count)]
+        @type_graph << [@gtype, ((value1.to_f * 100) / @type_graph_count)]        
       end
       generate_graph(I18n.t('ui.graphs.by_type.title'), @type_graph, @owner.graph_by_type_path)
     end
 
     def generate_result_graph
-      @resultRecords = Lsspdfasset.select(:u_status).where(:u_service_id => @owner.u_service_id, :u_delete => false).group(["u_status"]).count(:u_status)
+      @resultRecords = Lsspdfasset.select(:u_status).where(:u_service_id => @owner.u_service_id, :u_delete => false).where("u_status !=?", "Removed").group(["u_status"]).count(:u_status)
       @result_graph = []
       @result_graph_count = 0
       @resultRecords.each do |key, value|
-        @result_graph_count += value
+        @result_graph_count += value        
       end
       
       @resultRecords.each do |key1, value1|
@@ -66,7 +66,7 @@ module Report
         else
           @gtype = "Passed"
         end
-        @result_graph << [@gtype, ((value1.to_f * 100) / @result_graph_count)]
+        @result_graph << [@gtype, ((value1.to_f * 100) / @result_graph_count)]        
       end
       generate_graph(I18n.t('ui.graphs.by_result.title'), @result_graph, @owner.graph_by_result_path)
     end
@@ -74,7 +74,7 @@ module Report
     def generate_na_reason_graph
       #@naRecords = Lsspdfasset.select(:u_non_accessible_reasons).where("u_service_id =? AND u_non_accessible_reasons IS NOT NULL", @owner.u_service_id).group(["u_non_accessible_reasons"]).count(:u_non_accessible_reasons)
       @naRecords = Lsspdfasset.select(:u_non_accessible_reasons).where(u_service_id: @owner.u_service_id, :u_delete => false).where.not(u_non_accessible_reasons: "").group(["u_non_accessible_reasons"]).count(:u_non_accessible_reasons)
-      #Rails.logger.debug("NA Records Length : #{@naRecords.length.inspect}")   
+      #Rails.logger.debug("NA Records Length : #{@naRecords.length.inspect}")
       if @naRecords.length != 0
         Rails.logger.debug("IF Condition NA Records : #{@naRecords.inspect}")
         @na_graph = []
@@ -87,7 +87,7 @@ module Report
           @na_graph << [key1,  ((value1.to_f * 100) / @na_graph_total)]
         end
         generate_pie_graph(I18n.t('ui.graphs.na_reasons.title'), @na_graph, @owner.graph_na_reasons_path)
-      end   
+      end
     end
 
     def generate_graph(title, data, file)

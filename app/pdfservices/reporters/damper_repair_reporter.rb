@@ -1,4 +1,10 @@
 class DamperRepairReporter < Reporter
+  def summary_report(job, model_name, address, facility_type)
+    generate(job.summary_report_path) do |pdf|
+      Report::CoverPage.new(job, model_name).write(pdf)
+    end
+  end
+
   def report(job, model_name, address, facility_type)
   	generate(job.full_report_path) do |pdf|
   	  Report::CoverPage.new(job, model_name).write(pdf)
