@@ -109,7 +109,7 @@ module DamperRepairReport
       unless image.blank?
         pdf.image(image, at:  [ 44, 251], fit: [105, 105])
       else
-        pdf.draw_text('Photo Unavailable', style: :bold, size: 11, at: 49, 194])
+        pdf.draw_text('Photo Unavailable', style: :bold, size: 11, at: [49, 194])
       end
       pdf.font_size 10
       pdf.draw_text("#{DamperRepairReporting.translate('reopened_after_installation')}", at: [44, 133])
