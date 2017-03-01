@@ -127,7 +127,7 @@ module DamperInspectionReport
         # end
         
         image = @record.pdf_image2.path(:pdf)
-        unless image.blank
+        unless image.blank?
           pdf.image(image, at: [30 - pdf.bounds.absolute_left, 481 - top_margin_pic_offset], fit: [225, 225])
         else
           pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at: [90 - pdf.bounds.absolute_left, 364 - top_margin_pic_offset])
