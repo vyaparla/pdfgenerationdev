@@ -2,9 +2,10 @@ module FirestopInstallationReport
   class TablePage
   	include Report::DataPageWritable
 
-    def initialize(job, building)
+    def initialize(job, building, tech)
       @job = job
       @building = building
+      @tech = tech
     end
 
 

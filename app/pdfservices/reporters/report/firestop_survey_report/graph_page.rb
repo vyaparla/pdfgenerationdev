@@ -2,8 +2,9 @@ module FirestopSurveyReport
   class GraphPage
     include DataPageWritable
 
-    def initialize(job)
+    def initialize(job, tech)
       @job = job
+      @tech = tech
     end
 
     def write(pdf)

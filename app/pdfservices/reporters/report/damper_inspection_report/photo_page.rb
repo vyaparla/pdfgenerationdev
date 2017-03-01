@@ -105,11 +105,11 @@ module DamperInspectionReport
         #   pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at:  [90 - pdf.bounds.absolute_left, 639 - top_margin_pic_offset])
         # end
 
-        image_data = @record.pdf_image1.path(:pdf)
-        if image_data
-          pdf.image(image_data, at: [30 - pdf.bounds.absolute_left, 756 - top_margin_pic_offset], fit: [225, 225])
+        image = @record.pdf_image1.path(:pdf)
+        unless image.blank?
+          pdf.image(image, at: [30 - pdf.bounds.absolute_left, 756 - top_margin_pic_offset], fit: [225, 225])
         else
-          pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at:  [90 - pdf.bounds.absolute_left, 639 - top_margin_pic_offset])
+          pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at: [90 - pdf.bounds.absolute_left, 639 - top_margin_pic_offset])
         end
         pdf.draw_text(DamperInspectionReporting.translate(:open), at: [30 - pdf.bounds.absolute_left, 518 - top_margin_pic_offset])
       end
@@ -126,9 +126,9 @@ module DamperInspectionReport
         #   pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at: [90 - pdf.bounds.absolute_left, 364 - top_margin_pic_offset])
         # end
         
-        image_data = @record.pdf_image2.path(:pdf)
-        if image_data
-          pdf.image(image_data, at:  [30 - pdf.bounds.absolute_left, 481 - top_margin_pic_offset], fit: [225, 225])
+        image = @record.pdf_image2.path(:pdf)
+        unless image.blank
+          pdf.image(image, at: [30 - pdf.bounds.absolute_left, 481 - top_margin_pic_offset], fit: [225, 225])
         else
           pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at: [90 - pdf.bounds.absolute_left, 364 - top_margin_pic_offset])
         end
@@ -149,9 +149,9 @@ module DamperInspectionReport
         # else
         #   pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at:  [350 - pdf.bounds.absolute_left, 364 - top_margin_pic_offset])
         # end
-        image_data = @record.pdf_image3.path(:pdf)
-        if image_data
-          pdf.image(image_data, at:  [290 - pdf.bounds.absolute_left, 481 - top_margin_pic_offset], fit: [225, 225])
+        image = @record.pdf_image3.path(:pdf)
+        unless image.blank?
+          pdf.image(image, at: [290 - pdf.bounds.absolute_left, 481 - top_margin_pic_offset], fit: [225, 225])
         else
           pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at:  [350 - pdf.bounds.absolute_left, 364 - top_margin_pic_offset])
         end          

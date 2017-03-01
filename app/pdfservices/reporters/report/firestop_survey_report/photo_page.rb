@@ -49,10 +49,18 @@ module FirestopSurveyReport
 
     def draw_before_image(pdf)
       pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at:  [35, 530], fit: [123, 123])
-      unless @record.u_image1.blank?
-        pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64, #{@record.u_image1}")[:data])), at:  [44, 521], fit: [105, 105]
+
+      # unless @record.u_image1.blank?
+      #   pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64, #{@record.u_image1}")[:data])), at:  [44, 521], fit: [105, 105]
+      # else
+      # 	pdf.draw_text('Photo Unavailable', style: :bold, size:  11, at: [49, 464])
+      # end
+
+      image = @record.pdf_image1.path(:pdf)
+      unless image.blank?
+        pdf.image(image, at: [44, 521], fit: [105, 105])
       else
-      	pdf.draw_text('Photo Unavailable', style: :bold, size:  11, at: [49, 464])
+        pdf.draw_text('Photo Unavailable', style: :bold, size:  11, at: [49, 464])
       end
       pdf.font_size 10
       pdf.draw_text("Before Installation", at: [44, 403])
@@ -61,10 +69,17 @@ module FirestopSurveyReport
     def draw_after_image(pdf)
       pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at:  [35, 395], fit: [123, 123])
      
-      unless @record.u_image2.blank?
-        pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64, #{@record.u_image2}")[:data])), at: [44, 386], fit: [105, 105]
+      # unless @record.u_image2.blank?
+      #   pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64, #{@record.u_image2}")[:data])), at: [44, 386], fit: [105, 105]
+      # else
+      # 	pdf.draw_text('Photo Unavailable', style: :bold, size: 11, at: [49, 329])
+      # end
+
+      image = @record.pdf_image2.path(:pdf)
+      unless image.blank?
+        pdf.image(image, at: [44, 386], fit: [105, 105])
       else
-      	pdf.draw_text('Photo Unavailable', style: :bold, size: 11, at: [49, 329])
+        pdf.draw_text('Photo Unavailable', style: :bold, size: 11, at: [49, 329])
       end
       pdf.font_size 10
       pdf.draw_text("After Installation", at: [44, 268])
@@ -74,15 +89,15 @@ module FirestopSurveyReport
       'Firestop Survey Report'
     end
 
-    def splitBase64(uri)
-      if uri.match(%r{^data:(.*?);(.*?),(.*)$})
-        return {
-          type:      $1, # "image/png"
-          encoder:   $2, # "base64"
-          data:      $3, # data string
-          extension: $1.split('/')[1] # "png"
-        }
-      end
-    end
+    # def splitBase64(uri)
+    #   if uri.match(%r{^data:(.*?);(.*?),(.*)$})
+    #     return {
+    #       type:      $1, # "image/png"
+    #       encoder:   $2, # "base64"
+    #       data:      $3, # data string
+    #       extension: $1.split('/')[1] # "png"
+    #     }
+    #   end
+    # end
   end
 end

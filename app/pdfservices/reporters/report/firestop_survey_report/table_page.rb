@@ -2,9 +2,10 @@ module FirestopSurveyReport
   class TablePage
   	include DataPageWritable
 
-    def initialize(records, building_section)
+    def initialize(records, building_section, tech)
       @records = records
       @building_section = building_section
+      @tech = tech
     end
 
     def write(pdf)

@@ -10,10 +10,10 @@
     <tr>
       <th>Job ID</th>
       <th>Service ID</th>
-      <th>Image1</th>
+      <!-- <th>Image1</th>
       <th>Image2</th>
       <th>Image3</th>
-      <th>Image4</th>
+      <th>Image4</th> -->
       <th>Tag</th>
       <th>Service Type</th>
       <!--<th>Location</th>
@@ -48,10 +48,10 @@
         <td><%#= image_tag("data:image/jpeg;base64,#{job.u_image3}", size: "100") %></td>
         <td><%#= image_tag("data:image/jpeg;base64,#{job.u_image4}", size: "100") %></td> -->
 
-        <td><%= image_tag job.pdf_image1.url(:thumb) %></td>
-        <td><%= image_tag job.pdf_image2.url(:thumb) %></td>
-        <td><%= image_tag job.pdf_image3.url(:thumb) %></td>
-        <td><%= image_tag job.pdf_image4.url(:thumb) %></td>
+        <!-- <td><%#= image_tag job.pdf_image1.url(:thumb) %></td>
+        <td><%#= image_tag job.pdf_image2.url(:thumb) %></td>
+        <td><%#= image_tag job.pdf_image3.url(:thumb) %></td>
+        <td><%#= image_tag job.pdf_image4.url(:thumb) %></td> -->
         <td><%= job.u_tag %><td>
         <td><%= job.u_report_type %></td>
         <!--<td><%#= job.u_location_desc %></td>

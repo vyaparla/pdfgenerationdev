@@ -60,59 +60,90 @@ module DamperRepairReport
     end
 
     def draw_open_after_install_image(pdf)
-      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at:  [35, 530], fit: [123, 123])
-      unless @record.u_image1.blank?
-        pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_image1}")[:data])), at: [ 44, 521], fit: [105, 105]
+      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [35, 530], fit: [123, 123])
+
+      # unless @record.u_image1.blank?
+      #   pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_image1}")[:data])), at: [ 44, 521], fit: [105, 105]
+      # else
+      #   pdf.draw_text('Photo Unavailable', style: :bold, size: 11, at:  [49, 464])
+      # end
+
+      image = @record.pdf_image1.path(:pdf)
+      unless image.blank?
+        pdf.image(image, at: [ 44, 521], fit: [105, 105])
       else
-        pdf.draw_text('Photo Unavailable', style: :bold, size: 11, at:  [49, 464])
+        pdf.draw_text('Photo Unavailable', style: :bold, size: 11, at: [49, 464])
       end
       pdf.font_size 10
       pdf.draw_text("#{DamperRepairReporting.translate('open_after_installation')}", at: [44, 403])
     end
 
     def draw_closed_after_install_image(pdf)
-      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at:  [ 35, 395], fit: [123, 123])
-      unless @record.u_image2.blank?
-      	pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_image2}")[:data])), at:  [ 44, 386], fit: [105, 105]
+      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [ 35, 395], fit: [123, 123])
+      # unless @record.u_image2.blank?
+      # 	pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_image2}")[:data])), at:  [ 44, 386], fit: [105, 105]
+      # else
+      #   pdf.draw_text('Photo Unavailable', style: :bold, size:  11, at: [49, 329])
+      # end
+
+      image = @record.pdf_image2.path(:pdf)
+      unless image.blank?
+        pdf.image(image, at: [ 44, 386], fit: [105, 105])
       else
-        pdf.draw_text('Photo Unavailable', style: :bold, size:  11, at: [49, 329])
+        pdf.draw_text('Photo Unavailable', style: :bold, size: 11, at: [49, 329]) 
       end
       pdf.font_size 10
       pdf.draw_text("#{DamperRepairReporting.translate('closed_after_installation')}", at: [44, 268])
     end
 
     def draw_reopened_after_install_image(pdf)
-      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at:  [ 35, 260], fit: [123, 123])
-      unless @record.u_image3.blank?
-        pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_image3}")[:data])), at:  [ 44, 251], fit: [105, 105]
+      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [ 35, 260], fit: [123, 123])
+
+      # unless @record.u_image3.blank?
+      #   pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_image3}")[:data])), at:  [ 44, 251], fit: [105, 105]
+      # else
+      # 	pdf.draw_text('Photo Unavailable', style: :bold, size: 11, at:    [49, 194])
+      # end
+     
+      image = @record.pdf_image3.path(:pdf)
+      unless image.blank?
+        pdf.image(image, at:  [ 44, 251], fit: [105, 105])
       else
-      	pdf.draw_text('Photo Unavailable', style: :bold, size: 11, at:    [49, 194])
+        pdf.draw_text('Photo Unavailable', style: :bold, size: 11, at: 49, 194])
       end
       pdf.font_size 10
       pdf.draw_text("#{DamperRepairReporting.translate('reopened_after_installation')}", at: [44, 133])
     end
 
     def draw_new_install_image(pdf)
-      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at:  [ 35, 125], fit: [123, 123])
-      unless @record.u_image4.blank?
-      	pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_image4}")[:data])), at:  [ 44, 116], fit: [105, 105]
+      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [ 35, 125], fit: [123, 123])
+
+      # unless @record.u_image4.blank?
+      # 	pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_image4}")[:data])), at:  [ 44, 116], fit: [105, 105]
+      # else
+      # 	pdf.draw_text('Photo Unavailable', style: :bold, size: 11, at: [49, 59])
+      # end
+
+      image = @record.pdf_image4.path(:pdf)
+      unless image.blank?
+        pdf.image(image, at:  [ 44, 116], fit: [105, 105])
       else
-      	pdf.draw_text('Photo Unavailable', style: :bold, size: 11, at: [49, 59])
+        pdf.draw_text('Photo Unavailable', style: :bold, size: 11, at: [49, 59])
       end
       pdf.font_size 10
-      pdf.draw_text("#{DamperRepairReporting.translate('new_actuator_installed')}",at: [44, -2])
+      pdf.draw_text("#{DamperRepairReporting.translate('new_actuator_installed')}", at: [44, -2])
     end
 
-    def splitBase64(uri)
-      if uri.match(%r{^data:(.*?);(.*?),(.*)$})
-        return {
-          type:      $1, # "image/png"
-          encoder:   $2, # "base64"
-          data:      $3, # data string
-          extension: $1.split('/')[1] # "png"
-        }
-      end
-    end
+    # def splitBase64(uri)
+    #   if uri.match(%r{^data:(.*?);(.*?),(.*)$})
+    #     return {
+    #       type:      $1, # "image/png"
+    #       encoder:   $2, # "base64"
+    #       data:      $3, # data string
+    #       extension: $1.split('/')[1] # "png"
+    #     }
+    #   end
+    # end
 
     def comprehensive?
       @options[:comprehensive] == true
