@@ -11,7 +11,7 @@ class DamperRepairReporter < Reporter
   	  #DamperRepairReport::ProjectSummaryPage.new(job).write(pdf)
   	  job.buildings(job.u_service_id).each do |b|
         DamperRepairReport::TablePage.new(job, b, tech).write(pdf)
-        DamperRepairReport::PhotoSection.new(job, b).write(pdf)
+        DamperRepairReport::PhotoSection.new(job, b, tech).write(pdf)
       end
   	  Report::BackPage.new.write(pdf)
   	end

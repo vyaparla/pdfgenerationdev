@@ -4,7 +4,7 @@ class DamperInspectionReporter < Reporter
     generate(job.summary_report_path) do |pdf|
       Report::CoverPage.new(job, model_name, address).write(pdf)
       DamperInspectionReport::ProjectSummaryPage.new(job, tech).write(pdf)
-      DamperInspectionReport::GraphPage.new(job).write(pdf)
+      DamperInspectionReport::GraphPage.new(job, tech).write(pdf)
     end
   end
 

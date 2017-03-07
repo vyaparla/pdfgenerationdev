@@ -76,7 +76,6 @@ class Lsspdfasset < ActiveRecord::Base
     else
       "#{start_date}"
     end
-    
   end
 
   private
@@ -86,8 +85,7 @@ class Lsspdfasset < ActiveRecord::Base
   end
 
   def graph_path
-    File.join(Rails.root,
-              %w(public content pdfgraph graphs), "#{id}")
+    File.join(Rails.root, %w(public content pdfgraph graphs), "#{id}")
   end
 
 end

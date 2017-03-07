@@ -13,7 +13,7 @@ class FirestopInstallationReporter < Reporter
   	  Report::CoverPage.new(job, model_name, address).write(pdf)
   	  job.buildings(job.u_service_id).each do |b|
         FirestopInstallationReport::TablePage.new(job, b, tech).write(pdf)
-        FirestopInstallationReport::PhotoSection.new(job, b).write(pdf)
+        FirestopInstallationReport::PhotoSection.new(job, b, tech).write(pdf)
       end
       Report::BackPage.new.write(pdf)
   	end

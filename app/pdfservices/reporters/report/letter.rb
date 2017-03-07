@@ -34,12 +34,14 @@ module Report
 
     def complete_physical_address
       address = "#{@owner.u_facility_name}"
-      address << "\n#{@address[0]}"
-      address << "\n#{@address[1]}"
-      address << "\n#{@address[2]}"
-      address << ", #{@address[3]}"
-      address << "  #{@address[4]}"
-      address << "\n United States"
+      unless @address.blank?
+        address << "\n#{@address[0]}"
+        address << "\n#{@address[1]}"
+        address << "\n#{@address[2]}"
+        address << ", #{@address[3]}"
+        address << "  #{@address[4]}"
+        address << "\n United States"
+      end  
     end
 
     def draw_letter_body(pdf)

@@ -38,6 +38,7 @@ module Report
       end
       
       @typeRecords.each do |key1, value1|
+        Rails.logger.debug("Generate Graph Type KEYS : #{key1.inspect}")
         if key1 == "FSD"
           @gtype = "Fire/Smoke Damper"
         elsif key1 == "FD"
@@ -46,6 +47,7 @@ module Report
           @gtype = "Smoke Damper"
         end
         @type_graph << [@gtype, ((value1.to_f * 100) / @type_graph_count)]        
+        #Rails.logger.debug("Generate Graph Type : #{@gtype.inspect}")
       end
       generate_graph(I18n.t('ui.graphs.by_type.title'), @type_graph, @owner.graph_by_type_path)
     end
@@ -59,6 +61,7 @@ module Report
       end
       
       @resultRecords.each do |key1, value1|
+        Rails.logger.debug("Generate Graph Result KEYS : #{key1.inspect}")
         if key1 == "Fail"
           @gtype = "Failed"
         elsif key1 == "NA"
@@ -67,6 +70,7 @@ module Report
           @gtype = "Passed"
         end
         @result_graph << [@gtype, ((value1.to_f * 100) / @result_graph_count)]        
+        #Rails.logger.debug("Generate Graph Result : #{@gtype.inspect}")
       end
       generate_graph(I18n.t('ui.graphs.by_result.title'), @result_graph, @owner.graph_by_result_path)
     end
