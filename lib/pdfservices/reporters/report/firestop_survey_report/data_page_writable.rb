@@ -16,7 +16,7 @@ module FirestopSurveyReport
         end
         pdf.move_down 3
         pdf.text(
-          "#{label(technician_key)} #{owner.u_job_scale_rep}", :inline_format => true)
+          "#{label(technician_key)} #{technician}", :inline_format => true)
       end
       pdf.move_down 30
     end
@@ -28,6 +28,10 @@ module FirestopSurveyReport
     def technician_key
       :surveyed_by
     end
+
+    def technician
+      @tech
+    end 
 
   end
 end
