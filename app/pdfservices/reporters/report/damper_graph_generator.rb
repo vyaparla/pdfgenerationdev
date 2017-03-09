@@ -37,8 +37,7 @@ module Report
         @type_graph_count += value        
       end
       
-      @typeRecords.each do |key1, value1|
-        Rails.logger.debug("Generate Graph Type KEYS : #{key1.inspect}")
+      @typeRecords.each do |key1, value1|        
         if key1 == "FSD"
           @gtype = "Fire/Smoke Damper"
         elsif key1 == "FD"
@@ -60,15 +59,14 @@ module Report
       end
       
       @resultRecords.each do |key1, value1|
-        Rails.logger.debug("Generate Graph Result KEYS : #{key1.inspect}")
         if key1 == "Fail"
           @gtype = "Failed"
         elsif key1 == "NA"
           @gtype = "Non Accessible"
         else
           @gtype = "Passed"
-        end
-        @result_graph << [@gtype, ((value1.to_f * 100) / @result_graph_count)]        
+        end                
+        @result_graph << [@gtype, ((value1.to_f * 100) / @result_graph_count)]
       end
       generate_graph(I18n.t('ui.graphs.by_result.title'), @result_graph, @owner.graph_by_result_path)
     end

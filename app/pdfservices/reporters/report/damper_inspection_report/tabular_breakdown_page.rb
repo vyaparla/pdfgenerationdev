@@ -45,7 +45,7 @@ module DamperInspectionReport
                      [:damper_location, contains_all_results ? 85 : 60],
                      [:damper_type, 55]]
 
-      attributes   <<  [:service_type, 60] 
+      #attributes   <<  [:service_type, 60] 
       attributes   <<  [:deficiency, 75]
       attributes   <<  [:current_status, 60]
         # attributes <<  [:fpm_reading, 60]
@@ -67,8 +67,8 @@ module DamperInspectionReport
             :damper_number     => record.u_tag,
       	    :floor             => record.u_floor,   
             :damper_location   => record.u_location_desc,
-      	    :damper_type       => record.u_type,
-            :service_type      => "Inspection",
+      	    :damper_type       => record.u_damper_name,
+            # :service_type      => "Inspection",
             :deficiency        => "Issue",
             :current_status    => record.u_status
 

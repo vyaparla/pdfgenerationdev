@@ -55,7 +55,7 @@ module DamperInspectionReport
       end
 
       def draw_damper_type(pdf)
-        pdf.text("<b>#{label(:damper_type)}:</b>" + "#{@record.u_type}", inline_format: true)
+        pdf.text("<b>#{label(:damper_type)}:</b> #{@record.u_type}", inline_format: true)
       end 
 
       def draw_floor(pdf)
