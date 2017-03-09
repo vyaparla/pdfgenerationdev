@@ -47,7 +47,6 @@ module Report
           @gtype = "Smoke Damper"
         end
         @type_graph << [@gtype, ((value1.to_f * 100) / @type_graph_count)]        
-        #Rails.logger.debug("Generate Graph Type : #{@gtype.inspect}")
       end
       generate_graph(I18n.t('ui.graphs.by_type.title'), @type_graph, @owner.graph_by_type_path)
     end
@@ -70,7 +69,6 @@ module Report
           @gtype = "Passed"
         end
         @result_graph << [@gtype, ((value1.to_f * 100) / @result_graph_count)]        
-        #Rails.logger.debug("Generate Graph Result : #{@gtype.inspect}")
       end
       generate_graph(I18n.t('ui.graphs.by_result.title'), @result_graph, @owner.graph_by_result_path)
     end

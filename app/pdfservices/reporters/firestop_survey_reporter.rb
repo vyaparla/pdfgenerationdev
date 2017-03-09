@@ -4,7 +4,7 @@ class FirestopSurveyReporter < Reporter
     generate(job.summary_report_path) do |pdf|
       Report::CoverPage.new(job, model_name, address).write(pdf)
       FirestopSurveyReport::SummaryPage.new(job, tech).write(pdf)
-      FirestopSurveyReport::GraphPage.new(job, tech).write(pdf)
+      #FirestopSurveyReport::GraphPage.new(job, tech).write(pdf)
     end
   end
 

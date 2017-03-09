@@ -143,12 +143,16 @@ class ApiController < ApplicationController
 
   def download_full_pdf_report
     @pdfjob = Lsspdfasset.where(u_service_id: params[:serviceID], :u_delete => false).first
-    if @pdfjob.has_full_report?
-      @outputfile = @pdfjob.u_job_id + "_" + Time.now.strftime("%m-%d-%Y-%r").gsub(/\s+/, "_") + "_" + "full_report"
-      send_file @pdfjob.full_report_path, :type => 'application/pdf', :disposition =>  "attachment; filename=\"#{@outputfile}.pdf\""
-    else
-      render json: {message: "The PDF yet not generated to download the full pdf report"}
-    end
+    @outputfile = @pdfjob.u_job_id + "_" + Time.now.strftime("%m-%d-%Y-%r").gsub(/\s+/, "_") + "_" + "full_report"
+    send_file @pdfjob.full_report_path, :type => 'application/pdf', :disposition =>  "attachment; filename=\"#{@outputfile}.pdf\""
+    
+    # @pdfjob = Lsspdfasset.where(u_service_id: params[:serviceID], :u_delete => false).first
+    # if @pdfjob.has_full_report?
+    #   @outputfile = @pdfjob.u_job_id + "_" + Time.now.strftime("%m-%d-%Y-%r").gsub(/\s+/, "_") + "_" + "full_report"
+    #   send_file @pdfjob.full_report_path, :type => 'application/pdf', :disposition =>  "attachment; filename=\"#{@outputfile}.pdf\""
+    # else
+    #   render json: {message: "The PDF yet not generated to download the full pdf report"}
+    # end
   end
 
   def summary_report
