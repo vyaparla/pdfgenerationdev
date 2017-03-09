@@ -10,7 +10,7 @@ module FirestopSurveyReport
         draw_floor(pdf)
         pdf.move_down 10
         pdf.font_size 20
-        pdf.text("<b>Tag #: #{@record.u_tag}</b>", inline_format: true)
+        #pdf.text("<b>Tag #: #{@record.u_tag}</b>", inline_format: true)
         pdf.text("<b>Issue : #{@record.u_issue_type}</b>", inline_format: true)
         if @record.u_service_type == "Fixed On Site"
           pdf.text("<b>Corrected with UL system : #{@record.u_corrected_url_system}</b>", inline_format: true)

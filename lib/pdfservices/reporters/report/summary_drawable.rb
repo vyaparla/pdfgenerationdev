@@ -152,17 +152,9 @@ module Report
 
             @floorInfo.push(floor_json)
           end
-        end  
-        #Rails.logger.debug("FloorJson : #{@floorInfo.inspect}")
+        end
       end
-      #Rails.logger.debug("FloorJson : #{@floorInfo.inspect}")
-
-      @final_table_data = []
-      @floorInfo.each do |resultInfo|
-        @damperPer = '%.2f%' % ((resultInfo["Pass"] * 100) / (resultInfo["FSD"] + resultInfo["FD"] + resultInfo["SD"]))
-        @final_table_data << [resultInfo["floor"], resultInfo["FSD"], resultInfo["FD"], resultInfo["SD"], resultInfo["Pass"], resultInfo["Fail"], resultInfo["NA"], resultInfo["FSD"] + resultInfo["FD"] + resultInfo["SD"], @damperPer]
-      end
-    
+      
       @final_table_data_total = []
       $fsdtotal = 0
       $fdtotal = 0
@@ -171,10 +163,8 @@ module Report
       $ftotal = 0
       $natotal = 0
 
-      @floorInfo.each do |totalInfo|
-        #Rails.logger.debug("FloorJson : #{totalInfo["FSD"].inspect}")
-        $fsdtotal += totalInfo["FSD"]
-        #Rails.logger.debug("FloorJson : #{@fsdtotal.inspect}")
+      @floorInfo.each do |totalInfo|        
+        $fsdtotal += totalInfo["FSD"]        
         $fdtotal += totalInfo["FD"]
         $sdtotal += totalInfo["SD"]
         $ptotal += totalInfo["Pass"]
@@ -189,12 +179,48 @@ module Report
       @final_table_data_total.push($ftotal)
       @final_table_data_total.push($natotal)
       @final_table_data_total.push($fsdtotal + $fdtotal + $sdtotal)
+      @final_table_data_total.push("100.00%")
+
+
+      @final_table_data = []
+      @floorInfo.each do |resultInfo|
+        @damperTotal = resultInfo["FSD"] + resultInfo["FD"] + resultInfo["SD"]
+        @damperGrandtotal = $fsdtotal + $fdtotal + $sdtotal
+        @damperPer = '%.2f%' % ((100 * @damperTotal) / (@damperGrandtotal))
+        #@damperPer = '%.2f%' % ((resultInfo["Pass"] * 100) / (resultInfo["FSD"] + resultInfo["FD"] + resultInfo["SD"]))
+        @final_table_data << [resultInfo["floor"], resultInfo["FSD"], resultInfo["FD"], resultInfo["SD"], resultInfo["Pass"], resultInfo["Fail"], resultInfo["NA"], @damperTotal, @damperPer]
+      end
+    
+      # @final_table_data_total = []
+      # $fsdtotal = 0
+      # $fdtotal = 0
+      # $sdtotal = 0
+      # $ptotal = 0
+      # $ftotal = 0
+      # $natotal = 0
+
+      # @floorInfo.each do |totalInfo|        
+      #   $fsdtotal += totalInfo["FSD"]        
+      #   $fdtotal += totalInfo["FD"]
+      #   $sdtotal += totalInfo["SD"]
+      #   $ptotal += totalInfo["Pass"]
+      #   $ftotal += totalInfo["Fail"]
+      #   $natotal += totalInfo["NA"]
+      # end
+ 
+      # @final_table_data_total.push($fsdtotal)
+      # @final_table_data_total.push($fdtotal)
+      # @final_table_data_total.push($sdtotal)
+      # @final_table_data_total.push($ptotal)
+      # @final_table_data_total.push($ftotal)
+      # @final_table_data_total.push($natotal)
+      # @final_table_data_total.push($fsdtotal + $fdtotal + $sdtotal)
 
       $ptotal_damperPer  = '%.2f%' %  (($ptotal.to_f * 100) / ($fsdtotal + $fdtotal + $sdtotal))
       $ftotal_damperPer  = '%.2f%' %  (($ftotal.to_f * 100) / ($fsdtotal + $fdtotal + $sdtotal))
       $natotal_damperPer = '%.2f%' %  (($natotal.to_f * 100) / ($fsdtotal + $fdtotal + $sdtotal))
 
-      @final_table_data_total.push($ptotal_damperPer)
+      #@final_table_data_total.push($ptotal_damperPer)
       @final_table_data + [['GRAND TOTAL'] + @final_table_data_total]
       #Rails.logger.debug("Floor Final Result : #{@final_table_data.inspect}")
     end

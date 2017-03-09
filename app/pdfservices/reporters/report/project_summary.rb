@@ -7,7 +7,7 @@ module Report
     end
 
     def draw(pdf)
-      draw_facility_title(pdf)      
+      draw_facility_title(pdf)
       Report::Table.new(facility_summary_table_content).draw(pdf)
       pdf.move_down 30
       draw_title(pdf)
@@ -130,22 +130,11 @@ module Report
           end
         end
       end
-      @project_final_table_data = []
-      @buildingInfo.each do |resultInfo|
-        if resultInfo["type"] == "FSD"
-          @damper_type = "Fire/Smoke Damper"
-        elsif resultInfo["type"] == "FD"
-          @damper_type = "Fire Damper"
-        else
-          @damper_type = "Smoke Damper"
-        end
-        @project_final_table_data << [resultInfo["building"], @damper_type, resultInfo["Pass"], resultInfo["Fail"], resultInfo["NA"], resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"], 
-                                     '%.2f%' % ((resultInfo["Pass"].to_f * 100) / (resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"]))]
-      end
+      
       @project_grand_total_data = []
       $ptotal = 0
       $ftotal = 0
-      $natotal = 0
+      $natotal = 0      
       @buildingInfo.each do |totalInfo|
         $ptotal += totalInfo["Pass"]
         $ftotal += totalInfo["Fail"]
@@ -155,8 +144,39 @@ module Report
       @project_grand_total_data.push($ftotal)
       @project_grand_total_data.push($natotal)
       @project_grand_total_data.push($ptotal + $ftotal + $natotal)
-      @project_grand_total_data.push('%.2f%' % (($ptotal.to_f * 100) / ($ptotal + $ftotal + $natotal)))
+      #@project_grand_total_data.push('%.2f%' % (($ptotal.to_f * 100) / ($ptotal + $ftotal + $natotal)))
 
+      @project_final_table_data = []
+      @buildingInfo.each do |resultInfo|
+        if resultInfo["type"] == "FSD"
+          @damper_type = "Fire/Smoke Damper"
+        elsif resultInfo["type"] == "FD"
+          @damper_type = "Fire Damper"
+        else
+          @damper_type = "Smoke Damper"
+        end        
+        @project_total = resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"]
+        @project_grand_total = $ptotal + $ftotal + $natotal
+        @project_per = '%.2f%' % ((100 * @project_total.to_f) / (@project_grand_total))
+        @project_final_table_data << [resultInfo["building"], @damper_type, resultInfo["Pass"], resultInfo["Fail"], resultInfo["NA"], @project_total, @project_per]
+      end
+
+      # @project_grand_total_data = []
+      # $ptotal = 0
+      # $ftotal = 0
+      # $natotal = 0
+      # @buildingInfo.each do |totalInfo|
+      #   $ptotal += totalInfo["Pass"]
+      #   $ftotal += totalInfo["Fail"]
+      #   $natotal += totalInfo["NA"]
+      # end
+      # @project_grand_total_data.push($ptotal)
+      # @project_grand_total_data.push($ftotal)
+      # @project_grand_total_data.push($natotal)
+      # @project_grand_total_data.push($ptotal + $ftotal + $natotal)
+      # @project_grand_total_data.push('%.2f%' % (($ptotal.to_f * 100) / ($ptotal + $ftotal + $natotal)))
+
+      @project_grand_total_data.push("100.00%")
       $project_pass_per  = '%.2f%' %  (($ptotal.to_f * 100) / ($ptotal + $ftotal + $natotal))
       $project_fail_per  = '%.2f%' %  (($ftotal.to_f * 100) / ($ptotal + $ftotal + $natotal))
       $project_na_per = '%.2f%' %  (($natotal.to_f * 100) / ($ptotal + $ftotal + $natotal))
@@ -231,13 +251,6 @@ module Report
         end  
       end
 
-      @facility_building_table_data = []
-
-      @facility_buildingInfo.each do |facilityvalue|
-        @facility_building_table_data << [facilityvalue["building"], facilityvalue["Pass"], facilityvalue["Fail"], facilityvalue["NA"], facilityvalue["Pass"] + facilityvalue["Fail"] + facilityvalue["NA"],
-                                          '%.2f%' % ((facilityvalue["Pass"].to_f * 100) / (facilityvalue["Pass"] + facilityvalue["Fail"] + facilityvalue["NA"]))]
-      end
-      
       @facility_grand_total_data = []
       $bptotal = 0
       $bftotal = 0
@@ -252,7 +265,34 @@ module Report
       @facility_grand_total_data.push($bnatotal)
 
       @facility_grand_total_data.push($bptotal + $bftotal + $bnatotal)
-      @facility_grand_total_data.push('%.2f%' % (($bptotal.to_f * 100) / ($bptotal + $bftotal + $bnatotal)))
+      @facility_grand_total_data.push("100.00%")
+
+
+      @facility_building_table_data = []
+      @facility_buildingInfo.each do |facilityvalue|
+
+        @facility_total = facilityvalue["Pass"] + facilityvalue["Fail"] + facilityvalue["NA"]
+        @facility_grand_total = $bptotal + $bftotal + $bnatotal
+        @facility_per = '%.2f%' % ((100 * @facility_total.to_f) / (@facility_grand_total))
+
+        @facility_building_table_data << [facilityvalue["building"], facilityvalue["Pass"], facilityvalue["Fail"], facilityvalue["NA"], @facility_total, @facility_per]
+      end
+      
+      # @facility_grand_total_data = []
+      # $bptotal = 0
+      # $bftotal = 0
+      # $bnatotal = 0
+      # @facility_buildingInfo.each do |totalInfo|
+      #   $bptotal += totalInfo["Pass"]
+      #   $bftotal += totalInfo["Fail"]
+      #   $bnatotal += totalInfo["NA"]
+      # end
+      # @facility_grand_total_data.push($bptotal)
+      # @facility_grand_total_data.push($bftotal)
+      # @facility_grand_total_data.push($bnatotal)
+
+      # @facility_grand_total_data.push($bptotal + $bftotal + $bnatotal)
+      # @facility_grand_total_data.push('%.2f%' % (($bptotal.to_f * 100) / ($bptotal + $bftotal + $bnatotal)))
 
       @facility_building_table_data + [['GRAND TOTAL'] + @facility_grand_total_data]      
     end 

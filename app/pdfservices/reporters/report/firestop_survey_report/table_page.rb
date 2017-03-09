@@ -10,13 +10,12 @@ module FirestopSurveyReport
 
     def write(pdf)
       super
-      columns = ['Date', 'Item Number', 'Floor', 'Location', 'Penetration Type', 'Issue',
-      	         'Corrected On Site', 'Suggested Corrective Action']
+      columns = ['Asset #', 'Floor', 'Location', 'Penetration Type', 'Issue', 'Corrected On Site', 'Suggested Corrective Action']
 
       inspection_data = [columns]
       @records.each do |record|
         record_data = [
-          record.u_inspected_on.strftime('%m-%d-%Y'),
+          #record.u_inspected_on.strftime('%m-%d-%Y'),
           record.u_tag,
           record.u_floor,
           record.u_location_desc,
@@ -33,7 +32,7 @@ module FirestopSurveyReport
       end
       #create the table & write it into the PDF
       pdf.font_size 10
-      pdf.table(inspection_data, :column_widths => { 0 => 90 },
+      pdf.table(inspection_data, :column_widths => { 0 => 50 },
                 header: true,
                 cell_style: { align: :center, size: 10 }) do |table|
 
@@ -56,6 +55,5 @@ module FirestopSurveyReport
     def building
       @building ||= @building_section
     end
-
   end
 end

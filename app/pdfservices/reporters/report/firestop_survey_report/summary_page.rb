@@ -36,7 +36,6 @@ module FirestopSurveyReport
         survey_issue_summary << [key, value, "#{((value.to_f * 100 ) / @firestop_survey_issue_count).round(2)}%"]
       end
 
-
       pdf.font_size 10
       pdf.table(survey_issue_summary, header: true) do |table|
         table.row_colors = ['ffffff', 'eaeaea']
@@ -49,6 +48,8 @@ module FirestopSurveyReport
         table.column(1).style {|c| c.align = :center }
         table.column(2).style {|c| c.align = :center }
       end
+      pdf.move_down 50
+      FirestopSurveyReport::GraphPage.new(@job, @tech).write(pdf)
     end
   end
 end
