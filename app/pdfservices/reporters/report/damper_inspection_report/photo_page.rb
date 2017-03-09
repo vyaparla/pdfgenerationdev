@@ -63,10 +63,10 @@ module DamperInspectionReport
       end
 
       def draw_access_door_installation(pdf)
-        pdf.text("<b>Installed Access Door:</b>", inline_format: true)
-        pdf.indent(10) do
-          pdf.text("• #{@record.u_access_size}")
-        end
+        pdf.text("<b>Installed Access Door:</b> #{@record.u_access_size}", inline_format: true)
+        # pdf.indent(10) do
+        #   pdf.text("• #{@record.u_access_size}")
+        # end
       end
  
       def draw_status(pdf)
