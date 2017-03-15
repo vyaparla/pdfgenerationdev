@@ -31,14 +31,14 @@ module Report
 
     def generate_type_graph
       #@typeRecords = Lsspdfasset.select(:u_type).where(:u_service_id => @owner.u_service_id, :u_delete => false).where("u_status !=?", "Removed").group(["u_type"]).count(:u_type)
-      @typeRecords = Lsspdfasset.select(:u_type).where(:u_service_id => @owner.u_service_id, :u_delete => false).where("u_status !=?", "Removed").group(["u_type"]).order("CASE WHEN u_type = 'FD' THEN '1' WHEN u_type = 'SD' THEN '2' ELSE '3' END").count(:u_type)
+      @typeRecords = Lsspdfasset.select(:u_type).where(:u_service_id => @owner.u_service_id, :u_delete => false).where("u_status !=?", "Removed").where.not(u_status: "").group(["u_type"]).order("CASE WHEN u_type = 'FD' THEN '1' WHEN u_type = 'SD' THEN '2' ELSE '3' END").count(:u_type)
       @type_graph = []
       @type_graph_count = 0
       @typeRecords.each do |key, value|
         @type_graph_count += value
       end
       
-      @typeRecords.each do |key1, value1|        
+      @typeRecords.each do |key1, value1|
         if key1 == "FSD"
           @gtype = "Combination"
         elsif key1 == "FD"
@@ -46,7 +46,7 @@ module Report
         else
           @gtype = "Smoke"
         end
-        @type_graph << [@gtype, ((value1.to_f * 100) / @type_graph_count)]        
+        @type_graph << [@gtype, ((value1.to_f * 100) / @type_graph_count)]
       end
       generate_graph(I18n.t('ui.graphs.by_type.title'), @type_graph, @owner.graph_by_type_path)
     end
@@ -60,7 +60,7 @@ module Report
         @result_graph_count += value
       end
       
-      @resultRecords.each do |key1, value1|        
+      @resultRecords.each do |key1, value1|
         if key1 == "Fail"
           @gtype = "Failed"
         elsif key1 == "NA"
