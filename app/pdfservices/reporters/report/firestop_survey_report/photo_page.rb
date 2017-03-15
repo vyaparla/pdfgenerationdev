@@ -9,18 +9,21 @@ module FirestopSurveyReport
         draw_penetration_number(pdf)
         draw_floor(pdf)
         pdf.move_down 10
-        pdf.font_size 20
         #pdf.text("<b>Tag #: #{@record.u_tag}</b>", inline_format: true)
-        pdf.text("<b>Issue : #{@record.u_issue_type}</b>", inline_format: true)
+        draw_issue(pdf)
+        #pdf.text("<b>Issue : #{@record.u_issue_type}</b>", inline_format: true)
+        pdf.font_size 15
+        pdf.move_down 10
         if @record.u_service_type == "Fixed On Site"
-          pdf.text("<b>Corrected with UL system : #{@record.u_corrected_url_system}</b>", inline_format: true)
+          pdf.text("<b>Corrected with UL system : </b> #{@record.u_corrected_url_system}", inline_format: true)
         else
-          pdf.text("<b>Suggested UL System : #{@record.u_suggested_ul_system}</b>", inline_format: true)
+          pdf.text("<b>Suggested UL System : </b> #{@record.u_suggested_ul_system}</b>", inline_format: true)
         end
-        pdf.text("<b>Barrier type :  #{@record.u_barrier_type}</b>", inline_format: true)
+        pdf.move_down 10
+        pdf.text("<b>Barrier type : </b>  #{@record.u_barrier_type}", inline_format: true)
       end
       pdf.fill_color '202020'
-      pdf.font_size 12
+      #pdf.font_size 15
 
       if @record.u_service_type != "Fixed On Site"
       	draw_before_image(pdf)
@@ -45,6 +48,12 @@ module FirestopSurveyReport
     
     def draw_floor(pdf)
       pdf.text("<b>Floor :</b> #{@record.u_floor}", inline_format: true)
+    end
+
+    def draw_issue(pdf)
+      pdf.fill_color 'c1171d'
+      pdf.text("<b>Issue : </b> #{@record.u_issue_type}", inline_format: true)
+      pdf.fill_color '202020'
     end
 
     def draw_before_image(pdf)

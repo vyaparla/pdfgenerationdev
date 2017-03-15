@@ -1,5 +1,5 @@
 class FirestopSurveyReporter < Reporter
-  def summary_report(job, model_name, address, facility_type, tech)
+  def summary_report(job, model_name, address, tech)
     FirestopSurveyReport::GraphGenerator.new(job).generate
     generate(job.summary_report_path) do |pdf|
       Report::CoverPage.new(job, model_name, address).write(pdf)

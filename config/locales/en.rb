@@ -106,7 +106,8 @@
       },
       graphs: {
         by_building: {
-          title: 'BUILDINGS'
+          #title: 'BUILDINGS'
+          title: 'PROJECT ASSETS TOTALS BY BUILDINGS'
         },
         by_type: {
           title: 'TYPES'
@@ -133,6 +134,7 @@
           pass: 'Pass',
           fail: 'Fail',
           na: 'Non-Accessible',
+          removed: "Removed",
           total_dampers: 'Total Dampers',
           damper_per: '% of Total Dampers',
           type: 'Type',

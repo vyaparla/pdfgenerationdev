@@ -22,7 +22,7 @@ class ReportGeneration
   end
 
   def generate_summary_report
-    reporter.summary_report(@owner, @model_name, @address, @facility_type, @tech)
+    reporter.summary_report(@owner, @model_name, @address, @tech)
   end
 
   private

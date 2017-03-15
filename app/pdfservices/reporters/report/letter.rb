@@ -1,6 +1,6 @@
 module Report
   class Letter
-  	def initialize(owner, model, address, facility_type, i18n_key)
+  	def initialize(owner, model, address, facility_type, i18n_key, tech)
       @owner = owner
       @model = model
       # @group_name = group_name
@@ -8,6 +8,7 @@ module Report
       @address = address.split("_")
       @facility_type = facility_type
       @i18n_key = i18n_key
+      @tech = tech
     end
 
     def draw(pdf)
@@ -26,7 +27,8 @@ module Report
     def certified_letter_copy
       I18n.t("pdf.letter_page.#{@i18n_key}.certified_content",
              :address          => complete_physical_address,
-             :technician_list  => @owner.u_job_scale_rep,
+             #:technician_list  => @owner.u_job_scale_rep,
+             :technician_list  => @tech,
              :work_dates       => @owner.work_dates)
       
              #:work_dates       => "#{@owner.u_job_start_date.strftime(I18n.t('date.formats.long'))} - #{@owner.u_job_start_date.strftime(I18n.t('date.formats.long'))}")
@@ -41,7 +43,7 @@ module Report
         address << ", #{@address[3]}"
         address << "  #{@address[4]}"
         address << "\n United States"
-      end  
+      end
     end
 
     def draw_letter_body(pdf)

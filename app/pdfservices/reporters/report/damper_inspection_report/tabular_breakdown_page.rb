@@ -4,7 +4,7 @@ module DamperInspectionReport
    
     def initialize(records, damper_type, building_section, tech)
       @records = records
-      @damper_type = damper_type
+      @damper_type = damper_type      
       @building_section = building_section
       @tech = tech
     end
@@ -61,27 +61,117 @@ module DamperInspectionReport
       [attributes.map do |column, _|
            DamperInspectionReporting.column_heading(column)
       end] +
-      @records.map do |record|
-      	  data = {
-      	    :date              => record.u_inspected_on.strftime(I18n.t('time.formats.mdY')),      	    
+      if @damper_type == :pass_dampers
+        @records.map do |record|
+          data = {            
+            :date              => record.u_inspected_on.strftime(I18n.t('time.formats.mdY')),
             :damper_number     => record.u_tag,
-      	    :floor             => record.u_floor,   
+            :floor             => record.u_floor,
             :damper_location   => record.u_location_desc,
-      	    :damper_type       => record.u_damper_name,
-            # :service_type      => "Inspection",
-            :deficiency        => "Issue",
+            :damper_type       => record.u_damper_name,
+            #:service_type      => "Inspection",
+            #:deficiency        => "Issue",
             :current_status    => record.u_status
 
-      	    # :inspection_result => record.u_status,
-      	    # :reason_for_fail_or_na => record.u_reason
+            # :inspection_result => record.u_status,
+            # :reason_for_fail_or_na => record.u_reason
             # :fpm_reading           => '  ',
             # :corrective_action     => '  ',
             # :forty_five_days       => '  ',
             # :pfi                   => '  ',
             # :ilsm                  => '  '
-      	  }
-      	  attributes.map { |column, | data[column] }
+          }
+          attributes.map { |column, | data[column] }
+        end 
+      elsif @damper_type == :failed_dampers
+        @records.map do |record|
+          data = {            
+            :date              => record.u_inspected_on.strftime(I18n.t('time.formats.mdY')),
+            :damper_number     => record.u_tag,
+            :floor             => record.u_floor,
+            :damper_location   => record.u_location_desc,
+            :damper_type       => record.u_damper_name,
+            #:service_type      => "Inspection",
+            :deficiency        => record.u_reason,
+            :current_status    => record.u_status
+
+            # :inspection_result => record.u_status,
+            # :reason_for_fail_or_na => record.u_reason
+            # :fpm_reading           => '  ',
+            # :corrective_action     => '  ',
+            # :forty_five_days       => '  ',
+            # :pfi                   => '  ',
+            # :ilsm                  => '  '
+          }
+          attributes.map { |column, | data[column] }
+        end
+      elsif @damper_type == :na_dampers        
+        @records.map do |record|
+          data = {            
+            :date              => record.u_inspected_on.strftime(I18n.t('time.formats.mdY')),
+            :damper_number     => record.u_tag,
+            :floor             => record.u_floor,
+            :damper_location   => record.u_location_desc,
+            :damper_type       => record.u_damper_name,
+            #:service_type      => "Inspection",
+            :deficiency        => record.u_non_accessible_reasons,
+            :current_status    => record.u_status
+
+            # :inspection_result => record.u_status,
+            # :reason_for_fail_or_na => record.u_reason
+            # :fpm_reading           => '  ',
+            # :corrective_action     => '  ',
+            # :forty_five_days       => '  ',
+            # :pfi                   => '  ',
+            # :ilsm                  => '  '
+          }
+          attributes.map { |column, | data[column] }
+        end
+      else
+        @records.map do |record|
+          data = {            
+            :date              => record.u_inspected_on.strftime(I18n.t('time.formats.mdY')),
+            :damper_number     => record.u_tag,
+            :floor             => record.u_floor,
+            :damper_location   => record.u_location_desc,
+            :damper_type       => record.u_damper_name,
+            #:service_type      => "Inspection",
+            #:deficiency        => record.u_non_accessible_reasons,
+            :current_status    => record.u_status
+
+            # :inspection_result => record.u_status,
+            # :reason_for_fail_or_na => record.u_reason
+            # :fpm_reading           => '  ',
+            # :corrective_action     => '  ',
+            # :forty_five_days       => '  ',
+            # :pfi                   => '  ',
+            # :ilsm                  => '  '
+          }
+          attributes.map { |column, | data[column] }
+        end
       end
+            
+      # @records.map do |record|
+      # 	  data = {            
+      # 	    :date              => record.u_inspected_on.strftime(I18n.t('time.formats.mdY')),
+      #       :damper_number     => record.u_tag,
+      # 	    :floor             => record.u_floor,
+      #       :damper_location   => record.u_location_desc,
+      # 	    :damper_type       => record.u_damper_name,
+      #       #:service_type      => "Inspection",
+      #       :deficiency        => "Issue",
+      #       :current_status    => record.u_status
+
+      # 	    # :inspection_result => record.u_status,
+      # 	    # :reason_for_fail_or_na => record.u_reason
+      #       # :fpm_reading           => '  ',
+      #       # :corrective_action     => '  ',
+      #       # :forty_five_days       => '  ',
+      #       # :pfi                   => '  ',
+      #       # :ilsm                  => '  '
+      # 	  }
+      # 	  attributes.map { |column, | data[column] }
+      # end
     end
     
     def draw_summary_table(pdf, data, attributes)

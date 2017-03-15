@@ -30,20 +30,21 @@ module Report
     end
 
     def generate_type_graph
-      @typeRecords = Lsspdfasset.select(:u_type).where(:u_service_id => @owner.u_service_id, :u_delete => false).where("u_status !=?", "Removed").group(["u_type"]).count(:u_type)
+      #@typeRecords = Lsspdfasset.select(:u_type).where(:u_service_id => @owner.u_service_id, :u_delete => false).where("u_status !=?", "Removed").group(["u_type"]).count(:u_type)
+      @typeRecords = Lsspdfasset.select(:u_type).where(:u_service_id => @owner.u_service_id, :u_delete => false).where("u_status !=?", "Removed").group(["u_type"]).order("CASE WHEN u_type = 'FD' THEN '1' WHEN u_type = 'SD' THEN '2' ELSE '3' END").count(:u_type)
       @type_graph = []
       @type_graph_count = 0
       @typeRecords.each do |key, value|
-        @type_graph_count += value        
+        @type_graph_count += value
       end
       
       @typeRecords.each do |key1, value1|        
         if key1 == "FSD"
-          @gtype = "Fire/Smoke Damper"
+          @gtype = "Combination"
         elsif key1 == "FD"
-          @gtype = "Fire Damper"
+          @gtype = "Fire"
         else
-          @gtype = "Smoke Damper"
+          @gtype = "Smoke"
         end
         @type_graph << [@gtype, ((value1.to_f * 100) / @type_graph_count)]        
       end
@@ -51,21 +52,22 @@ module Report
     end
 
     def generate_result_graph
-      @resultRecords = Lsspdfasset.select(:u_status).where(:u_service_id => @owner.u_service_id, :u_delete => false).where("u_status !=?", "Removed").group(["u_status"]).count(:u_status)
+      #@resultRecords = Lsspdfasset.select(:u_status).where(:u_service_id => @owner.u_service_id, :u_delete => false).where("u_status !=?", "Removed").group(["u_status"]).count(:u_status)
+      @resultRecords = Lsspdfasset.select(:u_status).where(:u_service_id =>  @owner.u_service_id, :u_delete => false).where("u_status !=?", "Removed").group(["u_status"]).order("CASE WHEN u_status = 'Pass' THEN '1' WHEN u_status = 'Fail' THEN '2' ELSE '3' end").count(:u_status)
       @result_graph = []
       @result_graph_count = 0
       @resultRecords.each do |key, value|
-        @result_graph_count += value        
+        @result_graph_count += value
       end
       
-      @resultRecords.each do |key1, value1|
+      @resultRecords.each do |key1, value1|        
         if key1 == "Fail"
           @gtype = "Failed"
         elsif key1 == "NA"
           @gtype = "Non Accessible"
         else
           @gtype = "Passed"
-        end                
+        end
         @result_graph << [@gtype, ((value1.to_f * 100) / @result_graph_count)]
       end
       generate_graph(I18n.t('ui.graphs.by_result.title'), @result_graph, @owner.graph_by_result_path)
@@ -76,7 +78,7 @@ module Report
       @naRecords = Lsspdfasset.select(:u_non_accessible_reasons).where(u_service_id: @owner.u_service_id, :u_delete => false).where.not(u_non_accessible_reasons: "").group(["u_non_accessible_reasons"]).count(:u_non_accessible_reasons)
       #Rails.logger.debug("NA Records Length : #{@naRecords.length.inspect}")
       if @naRecords.length != 0
-        Rails.logger.debug("IF Condition NA Records : #{@naRecords.inspect}")
+        #Rails.logger.debug("IF Condition NA Records : #{@naRecords.inspect}")
         @na_graph = []
         @na_graph_total = 0
         @naRecords.each do |key, value|
@@ -98,12 +100,12 @@ module Report
                                  #385a81 #aa6d19 #e3bf42),
         :background_colors => %w(white white)
       }
-      gbar.font = "#{Rails.root}/lib/pdf_generation/fonts/Helvetica.ttf"
-      gbar.title_font_size = 40
+      #gbar.font = File.expand_path('lib/pdf_generation/fonts/Helvetica.ttf', Rails.root)
+      gbar.title_font_size = 30
       gbar.legend_font_size = 30
       gbar.marker_font_size = 24
       gbar.bottom_margin = 10
-      gbar.title_margin = 10
+      gbar.title_margin = 50
       gbar.sort = false
       gbar.maximum_value = 100 
       gbar.minimum_value = 0 
@@ -122,9 +124,8 @@ module Report
                                  #385a81 #aa6d19 #e3bf42),
         :background_colors => %w(white white)
       }
-      pie.font = File.expand_path('lib/pdf_generation/fonts/Helvetica.ttf',
-                                  Rails.root)
-      pie.title_font_size = 24
+      #pie.font = File.expand_path('lib/pdf_generation/fonts/Helvetica.ttf', Rails.root)
+      pie.title_font_size = 30
       pie.legend_font_size = 24
       pie.marker_font_size = 24
       pie.bottom_margin = 50

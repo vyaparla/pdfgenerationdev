@@ -54,7 +54,7 @@ module Report
     end
 
     def project_summary_table_headings
-      ["Building", "Type", "Pass", "Fail", "Non-Accessible", "Total", "% of Total"]
+      ["Building", "Type", "Pass", "Fail", "Non-Accessible", "Removed", "Total", "% of Total"]
     end
 
     def project_summary_table_content
@@ -62,7 +62,8 @@ module Report
     end
 
     def project_summary_table_data
-      @serviceInfo = Lsspdfasset.select(:u_building, :u_type, :u_status).where(:u_service_id => @owner.u_service_id, :u_delete => false).where("u_status !=?", "Removed").group(["u_building", "u_type","u_status"]).count(:u_status)
+      #@serviceInfo = Lsspdfasset.select(:u_building, :u_type, :u_status).where(:u_service_id => @owner.u_service_id, :u_delete => false).where("u_status !=?", "Removed").group(["u_building", "u_type","u_status"]).count(:u_status)
+      @serviceInfo = Lsspdfasset.select(:u_building, :u_type, :u_status).where(:u_service_id => @owner.u_service_id, :u_delete => false).group(["u_building", "u_type","u_status"]).order("CASE WHEN u_type = 'FD' THEN '1' WHEN u_type = 'SD' THEN '2' ELSE '3' END").count(:u_status)
       @buildingInfo = []
       @serviceInfo.each do |key,value|
         building_json = {}
@@ -76,17 +77,25 @@ module Report
             building_json["type"] = "SD"
           end
           if key[2] == "Pass"
-              building_json["Pass"] = value
-              building_json["Fail"] = 0
-              building_json["NA"] = 0
-            elsif key[2] == "Fail"
-              building_json["Pass"] = 0
-              building_json["Fail"] = value
-              building_json["NA"] = 0
-            else
-              building_json["Pass"] = 0
-              building_json["Fail"] = 0
-              building_json["NA"] = value
+            building_json["Pass"] = value
+            building_json["Fail"] = 0
+            building_json["NA"] = 0
+            building_json["Removed"] = 0
+          elsif key[2] == "Fail"
+            building_json["Pass"] = 0
+            building_json["Fail"] = value
+            building_json["NA"] = 0
+            building_json["Removed"] = 0
+          elsif key[2] == "NA"
+            building_json["Pass"] = 0
+            building_json["Fail"] = 0
+            building_json["NA"] = value
+            building_json["Removed"] = 0
+          else
+            building_json["Pass"] = 0
+            building_json["Fail"] = 0
+            building_json["NA"] = 0
+            building_json["Removed"] = value
           end
           @buildingInfo.push(building_json)
         else
@@ -97,8 +106,10 @@ module Report
                 info["Pass"] = value
               elsif (key[2]  == "Fail")
                 info["Fail"] = value
-              else
+              elsif (key[2] == "NA")
                 info["NA"] = value
+              else
+                info["Removed"] = value
               end
              @boolean = 1
             end
@@ -117,14 +128,22 @@ module Report
               building_json["Pass"] = value
               building_json["Fail"] = 0
               building_json["NA"] = 0
+              building_json["Removed"] = 0
             elsif key[2] == "Fail"
               building_json["Pass"] = 0
               building_json["Fail"] = value
               building_json["NA"] = 0
-            else
+              building_json["Removed"] = 0
+            elsif key[2] == "NA"
               building_json["Pass"] = 0
               building_json["Fail"] = 0
               building_json["NA"] = value
+              building_json["Removed"] = 0
+            else
+              building_json["Pass"] = 0
+              building_json["Fail"] = 0
+              building_json["NA"] = 0
+              building_json["Removed"] =  value
             end
             @buildingInfo.push(building_json)
           end
@@ -134,31 +153,34 @@ module Report
       @project_grand_total_data = []
       $ptotal = 0
       $ftotal = 0
-      $natotal = 0      
+      $natotal = 0
+      $removedtotal = 0
       @buildingInfo.each do |totalInfo|
         $ptotal += totalInfo["Pass"]
         $ftotal += totalInfo["Fail"]
         $natotal += totalInfo["NA"]
+        $removedtotal += totalInfo["Removed"]
       end
       @project_grand_total_data.push($ptotal)
       @project_grand_total_data.push($ftotal)
       @project_grand_total_data.push($natotal)
-      @project_grand_total_data.push($ptotal + $ftotal + $natotal)
+      @project_grand_total_data.push($removedtotal)
+      @project_grand_total_data.push($ptotal + $ftotal + $natotal + $removedtotal)
       #@project_grand_total_data.push('%.2f%' % (($ptotal.to_f * 100) / ($ptotal + $ftotal + $natotal)))
 
       @project_final_table_data = []
       @buildingInfo.each do |resultInfo|
         if resultInfo["type"] == "FSD"
-          @damper_type = "Fire/Smoke Damper"
+          @damper_type = "Combination"
         elsif resultInfo["type"] == "FD"
-          @damper_type = "Fire Damper"
+          @damper_type = "Fire"
         else
-          @damper_type = "Smoke Damper"
-        end        
+          @damper_type = "Smoke"
+        end
         @project_total = resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"]
         @project_grand_total = $ptotal + $ftotal + $natotal
         @project_per = '%.2f%' % ((100 * @project_total.to_f) / (@project_grand_total))
-        @project_final_table_data << [resultInfo["building"], @damper_type, resultInfo["Pass"], resultInfo["Fail"], resultInfo["NA"], @project_total, @project_per]
+        @project_final_table_data << [resultInfo["building"], @damper_type, resultInfo["Pass"], resultInfo["Fail"], resultInfo["NA"], resultInfo["Removed"], resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"] + resultInfo["Removed"], @project_per]
       end
 
       # @project_grand_total_data = []
@@ -193,7 +215,7 @@ module Report
     end
 
     def facility_summary_table_headings
-      ["Building", "Pass", "Fail", "Non-Accessible", "Total", "% of Total"] 
+      ["Building", "Pass", "Fail", "Non-Accessible", "Removed", "Total", "% of Total"] 
     end
 
     def facility_summary_table_content
@@ -201,7 +223,8 @@ module Report
     end
 
     def facility_summary_table_data
-      @facility_serviceInfo = Lsspdfasset.select(:u_building, :u_status).where(:u_service_id => @owner.u_service_id, :u_delete => false).where("u_status !=?", "Removed").group(["u_building", "u_status"]).count(:u_status)
+      #@facility_serviceInfo = Lsspdfasset.select(:u_building, :u_status).where(:u_service_id => @owner.u_service_id, :u_delete => false).where("u_status !=?", "Removed").group(["u_building", "u_status"]).count(:u_status)
+      @facility_serviceInfo = Lsspdfasset.select(:u_building, :u_status).where(:u_service_id => @owner.u_service_id, :u_delete => false).group(["u_building", "u_status"]).count(:u_status)
       @facility_buildingInfo = []
       
       @facility_serviceInfo.each do |key,value|
@@ -211,15 +234,23 @@ module Report
           if key[1] == "Pass"
             facility_building_json["Pass"] = value
             facility_building_json["Fail"] = 0
-            facility_building_json["NA"] = 0            
+            facility_building_json["NA"] = 0
+            facility_building_json["Removed"] = 0
           elsif key[1] == "Fail"
             facility_building_json["Pass"] = 0
             facility_building_json["Fail"] = value
             facility_building_json["NA"] = 0
-          else
+            facility_building_json["Removed"] = 0
+          elsif key[1] == "NA"
             facility_building_json["Pass"] = 0
             facility_building_json["Fail"] = 0
             facility_building_json["NA"] = value
+            facility_building_json["Removed"] = 0
+          else
+            facility_building_json["Pass"] = 0
+            facility_building_json["Fail"] = 0
+            facility_building_json["NA"] = 0
+            facility_building_json["Removed"] = value
           end
           @facility_buildingInfo.push(facility_building_json)
         else
@@ -236,16 +267,24 @@ module Report
             if key[1] == "Pass"
               facility_building_json["Pass"] = value
               facility_building_json["Fail"] = 0
-              facility_building_json["NA"] = 0            
+              facility_building_json["NA"] = 0
+              facility_building_json["Removed"] = 0
             elsif key[1] == "Fail"
               facility_building_json["Pass"] = 0
               facility_building_json["Fail"] = value
               facility_building_json["NA"] = 0
-            else
+              facility_building_json["Removed"] = 0
+            elsif key[1] == "NA"
               facility_building_json["Pass"] = 0
               facility_building_json["Fail"] = 0
               facility_building_json["NA"] = value
-            end            
+              facility_building_json["Removed"] = 0 
+            else
+              facility_building_json["Pass"] = 0
+              facility_building_json["Fail"] = 0
+              facility_building_json["NA"] = 0
+              facility_building_json["Removed"] = value
+            end
             @facility_buildingInfo.push(facility_building_json)
           end
         end  
@@ -255,16 +294,19 @@ module Report
       $bptotal = 0
       $bftotal = 0
       $bnatotal = 0
+      $bremovetotal = 0
       @facility_buildingInfo.each do |totalInfo|
         $bptotal += totalInfo["Pass"]
         $bftotal += totalInfo["Fail"]
         $bnatotal += totalInfo["NA"]
+        $bremovetotal += totalInfo["Removed"] 
       end
       @facility_grand_total_data.push($bptotal)
       @facility_grand_total_data.push($bftotal)
       @facility_grand_total_data.push($bnatotal)
+      @facility_grand_total_data.push($bremovetotal)
 
-      @facility_grand_total_data.push($bptotal + $bftotal + $bnatotal)
+      @facility_grand_total_data.push($bptotal + $bftotal + $bnatotal + $bremovetotal)
       @facility_grand_total_data.push("100.00%")
 
 
@@ -275,7 +317,7 @@ module Report
         @facility_grand_total = $bptotal + $bftotal + $bnatotal
         @facility_per = '%.2f%' % ((100 * @facility_total.to_f) / (@facility_grand_total))
 
-        @facility_building_table_data << [facilityvalue["building"], facilityvalue["Pass"], facilityvalue["Fail"], facilityvalue["NA"], @facility_total, @facility_per]
+        @facility_building_table_data << [facilityvalue["building"], facilityvalue["Pass"], facilityvalue["Fail"], facilityvalue["NA"], facilityvalue["Removed"], facilityvalue["Pass"] + facilityvalue["Fail"] + facilityvalue["NA"] + facilityvalue["Removed"], @facility_per]
       end
       
       # @facility_grand_total_data = []

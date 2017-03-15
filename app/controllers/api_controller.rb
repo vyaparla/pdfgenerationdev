@@ -70,31 +70,31 @@ class ApiController < ApplicationController
             @pdf_image1 = StringIO.open(Base64.decode64(@pdfjob.u_image1))
             @pdf_image1.class.class_eval { attr_accessor :original_filename, :content_type }
             @pdf_image1.original_filename = "#{params[:image_file_name1]}.jpg"      
-            @pdf_image1.content_type = "image/jpeg"          
+            @pdf_image1.content_type = "image/jpeg"
             @pdfjob.update_attribute(:pdf_image1, @pdf_image1)
           end
 
           unless @pdfjob.u_image2.blank?
             @pdf_image2 = StringIO.open(Base64.decode64(@pdfjob.u_image2))
             @pdf_image2.class.class_eval { attr_accessor :original_filename, :content_type }
-            @pdf_image2.original_filename = "#{params[:image_file_name2]}.jpg"        
-            @pdf_image2.content_type = "image/jpeg"            
+            @pdf_image2.original_filename = "#{params[:image_file_name2]}.jpg"
+            @pdf_image2.content_type = "image/jpeg"
             @pdfjob.update_attribute(:pdf_image2, @pdf_image2)
           end
       
           unless @pdfjob.u_image3.blank?
             @pdf_image3 = StringIO.open(Base64.decode64(@pdfjob.u_image3))
             @pdf_image3.class.class_eval { attr_accessor :original_filename, :content_type }
-            @pdf_image3.original_filename = "#{params[:image_file_name3]}.jpg"        
-            @pdf_image3.content_type = "image/jpeg"            
+            @pdf_image3.original_filename = "#{params[:image_file_name3]}.jpg"
+            @pdf_image3.content_type = "image/jpeg"
             @pdfjob.update_attribute(:pdf_image3, @pdf_image3)
           end
 
           unless @pdfjob.u_image4.blank?
             @pdf_image4 = StringIO.open(Base64.decode64(@pdfjob.u_image4))
             @pdf_image4.class.class_eval { attr_accessor :original_filename, :content_type }
-            @pdf_image4.original_filename = "#{params[:image_file_name4]}.jpg"        
-            @pdf_image4.content_type = "image/jpeg"            
+            @pdf_image4.original_filename = "#{params[:image_file_name4]}.jpg"
+            @pdf_image4.content_type = "image/jpeg"
             @pdfjob.update_attribute(:pdf_image4, @pdf_image4)
           end
           
@@ -174,10 +174,10 @@ class ApiController < ApplicationController
   # end
 
   def lssassets_job
-    params.require(:api).permit(:u_job_id, :u_asset_id, :u_service_id, :u_location_desc, :u_status, :u_type, :u_floor, 
+    params.require(:api).permit(:u_job_id, :u_asset_id, :u_service_id, :u_location_desc, :u_status, :u_type, :u_floor,
       :u_tag, :u_image1, :u_image2, :u_image3, :u_image4, :u_image5, :u_job_start_date, :u_job_end_date, :u_job_scale_rep,
-      :u_building, :u_reason, :u_access_size, :u_inspected_on, :u_inspector, :u_group_name, :u_facility_name, :u_damper_name, 
-      :u_non_accessible_reasons, :u_penetration_type, :u_barrier_type, :u_service_type, :u_issue_type, 
+      :u_building, :u_reason, :u_access_size, :u_inspected_on, :u_inspector, :u_group_name, :u_facility_name, :u_damper_name,
+      :u_non_accessible_reasons, :u_penetration_type, :u_barrier_type, :u_service_type, :u_issue_type,
       :u_corrected_url_system, :u_active, :u_delete, :u_suggested_ul_system, :u_repair_action_performed, :u_door_category,
       :u_fire_rating, :u_door_inspection_result, :u_door_type, :u_report_type, :pdf_image1, :pdf_image2, :pdf_image3, :pdf_image4)
   end

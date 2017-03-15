@@ -55,7 +55,7 @@ module DamperInspectionReport
       end
 
       def draw_damper_type(pdf)
-        pdf.text("<b>#{label(:damper_type)}:</b> #{@record.u_type}", inline_format: true)
+        pdf.text("<b>#{label(:damper_type)}:</b> #{@record.u_damper_name}(#{@record.u_type})", inline_format: true)
       end 
 
       def draw_floor(pdf)
@@ -70,6 +70,7 @@ module DamperInspectionReport
       end
  
       def draw_status(pdf)
+        pdf.move_down 10
       	if @record.u_status == "Pass"
           pdf.fill_color '137d08'
       	elsif @record.u_status == "Fail"
@@ -79,7 +80,7 @@ module DamperInspectionReport
       	else
       	  pdf.fill_color 'c1171d'
       	end
-        pdf.text("<b>#{label(:status)}:</b> #{@record.u_status}",inline_format: true)
+        pdf.text("<b>#{label(:status)}:</b> #{@record.u_status}", inline_format: true)
         pdf.fill_color '202020'
       end
 
@@ -88,7 +89,7 @@ module DamperInspectionReport
       end
       
       def draw_failure_reasons(pdf)
-      	pdf.move_down 25
+      	pdf.move_down 10
         pdf.fill_color 'c1171d'
         pdf.text("<b>#{DamperInspectionReporting.translate(:failure_reasons)}:</b> #{@record.u_reason}", inline_format: true)
       end
