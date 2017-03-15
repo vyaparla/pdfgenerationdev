@@ -56,7 +56,7 @@ module Report
     def summary_table_data
       #[["1", "5", "5", "5", "5", "5", "5"], ["2", "5", "5", "5", "5", "5", "5"]]
       #@building.floors.map { |f,| summary_table_row(f) 
-      @buildingInfo = Lsspdfasset.select(:u_building, :u_floor, :u_type).where(:u_service_id => @owner.u_service_id, :u_building => @building).group(["u_building", "u_floor", "u_type"]).order(:u_floor).count(:u_type)
+      @buildingInfo = Lsspdfasset.select(:u_building, :u_floor, :u_type).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_delete => false ).group(["u_building", "u_floor", "u_type"]).order(:u_floor).count(:u_type)
       @floorInfo = []
       @buildingInfo.each do |key,value|
         floor_json = {}
@@ -78,7 +78,7 @@ module Report
             floor_json["FD"] = 0
             floor_json["SD"] = value
           end
-          @building_result = Lsspdfasset.select(:u_building, :u_floor, :u_status).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_floor => key[1]).group(["u_building", "u_floor", "u_status"]).count(:u_status)
+          @building_result = Lsspdfasset.select(:u_building, :u_floor, :u_status).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_floor => key[1], :u_delete => false).group(["u_building", "u_floor", "u_status"]).count(:u_status)
 
           @building_result.each do |fstatus, fvalue|
             if !floor_json.has_key?(fstatus[2])
