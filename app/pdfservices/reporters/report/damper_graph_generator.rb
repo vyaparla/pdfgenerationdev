@@ -31,7 +31,7 @@ module Report
 
     def generate_type_graph
       #@typeRecords = Lsspdfasset.select(:u_type).where(:u_service_id => @owner.u_service_id, :u_delete => false).where("u_status !=?", "Removed").group(["u_type"]).count(:u_type)
-      @typeRecords = Lsspdfasset.select(:u_type).where(:u_service_id => @owner.u_service_id, :u_delete => false).where("u_status !=?", "Removed").where.not(u_status: "").group(["u_type"]).order("CASE WHEN u_type = 'FD' THEN '1' WHEN u_type = 'SD' THEN '2' ELSE '3' END").count(:u_type)
+      @typeRecords = Lsspdfasset.select(:u_type).where(:u_service_id => @owner.u_service_id, :u_delete => false).where("u_status !=?", "Removed").where.not(u_type: "").group(["u_type"]).order("CASE WHEN u_type = 'FD' THEN '1' WHEN u_type = 'SD' THEN '2' ELSE '3' END").count(:u_type)
       @type_graph = []
       @type_graph_count = 0
       @typeRecords.each do |key, value|
