@@ -224,7 +224,7 @@ module Report
 
     def facility_summary_table_data
       #@facility_serviceInfo = Lsspdfasset.select(:u_building, :u_status).where(:u_service_id => @owner.u_service_id, :u_delete => false).where("u_status !=?", "Removed").group(["u_building", "u_status"]).count(:u_status)
-      @facility_serviceInfo = Lsspdfasset.select(:u_building, :u_status).where(:u_service_id => @owner.u_service_id, :u_delete => false).where.not(u_status: "").group(["u_building", "u_status"]).count(:u_status)
+      @facility_serviceInfo = Lsspdfasset.select(:u_building, :u_status).where(:u_service_id => @owner.u_service_id, :u_delete => false).where.not(u_type: "").group(["u_building", "u_status"]).count(:u_status)
       @facility_buildingInfo = []
       
       @facility_serviceInfo.each do |key,value|
