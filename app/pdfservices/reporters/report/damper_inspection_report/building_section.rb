@@ -12,19 +12,19 @@ module DamperInspectionReport
   private
 
     def pass_records
-      @pass_records ||= records.where(:u_status => "Pass")
+      @pass_records ||= records.where(:u_status => "Pass").where.not(u_type: "")
     end
 
     def failed_records
-      @failed_records ||= records.where(:u_status => "Fail")
+      @failed_records ||= records.where(:u_status => "Fail").where.not(u_type: "")
     end
 
     def na_records
-      @na_records ||= records.where(:u_status => "NA")
+      @na_records ||= records.where(:u_status => "NA").where.not(u_type: "")
     end
     
     def remove_records
-      @remove_records ||= records.where(:u_status => "Removed")
+      @remove_records ||= records.where(:u_status => "Removed").where.not(u_type: "")
     end
 
     def write_breakdown_pages(pdf, building_section, tech)
