@@ -69,7 +69,7 @@ module FirestopSurveyReport
       g.minimum_value = 0 
       g.y_axis_increment = 20
 
-      @firestop_survey_summary = Lsspdfasset.select(:u_issue_type).where(:u_service_id => @job.u_service_id).group(["u_issue_type"]).count(:u_issue_type)
+      @firestop_survey_summary = Lsspdfasset.select(:u_issue_type).where(:u_service_id => @job.u_service_id, :u_delete => false).group(["u_issue_type"]).count(:u_issue_type)
       @firestop_survey_issue_count = 0
       @firestop_survey_summary.each do |key, value|
         @firestop_survey_issue_count += value
