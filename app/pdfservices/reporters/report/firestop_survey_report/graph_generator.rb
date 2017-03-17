@@ -66,7 +66,7 @@ module FirestopSurveyReport
       g.title_margin = 50
       g.sort = false
       g.maximum_value = 100 
-      g.minimum_value = 0 
+      g.minimum_value = 0
       g.y_axis_increment = 20
 
       @firestop_survey_summary = Lsspdfasset.select(:u_issue_type).where(:u_service_id => @job.u_service_id, :u_delete => false).group(["u_issue_type"]).count(:u_issue_type)

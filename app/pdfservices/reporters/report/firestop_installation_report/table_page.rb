@@ -12,13 +12,13 @@ module FirestopInstallationReport
     def write(pdf)
       return if records.empty?
       super
-      columns = ["Repaired On", "Floor", "Item Number", "Location", "Barrier Type", "Penetration Type", "Corrected with UL System"]
+      columns = ['Asset #', "Floor", "Location", "Barrier Type", "Penetration Type", "Corrected with UL System"]
       inspection_data = [columns]
       records.each do |inspection_record|
         record_data = [
-          inspection_record.u_inspected_on.strftime('%m-%d-%Y'),
-          inspection_record.u_floor,
+          #inspection_record.u_inspected_on.strftime('%m-%d-%Y'),
           inspection_record.u_tag,
+          inspection_record.u_floor,
           inspection_record.u_location_desc,
           inspection_record.u_barrier_type,
           inspection_record.u_penetration_type,
@@ -27,7 +27,7 @@ module FirestopInstallationReport
         inspection_data << record_data
       end
       pdf.font_size 10
-      pdf.table(inspection_data,
+      pdf.table(inspection_data, :column_widths => { 0 => 55 },
                 :header => true,
                 :cell_style => {:align => :center, :size => 8}) do |table|
         table.row_colors = ['ffffff', 'eaeaea']

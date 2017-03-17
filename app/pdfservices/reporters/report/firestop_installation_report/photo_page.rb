@@ -10,12 +10,15 @@ module FirestopInstallationReport
         draw_floor(pdf)
         pdf.move_down 10
         pdf.font_size 15
-        pdf.text("<b>Issue : #{@record.u_issue_type}</b>", inline_format: true)
-        pdf.text("<b>Corrected with UL syste : #{@record.u_corrected_url_system}</b>", inline_format: true)
+        draw_issue(pdf)
+        pdf.move_down 10
+        #pdf.text("<b>Issue : #{@record.u_issue_type}</b>", inline_format: true)
+        pdf.text("<b>Corrected with UL system : #{@record.u_corrected_url_system}</b>", inline_format: true)
+        pdf.move_down 10
         pdf.text("<b>Barrier type : #{@record.u_barrier_type}</b>", inline_format: true)
       end
       pdf.fill_color '202020'
-      pdf.font_size 12
+      #pdf.font_size 12
       if @record.u_service_type != "Fixed On Site"
         draw_before_image(pdf)
       else
@@ -40,6 +43,12 @@ module FirestopInstallationReport
     def draw_penetration_number(pdf)
       pdf.font_size 15
       pdf.text("<b>Penetration Number :</b> #{@record.u_tag}", inline_format: true)
+    end
+
+    def draw_issue(pdf)
+      pdf.fill_color 'c1171d'
+      pdf.text("<b>Issue : </b> #{@record.u_issue_type}", inline_format: true)
+      pdf.fill_color '202020'
     end
 
     def title

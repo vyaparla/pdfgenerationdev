@@ -32,9 +32,9 @@ module FirestopSurveyReport
       end
       #create the table & write it into the PDF
       pdf.font_size 10
-      pdf.table(inspection_data, :column_widths => { 0 => 50 },
+      pdf.table(inspection_data, :column_widths => { 0 => 55 },
                 header: true,
-                cell_style: { align: :center, size: 10 }) do |table|
+                cell_style: { align: :center, size: 8 }) do |table|
 
         table.row_colors = ['ffffff', 'eaeaea']
         table.rows(0).style { |r| r.border_color = '888888' }
