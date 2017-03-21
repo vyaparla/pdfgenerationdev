@@ -1,7 +1,7 @@
 class ReportGeneration
   
   require 'pdfjob'
-  require  'damper_inspection_job'
+  require 'damper_inspection_job'
 
 
   def initialize(owner, model_name, address, facility_type, tech)
