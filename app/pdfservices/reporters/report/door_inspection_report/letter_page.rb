@@ -12,7 +12,7 @@ module DoorInspectionReport
 
     def write(pdf)
       super
-      Report::Letter.new(@job, @model, @address, @facility_type, :door_inspection_report).draw(pdf)
+      Report::Letter.new(@job, @model, @address, @facility_type, :door_inspection_report, @tech).draw(pdf)
     end
   end
 end
