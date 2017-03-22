@@ -12,7 +12,7 @@
   </div>
 </div>
 
-<h1>Listing of Damper Inspection</h1>
+<h1>Listing of Damper Inspection(<%= @damper_inspection_count %>)</h1>
 
 <div class="table-responsview">
   <table class="table table-bordered border-striped" cellspacing="0" width="100%" id ="example">
@@ -41,18 +41,18 @@
       </tr>
     </thead>
     <tbody>
-      <% @damper_inspection.each do |damper| %>
+      <% @damper_inspection.each do |di| %>
         <tr>        
-          <td><%= damper.u_job_id %></td>        
-          <td><%= damper.u_service_id %></td>        
-          <td><%= damper.u_tag %></td>          
-          <td><%= damper.u_floor %></td>
-          <td><%= damper.u_type %></td>
-          <td><%= damper.u_damper_name %></td>
-          <td><%= damper.u_status %></td>        
-          <td><%= damper.u_active %></td>
-          <td><%= damper.u_delete %></td>
-          <td><%= link_to 'Destroy', pdfjob_path(damper), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-xs' %></td>
+          <td><%= di.u_job_id %></td>
+          <td><%= di.u_service_id %></td>
+          <td><%= di.u_tag %></td>
+          <td><%= di.u_floor %></td>
+          <td><%= di.u_type %></td>
+          <td><%= di.u_damper_name %></td>
+          <td><%= di.u_status %></td>
+          <td><%= di.u_active %></td>
+          <td><%= di.u_delete %></td>
+          <td><%= link_to 'Destroy', pdfjob_path(di), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-xs' %></td>
         </tr>
       <% end %>
     </tbody>
