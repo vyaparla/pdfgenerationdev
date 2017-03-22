@@ -25,6 +25,8 @@ class Lsspdfasset < ActiveRecord::Base
   # # alias_attribute :records, :lsspdfassets
   # belongs_to :lsspdfasset, :foreign_key => 'lsspdfasset_id'
 
+  has_many :firedoor_deficiencies, :foreign_key => :firedoor_service_sysid
+
 
   def buildings(serviceID)
     Lsspdfasset.where(:u_service_id => serviceID, :u_delete => false).pluck('DISTINCT u_building')

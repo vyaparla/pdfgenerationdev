@@ -76,3 +76,6 @@ gem 'prawn-table', '~> 0.2.1'
 group :production do
   gem 'daemons'
 end
+
+gem 'bootstrap-sass', '~> 3.2.0'
+gem 'autoprefixer-rails'

@@ -1,8 +1,8 @@
 class PdfjobsController < ApplicationController
 
   def index
-  	@pdfjobs = Lsspdfasset.all.where(:u_delete => false).order('created_at DESC').paginate(:page => params[:page], :per_page => 30)
-  	@pdfjobs_count = Lsspdfasset.where(:u_delete => false).count
+  	@damper_inspection = Lsspdfasset.where(:u_delete => false, :u_report_type => "DAMPERINSPECTION").order('created_at DESC').paginate(:page => params[:page], :per_page => 30)
+  	$pdfjobs_count = Lsspdfasset.where(:u_delete => false).count
   end
 
   def destroy
@@ -34,8 +34,22 @@ class PdfjobsController < ApplicationController
     #   job.delete
     # end
     @pdfjobs.destroy_all
-
     redirect_to root_path
   end
 
+  def damper_repair
+    @damper_repair = Lsspdfasset.where(:u_delete => false, :u_report_type => "DAMPERREPAIR").order('created_at DESC').paginate(:page => params[:page], :per_page => 30)
+  end
+
+  def firedoor_inspection
+    @firedoor_inspection = Lsspdfasset.where(:u_delete => false, :u_report_type => "FIREDOORINSPECTION").order('created_at DESC').paginate(:page => params[:page], :per_page => 30)
+  end
+
+  def firestop_survey
+    @firestop_survey = Lsspdfasset.where(:u_delete => false, :u_report_type => "FIRESTOPSURVEY").order('created_at DESC').paginate(:page => params[:page], :per_page => 30)
+  end
+
+  def firestop_installation
+    @firestop_installation = Lsspdfasset.where(:u_delete => false, :u_report_type => "FIRESTOPINSTALLATION").order('created_at DESC').paginate(:page => params[:page], :per_page => 30)
+  end
 end

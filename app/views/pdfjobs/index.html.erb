@@ -1,91 +1,65 @@
-<%= @pdfjobs_count %><br/>
+<div id="main-container" class="container-fluid">
+  <div class="row">
+    <div class="col-xs-12">
+      <ul class="nav nav-tabs" role="tablist">
+        <li class="active"><%= link_to 'Damper Inspection',  pdfjobs_path %></li>
+        <li><%= link_to 'Damper Repair',  damper_repair_pdfjobs_path %></li>
+        <li><%= link_to 'FireDoor Inspection',  firedoor_inspection_pdfjobs_path %></li>
+        <li><%= link_to 'Firestop Survey',  firestop_survey_pdfjobs_path %></li>
+        <li><%= link_to 'Firestop Installation',  firestop_installation_pdfjobs_path %></li>
+      </ul>
+    </div>
+  </div>
+</div>
 
-<p style="color:red;"><%= flash[:success] %></p>
-<p style="float:right;"><%= link_to "Delete All",  clear_index_list_view_pdfjobs_path %></p>
+<h1>Listing of Damper Inspection</h1>
 
-<%= will_paginate @pdfjobs %><br/>
-
-<table style="border: 1px solid #cacaca;" width="80%" align="top" cellpadding="0" cellspacing="0">
-  <tbody>
-    <tr>
-      <th>Job ID</th>
-      <th>Service ID</th>
-      <!-- <th>Image1</th>
-      <th>Image2</th>
-      <th>Image3</th>
-      <th>Image4</th> -->
-      <th>Tag</th>
-      <th>Service Type</th>
-      <!-- <th>Location</th>
-      <th>Bulding</th> -->
-      <th>Floor</th>
-      <th>Damper Type</th>
-      <th>Damper Name</th>
-      <th>Result</th>
-      <!-- <th>Job Start Date</th>
-      <th>Job End Date</th>
-      <th>Inspected ON</th>
-      <th>Scale REP</th>
-      <th>NA Reason</th>
-      <th>Penetration Type</th>
-      <th>Barrier Type</th>
-      <th>Service Type</th>
-      <th>Issue Type</th>
-      <th>Corrected URL System</th>
-      <th>Suggested UL System</th>
-      <th>Repair Action Performed</th> -->
-      <th>Active</th>
-      <th>Delete</th>
-      <th>Action</th>
-    </tr>
-    <% @pdfjobs.each do |job| %>
+<div class="table-responsview">
+  <table class="table table-bordered border-striped" cellspacing="0" width="100%" id ="example">
+    <thead>
       <tr>
-        <td><%= job.u_job_id %></td>
-        <td><%= job.u_service_id %></td>
-
-        <!-- <td><%#= image_tag("data:image/jpeg;base64,#{job.u_image1}", size: "100") %></td>
-        <td><%#= image_tag("data:image/jpeg;base64,#{job.u_image2}", size: "100") %></td>
-        <td><%#= image_tag("data:image/jpeg;base64,#{job.u_image3}", size: "100") %></td>
-        <td><%#= image_tag("data:image/jpeg;base64,#{job.u_image4}", size: "100") %></td> -->
-
-        <!-- <td><%#= image_tag job.pdf_image1.url(:thumb) %></td>
-        <td><%#= image_tag job.pdf_image2.url(:thumb) %></td>
-        <td><%#= image_tag job.pdf_image3.url(:thumb) %></td>
-        <td><%#= image_tag job.pdf_image4.url(:thumb) %></td> -->
-        <td><%= job.u_tag %><td>
-        <td><%= job.u_report_type %></td>
-        <!--<td><%#= job.u_location_desc %></td>
-        <td><%#= job.u_building %></td>-->
-        <td><%= job.u_floor %></td>
-        <td><%= job.u_type %></td>
-        <td><%= job.u_damper_name %></td>
-        <td><%= job.u_status %></td>
-        <!-- <td><%#= job.u_job_start_date %></td>
-        <td><%#= job.u_job_end_date %></td>
-        <td><%#= job.u_inspected_on %></td>
-        <td><%#= job.u_job_scale_rep %></td>
-        <td><%#= job.u_non_accessible_reasons %></td>
-        <td><%#= job.u_penetration_type %></td>
-        <td><%#= job.u_barrier_type %></td>
-        <td><%#= job.u_service_type %></td>
-        <td><%#= job.u_issue_type %></td>
-        <td><%#= job.u_corrected_url_system %></td>
-        <td><%#= job.u_suggested_ul_system %></td>
-        <td><%#= job.u_repair_action_performed %></td>--> 
-        <td><%= job.u_active %></td>
-        <td><%= job.u_delete %></td>
-
-        <!--<td><%#= job.u_pdf_number %></td>-->
-        <!--<td><%#= image_tag("data:image/jpeg;base64,#{job.image1}", size: "100") %></td>-->
-        <!--<td><%#= image_tag("data:image/jpeg;base64,#{job.u_close_image_base64code}", size: "100") %></td> -->
-        <td><%= link_to 'Delete', pdfjob_path(job),  method: :delete, 
-        data: { confirm: 'Are you sure?' } %></td>
-        <%# if job.has_full_report? %>
-          <!--<td><%#= link_to "Download Report", download_full_pdf_report_pdfjobs_path(:id => job.id), target: '_self' %></td>-->
-        <%# else %>
-          <!--<td><%#= link_to "Generate Report", generate_full_pdf_report_pdfjobs_path(:id => job.id)%></td>-->
-        <%# end %>
+        <!-- <th>Group Name(u_facility_name)</th>
+        <th>Facility Name(u_group_name)</th> -->
+        <th>Job ID(u_job_id)</th>
+        <!-- <th>Job Start Date(u_job_start_date)</th>
+        <th>Job End Date(u_job_end_date)</th> -->
+        <th>Service ID(u_service_id)</th>
+        <!-- <th>Asset ID(u_asset_id)</th>
+        <th>Building(u_building)</th> -->
+        <th>Asset Name(u_tag)</th>
+        <th>Location(u_location_desc)</th>
+        <th>Floor(u_floor)</th>
+        <th>Type(u_type)</th>
+        <th>Damper Name(u_damper_name)</th>
+        <th>Status(u_status)</th>
+        <!-- <th>Failure Reasons(u_reason)</th>
+        <th>Non-Accessible Reasons(u_non_accessible_reasons)</th>
+        <th>Access Door(u_access_size)</th> -->
+        <th>Active(u_active)</th>
+        <th>Delete(u_delete)</th>
+        <th colspan="3"></th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% @damper_inspection.each do |damper| %>
+        <tr>        
+          <td><%= damper.u_job_id %></td>        
+          <td><%= damper.u_service_id %></td>        
+          <td><%= damper.u_tag %></td>
+          <td><%= damper.u_location_desc %></td>
+          <td><%= damper.u_floor %></td>
+          <td><%= damper.u_type %></td>
+          <td><%= damper.u_damper_name %></td>
+          <td><%= damper.u_status %></td>        
+          <td><%= damper.u_active %></td>
+          <td><%= damper.u_delete %></td>
+          <td><%= link_to 'Destroy', pdfjob_path(damper), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-xs' %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+
+
+

@@ -167,6 +167,32 @@ class ApiController < ApplicationController
     send_file @pdfjob.summary_report_path, :type => 'application/pdf', :disposition =>  "attachment; filename=\"#{@outputfile}.pdf\""
   end
 
+  def save_firedoor_deficiency
+    if params[:fd_insert] == "insert"
+      @firedoor_deficiency = FiredoorDeficiency.new
+      @firedoor_deficiency.firedoor_service_sysid                  = params[:firedoor_service_sysid]
+      @firedoor_deficiency.firedoor_asset_sysid                    = params[:firedoor_asset_sysid]
+      @firedoor_deficiency.firedoor_deficiencies_sysid             = params[:firedoor_deficiencies_sysid]
+      @firedoor_deficiency.firedoor_deficiencies_codes             = params[:firedoor_deficiencies_codes]
+      @firedoor_deficiency.firedoor_deficiencies_codes_with_name   = params[:firedoor_deficiencies_codes_with_name]
+      @firedoor_deficiency.save
+      render json: {message: "Save Success"}
+    else
+      if params[:fd_insert] == "update"
+        @firedoor_deficiency = FiredoorDeficiency.find_by(firedoor_deficiencies_sysid: params[:firedoor_deficiencies_sysid])
+        unless @firedoor_deficiency.blank?
+          @firedoor_deficiency.update_attributes(:firedoor_service_sysid => params[:firedoor_service_sysid], :firedoor_asset_sysid => params[:firedoor_asset_sysid],
+                                                 :firedoor_deficiencies_sysid =>  params[:firedoor_deficiencies_sysid], :firedoor_deficiencies_codes => params[:firedoor_deficiencies_codes],
+                                                 :firedoor_deficiencies_codes_with_name => params[:firedoor_deficiencies_codes_with_name])
+
+          render json: {message: "Update Success"}
+        else
+          render json: {message: "Unable to Update the record!"}
+        end
+      end
+    end
+  end
+
   private
 
   # def pdfjob_params
