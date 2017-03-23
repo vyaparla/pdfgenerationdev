@@ -173,8 +173,11 @@ class ApiController < ApplicationController
       @firedoor_deficiency.firedoor_service_sysid                  = params[:firedoor_service_sysid]
       @firedoor_deficiency.firedoor_asset_sysid                    = params[:firedoor_asset_sysid]
       @firedoor_deficiency.firedoor_deficiencies_sysid             = params[:firedoor_deficiencies_sysid]
-      @firedoor_deficiency.firedoor_deficiencies_codes             = params[:firedoor_deficiencies_codes]
-      @firedoor_deficiency.firedoor_deficiencies_codes_with_name   = params[:firedoor_deficiencies_codes_with_name]
+      @firedoor_deficiency.firedoor_deficiencies_code              = params[:firedoor_deficiencies_code]
+      @firedoor_deficiency.firedoor_deficiencies_codename          = params[:firedoor_deficiencies_codename]
+      @firedoor_deficiency.firedoor_u_active                       = params[:firedoor_u_active]
+      @firedoor_deficiency.firedoor_u_delete                       = params[:firedoor_u_delete]
+
       @firedoor_deficiency.save
       render json: {message: "Save Success"}
     else
@@ -182,8 +185,9 @@ class ApiController < ApplicationController
         @firedoor_deficiency = FiredoorDeficiency.find_by(firedoor_deficiencies_sysid: params[:firedoor_deficiencies_sysid])
         unless @firedoor_deficiency.blank?
           @firedoor_deficiency.update_attributes(:firedoor_service_sysid => params[:firedoor_service_sysid], :firedoor_asset_sysid => params[:firedoor_asset_sysid],
-                                                 :firedoor_deficiencies_sysid =>  params[:firedoor_deficiencies_sysid], :firedoor_deficiencies_codes => params[:firedoor_deficiencies_codes],
-                                                 :firedoor_deficiencies_codes_with_name => params[:firedoor_deficiencies_codes_with_name])
+                                                 :firedoor_deficiencies_sysid =>  params[:firedoor_deficiencies_sysid], :firedoor_deficiencies_code => params[:firedoor_deficiencies_code],
+                                                 :firedoor_deficiencies_codename => params[:firedoor_deficiencies_codename], :firedoor_u_active => params[:firedoor_u_active],
+                                                 :firedoor_u_delete => params[:firedoor_u_delete])
 
           render json: {message: "Update Success"}
         else

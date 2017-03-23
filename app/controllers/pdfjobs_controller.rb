@@ -57,4 +57,10 @@ class PdfjobsController < ApplicationController
     @firestop_installation = Lsspdfasset.where(:u_delete => false, :u_report_type => "FIRESTOPINSTALLATION").order('created_at DESC').paginate(:page => params[:page], :per_page => 30)
     @firestop_installation_count = Lsspdfasset.where(:u_delete => false, :u_report_type => "FIRESTOPINSTALLATION").count
   end
+
+  def firedoor_deficiency
+    @firedoor_deficiency = FiredoorDeficiency.all.where(:firedoor_u_delete => false).order('created_at DESC').paginate(:page => params[:page], :per_page => 30)
+    @firedoor_deficiency_count = FiredoorDeficiency.all.where(:firedoor_u_delete => false).count
+  end
+
 end

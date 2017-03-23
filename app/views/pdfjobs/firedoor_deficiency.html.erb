@@ -1,0 +1,46 @@
+<div id="main-container" class="container-fluid">
+  <div class="row">
+    <div class="col-xs-12">
+      <ul class="nav nav-tabs" role="tablist">
+        <li><%= link_to 'Damper Inspection',  pdfjobs_path %></li>
+        <li><%= link_to 'Damper Repair',  damper_repair_pdfjobs_path %></li>
+        <li><%= link_to 'FireDoor Inspection',  firedoor_inspection_pdfjobs_path %></li>
+        <li><%= link_to 'Firestop Survey',  firestop_survey_pdfjobs_path %></li>
+        <li><%= link_to 'Firestop Installation',  firestop_installation_pdfjobs_path %></li>
+        <li class="active"><%= link_to 'FireDoor Deficiency', firedoor_deficiency_pdfjobs_path %></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<h1>Listing of FireDoor Defieciency(<%= @firedoor_deficiency_count %>)</h1>
+
+<div class="table-responsview">
+  <table class="table table-bordered border-striped" cellspacing="0" width="100%" id ="example">
+    <thead>
+      <tr>
+        <th>Service sysID(firedoor_service_sysid)</th>
+        <th>FireDoor Inspection Asset sysID(firedoor_asset_sysid)</th>
+        <th>FireDoor Deficiency sysID(firedoor_deficiencies_sysid)</th>
+        <th>FireDoor Deficiency Code(firedoor_deficiencies_code)</th>
+        <th>FireDoor Deficiency Code Name(firedoor_deficiencies_ccodename)</th>
+        <th>Active(firdoor_u_active)</th>
+        <th>Delete(firedoor_u_delete)</th>
+        <!-- <th colspan="3"></th> -->
+      </tr>
+    </thead>
+    <tbody>
+      <% @firedoor_deficiency.each do |fdd| %>
+        <tr>
+          <td><%= fdd.firedoor_service_sysid %></td>
+          <td><%= fdd.firedoor_asset_sysid %></td>
+          <td><%= fdd.firedoor_deficiencies_sysid %></td>
+          <td><%= fdd.firedoor_deficiencies_code %></td>
+          <td><%= fdd.firedoor_deficiencies_codename %></td>
+          <td><%= fdd.firedoor_u_active %></td>
+          <td><%= fdd.firedoor_u_delete %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

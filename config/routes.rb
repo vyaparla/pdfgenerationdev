@@ -17,6 +17,7 @@ Rails.application.routes.draw do
       get 'firedoor_inspection'
       get 'firestop_survey'
       get 'firestop_installation'
+      get 'firedoor_deficiency'
     end
   end
 
