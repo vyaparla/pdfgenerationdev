@@ -62,5 +62,4 @@ class PdfjobsController < ApplicationController
     @firedoor_deficiency = FiredoorDeficiency.all.where(:firedoor_u_delete => false).order('created_at DESC').paginate(:page => params[:page], :per_page => 30)
     @firedoor_deficiency_count = FiredoorDeficiency.all.where(:firedoor_u_delete => false).count
   end
-
 end

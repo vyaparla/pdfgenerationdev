@@ -11,50 +11,61 @@
       </ul>
     </div>
   </div>
-</div>
-
-<h1>Listing of FireDoor Inspection(<%= @firedoor_inspection_count %>)</h1>
-
-<div class="table-responsview">
-  <table class="table table-bordered border-striped" cellspacing="0" width="100%" id ="example">
-    <thead>
-      <tr>
-        <!-- <th>Group Name(u_facility_name)</th>
-        <th>Facility Name(u_group_name)</th> -->
-        <th>Job ID(u_job_id)</th>
-        <!-- <th>Job Start Date(u_job_start_date)</th>
-        <th>Job End Date(u_job_end_date)</th> -->
-        <th>Service ID(u_service_id)</th>
-        <!-- <th>Asset ID(u_asset_id)</th>
-        <th>Building(u_building)</th> -->
-        <th>Asset Name(u_tag)</th>
-        <!-- <th>Location(u_location_desc)</th> -->
-        <th>Floor(u_floor)</th>
-        <th>FireDoor Category(u_door_category)</th>
-        <th>FireDoor Rating(u_fire_rating)</th>
-        <th>FireDoor Inspection Result(u_door_inspection_result)</th>
-        <th>FireDoor Type(u_door_type)</th>
-        <th>Active(u_active)</th>
-        <th>Delete(u_delete)</th>
-        <th colspan="3"></th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @firedoor_inspection.each do |fdi| %>
-        <tr>
-          <td><%= fdi.u_job_id %></td>
-          <td><%= fdi.u_service_id %></td>
-          <td><%= fdi.u_tag %></td>
-          <td><%= fdi.u_floor %></td>
-          <td><%= fdi.u_door_category %></td>
-          <td><%= fdi.u_fire_rating %></td>
-          <td><%= fdi.u_door_inspection_result %></td>
-          <td><%= fdi.u_door_type %></td>
-          <td><%= fdi.u_active %></td>
-          <td><%= fdi.u_delete %></td>
-          <td><%= link_to 'Destroy', pdfjob_path(fdi), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-xs' %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="col-xs-6">
+        <h1>Listing of FireDoor Inspection(<%= @firedoor_inspection_count %>)</h1>
+      </div>
+      <div class="col-xs-6">
+        <%= will_paginate  @firedoor_inspection %> 
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="table-responsview">
+        <table class="table table-bordered border-striped" cellspacing="0" width="100%" id ="example">
+          <thead>
+            <tr>
+              <!-- <th>Group Name(u_facility_name)</th>
+              <th>Facility Name(u_group_name)</th> -->
+              <th>Job ID(u_job_id)</th>
+              <!-- <th>Job Start Date(u_job_start_date)</th>
+              <th>Job End Date(u_job_end_date)</th> -->
+              <th>Service ID(u_service_id)</th>
+              <!-- <th>Asset ID(u_asset_id)</th>
+              <th>Building(u_building)</th> -->
+              <th>Asset Name(u_tag)</th>
+              <!-- <th>Location(u_location_desc)</th> -->
+              <th>Floor(u_floor)</th>
+              <th>FireDoor Category(u_door_category)</th>
+              <th>FireDoor Rating(u_fire_rating)</th>
+              <th>FireDoor Inspection Result(u_door_inspection_result)</th>
+              <th>FireDoor Type(u_door_type)</th>
+              <th>Active(u_active)</th>
+              <th>Delete(u_delete)</th>
+              <th colspan="3"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @firedoor_inspection.each do |fdi| %>
+              <tr>
+                <td><%= fdi.u_job_id %></td>
+                <td><%= fdi.u_service_id %></td>
+                <td><%= fdi.u_tag %></td>
+                <td><%= fdi.u_floor %></td>
+                <td><%= fdi.u_door_category %></td>
+                <td><%= fdi.u_fire_rating %></td>
+                <td><%= fdi.u_door_inspection_result %></td>
+                <td><%= fdi.u_door_type %></td>
+                <td><%= fdi.u_active %></td>
+                <td><%= fdi.u_delete %></td>
+                <td><%= link_to 'Destroy', pdfjob_path(fdi), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-xs' %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>
