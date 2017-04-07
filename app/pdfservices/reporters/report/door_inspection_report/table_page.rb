@@ -14,7 +14,7 @@ module DoorInspectionReport
       inspection_data << [
         I18n.t(
           'ui.door_inspection_report_pdf.table_headings_cols.date'
-        ), 
+        ),
         I18n.t(
           'ui.door_inspection_report_pdf.table_headings_cols.floor'
         ),
@@ -29,18 +29,21 @@ module DoorInspectionReport
         ),
         I18n.t(
           'ui.door_inspection_report_pdf.table_headings_cols.door_type'
+        ),
+        I18n.t(
+          'ui.door_inspection_report_pdf.table_headings_cols.' +
+            'reasons_for_non_compliance'
         )
       ]
       @records.each do |record|
-        inspection_data << [record.u_inspected_on.strftime('%m-%d-%Y'), record.u_floor, 
-                            record.u_tag, record.u_fire_rating, record.u_location_desc,
-                            record.u_door_type]
+        @firedoor_deficiency_codes = FiredoorDeficiency.where(:firedoor_service_sysid => record.u_service_id, :firedoor_asset_sysid => record.u_asset_id).collect { |w| w.firedoor_deficiencies_code }.join(", ")        
+        inspection_data << [record.u_inspected_on, record.u_floor, record.u_tag, record.u_fire_rating, record.u_location_desc, record.u_door_type, @firedoor_deficiency_codes]
       end
       #create the table & write it into the PDF
       pdf.font_size 10
-      pdf.table(inspection_data, header:     true,
-                                 cell_style: { align: :center,
-                                               size:  8}) do |table|
+      pdf.table(inspection_data, :column_widths => { 0 => 55 },
+                                 header:     true,
+                                 cell_style: { align: :center, size:  8}) do |table|
         table.row_colors = ['ffffff', 'eaeaea']
         table.rows(0).style { |r| r.border_color = '888888'}
         table.rows(1..(table.row_length-1)).style do |r|
@@ -48,12 +51,12 @@ module DoorInspectionReport
         end
         table.row(0).style :background_color => '444444',
                            :text_color => 'ffffff'
-        table.column(0).style { |c| c.width = 60 } # floor column width
-        table.column(1).style { |c| c.width = 50 } # damper tag column
-        table.column(2).style { |c| c.width = 40 } # Fire rating
-        table.column(3).style { |c| c.width = 70 } # door location
-        table.column(4).style { |c| c.width = 40 } # door handing
-        table.column(5).style { |c| c.width = 80 } # reason for NC
+        # table.column(0).style { |c| c.width = 60 } # floor column width
+        # table.column(1).style { |c| c.width = 50 } # damper tag column
+        # table.column(2).style { |c| c.width = 40 } # Fire rating
+        # table.column(3).style { |c| c.width = 70 } # door location
+        # table.column(4).style { |c| c.width = 40 } # door handing
+        # table.column(5).style { |c| c.width = 80 } # reason for NC
       end
     end
 

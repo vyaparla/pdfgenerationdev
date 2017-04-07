@@ -1,6 +1,6 @@
-module DamperInspectionReport
+module DamperRepairReport
   class BuildingSummaryPage
-  	include Report::InspectionDataPageWritable
+  	include Report::RepairDataPageWritable
 
     def initialize(job, building, tech)
       @job = job
@@ -10,9 +10,9 @@ module DamperInspectionReport
 
     def write(pdf)
       super
-      Report::BuildingSummary.new(@job, @building).draw(pdf)
+      Report::RepairBuildingSummary.new(@job, @building).draw(pdf)
     end
-
+    
   private
 
     def building

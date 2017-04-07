@@ -38,7 +38,7 @@ module DamperInspectionReport
 
     def summary_table_attributes
       attributes = []
-      attributes += [[:date, nil], 
+      attributes += [[:date, nil],
                      [:damper_number, nil]]
 
       attributes += [[:floor, nil],
@@ -175,34 +175,30 @@ module DamperInspectionReport
     end
     
     def draw_summary_table(pdf, data, attributes)
-      pdf.table(
-          data,
-          :header => true,
-          :cell_style => { :size => 7, :padding => 4, :align => :center }
-      ) do |table|
+      pdf.table(data, :header => true, :cell_style => { :size => 7, :padding => 4, :align => :center }) do |table|
         last = table.row_length - 1
         table.row_colors = %w(ffffff eaeaea)
-          table.row(0).style :border_color     => '888888',
+        table.row(0).style :border_color     => '888888',
                            :background_color => '444444',
                            :text_color       => 'ffffff'
-          table.rows(1..last).style :border_color => 'cccccc'
-          attributes.each_with_index do |pair, index|
-            table.column(index).style :width => pair.last unless pair.last.nil?
+        table.rows(1..last).style :border_color => 'cccccc'
+        attributes.each_with_index do |pair, index|
+          table.column(index).style :width => pair.last unless pair.last.nil?
+        end
+        result_index = attributes.find_index do |pair|
+          pair.first == :inspection_result
+        end
+        result_index && table.column(result_index).rows(1..last).each do |cell|
+          cell.text_color = case cell.content
+          when DamperInspectionReporting.translate(:fail)
+            'c1171d'
+          when DamperInspectionReporting.translate(:na)
+            'f39d27'
+          else
+            '202020'
           end
-          result_index = attributes.find_index do |pair|
-                         pair.first == :inspection_result
-                       end
-          result_index && table.column(result_index).rows(1..last).each do |cell|
-            cell.text_color = case cell.content
-                            when DamperInspectionReporting.translate(:fail)
-                              'c1171d'
-                            when DamperInspectionReporting.translate(:na)
-                              'f39d27'
-                            else
-                              '202020'
-                            end
+        end
       end
     end
-  end
   end
 end

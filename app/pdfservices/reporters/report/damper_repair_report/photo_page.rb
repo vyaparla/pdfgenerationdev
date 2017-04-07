@@ -14,10 +14,10 @@ module DamperRepairReport
         draw_damper_tag(pdf)
         draw_damper_type(pdf)
         draw_floor(pdf)
-        unless @record.u_access_size.blank?
-          draw_access_door_installation(pdf)
-        end
-        #draw_status(pdf)
+        # unless @record.u_access_size.blank?
+        #   draw_access_door_installation(pdf)
+        # end
+        draw_status(pdf)
         draw_repairs(pdf)
       end
       draw_open_after_install_image(pdf)
@@ -36,27 +36,61 @@ module DamperRepairReport
 
     def draw_damper_tag(pdf)
       pdf.font_size 15
-      pdf.text("<b>Tag Number :</b> #{@record.u_tag}",inline_format: true)
+      pdf.text("<b>Tag Number : </b> #{@record.u_tag}",inline_format: true)
     end
 
     def draw_damper_type(pdf)
-      pdf.text("<b>Damper Type :</b> #{@record.u_type}", inline_format: true)
+      pdf.text("<b>Damper Type : </b> #{@record.u_type}", inline_format: true)
     end
 
     def draw_floor(pdf)
-      pdf.text("<b>Floor :</b> #{@record.u_floor}", inline_format: true)
+      pdf.text("<b>Floor : </b> #{@record.u_floor}", inline_format: true)
     end
 
-    def draw_access_door_installation(pdf)
-      pdf.text("<b>Installed Access Door : </b>", inline_format: true)
-      pdf.indent(10) do
-        pdf.text("• #{@record.u_access_size}")
+    def draw_status(pdf)
+      if @record.u_dr_passed_post_repair == "Pass"
+        pdf.fill_color '137d08'
+      elsif @record.u_dr_passed_post_repair == "Fail"
+        pdf.fill_color 'c1171d'
+      else
+        pdf.fill_color 'f39d27'
       end
+      pdf.text("<b>Status : </b> #{@record.u_dr_passed_post_repair}", inline_format: true)
+      pdf.fill_color '202020'
     end
+
+    # def draw_access_door_installation(pdf)
+    #   pdf.text("<b>Installed Access Door : </b> #{@record.u_access_size}", inline_format: true)
+    #   # pdf.indent(10) do
+    #   #   pdf.text("• #{@record.u_access_size}")
+    #   # end
+    # end
     
     def draw_repairs(pdf)
-      pdf.move_down 25
-      pdf.text("<b>Repair Performed:</b> #{@record.u_repair_action_performed}", inline_format: true)
+      pdf.move_down 10
+      pdf.text("<b>Repair Performed : </b> #{@record.u_repair_action_performed}", inline_format: true)
+      if @record.u_repair_action_performed == "Damper Repaired"
+        pdf.indent(10) do
+          pdf.text("<b>#{DamperRepairReporting.translate('type_of_repair')} : </b>", inline_format: true)
+          pdf.text("#{@record.u_dr_description}", inline_format: true)
+        end 
+      elsif @record.u_repair_action_performed == "Damper Installed"
+        pdf.indent(10) do
+          pdf.text("<b>#{DamperRepairReporting.translate('damper_model')} : </b> #{@record.u_dr_damper_model}", inline_format: true)
+          pdf.text("<b>#{DamperRepairReporting.translate('damper_size')}  : </b> #{@record.u_dr_installed_damper_width} x #{@record.u_dr_installed_damper_height}", inline_format: true)
+          pdf.text("<b>#{DamperRepairReporting.translate('damper_type')}  : </b> #{@record.u_dr_installed_damper_type}", inline_format: true)
+        end
+      elsif @record.u_repair_action_performed == "Actuator Installed"
+        pdf.indent(10) do
+          pdf.text("<b>#{DamperRepairReporting.translate('actuator_model')}   : </b> #{@record.u_dr_installed_actuator_model}", inline_format: true)
+          pdf.text("<b>#{DamperRepairReporting.translate('actuator_type')}    : </b> #{@record.u_dr_installed_actuator_type}", inline_format: true)
+          pdf.text("<b>#{DamperRepairReporting.translate('actuator_voltage')} : </b> #{@record.u_dr_actuator_voltage}", inline_format: true)
+        end
+      else
+        pdf.indent(10) do
+          pdf.text("<b>Installed Access Door : </b> #{@record.u_access_size}", inline_format: true)
+        end
+      end
     end
 
     def draw_open_after_install_image(pdf)

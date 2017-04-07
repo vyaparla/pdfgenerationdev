@@ -34,15 +34,24 @@
               <th>Service ID(u_service_id)</th>
               <!-- <th>Asset ID(u_asset_id)</th>
               <th>Building(u_building)</th> -->
-              <th>Asset Name(u_tag)</th>
-              <!-- <th>Location(u_location_desc)</th> -->
               <th>Floor(u_floor)</th>
               <th>Type(u_type)</th>
               <th>Damper Name(u_damper_name)</th>
-              <th>Access Door(u_access_size)</th>
+              <th>Asset Name(u_tag)</th>
+              <th>Status(u_dr_passed_post_repair)</th>
               <th>Repair Action Performed(u_repair_action_performed)</th>
               <th>Active(u_active)</th>
               <th>Delete(u_delete)</th>
+              <!-- <th>Location(u_location_desc)</th>
+              <th>Damper Repaired Description(u_dr_description)</th>
+              <th>u_dr_damper_model</th>
+              <th>u_dr_installed_damper_type</th>
+              <th>u_dr_installed_damper_height</th>
+              <th>u_dr_installed_damper_width</th>
+              <th>u_dr_installed_actuator_model</th>
+              <th>u_dr_installed_actuator_type</th>
+              <th>u_dr_actuator_voltage</th>
+              <th>Access Door(u_access_size)</th> -->
               <th colspan="3"></th>
             </tr>
           </thead>
@@ -51,11 +60,11 @@
               <tr>
                 <td><%= dr.u_job_id %></td>
                 <td><%= dr.u_service_id %></td>
-                <td><%= dr.u_tag %></td>
                 <td><%= dr.u_floor %></td>
                 <td><%= dr.u_type %></td>
                 <td><%= dr.u_damper_name %></td>
-                <td><%= dr.u_access_size %></td>
+                <td><%= dr.u_tag %></td>
+                <td><%= dr.u_dr_passed_post_repair %></td>
                 <td><%= dr.u_repair_action_performed %></td>
                 <td><%= dr.u_active %></td>
                 <td><%= dr.u_delete %></td>

@@ -4,7 +4,7 @@ module Report
 
     def initialize(owner, building)
       @owner = owner
-      @building = building      
+      @building = building
     end
 
   private

@@ -9,36 +9,62 @@ module DamperInspectionReport
     end
 
     def write(pdf)
-      
-      if @record.u_status == "Removed"
-      else
-        super
-        pdf.indent(250) do
-      	  draw_location_description(pdf)
-          draw_damper_tag(pdf)
-          draw_damper_type(pdf)
-          draw_floor(pdf)
-          draw_access_door_installation(pdf) unless @record.u_access_size.blank?
-          draw_status(pdf)
-          if @record.u_status == "Fail"
-            draw_failure_reasons(pdf)
-          end
+      super
+      pdf.indent(250) do
+        draw_location_description(pdf)
+        draw_damper_tag(pdf)
+        draw_damper_type(pdf)
+        draw_floor(pdf)
+        draw_access_door_installation(pdf) unless @record.u_access_size.blank?
+        draw_status(pdf)
+        if @record.u_status == "Fail"
+          draw_failure_reasons(pdf)
         end
+      end
 
-        if @record.u_status != "Fail"
-      	  draw_open_image(pdf)
+      if @record.u_status != "Fail"
+        draw_open_image(pdf)
+        draw_closed_image(pdf)
+      else
+        if @record.u_type.upcase != "FD"
+          draw_open_image(pdf)
           draw_closed_image(pdf)
+          draw_actuator_image(pdf)
         else
-      	  if @record.u_type.upcase != "FD"
-      	    draw_open_image(pdf)
-            draw_closed_image(pdf)
-            draw_actuator_image(pdf)
-          else
-            draw_open_image(pdf)
-            draw_closed_image(pdf)
-          end
+          draw_open_image(pdf)
+          draw_closed_image(pdf)
         end
-      end  
+      end
+
+      # if @record.u_status == "Removed"
+      # else
+      #   super
+      #   pdf.indent(250) do
+      # 	  draw_location_description(pdf)
+      #     draw_damper_tag(pdf)
+      #     draw_damper_type(pdf)
+      #     draw_floor(pdf)
+      #     draw_access_door_installation(pdf) unless @record.u_access_size.blank?
+      #     draw_status(pdf)
+      #     if @record.u_status == "Fail"
+      #       draw_failure_reasons(pdf)
+      #     end
+      #   end
+
+      #   if @record.u_status != "Fail"
+      # 	  draw_open_image(pdf)
+      #     draw_closed_image(pdf)
+      #   else
+      # 	  if @record.u_type.upcase != "FD"
+      # 	    draw_open_image(pdf)
+      #       draw_closed_image(pdf)
+      #       draw_actuator_image(pdf)
+      #     else
+      #       draw_open_image(pdf)
+      #       draw_closed_image(pdf)
+      #     end
+      #   end
+      # end
     end
 
     private
@@ -51,19 +77,19 @@ module DamperInspectionReport
 
       def draw_damper_tag(pdf)
         pdf.font_size 15
-        pdf.text("<b>#{label(:tag_number)}:</b> #{@record.u_tag}", inline_format: true)
+        pdf.text("<b>#{label(:tag_number)} : </b> #{@record.u_tag}", inline_format: true)
       end
 
       def draw_damper_type(pdf)
-        pdf.text("<b>#{label(:damper_type)}:</b> #{@record.u_damper_name}(#{@record.u_type})", inline_format: true)
+        pdf.text("<b>#{label(:damper_type)} : </b> #{@record.u_damper_name}(#{@record.u_type})", inline_format: true)
       end 
 
       def draw_floor(pdf)
-        pdf.text("<b>#{label(:floor)}:</b> #{@record.u_floor}", inline_format: true)
+        pdf.text("<b>#{label(:floor)} : </b> #{@record.u_floor}", inline_format: true)
       end
 
       def draw_access_door_installation(pdf)
-        pdf.text("<b>Installed Access Door:</b> #{@record.u_access_size}", inline_format: true)
+        pdf.text("<b>Installed Access Door : </b> #{@record.u_access_size}", inline_format: true)
         # pdf.indent(10) do
         #   pdf.text("• #{@record.u_access_size}")
         # end
@@ -80,7 +106,7 @@ module DamperInspectionReport
       	else
       	  pdf.fill_color 'c1171d'
       	end
-        pdf.text("<b>#{label(:status)}:</b> #{@record.u_status}", inline_format: true)
+        pdf.text("<b>#{label(:status)} : </b> #{@record.u_status}", inline_format: true)
         pdf.fill_color '202020'
       end
 
@@ -91,7 +117,7 @@ module DamperInspectionReport
       def draw_failure_reasons(pdf)
       	pdf.move_down 10
         pdf.fill_color 'c1171d'
-        pdf.text("<b>#{DamperInspectionReporting.translate(:failure_reasons)}:</b> #{@record.u_reason}", inline_format: true)
+        pdf.text("<b>#{DamperInspectionReporting.translate(:failure_reasons)} : </b> #{@record.u_reason}", inline_format: true)
       end
 
       def draw_open_image(pdf)

@@ -40,13 +40,18 @@ module DamperRepairReport
     end
 
     def repair_data
-      columns = [DamperRepairReporting.column_heading('date'), DamperRepairReporting.column_heading('damper_number'),
-                 DamperRepairReporting.column_heading('damper_location'), DamperRepairReporting.column_heading('corrective_action')]
+      columns = [DamperRepairReporting.column_heading('damper_number'), DamperRepairReporting.column_heading('damper_location'), 
+                 DamperRepairReporting.column_heading('status'), DamperRepairReporting.column_heading('corrective_action')]
       repair_data = []
       repair_data << columns
       records.each do |record|
         data = []
-        data += [record.u_inspected_on.strftime('%m-%d-%Y'), record.u_tag, record.u_location_desc, record.u_repair_action_performed]
+        data += [record.u_tag, record.u_location_desc, record.u_dr_passed_post_repair, 
+                 "#{if record.u_repair_action_performed == "Damper Repaired"
+                      record.u_dr_description
+                    else
+                      record.u_repair_action_performed
+                    end}"]
         repair_data << data
       end
       repair_data

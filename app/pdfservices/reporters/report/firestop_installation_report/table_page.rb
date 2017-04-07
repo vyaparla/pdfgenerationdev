@@ -12,11 +12,11 @@ module FirestopInstallationReport
     def write(pdf)
       return if records.empty?
       super
-      columns = ['Asset #', "Floor", "Location", "Barrier Type", "Penetration Type", "Corrected with UL System"]
+      columns = ['Date', 'Asset #', "Floor", "Location", "Barrier Type", "Penetration Type", "Corrected with UL System"]
       inspection_data = [columns]
       records.each do |inspection_record|
         record_data = [
-          #inspection_record.u_inspected_on.strftime('%m-%d-%Y'),
+          inspection_record.u_inspected_on.strftime('%m-%d-%Y'),
           inspection_record.u_tag,
           inspection_record.u_floor,
           inspection_record.u_location_desc,

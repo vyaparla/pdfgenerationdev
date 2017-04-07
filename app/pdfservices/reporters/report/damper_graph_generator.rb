@@ -16,7 +16,7 @@ module Report
   private
 
     def generate_building_graph
-      @serviceRecords = Lsspdfasset.select(:u_building).where(:u_service_id => @owner.u_service_id, :u_delete => false).where("u_status !=?", "Removed").group(["u_building"]).count(:u_type)
+      @serviceRecords = Lsspdfasset.select(:u_building).where(:u_service_id => @owner.u_service_id, :u_delete => false).where("u_status !=?", "Removed").where.not(u_type: "").group(["u_building"]).count(:u_type)
       @building_graph = []
       @graph_count = 0
       @serviceRecords.each do |key, value|

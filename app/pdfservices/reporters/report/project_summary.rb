@@ -35,7 +35,7 @@ module Report
       pdf.text("<b>Facility Building Summary</b>", :inline_format => true)
       pdf.fill_color '202020'
       pdf.move_down 10
-    end  
+    end
 
     def draw_title(pdf)
       pdf.font_size 40
@@ -287,7 +287,7 @@ module Report
             end
             @facility_buildingInfo.push(facility_building_json)
           end
-        end  
+        end
       end
 
       @facility_grand_total_data = []
@@ -295,6 +295,7 @@ module Report
       $bftotal = 0
       $bnatotal = 0
       $bremovetotal = 0
+
       @facility_buildingInfo.each do |totalInfo|
         $bptotal += totalInfo["Pass"]
         $bftotal += totalInfo["Fail"]
@@ -336,7 +337,7 @@ module Report
       # @facility_grand_total_data.push($bptotal + $bftotal + $bnatotal)
       # @facility_grand_total_data.push('%.2f%' % (($bptotal.to_f * 100) / ($bptotal + $bftotal + $bnatotal)))
 
-      @facility_building_table_data + [['GRAND TOTAL'] + @facility_grand_total_data]      
+      @facility_building_table_data + [['GRAND TOTAL'] + @facility_grand_total_data]
     end 
   end
 end

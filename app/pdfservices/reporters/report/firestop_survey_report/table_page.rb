@@ -10,12 +10,12 @@ module FirestopSurveyReport
 
     def write(pdf)
       super
-      columns = ['Asset #', 'Floor', 'Location', 'Penetration Type', 'Issue', 'Corrected On Site', 'Suggested Corrective Action']
+      columns = ['Date', 'Asset #', 'Floor', 'Location', 'Penetration Type', 'Issue', 'Corrected On Site', 'Suggested Corrective Action']
 
       inspection_data = [columns]
       @records.each do |record|
         record_data = [
-          #record.u_inspected_on.strftime('%m-%d-%Y'),
+          record.u_inspected_on.strftime('%m-%d-%Y'),
           record.u_tag,
           record.u_floor,
           record.u_location_desc,
