@@ -169,8 +169,8 @@ module Report
         $natotal += totalInfo["NA"]
       end
       
-      @final_table_data_total.push($sdtotal)
       @final_table_data_total.push($fdtotal)
+      @final_table_data_total.push($sdtotal)      
       @final_table_data_total.push($fsdtotal)
       @final_table_data_total.push($ptotal)
       @final_table_data_total.push($ftotal)

@@ -182,8 +182,8 @@ module Report
         $rtotal += totalInfo["Removed"]
       end
       
-      @final_table_data_total.push($sdtotal)
       @final_table_data_total.push($fdtotal)
+      @final_table_data_total.push($sdtotal)      
       @final_table_data_total.push($fsdtotal)
       @final_table_data_total.push($ptotal)
       @final_table_data_total.push($ftotal)
@@ -192,6 +192,7 @@ module Report
       @final_table_data_total.push($sdtotal + $fdtotal + $fsdtotal)
       @final_table_data_total.push("100.00%")
 
+      Rails.logger.debug("Floor Info :#{@floorInfo.inspect}")
 
       @final_table_data = []
       @floorInfo.each do |resultInfo|
@@ -199,7 +200,7 @@ module Report
         @damperGrandtotal = $ptotal + $ftotal + $natotal
         @damperPer = '%.2f%' % ((100 * @damperTotal) / (@damperGrandtotal))
         #@damperPer = '%.2f%' % ((resultInfo["Pass"] * 100) / (resultInfo["FSD"] + resultInfo["FD"] + resultInfo["SD"]))
-        @final_table_data << [resultInfo["floor"], resultInfo["SD"], resultInfo["FD"], resultInfo["FSD"], resultInfo["Pass"], resultInfo["Fail"], resultInfo["NA"], resultInfo["Removed"], resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"] + resultInfo["Removed"], @damperPer]
+        @final_table_data << [resultInfo["floor"], resultInfo["FD"], resultInfo["SD"], resultInfo["FSD"], resultInfo["Pass"], resultInfo["Fail"], resultInfo["NA"], resultInfo["Removed"], resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"] + resultInfo["Removed"], @damperPer]
       end
     
       # @final_table_data_total = []
