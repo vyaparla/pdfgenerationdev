@@ -101,7 +101,8 @@
           reasons_for_non_compliance: 'Door Deficiencies',
           code_score: 'Code Score',
           maintenance_score: 'Maintenance Score',
-          overall_score: 'Door Score'
+          overall_score: 'Door Score',
+          door_status: 'Status'
         }
       },
       graphs: {
@@ -154,7 +155,8 @@
           ilsm: 'ILSM',
           service_type: 'Service Type',
           deficiency: 'Deficiency',
-          current_status: 'Current Status'
+          current_status: 'Current Status',
+          installed_access_door: "Installed Access Door"
         },
         report_data_pages: {
           heading: 'FIRE AND SMOKE DAMPER INSPECTION REPORT',
@@ -257,7 +259,8 @@
           damper_location: 'Damper Location',
           status: 'Status',
           reason: 'Reason',
-          corrective_action: 'Corrective Action'
+          corrective_action: 'Corrective Action',
+          floor: 'Floor'
         },
       },
       repair_setup: {
