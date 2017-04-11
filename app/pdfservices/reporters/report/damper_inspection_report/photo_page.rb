@@ -20,6 +20,9 @@ module DamperInspectionReport
         if @record.u_status == "Fail"
           draw_failure_reasons(pdf)
         end
+        if @record.u_status == "NA"
+          draw_na_reasons(pdf)
+        end  
       end
 
       if @record.u_status != "Fail"
@@ -118,6 +121,12 @@ module DamperInspectionReport
       	pdf.move_down 10
         pdf.fill_color 'c1171d'
         pdf.text("<b>#{DamperInspectionReporting.translate(:failure_reasons)} : </b> #{@record.u_reason}", inline_format: true)
+      end
+
+      def draw_na_reasons(pdf)
+        pdf.move_down 10
+        pdf.fill_color 'f39d27'
+        pdf.text("<b>Non-Accessible Reason : </b> #{@record.u_non_accessible_reasons}", inline_format: true)
       end
 
       def draw_open_image(pdf)

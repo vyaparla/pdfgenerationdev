@@ -31,13 +31,16 @@ module DoorInspectionReport
           'ui.door_inspection_report_pdf.table_headings_cols.door_type'
         ),
         I18n.t(
+          'ui.door_inspection_report_pdf.table_headings_cols.door_status'
+        ),
+        I18n.t(
           'ui.door_inspection_report_pdf.table_headings_cols.' +
             'reasons_for_non_compliance'
         )
       ]
       @records.each do |record|
         @firedoor_deficiency_codes = FiredoorDeficiency.where(:firedoor_service_sysid => record.u_service_id, :firedoor_asset_sysid => record.u_asset_id).collect { |w| w.firedoor_deficiencies_code }.join(", ")        
-        inspection_data << [record.u_inspected_on, record.u_floor, record.u_tag, record.u_fire_rating, record.u_location_desc, record.u_door_type, @firedoor_deficiency_codes]
+        inspection_data << [record.u_inspected_on, record.u_floor, record.u_tag, record.u_fire_rating, record.u_location_desc, record.u_door_type, record.u_door_inspection_result, @firedoor_deficiency_codes]
       end
       #create the table & write it into the PDF
       pdf.font_size 10
@@ -51,12 +54,14 @@ module DoorInspectionReport
         end
         table.row(0).style :background_color => '444444',
                            :text_color => 'ffffff'
-        # table.column(0).style { |c| c.width = 60 } # floor column width
-        # table.column(1).style { |c| c.width = 50 } # damper tag column
-        # table.column(2).style { |c| c.width = 40 } # Fire rating
-        # table.column(3).style { |c| c.width = 70 } # door location
-        # table.column(4).style { |c| c.width = 40 } # door handing
-        # table.column(5).style { |c| c.width = 80 } # reason for NC
+        table.column(0).style { |c| c.width = 60 } # door_date
+        table.column(1).style { |c| c.width = 50 } # door_floor
+        table.column(2).style { |c| c.width = 50 } # door_tag
+        table.column(3).style { |c| c.width = 60 } # door_fire_rating
+        table.column(4).style { |c| c.width = 80 } # door_location_desc
+        table.column(5).style { |c| c.width = 70 } # door_type
+        table.column(6).style { |c| c.width = 80 } # door_inspection_result
+        table.column(7).style { |c| c.width = 90 } # door_deficiency_codes
       end
     end
 

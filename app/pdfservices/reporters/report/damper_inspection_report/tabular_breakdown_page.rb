@@ -4,7 +4,7 @@ module DamperInspectionReport
    
     def initialize(records, damper_type, building_section, tech)
       @records = records
-      @damper_type = damper_type      
+      @damper_type = damper_type
       @building_section = building_section
       @tech = tech
     end
@@ -45,9 +45,11 @@ module DamperInspectionReport
                      [:damper_location, contains_all_results ? 85 : 60],
                      [:damper_type, 55]]
 
-      #attributes   <<  [:service_type, 60] 
+      #attributes   <<  [:service_type, 60]
       attributes   <<  [:deficiency, 75]
+      attributes   +=  [[:corrective_action, 60]]
       attributes   <<  [:current_status, 60]
+      attributes   +=  [[:installed_access_door, 60]]
         # attributes <<  [:fpm_reading, 60]
         # attributes += [[:corrective_action, 60],
         #                  [:forty_five_days, 29],
@@ -63,16 +65,22 @@ module DamperInspectionReport
       end] +
       if @damper_type == :pass_dampers
         @records.map do |record|
+          if record.u_di_installed_access_door == "true"
+            @di_installedaccess_door = "YES"
+          else
+            @di_installedaccess_door = ""
+          end
           data = {            
             :date              => record.u_inspected_on.strftime(I18n.t('time.formats.mdY')),
             :damper_number     => record.u_tag,
             :floor             => record.u_floor,
             :damper_location   => record.u_location_desc,
             :damper_type       => record.u_damper_name,
+            :current_status    => record.u_status,
+            :installed_access_door    => @di_installedaccess_door
+
             #:service_type      => "Inspection",
             #:deficiency        => "Issue",
-            :current_status    => record.u_status
-
             # :inspection_result => record.u_status,
             # :reason_for_fail_or_na => record.u_reason
             # :fpm_reading           => '  ',
@@ -83,18 +91,25 @@ module DamperInspectionReport
           }
           attributes.map { |column, | data[column] }
         end 
-      elsif @damper_type == :failed_dampers
+      elsif @damper_type == :failed_dampers        
         @records.map do |record|
-          data = {            
+          if record.u_di_installed_access_door == "true"
+            @di_installedaccess_door = "YES"
+          else
+            @di_installedaccess_door = ""
+          end
+          data = {
             :date              => record.u_inspected_on.strftime(I18n.t('time.formats.mdY')),
             :damper_number     => record.u_tag,
             :floor             => record.u_floor,
             :damper_location   => record.u_location_desc,
             :damper_type       => record.u_damper_name,
-            #:service_type      => "Inspection",
             :deficiency        => record.u_reason,
-            :current_status    => record.u_status
+            :current_status    => record.u_status,
+            :corrective_action => record.u_di_replace_damper,
+            :installed_access_door    => @di_installedaccess_door
 
+            #:service_type      => "Inspection",
             # :inspection_result => record.u_status,
             # :reason_for_fail_or_na => record.u_reason
             # :fpm_reading           => '  ',
@@ -107,16 +122,22 @@ module DamperInspectionReport
         end
       elsif @damper_type == :na_dampers        
         @records.map do |record|
-          data = {            
+          if record.u_di_installed_access_door == "true"
+            @di_installedaccess_door = "YES"
+          else
+            @di_installedaccess_door = ""
+          end
+          data = {
             :date              => record.u_inspected_on.strftime(I18n.t('time.formats.mdY')),
             :damper_number     => record.u_tag,
             :floor             => record.u_floor,
             :damper_location   => record.u_location_desc,
             :damper_type       => record.u_damper_name,
-            #:service_type      => "Inspection",
             :deficiency        => record.u_non_accessible_reasons,
-            :current_status    => record.u_status
+            :current_status    => record.u_status,
+            :installed_access_door    => @di_installedaccess_door
 
+            #:service_type      => "Inspection",
             # :inspection_result => record.u_status,
             # :reason_for_fail_or_na => record.u_reason
             # :fpm_reading           => '  ',
@@ -129,16 +150,22 @@ module DamperInspectionReport
         end
       else
         @records.map do |record|
-          data = {            
+          if record.u_di_installed_access_door == "true"
+            @di_installedaccess_door = "YES"
+          else
+            @di_installedaccess_door = ""
+          end
+          data = {
             :date              => record.u_inspected_on.strftime(I18n.t('time.formats.mdY')),
             :damper_number     => record.u_tag,
             :floor             => record.u_floor,
             :damper_location   => record.u_location_desc,
             :damper_type       => record.u_damper_name,
+            :current_status    => record.u_status,
+            :installed_access_door    => @di_installedaccess_door
+
             #:service_type      => "Inspection",
             #:deficiency        => record.u_non_accessible_reasons,
-            :current_status    => record.u_status
-
             # :inspection_result => record.u_status,
             # :reason_for_fail_or_na => record.u_reason
             # :fpm_reading           => '  ',

@@ -34,6 +34,7 @@ module DamperRepairReport
       attributes = []
       attributes += [[:date, nil],
                      [:damper_number, nil],
+                     [:floor, nil],
                      [:damper_location, 85],
                      [:status, 60],
                      [:corrective_action, 100]] 
@@ -50,6 +51,7 @@ module DamperRepairReport
       	  data = {
       	    :date => record.u_inspected_on.strftime(I18n.t('time.formats.mdY')),
       	    :damper_number     => record.u_tag,
+            :floor             => record.u_floor,
       	    :damper_location   => record.u_location_desc,
             :status            => record.u_dr_passed_post_repair,
             :corrective_action => record.u_dr_description
@@ -59,6 +61,7 @@ module DamperRepairReport
       	  data = {
       	    :date => record.u_inspected_on.strftime(I18n.t('time.formats.mdY')),
       	    :damper_number     => record.u_tag,
+            :floor             => record.u_floor,
       	    :damper_location   => record.u_location_desc,
             :status            => record.u_dr_passed_post_repair,
             :corrective_action => record.u_repair_action_performed
