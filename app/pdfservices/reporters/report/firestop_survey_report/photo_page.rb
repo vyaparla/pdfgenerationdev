@@ -15,11 +15,10 @@ module FirestopSurveyReport
         pdf.font_size 15
         pdf.move_down 10
         if @record.u_service_type == "Fixed On Site"
-          pdf.text("<b>Corrected with UL system : </b> #{@record.u_corrected_url_system}", inline_format: true)
-        else
+          pdf.text("<b>Corrected with UL system : </b> #{@record.u_corrected_url_system}", inline_format: true)        
           pdf.text("<b>Suggested UL System : </b> #{@record.u_suggested_ul_system}</b>", inline_format: true)
         end
-        pdf.move_down 10
+        pdf.move_down 5
         pdf.text("<b>Barrier type : </b>  #{@record.u_barrier_type}", inline_format: true)
       end
       pdf.fill_color '202020'

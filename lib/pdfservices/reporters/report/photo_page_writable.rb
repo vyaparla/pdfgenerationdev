@@ -21,7 +21,8 @@ module Report
       @record.work_dates]].each do |(size, color), content|
         pdf.font_size size
         pdf.fill_color color
-        pdf.indent(15) { pdf.text(bold(content), :inline_format => true) }
+        pdf.indent(0) { pdf.text(bold(content), :inline_format => true) }
+        #pdf.text(bold(content), :inline_format => true)
       end
       pdf.move_down 45
     end

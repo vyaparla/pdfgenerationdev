@@ -5,19 +5,28 @@ module FirestopSurveyReport
   private
 
     def draw_heading(pdf)
-      pdf.indent(15) do
-        pdf.font_size 12
-        pdf.fill_color '202020'
-        [[:contracted_by, owner.u_group_name],
-         [place_key     , place_name         ],
-         [date_key      , owner.work_dates   ]].each do |key, value|
-          pdf.move_down 3
-          pdf.text("#{label(key)} #{value}", :inline_format => true)
-        end
+      # pdf.indent(15) do
+      #   pdf.font_size 12
+      #   pdf.fill_color '202020'
+      #   [[:contracted_by, owner.u_group_name],
+      #    [place_key     , place_name         ],
+      #    [date_key      , owner.work_dates   ]].each do |key, value|
+      #     pdf.move_down 3
+      #     pdf.text("#{label(key)} #{value}", :inline_format => true)
+      #   end
+      #   pdf.move_down 3
+      #   pdf.text("#{label(technician_key)} #{technician}", :inline_format => true)
+      # end
+      pdf.font_size 12
+      pdf.fill_color '202020'
+      [[:contracted_by, owner.u_group_name],
+      [place_key     , place_name         ],
+      [date_key      , owner.work_dates   ]].each do |key, value|
         pdf.move_down 3
-        pdf.text(
-          "#{label(technician_key)} #{technician}", :inline_format => true)
+        pdf.text("#{label(key)} #{value}", :inline_format => true)
       end
+        pdf.move_down 3
+        pdf.text("#{label(technician_key)} #{technician}", :inline_format => true)
       pdf.move_down 30
     end
 
