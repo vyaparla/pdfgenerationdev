@@ -172,7 +172,7 @@
           tag_number: 'Tag#',
           status: 'Inspection Result',
           location: 'Facility',
-          failure_reasons: 'Reason',
+          failure_reasons: 'Failure Reason',
           reason_for_na: 'Reason',
           all_dampers: 'All Dampers',
           pass_dampers: 'Pass Dampers',
