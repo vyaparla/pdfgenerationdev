@@ -133,7 +133,7 @@ module Report
               floor_json["SD"] = value
             end
             
-            @building_result = Lsspdfasset.select(:u_building, :u_floor, :u_status).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_floor => key[1], :u_delete => false).where("u_status !=?", "Removed").group(["u_building", "u_floor", "u_status"]).count(:u_status)
+            @building_result = Lsspdfasset.select(:u_building, :u_floor, :u_status).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_floor => key[1], :u_delete => false).group(["u_building", "u_floor", "u_status"]).count(:u_status)
             @building_result_len =  @building_result.length
     
             @building_result.each do |fstatus, fvalue|
