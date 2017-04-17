@@ -43,12 +43,14 @@ module DamperInspectionReport
 
       attributes += [[:floor, nil],
                      [:damper_location, contains_all_results ? 85 : 60],
-                     [:damper_type, 55]]
+                     [:damper_type, 55], 
+                     [:current_status, 60]]
 
       #attributes   <<  [:service_type, 60]
+      #attributes   <<  [:current_status, 60]
       attributes   <<  [:deficiency, 75]
       attributes   +=  [[:corrective_action, 60]]
-      attributes   <<  [:current_status, 60]
+      
       attributes   +=  [[:installed_access_door, 60]]
         # attributes <<  [:fpm_reading, 60]
         # attributes += [[:corrective_action, 60],
@@ -104,8 +106,8 @@ module DamperInspectionReport
             :floor             => record.u_floor,
             :damper_location   => record.u_location_desc,
             :damper_type       => record.u_damper_name,
-            :deficiency        => record.u_reason,
             :current_status    => record.u_status,
+            :deficiency        => record.u_reason,            
             :corrective_action => record.u_di_replace_damper,
             :installed_access_door    => @di_installedaccess_door
 
@@ -133,8 +135,8 @@ module DamperInspectionReport
             :floor             => record.u_floor,
             :damper_location   => record.u_location_desc,
             :damper_type       => record.u_damper_name,
-            :deficiency        => record.u_non_accessible_reasons,
             :current_status    => record.u_status,
+            :deficiency        => record.u_non_accessible_reasons,        
             :installed_access_door    => @di_installedaccess_door
 
             #:service_type      => "Inspection",
@@ -160,8 +162,8 @@ module DamperInspectionReport
             :damper_number     => record.u_tag,
             :floor             => record.u_floor,
             :damper_location   => record.u_location_desc,
-            :damper_type       => record.u_damper_name,
             :current_status    => record.u_status,
+            :damper_type       => record.u_damper_name,            
             :installed_access_door    => @di_installedaccess_door
 
             #:service_type      => "Inspection",

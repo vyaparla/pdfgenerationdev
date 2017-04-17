@@ -168,6 +168,12 @@ module Report
       @project_grand_total_data.push($ptotal + $ftotal + $natotal + $removedtotal)
       #@project_grand_total_data.push('%.2f%' % (($ptotal.to_f * 100) / ($ptotal + $ftotal + $natotal)))
 
+      if $ptotal == 0 && $ftotal == 0 && $natotal == 0
+        @project_grand_total_data.push("00.00%")  
+      else
+        @project_grand_total_data.push("100.00%")
+      end
+
       @project_final_table_data = []
       @buildingInfo.each do |resultInfo|
         if resultInfo["type"] == "FSD"
@@ -177,9 +183,16 @@ module Report
         else
           @damper_type = "Smoke"
         end
+
         @project_total = resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"]
         @project_grand_total = $ptotal + $ftotal + $natotal
-        @project_per = '%.2f%' % ((100 * @project_total.to_f) / (@project_grand_total))
+
+        if @project_total == 0 && @project_grand_total == 0
+          @project_per = "00.00%"   
+        else
+          @project_per = '%.2f%' % ((100 * @project_total.to_f) / (@project_grand_total))  
+        end  
+        #@project_per = '%.2f%' % ((100 * @project_total.to_f) / (@project_grand_total))
         @project_final_table_data << [resultInfo["building"], @damper_type, resultInfo["Pass"], resultInfo["Fail"], resultInfo["NA"], resultInfo["Removed"], resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"] + resultInfo["Removed"], @project_per]
       end
 
@@ -198,11 +211,16 @@ module Report
       # @project_grand_total_data.push($ptotal + $ftotal + $natotal)
       # @project_grand_total_data.push('%.2f%' % (($ptotal.to_f * 100) / ($ptotal + $ftotal + $natotal)))
 
-      @project_grand_total_data.push("100.00%")
-      $project_pass_per  = '%.2f%' %  (($ptotal.to_f * 100) / ($ptotal + $ftotal + $natotal))
-      $project_fail_per  = '%.2f%' %  (($ftotal.to_f * 100) / ($ptotal + $ftotal + $natotal))
-      $project_na_per = '%.2f%' %  (($natotal.to_f * 100) / ($ptotal + $ftotal + $natotal))
-
+      if $ptotal == 0 && $ftotal == 0 && $natotal == 0
+        $project_pass_per  = "00.00%"
+        $project_fail_per  = "00.00%"
+        $project_na_per = "00.00%"
+      else
+        $project_pass_per  = '%.2f%' %  (($ptotal.to_f * 100) / ($ptotal + $ftotal + $natotal))
+        $project_fail_per  = '%.2f%' %  (($ftotal.to_f * 100) / ($ptotal + $ftotal + $natotal))
+        $project_na_per = '%.2f%' %  (($natotal.to_f * 100) / ($ptotal + $ftotal + $natotal))  
+      end  
+      
       @project_final_table_data + [['GRAND TOTAL', ''] + @project_grand_total_data]
     end
 
@@ -211,11 +229,12 @@ module Report
        DamperInspectionReporting.column_heading(:percent_of_dampers)]] + 
        [[DamperInspectionReporting.column_heading(:pass), $project_pass_per],
        [DamperInspectionReporting.column_heading(:fail), $project_fail_per],
-       [DamperInspectionReporting.column_heading(:na), $project_na_per]]
+       [DamperInspectionReporting.column_heading(:na), $project_na_per]
+       ]
     end
 
     def facility_summary_table_headings
-      ["Building", "Pass", "Fail", "Non-Accessible", "Removed", "Total", "% of Total"] 
+      ["Building", "Pass", "Fail", "Non-Accessible", "Removed", "Total", "% of Total"]
     end
 
     def facility_summary_table_content
@@ -300,7 +319,7 @@ module Report
         $bptotal += totalInfo["Pass"]
         $bftotal += totalInfo["Fail"]
         $bnatotal += totalInfo["NA"]
-        $bremovetotal += totalInfo["Removed"] 
+        $bremovetotal += totalInfo["Removed"]
       end
       @facility_grand_total_data.push($bptotal)
       @facility_grand_total_data.push($bftotal)
@@ -308,16 +327,26 @@ module Report
       @facility_grand_total_data.push($bremovetotal)
 
       @facility_grand_total_data.push($bptotal + $bftotal + $bnatotal + $bremovetotal)
-      @facility_grand_total_data.push("100.00%")
 
+      if $bptotal == 0 && $bftotal == 0 && $bnatotal == 0
+        @facility_grand_total_data.push("00.00%")        
+      else
+        @facility_grand_total_data.push("100.00%")
+      end
 
       @facility_building_table_data = []
       @facility_buildingInfo.each do |facilityvalue|
 
         @facility_total = facilityvalue["Pass"] + facilityvalue["Fail"] + facilityvalue["NA"]
         @facility_grand_total = $bptotal + $bftotal + $bnatotal
-        @facility_per = '%.2f%' % ((100 * @facility_total.to_f) / (@facility_grand_total))
 
+        if @facility_total == 0 && @facility_grand_total == 0
+          @facility_per = "00.00%"
+        else
+          @facility_per = '%.2f%' % ((100 * @facility_total.to_f) / (@facility_grand_total))
+        end
+
+        #@facility_per = '%.2f%' % ((100 * @facility_total.to_f) / (@facility_grand_total))
         @facility_building_table_data << [facilityvalue["building"], facilityvalue["Pass"], facilityvalue["Fail"], facilityvalue["NA"], facilityvalue["Removed"], facilityvalue["Pass"] + facilityvalue["Fail"] + facilityvalue["NA"] + facilityvalue["Removed"], @facility_per]
       end
       

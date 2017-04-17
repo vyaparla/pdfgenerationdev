@@ -133,7 +133,8 @@ module Report
               floor_json["SD"] = value
             end
             
-            @building_result = Lsspdfasset.select(:u_building, :u_floor, :u_status).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_floor => key[1], :u_delete => false).group(["u_building", "u_floor", "u_status"]).count(:u_status)
+            @building_result = Lsspdfasset.select(:u_building, :u_floor, :u_status).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_floor => key[1], :u_delete => false).where("u_status !=?", "Removed").group(["u_building", "u_floor", "u_status"]).count(:u_status)
+            #@building_result = Lsspdfasset.select(:u_building, :u_floor, :u_status).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_floor => key[1], :u_delete => false).group(["u_building", "u_floor", "u_status"]).count(:u_status)
             @building_result_len =  @building_result.length
     
             @building_result.each do |fstatus, fvalue|
@@ -190,15 +191,25 @@ module Report
       @final_table_data_total.push($natotal)
       @final_table_data_total.push($rtotal)
       @final_table_data_total.push($sdtotal + $fdtotal + $fsdtotal)
-      @final_table_data_total.push("100.00%")
 
+      if $ptotal == 0 && $ftotal == 0 && $natotal == 0
+        @final_table_data_total.push("00.00%")
+      else
+        @final_table_data_total.push("100.00%")
+      end   
+      
       Rails.logger.debug("Floor Info :#{@floorInfo.inspect}")
 
       @final_table_data = []
       @floorInfo.each do |resultInfo|
         @damperTotal = resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"]
         @damperGrandtotal = $ptotal + $ftotal + $natotal
-        @damperPer = '%.2f%' % ((100 * @damperTotal) / (@damperGrandtotal))
+
+        if @damperTotal == 0 && @damperGrandtotal == 0
+          @damperPer = "00.00%"
+        else
+          @damperPer = '%.2f%' % ((100 * @damperTotal) / (@damperGrandtotal))
+        end        
         #@damperPer = '%.2f%' % ((resultInfo["Pass"] * 100) / (resultInfo["FSD"] + resultInfo["FD"] + resultInfo["SD"]))
         @final_table_data << [resultInfo["floor"], resultInfo["FD"], resultInfo["SD"], resultInfo["FSD"], resultInfo["Pass"], resultInfo["Fail"], resultInfo["NA"], resultInfo["Removed"], resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"] + resultInfo["Removed"], @damperPer]
       end
@@ -228,9 +239,15 @@ module Report
       # @final_table_data_total.push($natotal)
       # @final_table_data_total.push($fsdtotal + $fdtotal + $sdtotal)
 
-      $ptotal_damperPer  = '%.2f%' %  (($ptotal.to_f * 100) / ($ptotal + $ftotal + $natotal))
-      $ftotal_damperPer  = '%.2f%' %  (($ftotal.to_f * 100) / ($ptotal + $ftotal + $natotal))
-      $natotal_damperPer = '%.2f%' %  (($natotal.to_f * 100) / ($ptotal + $ftotal + $natotal))
+      if $ptotal == 0 && $ftotal == 0 && $natotal == 0
+        $ptotal_damperPer  = "00.00%"
+        $ftotal_damperPer  = "00.00%"
+        $natotal_damperPer = "00.00%"
+      else
+        $ptotal_damperPer  = '%.2f%' %  (($ptotal.to_f * 100) / ($ptotal + $ftotal + $natotal))
+        $ftotal_damperPer  = '%.2f%' %  (($ftotal.to_f * 100) / ($ptotal + $ftotal + $natotal))
+        $natotal_damperPer = '%.2f%' %  (($natotal.to_f * 100) / ($ptotal + $ftotal + $natotal))
+      end
 
       #@final_table_data_total.push($ptotal_damperPer)
       @final_table_data + [['GRAND TOTAL'] + @final_table_data_total]

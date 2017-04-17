@@ -25,20 +25,23 @@ module DamperInspectionReport
         end  
       end
 
-      if @record.u_status != "Fail"
-        draw_open_image(pdf)
-        draw_closed_image(pdf)
+      if @record.u_status == "Removed"
       else
-        if @record.u_type.upcase != "FD"
+        if @record.u_status != "Fail"
           draw_open_image(pdf)
           draw_closed_image(pdf)
-          draw_actuator_image(pdf)
         else
-          draw_open_image(pdf)
-          draw_closed_image(pdf)
+          if @record.u_type.upcase != "FD"
+            draw_open_image(pdf)
+            draw_closed_image(pdf)
+            draw_actuator_image(pdf)
+          else
+            draw_open_image(pdf)
+            draw_closed_image(pdf)
+          end
         end
       end
-
+      
       # if @record.u_status == "Removed"
       # else
       #   super

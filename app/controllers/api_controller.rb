@@ -64,14 +64,55 @@ class ApiController < ApplicationController
     else
       if params[:status] == "update"
         @pdfjob = Lsspdfasset.find_by(u_asset_id: params[:u_asset_id])
-        if @pdfjob.update(lssassets_job)
+
+        unless @pdfjob.blank?
+          if @pdfjob.update(lssassets_job)
           
+            unless @pdfjob.u_image1.blank?
+              @pdf_image1 = StringIO.open(Base64.decode64(@pdfjob.u_image1))
+              @pdf_image1.class.class_eval { attr_accessor :original_filename, :content_type }
+              @pdf_image1.original_filename = "#{params[:image_file_name1]}.jpg"
+              @pdf_image1.content_type = "image/jpeg"
+              @pdfjob.update_attribute(:pdf_image1, @pdf_image1)
+            end
+
+            unless @pdfjob.u_image2.blank?
+              @pdf_image2 = StringIO.open(Base64.decode64(@pdfjob.u_image2))
+              @pdf_image2.class.class_eval { attr_accessor :original_filename, :content_type }
+              @pdf_image2.original_filename = "#{params[:image_file_name2]}.jpg"
+              @pdf_image2.content_type = "image/jpeg"
+              @pdfjob.update_attribute(:pdf_image2, @pdf_image2)
+            end
+      
+            unless @pdfjob.u_image3.blank?
+              @pdf_image3 = StringIO.open(Base64.decode64(@pdfjob.u_image3))
+              @pdf_image3.class.class_eval { attr_accessor :original_filename, :content_type }
+              @pdf_image3.original_filename = "#{params[:image_file_name3]}.jpg"
+              @pdf_image3.content_type = "image/jpeg"
+              @pdfjob.update_attribute(:pdf_image3, @pdf_image3)
+            end
+
+            unless @pdfjob.u_image4.blank?
+              @pdf_image4 = StringIO.open(Base64.decode64(@pdfjob.u_image4))
+              @pdf_image4.class.class_eval { attr_accessor :original_filename, :content_type }
+              @pdf_image4.original_filename = "#{params[:image_file_name4]}.jpg"
+              @pdf_image4.content_type = "image/jpeg"
+              @pdfjob.update_attribute(:pdf_image4, @pdf_image4)
+            end
+            render json: {message: "Update Success"}
+          else
+            render json: {message: "Unable to Update the record!"}
+          end
+        else  
+          @pdfjob = Lsspdfasset.new(lssassets_job)
+          @pdfjob.save
+      
           unless @pdfjob.u_image1.blank?
             @pdf_image1 = StringIO.open(Base64.decode64(@pdfjob.u_image1))
             @pdf_image1.class.class_eval { attr_accessor :original_filename, :content_type }
             @pdf_image1.original_filename = "#{params[:image_file_name1]}.jpg"
             @pdf_image1.content_type = "image/jpeg"
-            @pdfjob.update_attribute(:pdf_image1, @pdf_image1)
+            @pdfjob.pdf_image1 = @pdf_image1
           end
 
           unless @pdfjob.u_image2.blank?
@@ -79,7 +120,7 @@ class ApiController < ApplicationController
             @pdf_image2.class.class_eval { attr_accessor :original_filename, :content_type }
             @pdf_image2.original_filename = "#{params[:image_file_name2]}.jpg"
             @pdf_image2.content_type = "image/jpeg"
-            @pdfjob.update_attribute(:pdf_image2, @pdf_image2)
+            @pdfjob.pdf_image2 = @pdf_image2
           end
       
           unless @pdfjob.u_image3.blank?
@@ -87,7 +128,7 @@ class ApiController < ApplicationController
             @pdf_image3.class.class_eval { attr_accessor :original_filename, :content_type }
             @pdf_image3.original_filename = "#{params[:image_file_name3]}.jpg"
             @pdf_image3.content_type = "image/jpeg"
-            @pdfjob.update_attribute(:pdf_image3, @pdf_image3)
+            @pdfjob.pdf_image3 = @pdf_image3
           end
 
           unless @pdfjob.u_image4.blank?
@@ -95,12 +136,11 @@ class ApiController < ApplicationController
             @pdf_image4.class.class_eval { attr_accessor :original_filename, :content_type }
             @pdf_image4.original_filename = "#{params[:image_file_name4]}.jpg"
             @pdf_image4.content_type = "image/jpeg"
-            @pdfjob.update_attribute(:pdf_image4, @pdf_image4)
+            @pdfjob.pdf_image4 = @pdf_image4
           end
-          
-          render json: {message: "Update Success"}
-        else
-          render json: {message: "Unable to Update the record!"}
+      
+          @pdfjob.save
+          render json: {message: "Save Success"}
         end
       else
         @pdfjob = Lsspdfasset.find_by(u_asset_id: params[:u_asset_id])
