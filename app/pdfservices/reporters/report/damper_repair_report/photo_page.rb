@@ -71,8 +71,8 @@ module DamperRepairReport
       pdf.text("<b>Repair Performed : </b> #{@record.u_repair_action_performed}", inline_format: true)
       if @record.u_repair_action_performed == "Damper Repaired"
         pdf.indent(10) do
-          pdf.text("<b>#{DamperRepairReporting.translate('type_of_repair')} : </b>", inline_format: true)
-          pdf.text("#{@record.u_dr_description}", inline_format: true)
+          pdf.text("<b>#{DamperRepairReporting.translate('type_of_repair')} : </b> #{@record.u_dr_description}", inline_format: true)
+          #pdf.text("#{@record.u_dr_description}", inline_format: true)
         end 
       elsif @record.u_repair_action_performed == "Damper Installed"
         pdf.indent(10) do
