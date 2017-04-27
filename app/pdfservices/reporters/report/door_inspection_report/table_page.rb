@@ -40,7 +40,7 @@ module DoorInspectionReport
       ]
       @records.each do |record|
         @firedoor_deficiency_codes = FiredoorDeficiency.where(:firedoor_service_sysid => record.u_service_id, :firedoor_asset_sysid => record.u_asset_id).collect { |w| w.firedoor_deficiencies_code }.join(", ")        
-        inspection_data << [record.u_inspected_on, record.u_floor, record.u_tag, record.u_fire_rating, record.u_location_desc, record.u_door_type, record.u_door_inspection_result, @firedoor_deficiency_codes]
+        inspection_data << [record.u_inspected_on.strftime('%m/%d/%Y'), record.u_floor, record.u_tag, record.u_fire_rating, record.u_location_desc, record.u_door_type, record.u_door_inspection_result, @firedoor_deficiency_codes]
       end
       #create the table & write it into the PDF
       pdf.font_size 10
