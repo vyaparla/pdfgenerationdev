@@ -42,6 +42,7 @@
               <th>FireDoor Inspection Result(u_door_inspection_result)</th>
               <th>FireDoor Type(u_door_type)</th>
               <th>FireDoor Deficiency</th>
+              <th>FireDoor InspectionDate(u_inspected_on)</th>
               <th>Active(u_active)</th>
               <th>Delete(u_delete)</th>
               <th colspan="3"></th>
@@ -58,8 +59,9 @@
                 <td><%= fdi.u_door_category %></td>
                 <td><%= fdi.u_fire_rating %></td>
                 <td><%= fdi.u_door_inspection_result %></td>
-                <td><%= fdi.u_door_type %></td>                
+                <td><%= fdi.u_door_type %></td> 
                 <td><%= firedoor_deficiency_codes(fdi) %></td>
+                <td><%= fdi.u_inspected_on %></td>
                 <td><%= fdi.u_active %></td>
                 <td><%= fdi.u_delete %></td>
                 <td><%= link_to 'Destroy', pdfjob_path(fdi), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-xs' %></td>
