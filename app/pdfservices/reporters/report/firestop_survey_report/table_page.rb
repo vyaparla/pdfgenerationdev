@@ -11,7 +11,7 @@ module FirestopSurveyReport
     def write(pdf)
       super
       #columns = ['Date', 'Asset #', 'Floor', 'Location', 'Penetration Type', 'Issue', 'Corrected On Site', 'Suggested Corrective Action']
-      columns = ['Date', 'Asset #', 'Floor', 'Location', "Barrier Type", 'Penetration Type', 'Issue', 'Corrected On Site', "Corrected with UL System"]
+      columns = ['Date', 'Asset #', 'Floor', 'Location', "Barrier Type", 'Penetration Type', 'Issue', 'Corrected On Site', "Suggested Corrective Action", "Corrected with UL System"]
 
       inspection_data = [columns]
       @records.each do |record|
@@ -28,8 +28,8 @@ module FirestopSurveyReport
           else
             'NO'
           end,
+          record.u_suggested_ul_system,
           record.u_corrected_url_system
-          #record.u_suggested_ul_system
         ]
         inspection_data << record_data
       end

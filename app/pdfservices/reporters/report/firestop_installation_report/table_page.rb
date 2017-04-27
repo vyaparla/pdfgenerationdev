@@ -13,7 +13,7 @@ module FirestopInstallationReport
       return if records.empty?
       super
       #columns = ['Date', 'Asset #', "Floor", "Location", "Barrier Type", "Penetration Type", "Corrected with UL System"]
-      columns = ['Date', 'Asset #', "Floor", "Location", "Barrier Type", "Penetration Type", "Issue", "Corrected On Site", "Corrected with UL System"]
+      columns = ['Date', 'Asset #', "Floor", "Location", "Barrier Type", "Penetration Type", "Issue", "Corrected On Site", "Suggested Corrective Action", "Corrected with UL System"]
 
       inspection_data = [columns]
       records.each do |inspection_record|
@@ -30,6 +30,7 @@ module FirestopInstallationReport
           else
             'NO'
           end,
+          inspection_record.u_suggested_ul_system,
           inspection_record.u_corrected_url_system
         ]
         inspection_data << record_data

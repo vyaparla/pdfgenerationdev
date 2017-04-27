@@ -65,6 +65,10 @@ class Lsspdfasset < ActiveRecord::Base
     File.join(graph_path, 'graph_top_issues.png')
   end
 
+  def installation_top_issue_path
+    File.join(graph_path, 'installation_graph_top_issues.png')
+  end
+
   def dr_graph_by_building_path
     File.join(graph_path, 'dr_graph_by_building.png')
   end

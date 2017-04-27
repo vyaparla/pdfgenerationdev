@@ -42,7 +42,8 @@ module FirestopSurveyReport
 
     def draw_penetration_number(pdf)
       pdf.font_size 15
-      pdf.text("<b>Penetration Number :</b> #{@record.u_tag}", inline_format: true)
+      pdf.text("<b>Asset # :</b> #{@record.u_tag}", inline_format: true)
+      #pdf.text("<b>Penetration Number :</b> #{@record.u_tag}", inline_format: true)
     end
     
     def draw_floor(pdf)
@@ -56,41 +57,39 @@ module FirestopSurveyReport
     end
 
     def draw_before_image(pdf)
-      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at:  [35, 530], fit: [123, 123])
+      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at:  [35, 643], fit: [123, 123])
+      image = @record.pdf_image1.path(:pdf)      
+      unless image.blank?
+        pdf.image(image, at: [44, 634], fit: [105, 105])
+      else
+        pdf.draw_text('Photo Unavailable', style: :bold, size:  11, at: [49, 580])
+      end
+      pdf.font_size 10
+      pdf.draw_text("Before Installation", at: [44, 515])
 
       # unless @record.u_image1.blank?
       #   pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64, #{@record.u_image1}")[:data])), at:  [44, 521], fit: [105, 105]
       # else
-      # 	pdf.draw_text('Photo Unavailable', style: :bold, size:  11, at: [49, 464])
+      #   pdf.draw_text('Photo Unavailable', style: :bold, size:  11, at: [49, 464])
       # end
-
-      image = @record.pdf_image1.path(:pdf)
-      unless image.blank?
-        pdf.image(image, at: [44, 521], fit: [105, 105])
-      else
-        pdf.draw_text('Photo Unavailable', style: :bold, size:  11, at: [49, 464])
-      end
-      pdf.font_size 10
-      pdf.draw_text("Before Installation", at: [44, 403])
     end
 
     def draw_after_image(pdf)
-      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at:  [35, 395], fit: [123, 123])
-     
+      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at:  [35, 507], fit: [123, 123])
+      image = @record.pdf_image2.path(:pdf)      
+      unless image.blank?
+        pdf.image(image, at: [44, 498], fit: [105, 105])
+      else
+        pdf.draw_text('Photo Unavailable', style: :bold, size: 11, at: [49, 445])
+      end
+      pdf.font_size 10
+      pdf.draw_text("After Installation", at: [44, 379])
+
       # unless @record.u_image2.blank?
       #   pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64, #{@record.u_image2}")[:data])), at: [44, 386], fit: [105, 105]
       # else
-      # 	pdf.draw_text('Photo Unavailable', style: :bold, size: 11, at: [49, 329])
+      #   pdf.draw_text('Photo Unavailable', style: :bold, size: 11, at: [49, 329])
       # end
-
-      image = @record.pdf_image2.path(:pdf)
-      unless image.blank?
-        pdf.image(image, at: [44, 386], fit: [105, 105])
-      else
-        pdf.draw_text('Photo Unavailable', style: :bold, size: 11, at: [49, 329])
-      end
-      pdf.font_size 10
-      pdf.draw_text("After Installation", at: [44, 268])
     end
 
     def title

@@ -68,7 +68,8 @@
         report_data_pages: {
           heading: 'FIRE DOOR INSPECTION REPORT',
           location: 'Facility',
-          door_number: 'Door Number',
+          #door_number: 'Door Number',
+          door_number: 'Asset #',
           floor: 'Floor',
           reason_for_non_compliance: 'Door Deficiencies',
           door_secured: 'Door Secured',
@@ -95,6 +96,7 @@
           type: 'Type',
           date: 'Date',
           door_number: 'Door Number',
+          #door_number: 'Asset #',
           fire_rating: 'Fire Rating',
           door_location: 'Door Location',
           door_type: 'Door Type',
@@ -143,8 +145,10 @@
           percent_of_dampers: '% of Dampers',
           percent_of_total: '% of Total',
           test_result: 'Test Result',
-          damper_number: 'Damper Number',
+          #damper_number: 'Damper Number',
+          damper_number: 'Asset #',
           damper_type: 'Damper Type',
+          #damper_type: 'Asset Type',
           damper_location: 'Location',
           inspection_result: 'Inspection Result',
           reason_for_fail_or_na: 'Reason for Failure or Inaccessibility',
@@ -255,7 +259,8 @@
           repair_date: 'Date Repaired',
           technician: 'Technician',
           date: 'Date',
-          damper_number: 'Damper Number',
+          #damper_number: 'Damper Number',
+          damper_number: 'Asset #',
           damper_location: 'Damper Location',
           status: 'Status',
           reason: 'Reason',
@@ -348,12 +353,15 @@
       },
       photo_page: {
         label: {
-          damper_type: 'Type',
-          door_number: 'Door Number',
+          # damper_type: 'Type',
+          damper_type: 'Asset Type',
+          #door_number: 'Door Number',
+          door_number: 'Asset #',
           floor: 'Floor',
           penetration_number: 'Penetration Number',
           status: 'Status',
-          tag_number: 'Tag'
+          #tag_number: 'Tag'
+          tag_number: 'Asset #'
         },
         status: {
           pass: 'Pass',

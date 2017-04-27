@@ -82,13 +82,20 @@ module DamperInspectionReport
       end
 
       def draw_damper_tag(pdf)
-        pdf.font_size 15
+        pdf.font_size 15        
         pdf.text("<b>#{label(:tag_number)} : </b> #{@record.u_tag}", inline_format: true)
       end
 
       def draw_damper_type(pdf)
-        pdf.text("<b>#{label(:damper_type)} : </b> #{@record.u_damper_name}(#{@record.u_type})", inline_format: true)
-      end 
+        if @record.u_damper_name.upcase == "FIRE"
+          pdf.text("<b>#{label(:damper_type)} : </b> Fire Damper", inline_format: true)
+        elsif @record.u_damper_name.upcase == "SMOKE"
+          pdf.text("<b>#{label(:damper_type)} : </b> Smoke Damper", inline_format: true)
+        else
+          pdf.text("<b>#{label(:damper_type)} : </b> Combination", inline_format: true)
+        end
+        #pdf.text("<b>#{label(:damper_type)} : </b> #{@record.u_damper_name}", inline_format: true)
+      end
 
       def draw_floor(pdf)
         pdf.text("<b>#{label(:floor)} : </b> #{@record.u_floor}", inline_format: true)
@@ -133,17 +140,10 @@ module DamperInspectionReport
       end
 
       def draw_open_image(pdf)
-        top_margin_pic_offset = 235
+        top_margin_pic_offset = 125
         pdf.fill_color '202020'
         pdf.font_size 12
-        pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [15 - pdf.bounds.absolute_left, 771 - top_margin_pic_offset])
-
-        # unless @record.u_image1.blank?
-        #   pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_image1}")[:data])), at: [30 - pdf.bounds.absolute_left, 756 - top_margin_pic_offset], fit: [225, 225]
-        # else
-        #   pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at:  [90 - pdf.bounds.absolute_left, 639 - top_margin_pic_offset])
-        # end
-
+        pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [15 - pdf.bounds.absolute_left, 771 - top_margin_pic_offset])        
         image = @record.pdf_image1.path(:pdf)
         unless image.blank?
           pdf.image(image, at: [30 - pdf.bounds.absolute_left, 756 - top_margin_pic_offset], fit: [225, 225])
@@ -151,20 +151,19 @@ module DamperInspectionReport
           pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at: [90 - pdf.bounds.absolute_left, 639 - top_margin_pic_offset])
         end
         pdf.draw_text(DamperInspectionReporting.translate(:open), at: [30 - pdf.bounds.absolute_left, 518 - top_margin_pic_offset])
+
+        # unless @record.u_image1.blank?
+        #   pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_image1}")[:data])), at: [30 - pdf.bounds.absolute_left, 756 - top_margin_pic_offset], fit: [225, 225]
+        # else
+        #   pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at:  [90 - pdf.bounds.absolute_left, 639 - top_margin_pic_offset])
+        # end
       end
 
       def draw_closed_image(pdf)
-      	top_margin_pic_offset = 235
+      	top_margin_pic_offset = 110
         pdf.fill_color '202020'
         pdf.font_size 12
         pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [15 - pdf.bounds.absolute_left, 496 - top_margin_pic_offset])
-
-        # unless @record.u_image2.blank?
-        #   pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_image2}")[:data])), at:  [30 - pdf.bounds.absolute_left, 481 - top_margin_pic_offset], fit: [225, 225]
-        # else
-        #   pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at: [90 - pdf.bounds.absolute_left, 364 - top_margin_pic_offset])
-        # end
-        
         image = @record.pdf_image2.path(:pdf)
         unless image.blank?
           pdf.image(image, at: [30 - pdf.bounds.absolute_left, 481 - top_margin_pic_offset], fit: [225, 225])
@@ -173,21 +172,21 @@ module DamperInspectionReport
         end
         pdf.move_down 100
         pdf.draw_text(DamperInspectionReporting.translate(:closed), at: [30 - pdf.bounds.absolute_left, 243 - top_margin_pic_offset])
+
+        # unless @record.u_image2.blank?
+        #   pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_image2}")[:data])), at:  [30 - pdf.bounds.absolute_left, 481 - top_margin_pic_offset], fit: [225, 225]
+        # else
+        #   pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at: [90 - pdf.bounds.absolute_left, 364 - top_margin_pic_offset])
+        # end
       end
 
       def draw_actuator_image(pdf)
-      	top_margin_pic_offset = 235
+      	top_margin_pic_offset = 110
         pdf.fill_color '202020'
         pdf.font_size 12
         if @record.u_image3
           pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [275 - pdf.bounds.absolute_left, 496 - top_margin_pic_offset])
-        end
-   
-        # unless @record.u_image2.blank?
-        #   pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_image3}")[:data])), at:  [290 - pdf.bounds.absolute_left, 481 - top_margin_pic_offset], fit: [225, 225]
-        # else
-        #   pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at:  [350 - pdf.bounds.absolute_left, 364 - top_margin_pic_offset])
-        # end
+        end        
         image = @record.pdf_image3.path(:pdf)
         unless image.blank?
           pdf.image(image, at: [290 - pdf.bounds.absolute_left, 481 - top_margin_pic_offset], fit: [225, 225])
@@ -196,6 +195,12 @@ module DamperInspectionReport
         end          
         pdf.move_down 100
         pdf.draw_text(DamperInspectionReporting.translate(:actuator), at: [290 - pdf.bounds.absolute_left, 243 - top_margin_pic_offset])
+
+        # unless @record.u_image2.blank?
+        #   pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_image3}")[:data])), at:  [290 - pdf.bounds.absolute_left, 481 - top_margin_pic_offset], fit: [225, 225]
+        # else
+        #   pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at:  [350 - pdf.bounds.absolute_left, 364 - top_margin_pic_offset])
+        # end
       end
 
       # def splitBase64(uri)

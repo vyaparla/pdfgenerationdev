@@ -29,7 +29,8 @@ module DoorInspectionReport
 
     def draw_door_number(pdf)
       pdf.font_size 15
-      pdf.text("<b>Door Number : </b> #{@record.u_tag}", inline_format: true)
+      pdf.text("<b>Asset # : </b> #{@record.u_tag}", inline_format: true)
+      #pdf.text("<b>Door Number : </b> #{@record.u_tag}", inline_format: true)
     end
 
     def draw_floor(pdf)
@@ -57,42 +58,40 @@ module DoorInspectionReport
     def draw_secured_image(pdf)
       pdf.fill_color '202020'
       pdf.font_size 12
-      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [15 - pdf.bounds.absolute_left, 536])
+      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [15 - pdf.bounds.absolute_left, 649])
+      image =  @record.pdf_image1.path(:pdf)      
+      unless image.blank?
+        pdf.image(image, at: [30 - pdf.bounds.absolute_left, 634], fit: [225, 225])
+      else
+        pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at: [90 - pdf.bounds.absolute_left, 520])
+      end
+      pdf.draw_text(I18n.t('ui.door_inspection_report_pdf.report_data_pages.door_secured'), at: [30 - pdf.bounds.absolute_left, 390])
 
       # unless @record.u_image1.blank?
-      # 	 pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_image1}")[:data])), at:  [30 - pdf.bounds.absolute_left, 521], fit: [225, 225]
+      #    pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_image1}")[:data])), at:  [30 - pdf.bounds.absolute_left, 521], fit: [225, 225]
       # else
-      # 	pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at: [90 - pdf.bounds.absolute_left, 404])
+      #   pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at: [90 - pdf.bounds.absolute_left, 404])
       # end
-
-      image =  @record.pdf_image1.path(:pdf)
-      unless image.blank?
-        pdf.image(image, at: [30 - pdf.bounds.absolute_left, 521], fit: [225, 225])
-      else
-        pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at: [90 - pdf.bounds.absolute_left, 404])
-      end
-      pdf.draw_text(I18n.t('ui.door_inspection_report_pdf.report_data_pages.door_secured'), at: [30 - pdf.bounds.absolute_left, 283])
     end
 
     def draw_unsecured_image(pdf)
       pdf.fill_color '202020'
       pdf.font_size 12
-      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [15 - pdf.bounds.absolute_left, 261])
-
-      # unless @record.u_image2.blank?
-      # 	 pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_image2}")[:data])), at:  [30 - pdf.bounds.absolute_left, 246], fit: [225, 225]
-      # else
-      # 	pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at: [90 - pdf.bounds.absolute_left, 129])
-      # end
-
-      image =  @record.pdf_image2.path(:pdf)
+      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [15 - pdf.bounds.absolute_left, 380])
+      image =  @record.pdf_image2.path(:pdf)      
       unless image.blank?
-        pdf.image(image, at: [30 - pdf.bounds.absolute_left, 246], fit: [225, 225])
+        pdf.image(image, at: [30 - pdf.bounds.absolute_left, 365], fit: [225, 225])
       else
-        pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at: [90 - pdf.bounds.absolute_left, 129])
+        pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at: [90 - pdf.bounds.absolute_left, 250])
       end 
       pdf.move_down 100
-      pdf.draw_text(I18n.t('ui.door_inspection_report_pdf.report_data_pages.door_unsecured'), at: [30 - pdf.bounds.absolute_left, 8])
+      pdf.draw_text(I18n.t('ui.door_inspection_report_pdf.report_data_pages.door_unsecured'), at: [30 - pdf.bounds.absolute_left, 123])
+
+      # unless @record.u_image2.blank?
+      #    pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_image2}")[:data])), at:  [30 - pdf.bounds.absolute_left, 246], fit: [225, 225]
+      # else
+      #   pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at: [90 - pdf.bounds.absolute_left, 129])
+      # end
     end
 
     # def splitBase64(uri)

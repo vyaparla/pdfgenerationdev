@@ -20,8 +20,18 @@ module Report
     end
 
     def start_new_page(pdf)
-      pdf.start_new_page :bottom_margin => bottom_margin
+      #pdf.start_new_page :bottom_margin => bottom_margin
+      pdf.start_new_page
       draw_background(pdf)
+      pdf.number_pages "# <page>",
+      {
+        :start_count_at => 1,
+        :page_filter => :all,
+        :at => [pdf.bounds.right - 180, 130],
+        :width => 170,
+        :align => :right, :size => 14,
+        :color => "202020"
+      }
       draw_heading(pdf) if respond_to?(:draw_heading, true)
     end
   end

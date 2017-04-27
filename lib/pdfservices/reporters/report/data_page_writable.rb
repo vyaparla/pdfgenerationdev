@@ -8,9 +8,9 @@ module Report
       "<b>#{string}</b>"
     end
 
-    def bottom_margin
-      150
-    end
+    # def bottom_margin
+    #   150
+    # end
 
     def draw_heading(pdf)
       # pdf.indent(5) do
@@ -68,6 +68,5 @@ module Report
     def relative_background_path
       'three_hundred_dpi/final_data_page_new.jpg'
     end
-
   end
 end

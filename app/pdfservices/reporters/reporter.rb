@@ -14,6 +14,7 @@ private
         :light        => font_file('Light'),
         :light_italic => font_file('LightOblique')
       })
+
       pdf.default_leading 3
       block.call(pdf)
     end

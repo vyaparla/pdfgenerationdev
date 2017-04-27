@@ -1,10 +1,7 @@
-module FirestopSurveyReport
+module FirestopInstallationReport
   class GraphPage
-    #include DataPageWritable
-
-    def initialize(job)
-      @job = job
-      #@tech = tech
+  	def initialize(job)
+      @job = job      
     end
 
     def write(pdf)
@@ -18,7 +15,7 @@ module FirestopSurveyReport
   private
 
     def issues_path
-      @job.graph_top_issues_path
+      @job.installation_top_issue_path
     end
   end
 end

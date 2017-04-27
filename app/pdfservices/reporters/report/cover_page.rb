@@ -20,7 +20,9 @@ module Report
       draw_title(pdf)
       draw_subtitle(pdf)
     end
-    
+  
+  private
+
     def draw_title(pdf)
       # pdf.indent 40 do
       #   pdf.move_down 300
@@ -68,7 +70,7 @@ module Report
       #   end
       # end
       pdf.font_size 25
-      pdf.fill_color 'c6171e'        
+      pdf.fill_color 'c6171e'
       pdf.text("<b><i>#{@owner.u_facility_name}</i></b>", :inline_format => true)
       pdf.move_down 20
       unless @address.blank?
