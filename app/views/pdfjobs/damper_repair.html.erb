@@ -40,6 +40,7 @@
               <th>Asset Name(u_tag)</th>
               <th>Status(u_dr_passed_post_repair)</th>
               <th>Repair Action Performed(u_repair_action_performed)</th>
+              <th>Repair Date(u_inspected_on)</th>
               <th>Active(u_active)</th>
               <th>Delete(u_delete)</th>
               <!-- <th>Location(u_location_desc)</th>
@@ -66,6 +67,7 @@
                 <td><%= dr.u_tag %></td>
                 <td><%= dr.u_dr_passed_post_repair %></td>
                 <td><%= dr.u_repair_action_performed %></td>
+                <td><%= dr.u_inspected_on %></td>
                 <td><%= dr.u_active %></td>
                 <td><%= dr.u_delete %></td>
                 <td><%= link_to 'Destroy', pdfjob_path(dr), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-xs' %></td>

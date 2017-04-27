@@ -37,15 +37,16 @@
               <th>Floor(u_floor)</th>
               <th>Type(u_type)</th>
               <th>Damper Name(u_damper_name)</th>
-              <th>Asset Name(u_tag)</th>              
+              <th>Asset Name(u_tag)</th>
               <th>Status(u_status)</th>
+              <th>Damper InspectionDate(u_inspected_on)</th>
+              <th>Active(u_active)</th>
+              <th>Delete(u_delete)</th>
+              <th colspan="3"></th>
               <!-- <th>Location(u_location_desc)</th> -->
               <!-- <th>Failure Reasons(u_reason)</th>
               <th>Non-Accessible Reasons(u_non_accessible_reasons)</th>
               <th>Access Door(u_access_size)</th> -->
-              <th>Active(u_active)</th>
-              <th>Delete(u_delete)</th>
-              <th colspan="3"></th>
             </tr>
           </thead>
           <tbody>
@@ -56,8 +57,9 @@
                 <td><%= di.u_floor %></td>
                 <td><%= di.u_type %></td>
                 <td><%= di.u_damper_name %></td>
-                <td><%= di.u_tag %></td>      
+                <td><%= di.u_tag %></td>
                 <td><%= di.u_status %></td>
+                <td><%= di.u_inspected_on %></td>
                 <td><%= di.u_active %></td>
                 <td><%= di.u_delete %></td>
                 <td><%= link_to 'Destroy', pdfjob_path(di), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-xs' %></td>
