@@ -223,7 +223,7 @@ class ApiController < ApplicationController
 
   def download_full_pdf_report
     @pdfjob = Lsspdfasset.where(u_service_id: params[:serviceID], :u_delete => false).first
-    @outputfile = @pdfjob.u_job_id + "_" + params[:servicetype] + "_" + Time.now.strftime("%m-%d-%Y-%r").gsub(/\s+/, "_") + "_" + "full_report"
+    @outputfile = @pdfjob.u_job_id + "_" + params[:servicetype] + "_" + Time.now.strftime("%m-%d-%Y-%r").gsub(/\s+/, "_") + "_" + "detail_report"
     send_file @pdfjob.full_report_path, :type => 'application/pdf', :disposition =>  "attachment; filename=\"#{@outputfile}.pdf\""
     
     # @pdfjob = Lsspdfasset.where(u_service_id: params[:serviceID], :u_delete => false).first
