@@ -76,7 +76,7 @@ module Report
         address << "\n#{@address[2]}"
         address << ", #{@address[3]}"
         address << "  #{@address[4]}"
-        address << "\n United States"
+        #address << "\n United States"
       end
     end
 

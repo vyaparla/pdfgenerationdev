@@ -47,7 +47,7 @@ module Report
       elsif @model_name == "DAMPERREPAIR"
         pdf.text("<b><i>Damper Repair Report</i></b>", :inline_format => true)
       elsif @model_name == "FIREDOORINSPECTION"
-        pdf.text("<b><i>Fire Door Inspection Report</i></b>", :inline_format => true)
+        pdf.text("<b><i>FireDoor Inspection Report</i></b>", :inline_format => true)
       elsif @model_name == "FIRESTOPINSTALLATION"
         pdf.text("<b><i>Firestop Installation Report</i></b>", :inline_format => true)
       elsif @model_name == "FIRESTOPSURVEY"
@@ -76,7 +76,7 @@ module Report
       unless @address.blank?
         pdf.text("<b><i>#{@address[0]}, #{@address[1]}, #{@address[2]}</i></b>", :inline_format => true)
         pdf.text("<b><i>#{@address[3]}, #{@address[4]}</i></b>", :inline_format => true)
-        pdf.text("<b><i>United States</i></b>", :inline_format => true)
+        #pdf.text("<b><i>United States</i></b>", :inline_format => true)
       end
     end
 
