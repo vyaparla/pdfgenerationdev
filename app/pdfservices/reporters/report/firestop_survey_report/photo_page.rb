@@ -57,15 +57,15 @@ module FirestopSurveyReport
     end
 
     def draw_before_image(pdf)
-      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at:  [35, 643], fit: [123, 123])
+      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at:  [35, 530], fit: [123, 123])
       image = @record.pdf_image1.path(:pdf)      
       unless image.blank?
-        pdf.image(image, at: [44, 634], fit: [105, 105])
+        pdf.image(image, at: [44, 521], fit: [105, 105])
       else
-        pdf.draw_text('Photo Unavailable', style: :bold, size:  11, at: [49, 580])
+        pdf.draw_text('Photo Unavailable', style: :bold, size:  11, at: [49, 464])
       end
       pdf.font_size 10
-      pdf.draw_text("Before Installation", at: [44, 515])
+      pdf.draw_text("Before Installation", at: [44, 403])
 
       # unless @record.u_image1.blank?
       #   pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64, #{@record.u_image1}")[:data])), at:  [44, 521], fit: [105, 105]
@@ -75,15 +75,15 @@ module FirestopSurveyReport
     end
 
     def draw_after_image(pdf)
-      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at:  [35, 507], fit: [123, 123])
+      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at:  [35, 400], fit: [123, 123])
       image = @record.pdf_image2.path(:pdf)      
       unless image.blank?
-        pdf.image(image, at: [44, 498], fit: [105, 105])
+        pdf.image(image, at: [44, 391], fit: [105, 105])
       else
-        pdf.draw_text('Photo Unavailable', style: :bold, size: 11, at: [49, 445])
+        pdf.draw_text('Photo Unavailable', style: :bold, size: 11, at: [49, 334])
       end
       pdf.font_size 10
-      pdf.draw_text("After Installation", at: [44, 379])
+      pdf.draw_text("After Installation", at: [44, 272])
 
       # unless @record.u_image2.blank?
       #   pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64, #{@record.u_image2}")[:data])), at: [44, 386], fit: [105, 105]

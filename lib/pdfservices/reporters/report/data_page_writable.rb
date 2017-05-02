@@ -8,9 +8,9 @@ module Report
       "<b>#{string}</b>"
     end
 
-    # def bottom_margin
-    #   150
-    # end
+    def bottom_margin
+      150
+    end
 
     def draw_heading(pdf)
       # pdf.indent(5) do

@@ -19,19 +19,33 @@ module Report
       pdf.image background_path, :fit => size, :at  => [-pdf.bounds.absolute_left, size.last - pdf.bounds.absolute_bottom]
     end
 
-    def start_new_page(pdf)
-      #pdf.start_new_page :bottom_margin => bottom_margin
-      pdf.start_new_page
+    def start_new_page(pdf)      
+      pdf.start_new_page :bottom_margin => bottom_margin
       draw_background(pdf)
-      pdf.number_pages "<page>",
-      {
-        :start_count_at => 1,
-        :page_filter => :all,
-        :at => [pdf.bounds.right - 180, 130],
-        :width => 170,
-        :align => :right, :size => 11,
-        :color => "808080"
-      }
+
+      string = "<page>"
+      options = { :at => [pdf.bounds.right - 180, 130],
+      :width => 170,
+      :align => :right, :size => 11,
+      :page_filter => (0..1),
+      :start_count_at => 1,
+      :color => "808080" }
+      pdf.number_pages string, options
+      options[:at] = [pdf.bounds.right - 180, 10]
+      options[:page_filter] = lambda{ |pg| pg > 1 }
+      options[:start_count_at] = 2
+      pdf.number_pages string, options
+    
+      # pdf.number_pages "<page>",
+      # {
+      #   :start_count_at => 1,
+      #   :page_filter => :all,
+      #   :at => [pdf.bounds.right - 180, 50],
+      #   :width => 170,
+      #   :align => :right, :size => 11,
+      #   :color => "808080"
+      # }
+
       draw_heading(pdf) if respond_to?(:draw_heading, true)
     end
   end

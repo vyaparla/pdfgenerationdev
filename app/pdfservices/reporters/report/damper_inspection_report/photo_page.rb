@@ -140,7 +140,7 @@ module DamperInspectionReport
       end
 
       def draw_open_image(pdf)
-        top_margin_pic_offset = 125
+        top_margin_pic_offset = 235
         pdf.fill_color '202020'
         pdf.font_size 12
         pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [15 - pdf.bounds.absolute_left, 771 - top_margin_pic_offset])        
@@ -160,7 +160,7 @@ module DamperInspectionReport
       end
 
       def draw_closed_image(pdf)
-      	top_margin_pic_offset = 110
+      	top_margin_pic_offset = 235
         pdf.fill_color '202020'
         pdf.font_size 12
         pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [15 - pdf.bounds.absolute_left, 496 - top_margin_pic_offset])
@@ -181,7 +181,7 @@ module DamperInspectionReport
       end
 
       def draw_actuator_image(pdf)
-      	top_margin_pic_offset = 110
+      	top_margin_pic_offset = 235
         pdf.fill_color '202020'
         pdf.font_size 12
         if @record.u_image3

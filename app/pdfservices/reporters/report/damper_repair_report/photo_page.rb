@@ -103,15 +103,15 @@ module DamperRepairReport
     end
 
     def draw_open_after_install_image(pdf)
-      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [35, 640], fit: [123, 123])
-      image = @record.pdf_image1.path(:pdf)      
+      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [35, 530], fit: [123, 123])
+      image = @record.pdf_image1.path(:pdf)
       unless image.blank?
-        pdf.image(image, at: [44, 631], fit: [105, 105])
+        pdf.image(image, at: [44, 521], fit: [105, 105])
       else
-        pdf.draw_text('Photo Unavailable', style: :bold, size: 11, at: [49, 574])
+        pdf.draw_text('Photo Unavailable', style: :bold, size: 11, at: [49, 464])
       end
       pdf.font_size 10
-      pdf.draw_text("#{DamperRepairReporting.translate('open_after_installation')}", at: [44, 513])
+      pdf.draw_text("#{DamperRepairReporting.translate('open_after_installation')}", at: [44, 403])
 
       # unless @record.u_image1.blank?
       #   pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_image1}")[:data])), at: [ 44, 521], fit: [105, 105]
@@ -121,15 +121,15 @@ module DamperRepairReport
     end
 
     def draw_closed_after_install_image(pdf)
-      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [35, 510], fit: [123, 123])
+      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [35, 395], fit: [123, 123])
       image = @record.pdf_image2.path(:pdf)      
       unless image.blank?
-        pdf.image(image, at: [44, 501], fit: [105, 105])
+        pdf.image(image, at: [44, 386], fit: [105, 105])
       else
-        pdf.draw_text('Photo Unavailable', style: :bold, size: 11, at: [49, 450])
+        pdf.draw_text('Photo Unavailable', style: :bold, size: 11, at: [49, 329])
       end
       pdf.font_size 10
-      pdf.draw_text("#{DamperRepairReporting.translate('closed_after_installation')}", at: [44, 381])
+      pdf.draw_text("#{DamperRepairReporting.translate('closed_after_installation')}", at: [44, 268])
 
       # unless @record.u_image2.blank?
       #   pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_image2}")[:data])), at:  [ 44, 386], fit: [105, 105]
@@ -139,15 +139,15 @@ module DamperRepairReport
     end
 
     def draw_reopened_after_install_image(pdf)
-      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [35, 380], fit: [123, 123])
+      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [35, 260], fit: [123, 123])
       image = @record.pdf_image3.path(:pdf)      
       unless image.blank?
-        pdf.image(image, at:  [44, 371], fit: [105, 105])
+        pdf.image(image, at:  [44, 251], fit: [105, 105])
       else
-        pdf.draw_text('Photo Unavailable', style: :bold, size: 11, at: [49, 315])
+        pdf.draw_text('Photo Unavailable', style: :bold, size: 11, at: [49, 194])
       end
       pdf.font_size 10
-      pdf.draw_text("#{DamperRepairReporting.translate('reopened_after_installation')}", at: [44, 250])
+      pdf.draw_text("#{DamperRepairReporting.translate('reopened_after_installation')}", at: [44, 133])
 
       # unless @record.u_image3.blank?
       #   pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_image3}")[:data])), at:  [ 44, 251], fit: [105, 105]
@@ -157,15 +157,15 @@ module DamperRepairReport
     end
 
     def draw_new_install_image(pdf)
-      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [35, 248], fit: [123, 123])
-      image = @record.pdf_image4.path(:pdf)      
+      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [35, 125], fit: [123, 123])
+      image = @record.pdf_image4.path(:pdf)
       unless image.blank?
-        pdf.image(image, at:  [44, 239], fit: [105, 105])
+        pdf.image(image, at:  [44, 116], fit: [105, 105])
       else
-        pdf.draw_text('Photo Unavailable', style: :bold, size: 11, at: [49, 185])
+        pdf.draw_text('Photo Unavailable', style: :bold, size: 11, at: [49, 59])
       end
       pdf.font_size 10
-      pdf.draw_text("#{DamperRepairReporting.translate('new_actuator_installed')}", at: [44, 119])
+      pdf.draw_text("#{DamperRepairReporting.translate('new_actuator_installed')}", at: [44, -2])
 
       # unless @record.u_image4.blank?
       #   pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_image4}")[:data])), at:  [ 44, 116], fit: [105, 105]
