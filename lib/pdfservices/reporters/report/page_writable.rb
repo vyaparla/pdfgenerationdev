@@ -24,14 +24,14 @@ module Report
       draw_background(pdf)
 
       string = "<page>"
-      options = { :at => [pdf.bounds.right - 180, 130],
+      options = { :at => [pdf.bounds.right - 150, 130],
       :width => 170,
       :align => :right, :size => 11,
       :page_filter => (0..1),
       :start_count_at => 1,
       :color => "808080" }
       pdf.number_pages string, options
-      options[:at] = [pdf.bounds.right - 180, 10]
+      options[:at] = [pdf.bounds.right - 150, 10]
       options[:page_filter] = lambda{ |pg| pg > 1 }
       options[:start_count_at] = 2
       pdf.number_pages string, options
