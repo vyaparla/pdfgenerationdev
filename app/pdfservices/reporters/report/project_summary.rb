@@ -9,10 +9,10 @@ module Report
     def draw(pdf)
       draw_facility_title(pdf)
       Report::Table.new(facility_summary_table_content).draw(pdf)
-      pdf.move_down 30
+      pdf.move_down 20
       draw_title(pdf)
       Report::Table.new(project_summary_table_content).draw(pdf)
-      pdf.move_down 30
+      pdf.move_down 20
       draw_label(pdf, 'Statistics')
       top = pdf.cursor
       # pdf.indent(300) { Report::Table.new(type_table_content).draw(pdf) }
@@ -22,7 +22,7 @@ module Report
         formatter.cell[2,0] = { :text_color => 'c1171d' }
         formatter.cell[3,0] = { :text_color => 'f39d27' }
       end
-      pdf.move_down 25
+      pdf.move_down 20
     end
    
   private
@@ -165,7 +165,11 @@ module Report
       @project_grand_total_data.push($ftotal)
       @project_grand_total_data.push($natotal)
       @project_grand_total_data.push($removedtotal)
-      @project_grand_total_data.push($ptotal + $ftotal + $natotal + $removedtotal)
+      #@project_grand_total_data.push("0")
+
+      #@project_grand_total_data.push($ptotal + $ftotal + $natotal + $removedtotal)
+      @project_grand_total_data.push($ptotal + $ftotal + $natotal)
+
       #@project_grand_total_data.push('%.2f%' % (($ptotal.to_f * 100) / ($ptotal + $ftotal + $natotal)))
 
       if $ptotal == 0 && $ftotal == 0 && $natotal == 0
@@ -193,7 +197,8 @@ module Report
           @project_per = '%.2f%' % ((100 * @project_total.to_f) / (@project_grand_total))  
         end  
         #@project_per = '%.2f%' % ((100 * @project_total.to_f) / (@project_grand_total))
-        @project_final_table_data << [resultInfo["building"], @damper_type, resultInfo["Pass"], resultInfo["Fail"], resultInfo["NA"], resultInfo["Removed"], resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"] + resultInfo["Removed"], @project_per]
+        #@project_final_table_data << [resultInfo["building"], @damper_type, resultInfo["Pass"], resultInfo["Fail"], resultInfo["NA"], resultInfo["Removed"], resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"] + resultInfo["Removed"], @project_per]
+        @project_final_table_data << [resultInfo["building"], @damper_type, resultInfo["Pass"], resultInfo["Fail"], resultInfo["NA"], resultInfo["Removed"], resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"], @project_per]
       end
 
       # @project_grand_total_data = []
@@ -229,7 +234,8 @@ module Report
        DamperInspectionReporting.column_heading(:percent_of_dampers)]] + 
        [[DamperInspectionReporting.column_heading(:pass), $project_pass_per],
        [DamperInspectionReporting.column_heading(:fail), $project_fail_per],
-       [DamperInspectionReporting.column_heading(:na), $project_na_per]
+       [DamperInspectionReporting.column_heading(:na), $project_na_per],
+       [DamperInspectionReporting.column_heading(:removed), "00.00%"]
        ]
     end
 
@@ -325,8 +331,10 @@ module Report
       @facility_grand_total_data.push($bftotal)
       @facility_grand_total_data.push($bnatotal)
       @facility_grand_total_data.push($bremovetotal)
+      #@facility_grand_total_data.push("0")
 
-      @facility_grand_total_data.push($bptotal + $bftotal + $bnatotal + $bremovetotal)
+      #@facility_grand_total_data.push($bptotal + $bftotal + $bnatotal + $bremovetotal)
+      @facility_grand_total_data.push($bptotal + $bftotal + $bnatotal)
 
       if $bptotal == 0 && $bftotal == 0 && $bnatotal == 0
         @facility_grand_total_data.push("00.00%")        
@@ -347,7 +355,8 @@ module Report
         end
 
         #@facility_per = '%.2f%' % ((100 * @facility_total.to_f) / (@facility_grand_total))
-        @facility_building_table_data << [facilityvalue["building"], facilityvalue["Pass"], facilityvalue["Fail"], facilityvalue["NA"], facilityvalue["Removed"], facilityvalue["Pass"] + facilityvalue["Fail"] + facilityvalue["NA"] + facilityvalue["Removed"], @facility_per]
+        #@facility_building_table_data << [facilityvalue["building"], facilityvalue["Pass"], facilityvalue["Fail"], facilityvalue["NA"], facilityvalue["Removed"], facilityvalue["Pass"] + facilityvalue["Fail"] + facilityvalue["NA"] + facilityvalue["Removed"], @facility_per]
+        @facility_building_table_data << [facilityvalue["building"], facilityvalue["Pass"], facilityvalue["Fail"], facilityvalue["NA"], facilityvalue["Removed"], facilityvalue["Pass"] + facilityvalue["Fail"] + facilityvalue["NA"], @facility_per]
       end
       
       # @facility_grand_total_data = []

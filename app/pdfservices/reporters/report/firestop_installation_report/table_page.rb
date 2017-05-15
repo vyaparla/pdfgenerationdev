@@ -18,7 +18,7 @@ module FirestopInstallationReport
       inspection_data = [columns]
       records.each do |inspection_record|
         record_data = [
-          inspection_record.u_inspected_on.strftime('%m/%d/%Y'),
+          inspection_record.u_inspected_on.localtime.strftime('%m/%d/%Y'),
           inspection_record.u_tag,
           inspection_record.u_floor,
           inspection_record.u_location_desc,

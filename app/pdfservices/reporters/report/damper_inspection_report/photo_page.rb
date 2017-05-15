@@ -9,60 +9,30 @@ module DamperInspectionReport
     end
 
     def write(pdf)
-      super
-      pdf.indent(250) do
-        draw_location_description(pdf)
-        draw_damper_tag(pdf)
-        draw_damper_type(pdf)
-        draw_floor(pdf)
-        draw_access_door_installation(pdf) unless @record.u_access_size.blank?
-        draw_status(pdf)
-        if @record.u_status == "Fail"
-          draw_failure_reasons(pdf)
-        end
-        if @record.u_status == "NA"
-          draw_na_reasons(pdf)
-        end  
-      end
+      # super
+      # pdf.indent(250) do
+      #   draw_location_description(pdf)
+      #   draw_damper_tag(pdf)
+      #   draw_damper_type(pdf)
+      #   draw_floor(pdf)
+      #   draw_access_door_installation(pdf) unless @record.u_access_size.blank?
+      #   draw_status(pdf)
+      #   if @record.u_status == "Fail"
+      #     draw_failure_reasons(pdf)
+      #   end
+      #   if @record.u_status == "NA"
+      #     draw_na_reasons(pdf)
+      #   end  
+      # end
 
-      if @record.u_status == "Removed"
-      else
-        if @record.u_status != "Fail"
-          draw_open_image(pdf)
-          draw_closed_image(pdf)
-        else
-          if @record.u_type.upcase != "FD"
-            draw_open_image(pdf)
-            draw_closed_image(pdf)
-            draw_actuator_image(pdf)
-          else
-            draw_open_image(pdf)
-            draw_closed_image(pdf)
-          end
-        end
-      end
-      
       # if @record.u_status == "Removed"
       # else
-      #   super
-      #   pdf.indent(250) do
-      # 	  draw_location_description(pdf)
-      #     draw_damper_tag(pdf)
-      #     draw_damper_type(pdf)
-      #     draw_floor(pdf)
-      #     draw_access_door_installation(pdf) unless @record.u_access_size.blank?
-      #     draw_status(pdf)
-      #     if @record.u_status == "Fail"
-      #       draw_failure_reasons(pdf)
-      #     end
-      #   end
-
       #   if @record.u_status != "Fail"
-      # 	  draw_open_image(pdf)
+      #     draw_open_image(pdf)
       #     draw_closed_image(pdf)
       #   else
-      # 	  if @record.u_type.upcase != "FD"
-      # 	    draw_open_image(pdf)
+      #     if @record.u_type.upcase != "FD"
+      #       draw_open_image(pdf)
       #       draw_closed_image(pdf)
       #       draw_actuator_image(pdf)
       #     else
@@ -71,6 +41,36 @@ module DamperInspectionReport
       #     end
       #   end
       # end
+      
+      if @record.u_status == "Removed"
+      else
+        super
+        pdf.indent(250) do
+      	  draw_location_description(pdf)
+          draw_damper_tag(pdf)
+          draw_damper_type(pdf)
+          draw_floor(pdf)
+          draw_access_door_installation(pdf) #unless @record.u_access_size.blank?
+          draw_status(pdf)
+          if @record.u_status == "Fail"
+            draw_failure_reasons(pdf)
+          end
+        end
+
+        if @record.u_status != "Fail"
+      	  draw_open_image(pdf)
+          draw_closed_image(pdf)
+        else
+      	  if @record.u_type.upcase != "FD"
+      	    draw_open_image(pdf)
+            draw_closed_image(pdf)
+            draw_actuator_image(pdf)
+          else
+            draw_open_image(pdf)
+            draw_closed_image(pdf)
+          end
+        end
+      end
     end
 
     private
@@ -102,7 +102,11 @@ module DamperInspectionReport
       end
 
       def draw_access_door_installation(pdf)
-        pdf.text("<b>Installed Access Door : </b> #{@record.u_access_size}", inline_format: true)
+        if @record.u_di_installed_access_door == "true"
+          pdf.text("<b>Installed Access Door : </b> YES", inline_format: true)  
+        else
+          pdf.text("<b>Installed Access Door : </b> NO", inline_format: true)
+        end
         # pdf.indent(10) do
         #   pdf.text("• #{@record.u_access_size}")
         # end

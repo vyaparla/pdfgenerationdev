@@ -57,7 +57,12 @@ class ApiController < ApplicationController
         @pdf_image4.content_type = "image/jpeg"
         @pdfjob.pdf_image4 = @pdf_image4
       end
-      
+
+
+      #@pdfjob.u_job_start_date =  Time.now.utc
+      #@pdfjob.u_job_end_date =  Time.now.utc
+      #@pdfjob.u_inspected_on =  Time.now.utc
+
       @pdfjob.save
 
       render json: {message: "Save Success"}
@@ -98,6 +103,9 @@ class ApiController < ApplicationController
             @pdf_image4.content_type = "image/jpeg"
             @pdfjob.update_attribute(:pdf_image4, @pdf_image4)
           end
+
+          #@pdfjob.update_attributes(:u_job_start_date =>  Time.now.utc, :u_job_end_date => Time.now.utc, :u_inspected_on => Time.now.utc)
+
           render json: {message: "Update Success"}
         else
           render json: {message: "Unable to Update the record!"}

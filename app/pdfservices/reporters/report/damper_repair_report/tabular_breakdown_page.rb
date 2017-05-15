@@ -49,7 +49,7 @@ module DamperRepairReport
       @records.map do |record|
       	if record.u_repair_action_performed == "Damper Repaired"
       	  data = {
-      	    :date => record.u_inspected_on.strftime(I18n.t('time.formats.mdY')),
+      	    :date => record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')),
       	    :damper_number     => record.u_tag,
             :floor             => record.u_floor,
       	    :damper_location   => record.u_location_desc,
@@ -59,7 +59,7 @@ module DamperRepairReport
       	  attributes.map { |column, | data[column] }
       	else
       	  data = {
-      	    :date => record.u_inspected_on.strftime(I18n.t('time.formats.mdY')),
+      	    :date => record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')),
       	    :damper_number     => record.u_tag,
             :floor             => record.u_floor,
       	    :damper_location   => record.u_location_desc,

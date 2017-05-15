@@ -26,7 +26,7 @@ module DamperInspectionReport
 
     def building
       @building ||= @building_section
-    end
+    end    
 
     def title
       DamperInspectionReporting.translate(@damper_type)
@@ -73,7 +73,7 @@ module DamperInspectionReport
             @di_installedaccess_door = ""
           end
           data = {            
-            :date              => record.u_inspected_on.strftime(I18n.t('time.formats.mdY')),
+            :date              => record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')),
             :damper_number     => record.u_tag,
             :floor             => record.u_floor,
             :damper_location   => record.u_location_desc,
@@ -93,7 +93,7 @@ module DamperInspectionReport
           }
           attributes.map { |column, | data[column] }
         end 
-      elsif @damper_type == :failed_dampers        
+      elsif @damper_type == :failed_dampers
         @records.map do |record|
           if record.u_di_installed_access_door == "true"
             @di_installedaccess_door = "YES"
@@ -101,13 +101,13 @@ module DamperInspectionReport
             @di_installedaccess_door = ""
           end
           data = {
-            :date              => record.u_inspected_on.strftime(I18n.t('time.formats.mdY')),
+            :date              => record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')),
             :damper_number     => record.u_tag,
             :floor             => record.u_floor,
             :damper_location   => record.u_location_desc,
             :damper_type       => record.u_damper_name,
             :current_status    => record.u_status,
-            :deficiency        => record.u_reason,            
+            :deficiency        => record.u_reason,
             :corrective_action => record.u_di_replace_damper,
             :installed_access_door    => @di_installedaccess_door
 
@@ -130,13 +130,13 @@ module DamperInspectionReport
             @di_installedaccess_door = ""
           end
           data = {
-            :date              => record.u_inspected_on.strftime(I18n.t('time.formats.mdY')),
+            :date              => record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')),
             :damper_number     => record.u_tag,
             :floor             => record.u_floor,
             :damper_location   => record.u_location_desc,
             :damper_type       => record.u_damper_name,
             :current_status    => record.u_status,
-            :deficiency        => record.u_non_accessible_reasons,        
+            :deficiency        => record.u_non_accessible_reasons,
             :installed_access_door    => @di_installedaccess_door
 
             #:service_type      => "Inspection",
@@ -158,12 +158,12 @@ module DamperInspectionReport
             @di_installedaccess_door = ""
           end
           data = {
-            :date              => record.u_inspected_on.strftime(I18n.t('time.formats.mdY')),
+            :date              => record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')),
             :damper_number     => record.u_tag,
             :floor             => record.u_floor,
             :damper_location   => record.u_location_desc,
             :current_status    => record.u_status,
-            :damper_type       => record.u_damper_name,            
+            :damper_type       => record.u_damper_name,
             :installed_access_door    => @di_installedaccess_door
 
             #:service_type      => "Inspection",

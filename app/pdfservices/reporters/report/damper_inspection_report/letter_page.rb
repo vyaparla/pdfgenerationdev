@@ -6,7 +6,7 @@ module DamperInspectionReport
       @job = job
       @model = model
       # @group_name = group_name
-      # @facility_name = facility_name
+      #@facility_name = job.u_facility_name
       @address = address
       @facility_type = facility_type
       @tech = tech
@@ -15,6 +15,6 @@ module DamperInspectionReport
     def write(pdf)
       super
       Report::Letter.new(@job, @model, @address, @facility_type, :damper_inspection_report, @tech).draw(pdf)
-    end
+    end  
   end
 end

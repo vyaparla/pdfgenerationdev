@@ -13,12 +13,11 @@ module Report
     end
 
     def draw_heading(pdf)
-      [[[12, '202020'],
-      title],
-      [[12, 'f39d27'],
-      "#{@record.u_building}: #{@record.u_facility_name}"],
-      [[10, '202020'],
-      @record.work_dates]].each do |(size, color), content|
+      [[[12, '202020'], title],
+       #[[12, 'f39d27'], "#{@record.u_building}: #{@record.u_facility_name}"],
+       [[12, 'f39d27'], "#{@record.u_facility_name}"],
+       [[12, 'f39d27'], "#{@record.u_building}"],
+       [[10, '202020'], @record.work_dates]].each do |(size, color), content|
         pdf.font_size size
         pdf.fill_color color
         pdf.indent(0) { pdf.text(bold(content), :inline_format => true) }

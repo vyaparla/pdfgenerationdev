@@ -190,7 +190,9 @@ module Report
       @final_table_data_total.push($ftotal)
       @final_table_data_total.push($natotal)
       @final_table_data_total.push($rtotal)
-      @final_table_data_total.push($sdtotal + $fdtotal + $fsdtotal)
+      #@final_table_data_total.push("0")
+      #@final_table_data_total.push($sdtotal + $fdtotal + $fsdtotal)
+      @final_table_data_total.push($ptotal + $ftotal + $natotal)
 
       if $ptotal == 0 && $ftotal == 0 && $natotal == 0
         @final_table_data_total.push("00.00%")
@@ -211,7 +213,8 @@ module Report
           @damperPer = '%.2f%' % ((100 * @damperTotal) / (@damperGrandtotal))
         end        
         #@damperPer = '%.2f%' % ((resultInfo["Pass"] * 100) / (resultInfo["FSD"] + resultInfo["FD"] + resultInfo["SD"]))
-        @final_table_data << [resultInfo["floor"], resultInfo["FD"], resultInfo["SD"], resultInfo["FSD"], resultInfo["Pass"], resultInfo["Fail"], resultInfo["NA"], resultInfo["Removed"], resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"] + resultInfo["Removed"], @damperPer]
+        #@final_table_data << [resultInfo["floor"], resultInfo["FD"], resultInfo["SD"], resultInfo["FSD"], resultInfo["Pass"], resultInfo["Fail"], resultInfo["NA"], resultInfo["Removed"], resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"] + resultInfo["Removed"], @damperPer]
+        @final_table_data << [resultInfo["floor"], resultInfo["FD"], resultInfo["SD"], resultInfo["FSD"], resultInfo["Pass"], resultInfo["Fail"], resultInfo["NA"], resultInfo["Removed"], resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"], @damperPer]
       end
     
       # @final_table_data_total = []
@@ -275,7 +278,9 @@ module Report
        DamperInspectionReporting.column_heading(:percent_of_dampers)]] + 
        [[DamperInspectionReporting.column_heading(:pass), $ptotal_damperPer],
        [DamperInspectionReporting.column_heading(:fail), $ftotal_damperPer],
-       [DamperInspectionReporting.column_heading(:na), $natotal_damperPer]]
+       [DamperInspectionReporting.column_heading(:na), $natotal_damperPer],
+       [DamperInspectionReporting.column_heading(:removed), "00.00%"]
+      ]
     end
 
     def type_table_content

@@ -83,11 +83,11 @@ class Lsspdfasset < ActiveRecord::Base
 
   def work_dates
     unless self.u_job_start_date.blank?
-      start_date = self.u_job_start_date.strftime(I18n.t('date.formats.long'))
+      start_date = self.u_job_start_date.localtime.strftime(I18n.t('date.formats.long'))
     end
 
     unless self.u_job_end_date.blank?
-      end_date = self.u_job_end_date.strftime(I18n.t('date.formats.long'))
+      end_date = self.u_job_end_date.localtime.strftime(I18n.t('date.formats.long'))
     end
     unless end_date.blank?
       "#{start_date} - #{end_date}"
