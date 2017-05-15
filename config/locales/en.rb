@@ -179,7 +179,7 @@
           failure_reasons: 'Failure Reason',
           reason_for_na: 'Reason',
           all_dampers: 'All Dampers',
-          pass_dampers: 'Pass Dampers',
+          pass_dampers: 'Passed Dampers',
           failed_dampers: 'Failed Dampers',
           na_dampers: 'Non-Accessible Dampers',
           removed_dampers: 'Removed Dampers',
