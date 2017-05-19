@@ -1,4 +1,6 @@
 class PdfjobsController < ApplicationController
+  
+  before_action :authenticate_user!
 
   def index
   	@damper_inspection = Lsspdfasset.where(:u_delete => false, :u_report_type => "DAMPERINSPECTION").order('created_at DESC').paginate(:page => params[:page], :per_page => 30)

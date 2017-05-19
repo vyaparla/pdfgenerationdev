@@ -26,10 +26,18 @@ module FirestopInstallationReport
       pdf.fill_color 'c6171e'      
       @total_issue = Lsspdfasset.where(:u_service_id => @job.u_service_id, :u_delete => false).collect(&:u_issue_type).count
       pdf.text("<b>Total # of Issue : </b> #{@total_issue}", inline_format: true)
+      @issue_fixed_on_site = 0
+      @issue_survey_only = 0
       @issue_types = Lsspdfasset.select(:u_issue_type, :u_service_type).where(:u_service_id => @job.u_service_id, :u_delete => false).group(["u_service_type"]).count(:u_service_type)
-      @toal_issue_types = @issue_types.values
-      pdf.text("<b>Total # of Issue Fixed on Site : </b> #{@toal_issue_types[0]}", inline_format: true)
-      pdf.text("<b>Total # of Issue Remaining : </b> #{@toal_issue_types[1]}", inline_format: true)
+      @issue_types.each do |key, value|
+        if key == "Fixed On Site"
+          @issue_fixed_on_site = value
+        else
+          @issue_survey_only = value
+        end
+      end 
+      pdf.text("<b>Total # of Issue Fixed on Site : </b> #{@issue_fixed_on_site}", inline_format: true)
+      pdf.text("<b>Total # of Issue Remaining : </b> #{@issue_survey_only}", inline_format: true) 
       #End Jira LSP-1067
 
       pdf.fill_color '202020'

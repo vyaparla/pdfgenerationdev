@@ -64,7 +64,9 @@
                 <td><%= di.u_inspected_on.localtime %></td>
                 <td><%= di.u_active %></td>
                 <td><%= di.u_delete %></td>
-                <td><%= link_to 'Destroy', pdfjob_path(di), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-xs' %></td>
+                <% if current_user.role == "Admin" %>
+                  <td><%= link_to 'Destroy', pdfjob_path(di), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-xs' %></td>
+                <% end %>
               </tr>
             <% end %>
           </tbody>

@@ -70,7 +70,9 @@
                 <td><%= dr.u_inspected_on %></td>
                 <td><%= dr.u_active %></td>
                 <td><%= dr.u_delete %></td>
-                <td><%= link_to 'Destroy', pdfjob_path(dr), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-xs' %></td>
+                <% if current_user.role == "Admin" %>
+                  <td><%= link_to 'Destroy', pdfjob_path(dr), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-xs' %></td>
+                <% end %>
               </tr>
             <% end %>
           </tbody>

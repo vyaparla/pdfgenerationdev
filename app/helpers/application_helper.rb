@@ -4,4 +4,9 @@ module ApplicationHelper
   	@codes = FiredoorDeficiency.where(:firedoor_service_sysid => fddc.u_service_id, :firedoor_asset_sysid => fddc.u_asset_id).collect { |w| w.firedoor_deficiencies_code }.join(", ")
     return @codes
   end
+
+  def user_name(user)
+  	return "#{user.first_name} #{user.last_name}"
+  end
+
 end

@@ -64,7 +64,9 @@
                 <td><%= fdi.u_inspected_on %></td>
                 <td><%= fdi.u_active %></td>
                 <td><%= fdi.u_delete %></td>
-                <td><%= link_to 'Destroy', pdfjob_path(fdi), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-xs' %></td>
+                <% if current_user.role == "Admin" %>
+                  <td><%= link_to 'Destroy', pdfjob_path(fdi), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-xs' %></td>
+                <% end %>
               </tr>
             <% end %>
           </tbody>

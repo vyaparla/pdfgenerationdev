@@ -1,5 +1,11 @@
 Rails.application.routes.draw do
 
+  devise_for :users, controllers: { registrations: "registrations" }
+
+  devise_scope :user do
+    root to: "devise/sessions#new"
+  end
+  
   match '/api/save_pdf' => 'api#save_pdf', via:[:post]
   match '/api/pdf_generation' => 'api#pdf_generation', via:[:get]
   match '/api/download_full_pdf_report' => 'api#download_full_pdf_report', via:[:get]
@@ -21,5 +27,5 @@ Rails.application.routes.draw do
     end
   end
 
-  root 'pdfjobs#index'
+  #root 'pdfjobs#index'
 end
