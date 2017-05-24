@@ -152,7 +152,7 @@ module DamperInspectionReport
         pdf.text("<b>Non-Accessible Reason : </b> #{@record.u_non_accessible_reasons}", inline_format: true)
         if @record.u_non_accessible_reasons.delete(' ').upcase == "OTHER"
           pdf.indent(10) do
-            pdf.text("<b>Non-Accessible Reason  : </b> #{@record.u_other_nonaccessible_reason}", inline_format: true)
+            pdf.text("<b>Other Non-Accessible Reason  : </b> #{@record.u_other_nonaccessible_reason}", inline_format: true)
           end
         end
       end

@@ -409,6 +409,17 @@ CORPORATE: 1-888-675-4519)
         },
         damper_inspection_report: {
           title: 'FIRE & SMOKE DAMPER INSPECTION SERVICES',
+#           content: %(LSS Life Safety Services, LLC, in accordance with The National Fire Protection Association’s (NFPA) Code inspected fire and smoke dampers located in %{location_name} during the period of %{work_dates}.  The project was managed by %{pm_name}, who is an independent inspector and representative of LSS Life Safety Services, LLC, and is not affiliated with any supplier, manufacturer, or distributor of fire dampers, smoke dampers, or affiliated damper components.
+
+# The following report and digital pictures provide the result of the inspection for the dampers that were inspected.  This report is intended to describe the location and operability of the dampers for the dates in which LSS Life Safety Services’ representatives performed the inspection of the dampers, and is not intended to constitute any warranty as to the continued operation of any damper.
+
+# Thank you for contracting LSS Life Safety Services for this project and we look forward to the opportunity of working with you in the future on additional projects.
+
+# Quality Assurance inspected by %{qa_inspected_by}.
+
+
+# _____________________________
+# %{pm_name})
           content: %(LSS Life Safety Services, LLC, in accordance with The National Fire Protection Association’s (NFPA) Code inspected fire and smoke dampers located in %{location_name} during the period of %{work_dates}.  The project was managed by %{pm_name}, who is an independent inspector and representative of LSS Life Safety Services, LLC, and is not affiliated with any supplier, manufacturer, or distributor of fire dampers, smoke dampers, or affiliated damper components.
 
 The following report and digital pictures provide the result of the inspection for the dampers that were inspected.  This report is intended to describe the location and operability of the dampers for the dates in which LSS Life Safety Services’ representatives performed the inspection of the dampers, and is not intended to constitute any warranty as to the continued operation of any damper.
@@ -419,7 +430,7 @@ Quality Assurance inspected by %{qa_inspected_by}.
 
 
 _____________________________
-%{pm_name}),
+%{qa_inspected_by}),
           certified_content: %(TESTING FREQUENCY: 6 YEARS FOR HEALTHCARE OCCUPANCY
 
 EC.02.03.05 - EP 18 - FIRE AND SMOKE DAMPERS
@@ -443,6 +454,17 @@ CORPORATE: 1-888-675-4519)
         },
         door_inspection_report: {
           title: 'FIRE & SMOKE DOOR INSPECTION SUMMARY REPORT',
+#           content: %(Life Safety Services, LLC (LSS), in accordance with The National Fire Protection Association’s (NFPA) 2010 NFPA 80, "Standard for Fire Doors and Other Opening Protectives" Section 5.2.4.2 and 2010 NFPA 105, "Standard for the Installation of Smoke Door Assemblies and Other Opening Protectives" section 5.2.1 and 4.4 (specific to smoke door labeling) inspected the fire and smoke doors located in %{location_name} during the period of %{work_dates}.  The project was managed by %{pm_name}, who is an independent inspector and representative of Life Safety Services, LLC, and is not affiliated with any supplier, manufacturer, or distributor of fire doors, smoke doors, or affiliated door components or door hardware.
+
+# The following report and digital pictures provide the result of the inspection of the doors that were inspected.  This report is intended to describe the location and compliance and non-compliance of the doors for the dates in which Life Safety Services’ representatives performed the inspection of the doors, and is not intended to constitute any warranty as to the continued operation of any doors and/or door hardware.
+
+# Thank you for contracting Life Safety Services (LSS) for this project and we look forward to the opportunity of working with you in the future on additional projects.
+
+# Quality Assurance inspected by %{qa_inspected_by}.
+
+
+# _____________________________
+# %{pm_name})
           content: %(Life Safety Services, LLC (LSS), in accordance with The National Fire Protection Association’s (NFPA) 2010 NFPA 80, "Standard for Fire Doors and Other Opening Protectives" Section 5.2.4.2 and 2010 NFPA 105, "Standard for the Installation of Smoke Door Assemblies and Other Opening Protectives" section 5.2.1 and 4.4 (specific to smoke door labeling) inspected the fire and smoke doors located in %{location_name} during the period of %{work_dates}.  The project was managed by %{pm_name}, who is an independent inspector and representative of Life Safety Services, LLC, and is not affiliated with any supplier, manufacturer, or distributor of fire doors, smoke doors, or affiliated door components or door hardware.
 
 The following report and digital pictures provide the result of the inspection of the doors that were inspected.  This report is intended to describe the location and compliance and non-compliance of the doors for the dates in which Life Safety Services’ representatives performed the inspection of the doors, and is not intended to constitute any warranty as to the continued operation of any doors and/or door hardware.
@@ -453,7 +475,7 @@ Quality Assurance inspected by %{qa_inspected_by}.
 
 
 _____________________________
-%{pm_name})
+%{qa_inspected_by})
         }
       },
       summary_page: {
