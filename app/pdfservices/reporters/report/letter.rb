@@ -54,7 +54,8 @@ module Report
     def letter_copy
       I18n.t("pdf.letter_page.#{@i18n_key}.content",
           :location_name    => @owner.u_facility_name,
-          :pm_name          => "#{@owner.u_job_scale_rep}",
+          #:pm_name          => "#{@owner.u_job_scale_rep}",
+          :pm_name          => "#{@tech}",
           :work_dates       => @owner.work_dates,
           :qa_inspected_by  => "#{@owner.u_job_scale_rep}")
     end

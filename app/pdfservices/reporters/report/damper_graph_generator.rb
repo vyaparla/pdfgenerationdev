@@ -107,8 +107,8 @@ module Report
       gbar.bottom_margin = 10
       gbar.title_margin = 50
       gbar.sort = false
-      gbar.maximum_value = 100 
-      gbar.minimum_value = 0 
+      gbar.maximum_value = 100
+      gbar.minimum_value = 0
       gbar.y_axis_increment = 20
       gbar.title = title
       data.each {|d| gbar.data d.first, d.last}
