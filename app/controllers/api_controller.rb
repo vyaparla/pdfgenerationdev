@@ -285,6 +285,86 @@ class ApiController < ApplicationController
     end
   end
 
+
+  def spreadsheets
+    @records     = Lsspdfasset.where(u_service_id: params[:serviceid], :u_delete => false)
+    @outputfile  = params[:jobID] + "_" + params[:servicetype] + "_" + Time.now.strftime("%m-%d-%Y-%r").gsub(/\s+/, "_") + "_" + "spreadsheet_report"
+    if params[:servicetype].delete(' ').upcase == "DAMPERINSPECTION"
+      csv_data = CSV.generate do |csv|
+        csv << ["Asset #", "Facility", "Building", "Floor", "Damper Location", "Damper Type", "Status", "Deficiency", "Date", "Technician"]
+        @records.each do |record|
+          csv << [record.u_tag, record.u_facility_name, record.u_building, record.u_floor, record.u_location_desc, record.u_type, record.u_status, 
+                  if record.u_status == "Fail"
+                    record.u_reason
+                  else
+                    record.u_non_accessible_reasons
+                  end,
+                  record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')), record.u_inspector
+                ]
+        end
+      end
+    elsif params[:servicetype].delete(' ').upcase == "DAMPERREPAIR"
+      csv_data = CSV.generate do |csv|
+        csv << ["Asset #", "Facility", "Building", "Floor", "Damper Location", "Damper Type", "Status", "Action Taken", "Date", "Technician"]
+        @records.each do |record|
+          csv << [record.u_tag, record.u_facility_name, record.u_building, record.u_floor, record.u_location_desc, record.u_damper_name, record.u_dr_passed_post_repair,
+                  if record.u_repair_action_performed == "Damper Repaired"
+                    record.u_repair_action_performed + ":" + record.u_dr_description
+                  elsif record.u_repair_action_performed == "Damper Installed"
+                    record.u_repair_action_performed + ":" + record.u_dr_damper_model
+                  elsif record.u_repair_action_performed == "Actuator Installed"
+                    record.u_repair_action_performed + ":" + record.u_dr_installed_actuator_model
+                  else
+                    record.u_repair_action_performed + ":" + record.u_access_size 
+                  end,
+                  record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')), record.u_inspector
+                 ]
+        end
+      end  
+    elsif params[:servicetype].delete(' ').upcase == "FIREDOORINSPECTION"
+      csv_data = CSV.generate do |csv|                 
+        csv << ["Door No.", "Facility", "Building", "Floor", "Door Location", "Fire Rating", "Door Deficiencies", "Date", "Technician"]
+        @records.each do |record|
+          @firedoor_deficiency_codes = FiredoorDeficiency.where(:firedoor_service_sysid => record.u_service_id, :firedoor_asset_sysid => record.u_asset_id).collect { |w| w.firedoor_deficiencies_code }.join(", ")
+          csv << [record.u_tag, record.u_facility_name, record.u_building, record.u_floor, record.u_location_desc, record.u_fire_rating, @firedoor_deficiency_codes, record.u_inspected_on.localtime.strftime('%m/%d/%Y'), record.u_inspector]
+        end
+      end
+    elsif params[:servicetype].delete(' ').upcase == "FIRESTOPSURVEY"
+      csv_data = CSV.generate do |csv|
+        csv << ["Asset #", "Facility", "Building", "Floor", "Location", "Barrier Type", "Penetration Type", "Issue", "Corrected On Site", "Suggested Corrective Action", "Corrected with UL System", "Date", "Technician"]
+        @records.each do |record|
+          csv << [record.u_tag, record.u_facility_name, record.u_building, record.u_floor, record.u_location_desc, record.u_barrier_type, 
+                  record.u_penetration_type, record.u_issue_type,
+                  if record.u_service_type == "Fixed On Site"
+                    'YES'
+                  else
+                    'NO'
+                  end,
+                  record.u_suggested_ul_system, record.u_corrected_url_system, record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')), record.u_inspector
+                 ]
+        end
+      end
+    else
+      csv_data = CSV.generate do |csv|
+        csv << ["Asset #", "Facility", "Building", "Floor", "Location", "Barrier Type", "Penetration Type", "Issue", "Corrected On Site", "Suggested Corrective Action", "Corrected with UL System", "Date", "Technician"]
+        @records.each do |record|
+          csv << [record.u_tag, record.u_facility_name, record.u_building, record.u_floor, record.u_location_desc, record.u_barrier_type, 
+                  record.u_penetration_type, record.u_issue_type,
+                  if record.u_service_type == "Fixed On Site"
+                    'YES'
+                  else
+                    'NO'
+                  end,
+                  record.u_suggested_ul_system, record.u_corrected_url_system, record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')), record.u_inspector
+                 ] 
+        end
+      end
+    end
+    send_data csv_data,
+    :type => 'text/csv; charset=iso-8859-1; header=present',
+    :disposition => "attachment; filename=#{@outputfile}.csv"
+  end  
+
   private
 
   # def pdfjob_params
