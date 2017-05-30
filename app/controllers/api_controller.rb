@@ -286,10 +286,10 @@ class ApiController < ApplicationController
   end
 
 
-  def spreadsheets
-    @records     = Lsspdfasset.where(u_service_id: params[:serviceid], :u_delete => false)
-    @outputfile  = params[:jobID] + "_" + params[:servicetype] + "_" + Time.now.strftime("%m-%d-%Y-%r").gsub(/\s+/, "_") + "_" + "spreadsheet_report"
+  def spreadsheets    
+    @outputfile = params[:jobID] + "_" + params[:servicetype] + "_" + Time.now.strftime("%m-%d-%Y-%r").gsub(/\s+/, "_") + "_" + "spreadsheet_report"
     if params[:servicetype].delete(' ').upcase == "DAMPERINSPECTION"
+      @records = Lsspdfasset.where(u_service_id: params[:serviceid], :u_delete => false).where.not(u_type: "")
       csv_data = CSV.generate do |csv|
         csv << ["Asset #", "Facility", "Building", "Floor", "Damper Location", "Damper Type", "Status", "Deficiency", "Date", "Technician"]
         @records.each do |record|
@@ -304,6 +304,7 @@ class ApiController < ApplicationController
         end
       end
     elsif params[:servicetype].delete(' ').upcase == "DAMPERREPAIR"
+      @records = Lsspdfasset.where(u_service_id: params[:serviceid], :u_delete => false).where.not(u_type: "")
       csv_data = CSV.generate do |csv|
         csv << ["Asset #", "Facility", "Building", "Floor", "Damper Location", "Damper Type", "Status", "Action Taken", "Date", "Technician"]
         @records.each do |record|
@@ -322,6 +323,7 @@ class ApiController < ApplicationController
         end
       end  
     elsif params[:servicetype].delete(' ').upcase == "FIREDOORINSPECTION"
+      @records = Lsspdfasset.where(u_service_id: params[:serviceid], :u_delete => false)
       csv_data = CSV.generate do |csv|                 
         csv << ["Door No.", "Facility", "Building", "Floor", "Door Location", "Fire Rating", "Door Deficiencies", "Date", "Technician"]
         @records.each do |record|
@@ -330,6 +332,7 @@ class ApiController < ApplicationController
         end
       end
     elsif params[:servicetype].delete(' ').upcase == "FIRESTOPSURVEY"
+      @records = Lsspdfasset.where(u_service_id: params[:serviceid], :u_delete => false)
       csv_data = CSV.generate do |csv|
         csv << ["Asset #", "Facility", "Building", "Floor", "Location", "Barrier Type", "Penetration Type", "Issue", "Corrected On Site", "Suggested Corrective Action", "Corrected with UL System", "Date", "Technician"]
         @records.each do |record|
@@ -345,6 +348,7 @@ class ApiController < ApplicationController
         end
       end
     else
+      @records = Lsspdfasset.where(u_service_id: params[:serviceid], :u_delete => false)
       csv_data = CSV.generate do |csv|
         csv << ["Asset #", "Facility", "Building", "Floor", "Location", "Barrier Type", "Penetration Type", "Issue", "Corrected On Site", "Suggested Corrective Action", "Corrected with UL System", "Date", "Technician"]
         @records.each do |record|
