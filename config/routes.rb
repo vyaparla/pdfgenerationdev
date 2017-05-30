@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   match '/api/summary_report' => 'api#summary_report', via:[:get]
   match '/api/save_firedoor_deficiency' => 'api#save_firedoor_deficiency', via:[:post]
   #match '/api/update_pdf' => 'api#update_pdf', via:[:put]
+  match  '/api/spreadsheets' => 'api#spreadsheets', via:[:get]
 
 
   resources :pdfjobs do
