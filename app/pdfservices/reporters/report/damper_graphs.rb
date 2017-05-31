@@ -21,7 +21,8 @@ module Report
   private
 
     def draw_building_graph(pdf)
-      Report::Graph.new('BUILDING', @owner.graph_by_building_path, [-20, 512]).draw(pdf)
+      #Report::Graph.new('BUILDING', @owner.graph_by_building_path, [-20, 512]).draw(pdf)
+      Report::Graph.new('BUILDING', @owner.graph_by_building_path, [-35, 512]).draw(pdf)
     end
 
     def draw_type_graph(pdf)
@@ -29,11 +30,13 @@ module Report
     end
 
     def draw_result_graph(pdf)
-      Report::Graph.new('RESULT', @owner.graph_by_result_path, [-20, 237]).draw(pdf)
+      #Report::Graph.new('RESULT', @owner.graph_by_result_path, [-20, 237]).draw(pdf)
+      Report::Graph.new('RESULT', @owner.graph_by_result_path, [-20, 240]).draw(pdf)
     end
 
     def draw_na_reason_graph(pdf)
-      Report::Graph.new('NA REASON', @owner.graph_na_reasons_path, [240, 237]).draw(pdf)
+      #Report::Graph.new('NA REASON', @owner.graph_na_reasons_path, [240, 237]).draw(pdf)
+      Report::Graph.new('NA REASON', @owner.graph_na_reasons_path, [240, 240]).draw(pdf)
     end
 
     def draw_na_reason_placeholder(pdf)
