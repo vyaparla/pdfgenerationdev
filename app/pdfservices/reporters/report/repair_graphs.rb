@@ -17,7 +17,8 @@ module Report
     end
 
     def draw_dr_type_graph(pdf)
-      Report::Graph.new('TYPE', @owner.dr_graph_by_type_path, [320, 512]).draw(pdf)
+      #Report::Graph.new('TYPE', @owner.dr_graph_by_type_path, [320, 512]).draw(pdf)
+      Report::Graph.new('TYPE', @owner.dr_graph_by_type_path, [280, 512]).draw(pdf)
     end
 
     def draw_dr_result_graph(pdf)
