@@ -18,9 +18,9 @@ module Report
   private
     
     def draw_title(pdf, title)
-      pdf.font_size 40
+      pdf.font_size 25
       pdf.fill_color 'f39d27'
-      pdf.text("<b>#{title}</b>", :inline_format => true)
+      pdf.text("<b>#{title} - #{@building}</b>", :inline_format => true)
       pdf.fill_color '202020'
       pdf.move_down 10
     end

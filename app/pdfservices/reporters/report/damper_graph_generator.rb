@@ -26,7 +26,8 @@ module Report
       @serviceRecords.each do |key1, value1|
         @building_graph << [key1, ((value1.to_f * 100) / @graph_count)]
       end
-      generate_graph(I18n.t('ui.graphs.by_building.title'), @building_graph, @owner.graph_by_building_path)
+      #generate_graph(I18n.t('ui.graphs.by_building.title'), @building_graph, @owner.graph_by_building_path)
+      generate_pie_graph(I18n.t('ui.graphs.by_building.title'), @building_graph, @owner.graph_by_building_path)
     end
 
     def generate_type_graph
@@ -48,7 +49,8 @@ module Report
         end
         @type_graph << [@gtype, ((value1.to_f * 100) / @type_graph_count)]
       end
-      generate_graph(I18n.t('ui.graphs.by_type.title'), @type_graph, @owner.graph_by_type_path)
+      #generate_graph(I18n.t('ui.graphs.by_type.title'), @type_graph, @owner.graph_by_type_path)
+      generate_pie_graph(I18n.t('ui.graphs.by_type.title'), @type_graph, @owner.graph_by_type_path)
     end
 
     def generate_result_graph
@@ -70,7 +72,8 @@ module Report
         end
         @result_graph << [@gtype, ((value1.to_f * 100) / @result_graph_count)]
       end
-      generate_graph(I18n.t('ui.graphs.by_result.title'), @result_graph, @owner.graph_by_result_path)
+      #generate_graph(I18n.t('ui.graphs.by_result.title'), @result_graph, @owner.graph_by_result_path)
+      generate_pie_graph(I18n.t('ui.graphs.by_result.title'), @result_graph, @owner.graph_by_result_path)
     end
 
     def generate_na_reason_graph

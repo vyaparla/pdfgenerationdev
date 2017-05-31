@@ -8,7 +8,8 @@ module FirestopInstallationReport
       #super
       top = 400 - pdf.bounds.absolute_bottom
       if File.exists?(issues_path)
-        Report::Graph.new('ISSUES', issues_path, [111, top]).draw(pdf)
+        #Report::Graph.new('ISSUES', issues_path, [111, top]).draw(pdf)
+        Report::Graph.new('ISSUES', issues_path, [160, top]).draw(pdf)
       end
     end
 

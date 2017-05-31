@@ -24,7 +24,8 @@ module DamperRepairReport
       @dr_buildingInfo.each do |key1, value1|
       	@dr_building_graph << [key1, ((value1.to_f * 100) / @dr_graph_count)]
       end
-      dr_generate_graph(I18n.t('ui.graphs.by_building.title'), @dr_building_graph, @job.dr_graph_by_building_path)
+      #dr_generate_graph(I18n.t('ui.graphs.by_building.title'), @dr_building_graph, @job.dr_graph_by_building_path)
+      dr_generate_pie_graph(I18n.t('ui.graphs.by_building.title'), @dr_building_graph, @job.dr_graph_by_building_path)
     end
 
     def generate_dr_type_graph
@@ -45,7 +46,8 @@ module DamperRepairReport
         end
         @dr_type_graph << [@dr_gtype, ((value1.to_f * 100) / @dr_type_graph_count)]
       end
-      dr_generate_graph(I18n.t('ui.graphs.by_type.title'), @dr_type_graph, @job.dr_graph_by_type_path)
+      #dr_generate_graph(I18n.t('ui.graphs.by_type.title'), @dr_type_graph, @job.dr_graph_by_type_path)
+      dr_generate_pie_graph(I18n.t('ui.graphs.by_type.title'), @dr_type_graph, @job.dr_graph_by_type_path)
     end
 
     def generate_dr_result_graph

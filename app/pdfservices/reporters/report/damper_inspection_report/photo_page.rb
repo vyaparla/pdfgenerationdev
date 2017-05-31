@@ -140,9 +140,10 @@ module DamperInspectionReport
         pdf.fill_color 'c1171d'
         pdf.text("<b>#{DamperInspectionReporting.translate(:failure_reasons)} : </b> #{@record.u_reason}", inline_format: true)
         if @record.u_reason.delete(' ').upcase == "OTHER"
-          pdf.indent(10) do
-            pdf.text("<b>Other Failure Reason : </b> #{@record.u_other_failure_reason}", inline_format: true)
-          end
+          pdf.text("<b>Other Failure Reason : </b> #{@record.u_other_failure_reason}", inline_format: true)
+          # pdf.indent(10) do
+          #   pdf.text("<b>Other Failure Reason : </b> #{@record.u_other_failure_reason}", inline_format: true)
+          # end
         end
       end      
 
@@ -151,9 +152,10 @@ module DamperInspectionReport
         pdf.fill_color 'f39d27'
         pdf.text("<b>Non-Accessible Reason : </b> #{@record.u_non_accessible_reasons}", inline_format: true)
         if @record.u_non_accessible_reasons.delete(' ').upcase == "OTHER"
-          pdf.indent(10) do
-            pdf.text("<b>Other Non-Accessible Reason  : </b> #{@record.u_other_nonaccessible_reason}", inline_format: true)
-          end
+          pdf.text("<b>Other Non-Accessible Reason  : </b> #{@record.u_other_nonaccessible_reason}", inline_format: true)
+          # pdf.indent(10) do
+          #   pdf.text("<b>Other Non-Accessible Reason  : </b> #{@record.u_other_nonaccessible_reason}", inline_format: true)
+          # end
         end
       end
 

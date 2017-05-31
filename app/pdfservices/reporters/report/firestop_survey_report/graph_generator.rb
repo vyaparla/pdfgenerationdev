@@ -50,7 +50,8 @@ module FirestopSurveyReport
       # make_directory(@job.graph_top_issues_path)
       # g.write(@job.graph_top_issues_path)
 
-      g =  Gruff::Bar.new('1333x1000')
+      #g =  Gruff::Bar.new('1333x1000')
+      g = Gruff::Pie.new('1333x1000')
       g.theme = {
         :marker_color => '#aaa',
         :colors => %w(#e3553f #f39d27 #94b463 #568ac6 #5e723f #8e3629 #385a81
