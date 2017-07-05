@@ -59,9 +59,9 @@ class ApiController < ApplicationController
       end
 
 
-      @pdfjob.u_job_start_date =  Time.now.utc
-      @pdfjob.u_job_end_date =  Time.now.utc
-      @pdfjob.u_inspected_on =  Time.now.utc
+      # @pdfjob.u_job_start_date =  Time.now.utc
+      # @pdfjob.u_job_end_date =  Time.now.utc
+      # @pdfjob.u_inspected_on =  Time.now.utc
 
       @pdfjob.save
 
@@ -381,8 +381,8 @@ class ApiController < ApplicationController
         @project_completion.m_authorization_signature = @signature
       end
 
-      @project_completion.m_date               =  Time.now.utc
-      @project_completion.m_project_start_date =  Time.now.utc
+      # @project_completion.m_date               =  Time.now.utc
+      # @project_completion.m_project_start_date =  Time.now.utc
 
       @project_completion.save
       render json: {message: "Save Success"}
