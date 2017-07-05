@@ -5,6 +5,10 @@ class DamperInspectionJob < ActiveRecord::Base
     def reporter_class
       DamperInspectionReporter
     end
+
+    def projectcompletion_reporter_class
+      DamperInspectionProjectCompletionReporter
+    end
   end
 
   # def full_report_path

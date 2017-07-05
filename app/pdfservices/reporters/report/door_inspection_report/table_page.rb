@@ -15,11 +15,11 @@ module DoorInspectionReport
         I18n.t(
           'ui.door_inspection_report_pdf.table_headings_cols.date'
         ),
-        I18n.t(
-          'ui.door_inspection_report_pdf.table_headings_cols.floor'
+        I18n.t(          
+          'ui.door_inspection_report_pdf.table_headings_cols.door_number'
         ),
         I18n.t(
-          'ui.door_inspection_report_pdf.table_headings_cols.door_number'
+          'ui.door_inspection_report_pdf.table_headings_cols.floor'
         ),
         I18n.t(
           'ui.door_inspection_report_pdf.table_headings_cols.fire_rating'
@@ -54,8 +54,8 @@ module DoorInspectionReport
         table.row(0).style :background_color => '444444',
                            :text_color => 'ffffff'
         table.column(0).style { |c| c.width = 60 } # door_date
-        table.column(1).style { |c| c.width = 50 } # door_floor
-        table.column(2).style { |c| c.width = 50 } # door_tag
+        table.column(1).style { |c| c.width = 50 } # door_tag
+        table.column(2).style { |c| c.width = 50 } # door_floor
         table.column(3).style { |c| c.width = 60 } # door_fire_rating
         table.column(4).style { |c| c.width = 80 } # door_location_desc
         table.column(5).style { |c| c.width = 70 } # door_type

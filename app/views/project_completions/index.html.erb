@@ -1,0 +1,91 @@
+<div id="main-container" class="container-fluid">
+  <div class="row">
+    <div class="col-xs-12">
+      <ul class="nav nav-tabs" role="tablist">
+        <li class="active"><%= link_to "MPC Damper Inspection", project_completions_path %></li>
+        <li><%= link_to "MPC Damper Repair", mpc_damperrepair_project_completions_path %></li>
+        <li><%= link_to "MPC FireDoor Inspection", mpc_firedoorinspection_project_completions_path %></li>
+        <li><%= link_to "MPC Firestop Survey", mpc_firestopsurvey_project_completions_path %></li>
+        <li><%= link_to "MPC Firestop Installation", mpc_firestopinstallation_project_completions_path %></li>
+      </ul>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="col-xs-6">
+        <h1>Listing of Damper Inspection(<%= @mpc_di_count %>)</h1>
+      </div>
+      <div class="col-xs-6">
+        <%= will_paginate  @mpc_di %>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="table-responsview">
+        <table class="table table-bordered border-striped" cellspacing="0" width="100%" id ="example">
+          <thead>
+            <tr>
+              <th>Job ID(m_job_id)</th>
+              <th>Service SysId(m_service_sysid)</th>
+              <th>Date(m_date)</th>
+              <th>Facility(m_facility)</th>
+              <th>Building(m_building)</th>
+              <th>Project Start Date(m_project_start_date)</th>
+              <th>Primary Contact Name(m_primary_contact_name)</th>
+              <th>Phone#(m_phone)</th>
+              <th>Printed Report(m_printed_report)</th>
+              <th>Autocad(m_autocad)</th>
+              <th>Total Dampers Inspected(m_total_no_of_dampers_inspected)</th>
+              <th>Total Dampers Passed(m_total_no_of_dampers_passed)</th>
+              <th>Total Dampers NA(m_total_no_of_dampers_na)</th>
+              <th>Total Dampers Access Door Installed(m_total_no_of_damper_access_door_installed)</th>
+              <th>Containment Tent Used(m_containment_tent_used)</th>
+              <th>Base Bid Count(m_base_bid_count)</th>
+              <th>Total Authorized Damper Bid(m_new_total_authorized_damper_bid)</th>
+              <th>Technician Name(m_technician_name)</th>
+              <th>Blueprints Facility(m_blueprints_facility)</th>
+              <th>Replacement Checklist(m_replacement_checklist)</th>
+              <th>Facility Items(m_facility_items)</th>
+              <th>Emailed Reports(m_emailed_reports)</th>
+              <th>Daily Basis(m_daily_basis)</th>
+              <th colspan="3"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @mpc_di.each do |di| %>
+              <tr>
+                <td><%= di.m_job_id %></td>
+                <td><%= di.m_service_sysid %></td>
+                <td><%= di.m_date.localtime.strftime(I18n.t('time.formats.mdY')) %></td>
+                <td><%= di.m_facility %></td>
+                <td><%= di.m_building %></td>
+                <td><%= di.m_project_start_date.localtime.strftime(I18n.t('time.formats.mdY')) %></td>
+                <td><%= di.m_primary_contact_name %></td>
+                <td><%= di.m_phone %></td>
+                <td><%= di.m_printed_report %></td>
+                <td><%= di.m_autocad %></td>
+                <td><%= di.m_total_no_of_dampers_inspected %></td>
+                <td><%= di.m_total_no_of_dampers_passed %></td>
+                <td><%= di.m_total_no_of_dampers_na %></td>
+                <td><%= di.m_total_no_of_damper_access_door_installed %></td>
+                <td><%= di.m_containment_tent_used %></td>
+                <td><%= di.m_base_bid_count %></td>
+                <td><%= di.m_new_total_authorized_damper_bid %></td>
+                <td><%= di.m_technician_name %></td>
+                <td><%= di.m_blueprints_facility %></td>
+                <td><%= di.m_replacement_checklist %></td>
+                <td><%= di.m_facility_items %></td>
+                <td><%= di.m_emailed_reports %></td>
+                <td><%= di.m_daily_basis %></td>
+                <% if current_user.role == "Admin" %> 
+                  <td><%= link_to "Destroy", project_completion_path(di), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-xs' %></td>
+                <% end %>  
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

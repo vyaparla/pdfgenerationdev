@@ -4,5 +4,9 @@ class DoorInspectionJob < ActiveRecord::Base
   	def reporter_class
       DoorInspectionReporter
     end
+    
+    def projectcompletion_reporter_class      
+      DoorInspectionProjectCompletionReporter
+    end
   end
 end

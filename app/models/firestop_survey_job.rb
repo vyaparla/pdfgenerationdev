@@ -3,5 +3,8 @@ class FirestopSurveyJob < ActiveRecord::Base
     def reporter_class
       FirestopSurveyReporter
     end
+    def projectcompletion_reporter_class
+      FirestopSurveyProjectCompletionReporter
+    end
   end
 end

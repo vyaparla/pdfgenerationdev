@@ -118,6 +118,7 @@ module Report
       make_directory(file)
       gbar.write(file)
     end
+    
   
     def generate_pie_graph(title, data, file)
       pie = Gruff::Pie.new('1333x1000')

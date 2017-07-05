@@ -1,5 +1,5 @@
 class Lsspdfasset < ActiveRecord::Base
-  include Reportable
+  #include Reportable
 
   #delegate :joint_commission_certified?, to: :id
 

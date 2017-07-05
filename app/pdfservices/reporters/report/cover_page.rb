@@ -47,7 +47,7 @@ module Report
       elsif @model_name == "DAMPERREPAIR"
         pdf.text("<b><i>Damper Repair Report</i></b>", :inline_format => true)
       elsif @model_name == "FIREDOORINSPECTION"
-        pdf.text("<b><i>FireDoor Inspection Report</i></b>", :inline_format => true)
+        pdf.text("<b><i>Fire Door Inspection Report</i></b>", :inline_format => true)
       elsif @model_name == "FIRESTOPINSTALLATION"
         pdf.text("<b><i>Firestop Installation Report</i></b>", :inline_format => true)
       elsif @model_name == "FIRESTOPSURVEY"

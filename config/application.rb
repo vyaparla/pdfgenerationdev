@@ -18,7 +18,9 @@ module Pdfgenerationdev
     # config.time_zone = 'Central Time (US & Canada)'
 
     config.autoload_paths += Dir["#{config.root}/app/pdfservices/**/",
-                                 "#{config.root}/lib/**/"]
+                                 "#{config.root}/app/projectcompletionservices/**/",
+                                 "#{config.root}/lib/**/"
+                                ]
 
     config.i18n.default_locale = :en                                 
 

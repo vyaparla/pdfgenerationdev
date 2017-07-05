@@ -4,7 +4,7 @@ class Reporter
   private
 
   def generate(file, &block)
-    make_directory(file)
+  	make_directory(file)
     Prawn::Document.generate(file, { :skip_page_creation => true }) do |pdf|
       pdf.font_families.update("Helvetica" => {
         :normal       => font_file,

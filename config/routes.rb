@@ -13,7 +13,8 @@ Rails.application.routes.draw do
   match '/api/save_firedoor_deficiency' => 'api#save_firedoor_deficiency', via:[:post]
   #match '/api/update_pdf' => 'api#update_pdf', via:[:put]
   match  '/api/spreadsheets' => 'api#spreadsheets', via:[:get]
-
+  match  '/api/project_completion_save_pdf' => 'api#project_completion_save_pdf', via:[:post]
+  match  '/api/download_project_completion_pdf_report' => 'api#download_project_completion_pdf_report', via:[:get]
 
   resources :pdfjobs do
     collection do
@@ -24,7 +25,16 @@ Rails.application.routes.draw do
       get 'firedoor_inspection'
       get 'firestop_survey'
       get 'firestop_installation'
-      get 'firedoor_deficiency'
+      get 'firedoor_deficiency' 
+    end
+  end
+
+  resources :project_completions do
+    collection do      
+      get 'mpc_damperrepair'
+      get 'mpc_firedoorinspection'
+      get 'mpc_firestopsurvey'
+      get 'mpc_firestopinstallation'
     end
   end
 

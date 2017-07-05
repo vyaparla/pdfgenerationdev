@@ -4,5 +4,8 @@ class FirestopInstallationJob < ActiveRecord::Base
     def reporter_class
       FirestopInstallationReporter
     end
+    def projectcompletion_reporter_class
+      FirestopInstallationProjectCompletionReporter
+    end
   end
 end

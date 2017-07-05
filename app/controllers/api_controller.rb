@@ -59,9 +59,9 @@ class ApiController < ApplicationController
       end
 
 
-      # @pdfjob.u_job_start_date =  Time.now.utc
-      # @pdfjob.u_job_end_date =  Time.now.utc
-      # @pdfjob.u_inspected_on =  Time.now.utc
+      @pdfjob.u_job_start_date =  Time.now.utc
+      @pdfjob.u_job_end_date =  Time.now.utc
+      @pdfjob.u_inspected_on =  Time.now.utc
 
       @pdfjob.save
 
@@ -285,7 +285,6 @@ class ApiController < ApplicationController
     end
   end
 
-
   def spreadsheets
     @outputfile = params[:jobID] + "_" + params[:servicetype] + "_" + Time.now.strftime("%m-%d-%Y-%r").gsub(/\s+/, "_") + "_" + "spreadsheet_report"
     if params[:servicetype].delete(' ').upcase == "DAMPERINSPECTION"
@@ -367,7 +366,62 @@ class ApiController < ApplicationController
     send_data csv_data,
     :type => 'text/csv; charset=iso-8859-1; header=present',
     :disposition => "attachment; filename=#{@outputfile}.csv"
-  end  
+  end
+
+
+  def project_completion_save_pdf
+    @project_completion = ProjectCompletion.new(project_completion)
+    if @project_completion.save
+
+      unless @project_completion.m_authorization_signature_base64.blank?
+        @signature = StringIO.open(Base64.decode64(@project_completion.m_authorization_signature_base64))
+        @signature.class.class_eval {attr_accessor :original_filename, :content_type}
+        @signature.original_filename =  "Authorizationsignature" + "_"  + "#{@project_completion.id}.jpg"
+        @signature.content_type = "image/jpeg"
+        @project_completion.m_authorization_signature = @signature
+      end
+
+      @project_completion.m_date               =  Time.now.utc
+      @project_completion.m_project_start_date =  Time.now.utc
+
+      @project_completion.save
+      render json: {message: "Save Success"}
+
+      ProjectCompletionReportGeneration.new(@project_completion).generate_projectcompletion_report
+
+      require 'base64'
+      require 'json'
+      require 'rest_client'      
+      url = 'https://dev18567.service-now.com/api/x_68827_lss/project_completion_pdfreport_mobile'      
+      request_body_map = {
+        "sys_id" => "#{@project_completion.m_service_sysid}",
+        "pdf_url" => "10.1.8.87:3000/api/download_project_completion_pdf_report?service_sysid=#{@project_completion.m_service_sysid}",    
+      }.to_json
+      
+      begin
+        response = RestClient.post("#{url}", "#{request_body_map}",
+                              {:content_type => 'application/json',
+                               :accept => 'application/json'
+                              })
+        puts "#{response.to_str}"
+        puts "Response status: #{response.code}"
+        response.headers.each { |k,v|
+          puts "Header: #{k}=#{v}"
+        }
+      rescue => e
+         puts "ERROR: #{e}"
+      end
+    else
+      render json: {message: "Unable to Save the record!"}
+    end
+  end
+
+  def download_project_completion_pdf_report
+    @project_completion = ProjectCompletion.where(m_service_sysid: params[:service_sysid]).last
+    @outputfile = @project_completion.m_job_id + "_" + @project_completion.m_servicetype.delete(' ').upcase + "_" + Time.now.localtime.strftime("%m-%d-%Y-%r").gsub(/\s+/, "_") + "_" + "project_completion_report"
+    #send_file @pdfjob.full_report_path, :type => 'application/pdf', :disposition =>  "attachment; filename=\"#{@outputfile}.pdf\""    
+    send_file @project_completion.project_completion_full_path, :type => 'application/pdf', :disposition =>  "attachment; filename=\"#{@outputfile}.pdf\""
+  end
 
   private
 
@@ -385,5 +439,18 @@ class ApiController < ApplicationController
       :u_dr_passed_post_repair, :u_dr_description, :u_dr_damper_model, :u_dr_installed_damper_type, :u_dr_installed_damper_height,
       :u_dr_installed_damper_width, :u_dr_installed_actuator_model, :u_dr_installed_actuator_type, :u_dr_actuator_voltage, :u_di_replace_damper, 
       :u_di_installed_access_door, :u_other_failure_reason, :u_other_nonaccessible_reason)
+  end
+
+
+  def project_completion
+    params.require(:api).permit(:m_job_id, :m_service_sysid, :m_date, :m_facility, :m_building, :m_servicetype, :m_project_start_date,
+                                :m_primary_contact_name, :m_phone, :m_printed_report, :m_autocad, :m_total_no_of_dampers_inspected,
+                                :m_total_no_of_dampers_passed, :m_total_no_of_dampers_na, :m_total_no_of_damper_access_door_installed, 
+                                :m_total_no_of_dampers_repaired, :m_total_no_of_dr_access_door_installed, :m_total_no_of_dr_actuator_installed,
+                                :m_total_no_of_dr_damper_installed, :m_total_no_of_firedoor_inspected, :m_total_no_of_firedoor_conformed,
+                                :m_total_no_of_firedoor_nonconformed, :m_total_no_of_firestop_surveyed, :m_total_no_of_firestop_fixedonsite,
+                                :m_total_no_of_fsi_surveyed, :m_total_no_of_fsi_fixedonsite, :m_containment_tent_used, :m_base_bid_count,
+                                :m_new_total_authorized_damper_bid, :m_technician_name, :m_blueprints_facility, :m_replacement_checklist,
+                                :m_facility_items, :m_emailed_reports, :m_daily_basis, :m_authorization_signature_base64, :m_authorization_signature)
   end
 end

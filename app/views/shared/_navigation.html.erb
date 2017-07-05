@@ -36,26 +36,36 @@
 
 <nav class="navbar navbar-default" role="navigation">
   <div class="container">
-    <div class="navbar-header">
-      <% if user_signed_in? %>
-        <a href="/"><h2>LSS PDF Report(<%= $pdfjobs_count %>)</h2></a>
-      <% else %>
-        <h2>LSS PDF Report</h2>
-      <% end %>
-    </div>
-    <ul class="nav navbar-nav navbar-right">
-      <% if user_signed_in? %>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= user_name(current_user) %><span class="caret"></span></a>
-          <ul class="dropdown-menu" role="menu">
-            <li class="divider"></li>
-            <li><%= link_to 'Sign out', destroy_user_session_path, :method => 'delete' %></li>
+    <div class="navbar-header1">
+      <div class="row">
+        <% if user_signed_in? %>
+          <div class="col-md-4">
+            <a href="/"><h2>LSS PDF Report(<%= $pdfjobs_count %>)</h2></a>
+          </div>
+          <div class="col-md-6">            
+            <h2><%= link_to "Project Completion PDF", project_completions_path %></h2>
+          </div>
+        <% else %>
+          <h2>LSS PDF Report</h2>
+        <% end %>
+   
+        <div class="col-md-2">
+          <ul class="nav navbar-nav navbar-right">
+            <% if user_signed_in? %>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= user_name(current_user) %><span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                  <li class="divider"></li>
+                  <li><%= link_to 'Sign out', destroy_user_session_path, :method => 'delete' %></li>
+                </ul>
+              </li>
+            <% else %>
+            <!-- <li><%#= link_to 'Sign in', new_user_session_path %></li> -->
+            <% end %>
           </ul>
-        </li>
-      <% else %>
-        <!-- <li><%#= link_to 'Sign in', new_user_session_path %></li> -->
-      <% end %>
-    </ul>
-  </div>
+        </div>
+      </div>
+    </div>
+  </div>  
 </nav>
 

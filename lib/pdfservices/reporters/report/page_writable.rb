@@ -19,7 +19,7 @@ module Report
       pdf.image background_path, :fit => size, :at  => [-pdf.bounds.absolute_left, size.last - pdf.bounds.absolute_bottom]
     end
 
-    def start_new_page(pdf)      
+    def start_new_page(pdf)
       pdf.start_new_page :bottom_margin => bottom_margin
       draw_background(pdf)
 
