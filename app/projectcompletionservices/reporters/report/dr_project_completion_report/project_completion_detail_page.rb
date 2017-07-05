@@ -20,17 +20,17 @@ module DRProjectCompletionReport
       array = @project.m_building.split(",")
       if array.length >= 5
         pdf.font_size 12
-        pdf.text_box("Total # of Dampers Repair:", :at => [10, 365], :style => :bold)
+        pdf.text_box("Total # of Dampers Repaired:", :at => [10, 365], :style => :bold)
         pdf.font_size 10
         pdf.text_box("#{@project.m_total_no_of_dampers_repaired}", :at => [315, 365])
       elsif array.length == 3
       	pdf.font_size 12
-        pdf.text_box("Total # of Dampers Repair:", :at => [10, 378], :style => :bold)
+        pdf.text_box("Total # of Dampers Repaired:", :at => [10, 378], :style => :bold)
         pdf.font_size 10
         pdf.text_box("#{@project.m_total_no_of_dampers_repaired}", :at => [315, 378])
       else
       	pdf.font_size 12
-        pdf.text_box("Total # of Dampers Repair:", :at => [10, 390], :style => :bold)
+        pdf.text_box("Total # of Dampers Repaired:", :at => [10, 390], :style => :bold)
         pdf.font_size 10
         pdf.text_box("#{@project.m_total_no_of_dampers_repaired}", :at => [315, 390])
       end  		  	
@@ -43,7 +43,7 @@ module DRProjectCompletionReport
         #pdf.text_box("Total # of Dampers Passed :", :at => [10, 103], :style => :bold)
         #pdf.text_box("Total # of Dampers Passed :", :at => [10, 180], :style => :bold)
         #pdf.text_box("Total # of Dampers Passed :", :at => [10, 185], :style => :bold) #182
-        pdf.text_box("Total # of Access Door Installed:", :at => [10, 350], :style => :bold)
+        pdf.text_box("Total # of Access Doors Installed:", :at => [10, 350], :style => :bold)
         pdf.font_size 10
         #pdf.text_box("#{@project.m_total_no_of_dampers_passed}", :at => [290, 103])
         #pdf.text_box("#{@project.m_total_no_of_dampers_passed}", :at => [315, 180])
@@ -51,12 +51,12 @@ module DRProjectCompletionReport
         pdf.text_box("#{@project.m_total_no_of_dr_access_door_installed}", :at => [315, 350])
       elsif array.length == 3
         pdf.font_size 12
-        pdf.text_box("Total # of Access Door Installed:", :at => [10, 363], :style => :bold)
+        pdf.text_box("Total # of Access Doors Installed:", :at => [10, 363], :style => :bold)
         pdf.font_size 10
         pdf.text_box("#{@project.m_total_no_of_dr_access_door_installed}", :at => [315, 363])
       else
         pdf.font_size 12
-        pdf.text_box("Total # of Access Door Installed:", :at => [10, 375], :style => :bold)
+        pdf.text_box("Total # of Access Doors Installed:", :at => [10, 375], :style => :bold)
         pdf.font_size 10
         pdf.text_box("#{@project.m_total_no_of_dr_access_door_installed}", :at => [315, 375])
       end	
@@ -70,7 +70,7 @@ module DRProjectCompletionReport
         #pdf.text_box("Total # of Dampers N/A :", :at => [10, 165], :style => :bold)
         #pdf.text_box("Total # of Dampers N/A :", :at => [10, 170], :style => :bold) #167 old
         #pdf.text_box("Total # of Dampers N/A :", :at => [10, 337], :style => :bold) new
-        pdf.text_box("Total # of Actuator Installed:", :at => [10, 335], :style => :bold)
+        pdf.text_box("Total # of Actuators Installed:", :at => [10, 335], :style => :bold)
         pdf.font_size 10
         #pdf.text_box("#{@project.m_total_no_of_dampers_na}", :at => [290, 88])
         #pdf.text_box("#{@project.m_total_no_of_dampers_na}", :at => [315, 88])
@@ -79,12 +79,12 @@ module DRProjectCompletionReport
         pdf.text_box("#{@project.m_total_no_of_dr_actuator_installed}", :at => [315, 335])
       elsif array.length == 3
         pdf.font_size 12
-        pdf.text_box("Total # of Actuator Installed:", :at => [10, 348], :style => :bold)
+        pdf.text_box("Total # of Actuators Installed:", :at => [10, 348], :style => :bold)
         pdf.font_size 10
         pdf.text_box("#{@project.m_total_no_of_dr_actuator_installed}", :at => [315, 348])
       else
         pdf.font_size 12
-        pdf.text_box("Total # of Actuator Installed:", :at => [10, 360], :style => :bold)
+        pdf.text_box("Total # of Actuators Installed:", :at => [10, 360], :style => :bold)
         pdf.font_size 10
         pdf.text_box("#{@project.m_total_no_of_dr_actuator_installed}", :at => [315, 360])
       end
@@ -98,7 +98,7 @@ module DRProjectCompletionReport
         #pdf.text_box("Total # of Access Doors Installed :", :at => [10, 150], :style => :bold)
         #pdf.text_box("Total # of Access Doors Installed :", :at => [10, 155], :style => :bold) #152 old
         #pdf.text_box("Total # of Access Doors Installed :", :at => [10, 322], :style => :bold) new
-        pdf.text_box("Total # of Damper Installed:", :at => [10, 320], :style => :bold)
+        pdf.text_box("Total # of Dampers Installed:", :at => [10, 320], :style => :bold)
         pdf.font_size 10
         #pdf.text_box("#{@project.m_total_no_of_damper_access_door_installed}", :at => [290, 73])
         #pdf.text_box("#{@project.m_total_no_of_damper_access_door_installed}", :at => [315, 73])
@@ -108,12 +108,12 @@ module DRProjectCompletionReport
         pdf.text_box("#{@project.m_total_no_of_dr_damper_installed}", :at => [315, 320])
       elsif array.length == 3
         pdf.font_size 12
-        pdf.text_box("Total # of Damper Installed:", :at => [10, 333], :style => :bold)
+        pdf.text_box("Total # of Dampers Installed:", :at => [10, 333], :style => :bold)
         pdf.font_size 10
         pdf.text_box("#{@project.m_total_no_of_dr_damper_installed}", :at => [315, 333])
       else
         pdf.font_size 12
-        pdf.text_box("Total # of Damper Installed:", :at => [10, 345], :style => :bold)
+        pdf.text_box("Total # of Dampers Installed:", :at => [10, 345], :style => :bold)
         pdf.font_size 10
         pdf.text_box("#{@project.m_total_no_of_dr_damper_installed}", :at => [315, 345])
       end	
