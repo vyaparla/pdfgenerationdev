@@ -391,8 +391,10 @@ class ApiController < ApplicationController
 
       require 'base64'
       require 'json'
-      require 'rest_client'      
-      url = 'https://dev18567.service-now.com/api/x_68827_lss/project_completion_pdfreport_mobile'      
+      require 'rest_client'
+      #url = 'https://dev18567.service-now.com/api/x_68827_lss/project_completion_pdfreport_mobile'
+      url =  @project_completion.m_instance_url + '/api/x_68827_lss/project_completion_pdfreport_mobile'
+      #Rails.logger.debug("URL: #{url}")
       request_body_map = {
         "sys_id" => "#{@project_completion.m_service_sysid}",
         "pdf_url" => "ec2-54-165-215-71.compute-1.amazonaws.com/api/download_project_completion_pdf_report?service_sysid=#{@project_completion.m_service_sysid}",    
@@ -451,6 +453,7 @@ class ApiController < ApplicationController
                                 :m_total_no_of_firedoor_nonconformed, :m_total_no_of_firestop_surveyed, :m_total_no_of_firestop_fixedonsite,
                                 :m_total_no_of_fsi_surveyed, :m_total_no_of_fsi_fixedonsite, :m_containment_tent_used, :m_base_bid_count,
                                 :m_new_total_authorized_damper_bid, :m_technician_name, :m_blueprints_facility, :m_replacement_checklist,
-                                :m_facility_items, :m_emailed_reports, :m_daily_basis, :m_authorization_signature_base64, :m_authorization_signature)
+                                :m_facility_items, :m_emailed_reports, :m_daily_basis, :m_authorization_signature_base64, :m_authorization_signature, 
+                                :m_instance_url)
   end
 end
