@@ -179,7 +179,8 @@ module Report
       image = @project.m_authorization_signature.path
       unless image.blank?
         #pdf.image(image, at: [375, 317], :width => 150, :height => 70) old
-        pdf.image(image, at: [375, 335], :width => 150, :height => 70) #new
+        #pdf.image(image, at: [375, 335], :width => 150, :height => 70) #new
+        pdf.image(image, at: [375, 335], :width => 150, :height => 60) #new
       else
       end
     end
