@@ -380,38 +380,38 @@ class ApiController < ApplicationController
         @project_completion.m_authorization_signature = @signature
       end
 
-      @project_completion.m_date               =  Time.now.utc
-      @project_completion.m_project_start_date =  Time.now.utc
+      # @project_completion.m_date               =  Time.now.utc
+      # @project_completion.m_project_start_date =  Time.now.utc
 
       @project_completion.save
       render json: {message: "Save Success"}
 
       ProjectCompletionReportGeneration.new(@project_completion).generate_projectcompletion_report
 
-      # require 'base64'
-      # require 'json'
-      # require 'rest_client'
-      # #url = 'https://dev18567.service-now.com/api/x_68827_lss/project_completion_pdfreport_mobile'
-      # url =  @project_completion.m_instance_url + '/api/x_68827_lss/project_completion_pdfreport_mobile'
-      # #Rails.logger.debug("URL: #{url}")
-      # request_body_map = {
-      #   "sys_id" => "#{@project_completion.m_service_sysid}",
-      #   "pdf_url" => "ec2-54-165-215-71.compute-1.amazonaws.com/api/download_project_completion_pdf_report?service_sysid=#{@project_completion.m_service_sysid}",
-      # }.to_json
+      require 'base64'
+      require 'json'
+      require 'rest_client'
+      #url = 'https://dev18567.service-now.com/api/x_68827_lss/project_completion_pdfreport_mobile'
+      url =  @project_completion.m_instance_url + '/api/x_68827_lss/project_completion_pdfreport_mobile'
+      #Rails.logger.debug("URL: #{url}")
+      request_body_map = {
+        "sys_id" => "#{@project_completion.m_service_sysid}",
+        "pdf_url" => "ec2-54-165-215-71.compute-1.amazonaws.com/api/download_project_completion_pdf_report?service_sysid=#{@project_completion.m_service_sysid}",
+      }.to_json
       
-      # begin
-      #   response = RestClient.post("#{url}", "#{request_body_map}",
-      #                         {:content_type => 'application/json',
-      #                          :accept => 'application/json'
-      #                         })
-      #   puts "#{response.to_str}"
-      #   puts "Response status: #{response.code}"
-      #   response.headers.each { |k,v|
-      #     puts "Header: #{k}=#{v}"
-      #   }
-      # rescue => e
-      #    puts "ERROR: #{e}"
-      # end
+      begin
+        response = RestClient.post("#{url}", "#{request_body_map}",
+                              {:content_type => 'application/json',
+                               :accept => 'application/json'
+                              })
+        puts "#{response.to_str}"
+        puts "Response status: #{response.code}"
+        response.headers.each { |k,v|
+          puts "Header: #{k}=#{v}"
+        }
+      rescue => e
+         puts "ERROR: #{e}"
+      end
     else
       render json: {message: "Unable to Save the record!"}
     end
