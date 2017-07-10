@@ -380,8 +380,8 @@ class ApiController < ApplicationController
         @project_completion.m_authorization_signature = @signature
       end
 
-      # @project_completion.m_date               =  Time.now.utc
-      # @project_completion.m_project_start_date =  Time.now.utc
+      @project_completion.m_date               =  Time.now.utc
+      @project_completion.m_project_start_date =  Time.now.utc
 
       @project_completion.save
       render json: {message: "Save Success"}
