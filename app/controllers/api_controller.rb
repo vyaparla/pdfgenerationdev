@@ -397,7 +397,7 @@ class ApiController < ApplicationController
       #Rails.logger.debug("URL: #{url}")
       request_body_map = {
         "sys_id" => "#{@project_completion.m_service_sysid}",
-        "pdf_url" => "ec2-54-165-215-71.compute-1.amazonaws.com/api/download_project_completion_pdf_report?service_sysid=#{@project_completion.m_service_sysid}",    
+        "pdf_url" => "ec2-54-165-215-71.compute-1.amazonaws.com/api/download_project_completion_pdf_report?service_sysid=#{@project_completion.m_service_sysid}",
       }.to_json
       
       begin

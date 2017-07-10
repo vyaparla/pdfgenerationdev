@@ -51,7 +51,8 @@ module Report
       :align => :right, :size => 10, 
       :start_count_at => 1}
       pdf.number_pages string, options
-      pdf.text_box("Captured at #{project.m_date.localtime.strftime(I18n.t('time.formats.mdY'))}", :at => [0, 48])
+      #pdf.text_box("Captured at #{project.m_date.localtime.strftime(I18n.t('time.formats.mdY'))}", :at => [0, 48])
+      pdf.text_box("Captured at #{project.m_date.localtime.strftime('%m-%d-%Y-%r')}", :at => [0, 48])
       pdf.text_box("Job Id: #{project.m_job_id}", :at => [0, 36])
     end
   end
