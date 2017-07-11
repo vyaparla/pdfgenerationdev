@@ -51,7 +51,7 @@ module DamperRepairReport
       	  data = {
       	    :date => record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')),
       	    :damper_number     => record.u_tag,
-            :floor             => record.u_floor,
+            :floor             => record.u_floor.to_i,
       	    :damper_location   => record.u_location_desc,
             :status            => record.u_dr_passed_post_repair,
             :corrective_action => record.u_dr_description
@@ -61,7 +61,7 @@ module DamperRepairReport
       	  data = {
       	    :date => record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')),
       	    :damper_number     => record.u_tag,
-            :floor             => record.u_floor,
+            :floor             => record.u_floor.to_i,
       	    :damper_location   => record.u_location_desc,
             :status            => record.u_dr_passed_post_repair,
             :corrective_action => record.u_repair_action_performed

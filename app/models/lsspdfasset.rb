@@ -81,6 +81,10 @@ class Lsspdfasset < ActiveRecord::Base
     File.join(graph_path, 'dr_graph_by_result.png')
   end
 
+  def graph_firedoor_door_by_rating_path
+    File.join(graph_path, 'firedoor_graph_door_by_rating.png')
+  end
+
   def work_dates
     unless self.u_job_start_date.blank?
       start_date = self.u_job_start_date.localtime.strftime(I18n.t('date.formats.long'))

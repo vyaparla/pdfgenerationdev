@@ -6,9 +6,12 @@ class DoorInspectionReporter < Reporter
   end
 
   def report(job, model_name, address, facility_type, tech)
+    DoorInspectionReport::GraphGenerator.new(job).generate
     generate(job.full_report_path) do |pdf|
       Report::CoverPage.new(job, model_name, address).write(pdf)
       DoorInspectionReport::LetterPage.new(job, model_name, address, facility_type, tech).write(pdf)
+      DoorInspectionReport::ProjectSummaryPage.new(job, tech).write(pdf)
+      DoorInspectionReport::GraphPage.new(job, tech).write(pdf)
       #DoorInspectionReport::DoorScorePage.new.write(pdf)
       #DoorInspectionReport::SummaryPage.new(job, tech).write(pdf)
        job.buildings(job.u_service_id).each do |b|

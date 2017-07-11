@@ -53,7 +53,7 @@ module DamperRepairReport
     end
 
     def draw_floor(pdf)
-      pdf.text("<b>Floor : </b> #{@record.u_floor}", inline_format: true)
+      pdf.text("<b>Floor : </b> #{@record.u_floor.to_i}", inline_format: true)
     end
 
     def draw_status(pdf)

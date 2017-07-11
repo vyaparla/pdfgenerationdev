@@ -23,7 +23,7 @@ module FirestopSurveyReport
       #Jira LSP-1067 : Until LSS moves into a direction of consistency across the naming conventions, you can replace Deficiency for Issue in the Firestop report examples.
       pdf.move_down 10
       pdf.font_size 15
-      pdf.fill_color 'c6171e'      
+      pdf.fill_color 'c6171e'
       @total_issue = Lsspdfasset.where(:u_service_id => @job.u_service_id, :u_delete => false).collect(&:u_issue_type).count
       pdf.text("<b>Total # of Issue : </b> #{@total_issue}", inline_format: true)      
       @issue_fixed_on_site = 0

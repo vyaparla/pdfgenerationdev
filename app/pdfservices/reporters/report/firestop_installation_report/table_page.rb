@@ -20,7 +20,7 @@ module FirestopInstallationReport
         record_data = [
           inspection_record.u_inspected_on.localtime.strftime('%m/%d/%Y'),
           inspection_record.u_tag,
-          inspection_record.u_floor,
+          inspection_record.u_floor.to_i,
           inspection_record.u_location_desc,
           inspection_record.u_barrier_type,
           inspection_record.u_penetration_type,

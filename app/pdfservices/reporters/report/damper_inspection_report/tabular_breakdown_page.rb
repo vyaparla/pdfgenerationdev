@@ -75,7 +75,7 @@ module DamperInspectionReport
           data = {            
             :date              => record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')),
             :damper_number     => record.u_tag,
-            :floor             => record.u_floor,
+            :floor             => record.u_floor.to_i,
             :damper_location   => record.u_location_desc,
             :damper_type       => record.u_damper_name,
             :current_status    => record.u_status,
@@ -103,7 +103,7 @@ module DamperInspectionReport
           data = {
             :date              => record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')),
             :damper_number     => record.u_tag,
-            :floor             => record.u_floor,
+            :floor             => record.u_floor.to_i,
             :damper_location   => record.u_location_desc,
             :damper_type       => record.u_damper_name,
             :current_status    => record.u_status,
@@ -132,7 +132,7 @@ module DamperInspectionReport
           data = {
             :date              => record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')),
             :damper_number     => record.u_tag,
-            :floor             => record.u_floor,
+            :floor             => record.u_floor.to_i,
             :damper_location   => record.u_location_desc,
             :damper_type       => record.u_damper_name,
             :current_status    => record.u_status,
@@ -160,7 +160,7 @@ module DamperInspectionReport
           data = {
             :date              => record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')),
             :damper_number     => record.u_tag,
-            :floor             => record.u_floor,
+            :floor             => record.u_floor.to_i,
             :damper_location   => record.u_location_desc,
             :current_status    => record.u_status,
             :damper_type       => record.u_damper_name,

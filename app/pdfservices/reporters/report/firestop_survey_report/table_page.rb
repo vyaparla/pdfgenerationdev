@@ -18,7 +18,7 @@ module FirestopSurveyReport
         record_data = [
           record.u_inspected_on.localtime.strftime('%m/%d/%Y'),
           record.u_tag,
-          record.u_floor,
+          record.u_floor.to_i,
           record.u_location_desc,
           record.u_barrier_type,
           record.u_penetration_type,
