@@ -116,7 +116,10 @@ module DoorInspectionReport
     end
 
     def draw_firedoor_door_by_rating(pdf)
+      pdf.font_size 10
       pdf.fill_color '202020'
+      pdf.text("Door By Rating", :inline_format => true)
+      pdf.move_down 10
       firedoor_doorbyrating = []
       firedoor_doorbyrating << ["Type", "Total", "% of Doors"]
       @firedoor_door_by_rating = Lsspdfasset.select(:u_fire_rating).where(:u_service_id => @job.u_service_id, :u_delete => false).where.not(u_fire_rating: "").group(["u_fire_rating"]).count(:u_fire_rating)
