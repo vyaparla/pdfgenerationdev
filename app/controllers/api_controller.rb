@@ -286,7 +286,8 @@ class ApiController < ApplicationController
   end
 
   def spreadsheets
-    @outputfile = params[:jobID] + "_" + params[:servicetype] + "_" + Time.now.strftime("%m-%d-%Y-%r").gsub(/\s+/, "_") + "_" + "spreadsheet_report"
+    #@outputfile = params[:jobID] + "_" + params[:servicetype] + "_" + Time.now.strftime("%m-%d-%Y-%r").gsub(/\s+/, "_") + "_" + "spreadsheet_report"
+    @outputfile = params[:servicetype].delete(' ').upcase + "_" + Time.now.strftime("%m-%d-%Y-%r").gsub(/\s+/, "_") + "_" + "spreadsheet_report"
     if params[:servicetype].delete(' ').upcase == "DAMPERINSPECTION"
       @records = Lsspdfasset.where(u_service_id: params[:serviceid], :u_delete => false).where.not(u_type: "")
       csv_data = CSV.generate do |csv|
@@ -318,7 +319,7 @@ class ApiController < ApplicationController
                     record.u_repair_action_performed + ":" + record.u_access_size 
                   end,
                   record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')), record.u_inspector
-                 ]
+                ]
         end
       end  
     elsif params[:servicetype].delete(' ').upcase == "FIREDOORINSPECTION"
@@ -343,10 +344,10 @@ class ApiController < ApplicationController
                     'NO'
                   end,
                   record.u_suggested_ul_system, record.u_corrected_url_system, record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')), record.u_inspector
-                 ]
+                ]
         end
       end
-    else
+    elsif params[:servicetype].delete(' ').upcase == "FIRESTOPINSTALLATION"
       @records = Lsspdfasset.where(u_service_id: params[:serviceid], :u_delete => false)
       csv_data = CSV.generate do |csv|
         csv << ["Asset #", "Facility", "Building", "Floor", "Location", "Barrier Type", "Penetration Type", "Issue", "Corrected On Site", "Suggested Corrective Action", "Corrected with UL System", "Date", "Technician"]
@@ -359,7 +360,33 @@ class ApiController < ApplicationController
                     'NO'
                   end,
                   record.u_suggested_ul_system, record.u_corrected_url_system, record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')), record.u_inspector
-                 ] 
+                ] 
+        end
+      end
+    else
+      @records = Lsspdfasset.where(u_facility_sys_id: params[:facilityid], :u_report_type => "DAMPERINSPECTION", :u_delete => false) + 
+                 Lsspdfasset.where(u_facility_sys_id: params[:facilityid], :u_report_type => "DAMPERREPAIR", :u_delete => false)
+      csv_data = CSV.generate do |csv|
+        csv << ["Date", "Asset #", "Facility", "Building", "Floor", "Damper Location", "Damper Type",  "Service Type", "Technician", "Result", "Issues", "Action Taken", "Current Status"]
+        @records.each do |record|
+          result_and_current_result = record.comperhensive_result(record)
+          csv << [record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')), record.u_tag, record.u_facility_name, record.u_building, record.u_floor.to_i, 
+                  record.u_location_desc, record.u_type, record.u_report_type, record.u_inspector, result_and_current_result,
+                  if result_and_current_result == "FAIL"
+                    if record.u_reason.delete(' ').upcase == "OTHER"
+                      record.u_reason + ":" + record.u_other_failure_reason
+                    else
+                      record.u_reason
+                    end
+                  else
+                    if record.u_non_accessible_reasons.delete(' ').upcase == "OTHER"
+                      record.u_non_accessible_reasons + ":" + record.u_other_nonaccessible_reason
+                    else
+                      record.u_non_accessible_reasons
+                    end
+                  end,
+                  "", result_and_current_result
+                ]
         end
       end
     end
@@ -439,7 +466,7 @@ class ApiController < ApplicationController
       :u_fire_rating, :u_door_inspection_result, :u_door_type, :u_report_type, :pdf_image1, :pdf_image2, :pdf_image3, :pdf_image4,
       :u_dr_passed_post_repair, :u_dr_description, :u_dr_damper_model, :u_dr_installed_damper_type, :u_dr_installed_damper_height,
       :u_dr_installed_damper_width, :u_dr_installed_actuator_model, :u_dr_installed_actuator_type, :u_dr_actuator_voltage, :u_di_replace_damper, 
-      :u_di_installed_access_door, :u_other_failure_reason, :u_other_nonaccessible_reason)
+      :u_di_installed_access_door, :u_other_failure_reason, :u_other_nonaccessible_reason, :u_facility_sys_id)
   end
 
 

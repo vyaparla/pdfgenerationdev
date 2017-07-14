@@ -100,6 +100,18 @@ class Lsspdfasset < ActiveRecord::Base
     end
   end
 
+  def comperhensive_result(record)
+    if self.u_status == "Pass"
+      return "PASS"
+    elsif self.u_status == "Fail"
+      return "FAIL"
+    elsif self.u_status == "NA"
+      return "NON-ACCESSIBLE"
+    else
+      return "REMOVED"
+    end
+  end
+
   private
 
   def pdf_path
