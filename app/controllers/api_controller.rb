@@ -372,20 +372,33 @@ class ApiController < ApplicationController
           result_and_current_result = record.comperhensive_result(record)
           csv << [record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')), record.u_tag, record.u_facility_name, record.u_building, record.u_floor.to_i, 
                   record.u_location_desc, record.u_type, record.u_report_type, record.u_inspector, result_and_current_result,
-                  if result_and_current_result == "FAIL"
-                    if record.u_reason.delete(' ').upcase == "OTHER"
-                      record.u_reason + ":" + record.u_other_failure_reason
+                  if record.u_report_type == "DAMPERINSPECTION"
+                    if result_and_current_result == "FAIL"
+                      if record.u_reason.delete(' ').upcase == "OTHER"
+                        record.u_reason + ":" + record.u_other_failure_reason
+                      else
+                        record.u_reason
+                      end
                     else
-                      record.u_reason
-                    end
-                  else
-                    if record.u_non_accessible_reasons.delete(' ').upcase == "OTHER"
-                      record.u_non_accessible_reasons + ":" + record.u_other_nonaccessible_reason
-                    else
-                      record.u_non_accessible_reasons
-                    end
+                      if record.u_non_accessible_reasons.delete(' ').upcase == "OTHER"
+                        record.u_non_accessible_reasons + ":" + record.u_other_nonaccessible_reason
+                      else
+                        record.u_non_accessible_reasons
+                      end
+                    end                  
                   end,
-                  "", result_and_current_result
+                  if record.u_report_type == "DAMPERREPAIR"
+                    if record.u_repair_action_performed == "Damper Repaired"
+                      record.u_repair_action_performed + ":" + record.u_dr_description
+                    elsif record.u_repair_action_performed == "Damper Installed"
+                      record.u_repair_action_performed + ":" + record.u_dr_damper_model
+                    elsif record.u_repair_action_performed == "Actuator Installed"
+                      record.u_repair_action_performed + ":" + record.u_dr_installed_actuator_model
+                    else
+                      record.u_repair_action_performed + ":" + record.u_access_size 
+                    end
+                  end, 
+                  result_and_current_result
                 ]
         end
       end

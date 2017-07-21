@@ -101,14 +101,24 @@ class Lsspdfasset < ActiveRecord::Base
   end
 
   def comperhensive_result(record)
-    if self.u_status == "Pass"
-      return "PASS"
-    elsif self.u_status == "Fail"
-      return "FAIL"
-    elsif self.u_status == "NA"
-      return "NON-ACCESSIBLE"
+    if record.u_report_type == "DAMPERINSPECTION"
+      if record.u_status == "Pass"
+        return "PASS"
+      elsif record.u_status == "Fail"
+        return "FAIL"
+      elsif record.u_status == "NA"
+        return "NON-ACCESSIBLE"
+      else
+        return "REMOVED"
+      end
     else
-      return "REMOVED"
+      if record.u_report_type == "DAMPERREPAIR"
+        if record.u_dr_passed_post_repair == "Pass"
+          return "PASS"
+        else
+          return "FAIL"
+        end
+      end
     end
   end
 

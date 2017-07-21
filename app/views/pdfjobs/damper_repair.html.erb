@@ -31,6 +31,7 @@
               <th>Job ID(u_job_id)</th>
               <!-- <th>Job Start Date(u_job_start_date)</th>
               <th>Job End Date(u_job_end_date)</th> -->
+              <th>Facility SysId(u_facility_sys_id)</th>
               <th>Service ID(u_service_id)</th>
               <!-- <th>Asset ID(u_asset_id)</th>
               <th>Building(u_building)</th> -->
@@ -60,6 +61,7 @@
             <% @damper_repair.each do |dr| %>
               <tr>
                 <td><%= dr.u_job_id %></td>
+                <td><%= dr.u_facility_sys_id %></td>
                 <td><%= dr.u_service_id %></td>
                 <td><%= dr.u_floor.to_i %></td>
                 <td><%= dr.u_type %></td>
