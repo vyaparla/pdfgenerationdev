@@ -30,8 +30,8 @@
               <th>Facility Name(u_group_name)</th> -->
               <th>Job ID(u_job_id)</th>
               <!-- <th>Job Start Date(u_job_start_date)</th>
-              <th>Job End Date(u_job_end_date)</th> -->
-              <th>Facility SysId(u_facility_sys_id)</th>
+              <th>Job End Date(u_job_end_date)</th> 
+              <th>Facility SysId(u_facility_sys_id)</th> -->
               <th>Service ID(u_service_id)</th>
               <!-- <th>Asset ID(u_asset_id)</th>
               <th>Building(u_building)</th> -->
@@ -54,8 +54,7 @@
           <tbody>
             <% @damper_inspection.each do |di| %>
               <tr>
-                <td><%= di.u_job_id %></td>
-                <td><%= di.u_facility_sys_id %></td>
+                <td><%= di.u_job_id %></td>                
                 <td><%= di.u_service_id %></td>
                 <td><%= di.u_floor.to_i %></td>
                 <td><%= di.u_type %></td>

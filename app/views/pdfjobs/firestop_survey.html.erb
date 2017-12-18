@@ -29,8 +29,8 @@
               <!-- <th>Group Name(u_facility_name)</th>
               <th>Facility Name(u_group_name)</th> -->
               <th>Job ID(u_job_id)</th>
-              <th>Facility SysId(u_facility_sys_id)</th>
-              <!-- <th>Job Start Date(u_job_start_date)</th>
+              <!-- <th>Facility SysId(u_facility_sys_id)</th>
+              <th>Job Start Date(u_job_start_date)</th>
               <th>Job End Date(u_job_end_date)</th> -->
               <th>Service ID(u_service_id)</th>
               <!-- <th>Asset ID(u_asset_id)</th>
@@ -53,8 +53,7 @@
           <tbody>
             <% @firestop_survey.each do |fss| %>
               <tr>
-                <td><%= fss.u_job_id %></td>
-                <td><%= fss.u_facility_sys_id %></td>
+                <td><%= fss.u_job_id %></td>                
                 <td><%= fss.u_service_id %></td>                
                 <td><%= fss.u_floor.to_i %></td>
                 <td><%= fss.u_tag %></td>
