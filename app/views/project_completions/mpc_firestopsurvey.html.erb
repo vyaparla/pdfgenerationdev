@@ -34,8 +34,10 @@
               <th>Project Start Date(m_project_start_date)</th>
               <th>Primary Contact Name(m_primary_contact_name)</th>
               <th>Phone#(m_phone)</th>
+              <th>Customer Name(m_customer_name)</th>
               <th>Printed Report(m_printed_report)</th>
               <th>Autocad(m_autocad)</th>
+              <th>Total # Firestop Assets(m_total_firestop_assets)</th>
               <th>Total Firestop Surveyed(m_total_no_of_firestop_surveyed)</th>
               <th>Total Firestop Fixed On Site(m_total_no_of_firestop_fixedonsite)</th>              
               <th>Containment Tent Used(m_containment_tent_used)</th>
@@ -61,8 +63,10 @@
                 <td><%= fss.m_project_start_date.localtime.strftime(I18n.t('time.formats.mdY')) %></td>
                 <td><%= fss.m_primary_contact_name %></td>
                 <td><%= fss.m_phone %></td>
+                <td><%= fss.m_customer_name %></td>
                 <td><%= fss.m_printed_report %></td>
                 <td><%= fss.m_autocad %></td>
+                <td><%= fss.m_total_firestop_assets %></td>
                 <td><%= fss.m_total_no_of_firestop_surveyed %></td>
                 <td><%= fss.m_total_no_of_firestop_fixedonsite %></td>                
                 <td><%= fss.m_containment_tent_used %></td>

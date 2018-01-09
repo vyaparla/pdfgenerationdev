@@ -34,6 +34,7 @@
               <th>Project Start Date(m_project_start_date)</th>
               <th>Primary Contact Name(m_primary_contact_name)</th>
               <th>Phone#(m_phone)</th>
+              <th>Customer Name(m_customer_name)</th>
               <th>Printed Report(m_printed_report)</th>
               <th>Autocad(m_autocad)</th>
               <th>Total Dampers Inspected(m_total_no_of_dampers_inspected)</th>
@@ -64,6 +65,7 @@
                 <td><%= di.m_project_start_date.localtime.strftime(I18n.t('time.formats.mdY')) %></td>
                 <td><%= di.m_primary_contact_name %></td>
                 <td><%= di.m_phone %></td>
+                <td><%= di.m_customer_name %></td>
                 <td><%= di.m_printed_report %></td>
                 <td><%= di.m_autocad %></td>
                 <td><%= di.m_total_no_of_dampers_inspected %></td>

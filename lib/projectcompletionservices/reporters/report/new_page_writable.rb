@@ -41,22 +41,22 @@ module Report
     end
 
     def draw_footer(pdf)
-      pdf.move_down 578
+      pdf.move_down 598 #578
       pdf.font_size 10
       pdf.stroke_horizontal_rule
       #pdf.text_box("Submitted by #{project.m_technician_name}" + " at #{project.m_date.localtime.strftime(I18n.t('time.formats.mdY'))}", :at => [0, 60])
       #pdf.text_box("Submitted by #{project.m_technician_name}" + " at #{project.m_date.strftime('%m-%d-%Y %I:%M:%p')}", :at => [0, 60])
-      pdf.text_box("Submitted by #{project.m_technician_name}" + " at #{project.m_date}", :at => [0, 60])
+      pdf.text_box("Submitted by #{project.m_technician_name}" + " at #{project.m_date}", :at => [0, 40])#60
       string = "Page : <page>"
-      options = { :at => [pdf.bounds.right - 170, 60],
+      options = { :at => [pdf.bounds.right - 170, 40],#60
       :width => 170,
       :align => :right, :size => 10, 
       :start_count_at => 1}
       pdf.number_pages string, options
       #pdf.text_box("Captured at #{project.m_date.localtime.strftime(I18n.t('time.formats.mdY'))}", :at => [0, 48])
       #pdf.text_box("Captured at #{project.m_date.strftime('%m-%d-%Y %I:%M:%p')}", :at => [0, 48])
-      pdf.text_box("Captured at #{project.m_date}", :at => [0, 48])
-      pdf.text_box("Job Id: #{project.m_job_id}", :at => [0, 36])
+      pdf.text_box("Captured at #{project.m_date}", :at => [0, 30])
+      pdf.text_box("Job Id: #{project.m_job_id}", :at => [0, 18])
     end
   end
 end

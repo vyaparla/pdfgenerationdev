@@ -420,8 +420,8 @@ class ApiController < ApplicationController
         @project_completion.m_authorization_signature = @signature
       end
 
-      # @project_completion.m_date               =  Time.now.utc
-      # @project_completion.m_project_start_date =  Time.now.utc
+      @project_completion.m_date               =  Time.now.utc
+      @project_completion.m_project_start_date =  Time.now.utc
 
       @project_completion.save
       render json: {message: "Save Success"}
@@ -493,6 +493,6 @@ class ApiController < ApplicationController
                                 :m_total_no_of_firestop_surveyed, :m_total_no_of_firestop_fixedonsite, :m_total_no_of_fsi_surveyed,
                                 :m_total_no_of_fsi_fixedonsite, :m_containment_tent_used, :m_base_bid_count, :m_new_total_authorized_damper_bid,
                                 :m_technician_name, :m_blueprints_facility, :m_replacement_checklist, :m_facility_items, :m_emailed_reports, :m_daily_basis,
-                                :m_authorization_signature_base64, :m_authorization_signature, :m_instance_url)
+                                :m_authorization_signature_base64, :m_authorization_signature, :m_instance_url, :m_customer_name, :m_total_firestop_assets)
   end
 end

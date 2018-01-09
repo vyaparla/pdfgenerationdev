@@ -81,3 +81,5 @@ gem 'bootstrap-sass', '~> 3.2.0'
 gem 'autoprefixer-rails'
 gem 'devise'
 gem 'rest-client', '~> 1.8'
+gem 'capistrano-rails-console', require: false
+gem 'nokogiri', '~> 1.8', '>= 1.8.1'

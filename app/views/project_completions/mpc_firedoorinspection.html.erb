@@ -34,6 +34,7 @@
               <th>Project Start Date(m_project_start_date)</th>
               <th>Primary Contact Name(m_primary_contact_name)</th>
               <th>Phone#(m_phone)</th>
+              <th>Customer Name(m_customer_name)</th>
               <th>Printed Report(m_printed_report)</th>
               <th>Autocad(m_autocad)</th>
               <th>Total FireDoor Inspected(m_total_no_of_firedoor_inspected)</th>
@@ -62,6 +63,7 @@
                 <td><%= fdi.m_project_start_date.localtime.strftime(I18n.t('time.formats.mdY')) %></td>
                 <td><%= fdi.m_primary_contact_name %></td>
                 <td><%= fdi.m_phone %></td>
+                <td><%= fdi.m_customer_name %></td>
                 <td><%= fdi.m_printed_report %></td>
                 <td><%= fdi.m_autocad %></td>
                 <td><%= fdi.m_total_no_of_firedoor_inspected %></td>

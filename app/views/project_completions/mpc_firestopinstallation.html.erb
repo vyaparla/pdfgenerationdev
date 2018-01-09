@@ -34,8 +34,10 @@
               <th>Project Start Date(m_project_start_date)</th>
               <th>Primary Contact Name(m_primary_contact_name)</th>
               <th>Phone#(m_phone)</th>
+              <th>Customer Name(m_customer_name)</th>
               <th>Printed Report(m_printed_report)</th>
               <th>Autocad(m_autocad)</th>
+              <th>Total # Firestop Assets(m_total_firestop_assets)</th>
               <th>Total Firestop Installation Surveyed(m_total_no_of_fsi_surveyed)</th>
               <th>Total Firestop Installation Fixed On Site(m_total_no_of_fsi_fixedonsite)</th>              
               <th>Containment Tent Used(m_containment_tent_used)</th>
@@ -61,10 +63,12 @@
                 <td><%= fsi.m_project_start_date.localtime.strftime(I18n.t('time.formats.mdY')) %></td>
                 <td><%= fsi.m_primary_contact_name %></td>
                 <td><%= fsi.m_phone %></td>
+                <td><%= fsi.m_customer_name %></td>
                 <td><%= fsi.m_printed_report %></td>
                 <td><%= fsi.m_autocad %></td>
+                <td><%= fsi.m_total_firestop_assets %></td>
                 <td><%= fsi.m_total_no_of_fsi_surveyed %></td>
-                <td><%= fsi.m_total_no_of_fsi_fixedonsite %></td>                
+                <td><%= fsi.m_total_no_of_fsi_fixedonsite %></td>           
                 <td><%= fsi.m_containment_tent_used %></td>
                 <td><%= fsi.m_base_bid_count %></td>
                 <td><%= fsi.m_new_total_authorized_damper_bid %></td>
