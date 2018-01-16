@@ -145,20 +145,28 @@ module Report
         #acknowledgeTech_name
         pdf.font_size 12
         #pdf.text_box("Name", :at => [8, 337], :style => :bold) old
-        pdf.text_box("Name", :at => [8, 355], :style => :bold) #new
+        pdf.text_box("Technician Name", :at => [8, 355], :style => :bold) #new
         pdf.font_size 10
         #pdf.text_box("#{@project.m_technician_name}", :at => [375, 337]) old
         pdf.text_box("#{@project.m_technician_name}", :at => [375, 355]) #new
 
+        #acknowledgeCustomer_name
+        pdf.font_size 12
+        #pdf.text_box("Name", :at => [8, 337], :style => :bold) old
+        pdf.text_box("Customer Name", :at => [8, 340], :style => :bold) #new
+        pdf.font_size 10
+        #pdf.text_box("#{@project.m_technician_name}", :at => [375, 337]) old
+        pdf.text_box("#{@project.m_customer_name}", :at => [375, 340]) #new
+
         #acknowledgeSignature
         pdf.font_size 12
         #pdf.text_box("Signature", :at => [8, 287], :style => :bold) old
-        pdf.text_box("Signature", :at => [8, 305], :style => :bold) #new
+        pdf.text_box("Signature", :at => [8, 290], :style => :bold) #new
         image = @project.m_authorization_signature.path
         unless image.blank?
           #pdf.image(image, at: [375, 317], :width => 150, :height => 70) old
           #pdf.image(image, at: [375, 335], :width => 150, :height => 70) #new
-          pdf.image(image, at: [375, 335], :width => 150, :height => 60) #new
+          pdf.image(image, at: [375, 320], :width => 150, :height => 60) #new
         else
         end
       elsif @project.m_servicetype == "Firedoor Inspection"
@@ -257,20 +265,28 @@ module Report
         #acknowledgeTech_name
         pdf.font_size 12
         #pdf.text_box("Name", :at => [8, 337], :style => :bold) old
-        pdf.text_box("Name", :at => [8, 388], :style => :bold) #new
+        pdf.text_box("Technician Name", :at => [8, 388], :style => :bold) #new
         pdf.font_size 10
         #pdf.text_box("#{@project.m_technician_name}", :at => [375, 337]) old
         pdf.text_box("#{@project.m_technician_name}", :at => [375, 388]) #new
 
+        #acknowledgeCustomer_name
+        pdf.font_size 12
+        #pdf.text_box("Name", :at => [8, 337], :style => :bold) old
+        pdf.text_box("Customer Name", :at => [8, 368], :style => :bold) #new
+        pdf.font_size 10
+        #pdf.text_box("#{@project.m_technician_name}", :at => [375, 337]) old
+        pdf.text_box("#{@project.m_customer_name}", :at => [375, 368]) #new
+
         #acknowledgeSignature
         pdf.font_size 12
         #pdf.text_box("Signature", :at => [8, 287], :style => :bold) old
-        pdf.text_box("Signature", :at => [8, 338], :style => :bold) #new
+        pdf.text_box("Signature", :at => [8, 318], :style => :bold) #new
         image = @project.m_authorization_signature.path
         unless image.blank?
           #pdf.image(image, at: [375, 317], :width => 150, :height => 70) old
           #pdf.image(image, at: [375, 335], :width => 150, :height => 70) #new
-          pdf.image(image, at: [375, 368], :width => 150, :height => 60) #new
+          pdf.image(image, at: [375, 348], :width => 150, :height => 60) #new
         else
         end   
 
@@ -352,28 +368,36 @@ module Report
         #acknowledgeDate
         pdf.font_size 12
         #pdf.text_box("Date", :at => [8, 357], :style => :bold) old
-        pdf.text_box("Date", :at => [8, 458], :style => :bold) #new
+        pdf.text_box("Date", :at => [8, 456], :style => :bold) #new
         pdf.font_size 10
         #pdf.text_box("#{@project.m_date.localtime.strftime(I18n.t('time.formats.mdY'))}", :at => [375, 357]) old
-        pdf.text_box("#{@project.m_date.localtime.strftime(I18n.t('time.formats.mdY'))}", :at => [375, 458]) #new
+        pdf.text_box("#{@project.m_date.localtime.strftime(I18n.t('time.formats.mdY'))}", :at => [375, 456]) #new        
 
         #acknowledgeTech_name
         pdf.font_size 12
         #pdf.text_box("Name", :at => [8, 337], :style => :bold) old
-        pdf.text_box("Name", :at => [8, 440], :style => :bold) #new
+        pdf.text_box("Technician Name", :at => [8, 436], :style => :bold) #new
         pdf.font_size 10
         #pdf.text_box("#{@project.m_technician_name}", :at => [375, 337]) old
-        pdf.text_box("#{@project.m_technician_name}", :at => [375, 440]) #new
+        pdf.text_box("#{@project.m_technician_name}", :at => [375, 436]) #new
+
+        #acknowledgeCustomer_name
+        pdf.font_size 12
+        #pdf.text_box("Name", :at => [8, 337], :style => :bold) old
+        pdf.text_box("Customer Name", :at => [8, 416], :style => :bold) #new426
+        pdf.font_size 10
+        #pdf.text_box("#{@project.m_technician_name}", :at => [375, 337]) old
+        pdf.text_box("#{@project.m_customer_name}", :at => [375, 416]) #new
 
         #acknowledgeTech_name
         pdf.font_size 12
         #pdf.text_box("Signature", :at => [8, 287], :style => :bold) old
-        pdf.text_box("Signature", :at => [8, 390], :style => :bold) #new
+        pdf.text_box("Signature", :at => [8, 366], :style => :bold) #new
         image = @project.m_authorization_signature.path
         unless image.blank?
           #pdf.image(image, at: [375, 317], :width => 150, :height => 70) old
           #pdf.image(image, at: [375, 335], :width => 150, :height => 70) #new
-          pdf.image(image, at: [375, 420], :width => 150, :height => 60) #new
+          pdf.image(image, at: [375, 396], :width => 150, :height => 60) #new
         else
         end
       end  

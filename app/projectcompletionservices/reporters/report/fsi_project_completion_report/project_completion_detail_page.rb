@@ -17,39 +17,39 @@ module FSIProjectCompletionReport
       array = @project.m_building.split(",")
       if array.length >= 5
         pdf.font_size 12
-        pdf.text_box("Total # of Firestop Assets:", :at => [10, 347], :style => :bold)
+        pdf.text_box("Total # of Firestop Assets:", :at => [10, 365], :style => :bold)
         pdf.font_size 10
-        pdf.text_box("#{@project.m_total_firestop_assets}", :at => [315, 347])
+        pdf.text_box("#{@project.m_total_firestop_assets}", :at => [315, 365])
       elsif array.length == 3
         pdf.font_size 12
-        pdf.text_box("Total # of Firestop Assets:", :at => [10, 360], :style => :bold)
+        pdf.text_box("Total # of Firestop Assets:", :at => [10, 378], :style => :bold)
         pdf.font_size 10
-        pdf.text_box("#{@project.m_total_firestop_assets}", :at => [315, 360])
+        pdf.text_box("#{@project.m_total_firestop_assets}", :at => [315, 378])
       else
         pdf.font_size 12
-        pdf.text_box("Total # of Firestop Assets:", :at => [10, 372], :style => :bold)
+        pdf.text_box("Total # of Firestop Assets:", :at => [10, 390], :style => :bold)
         pdf.font_size 10
-        pdf.text_box("#{@project.m_total_firestop_assets}", :at => [315, 372])
-      end 
-    end  
-  
+        pdf.text_box("#{@project.m_total_firestop_assets}", :at => [315, 390])
+      end
+    end
+
     def draw_pc_total_firestops_surveyed(pdf)
       array = @project.m_building.split(",")
       if array.length >= 5
         pdf.font_size 12
-        pdf.text_box("Total # of Firestops Surveyed:", :at => [10, 332], :style => :bold)
+        pdf.text_box("Total # of Firestop Surveyed:", :at => [10, 350], :style => :bold)
         pdf.font_size 10
-        pdf.text_box("#{@project.m_total_no_of_fsi_surveyed}", :at => [315, 332])
+        pdf.text_box("#{@project.m_total_no_of_fsi_surveyed}", :at => [315, 350])
       elsif array.length == 3
         pdf.font_size 12
-        pdf.text_box("Total # of Firestops Surveyed:", :at => [10, 345], :style => :bold)
+        pdf.text_box("Total # of Firestop Surveyed:", :at => [10, 363], :style => :bold)
         pdf.font_size 10
-        pdf.text_box("#{@project.m_total_no_of_fsi_surveyed}", :at => [315, 345])
+        pdf.text_box("#{@project.m_total_no_of_fsi_surveyed}", :at => [315, 363])
       else
         pdf.font_size 12
-        pdf.text_box("Total # of Firestops Surveyed:", :at => [10, 357], :style => :bold)
+        pdf.text_box("Total # of Firestop Surveyed:", :at => [10, 375], :style => :bold)
         pdf.font_size 10
-        pdf.text_box("#{@project.m_total_no_of_fsi_surveyed}", :at => [315, 357])
+        pdf.text_box("#{@project.m_total_no_of_fsi_surveyed}", :at => [315, 375])
       end
     end
 
@@ -57,20 +57,20 @@ module FSIProjectCompletionReport
       array = @project.m_building.split(",")
       if array.length >= 5
         pdf.font_size 12
-        pdf.text_box("Total # of Firestops Fixed on Site:", :at => [10, 317], :style => :bold)
+        pdf.text_box("Total # of Firestop Fixed on Site:", :at => [10, 335], :style => :bold)
         pdf.font_size 10
-        pdf.text_box("#{@project.m_total_no_of_fsi_fixedonsite}", :at => [315, 317])
+        pdf.text_box("#{@project.m_total_no_of_fsi_fixedonsite}", :at => [315, 335])
       elsif array.length == 3
         pdf.font_size 12
-        pdf.text_box("Total # of Firestops Fixed on Site:", :at => [10, 330], :style => :bold)
+        pdf.text_box("Total # of Firestop Fixed on Site:", :at => [10, 348], :style => :bold)
         pdf.font_size 10
-        pdf.text_box("#{@project.m_total_no_of_fsi_fixedonsite}", :at => [315, 330])
+        pdf.text_box("#{@project.m_total_no_of_fsi_fixedonsite}", :at => [315, 348])
       else
         pdf.font_size 12
-        pdf.text_box("Total # of Firestops Fixed on Site:", :at => [10, 342], :style => :bold)
+        pdf.text_box("Total # of Firestop Fixed on Site:", :at => [10, 360], :style => :bold)
         pdf.font_size 10
-        pdf.text_box("#{@project.m_total_no_of_fsi_fixedonsite}", :at => [315, 342])
-      end 	
+        pdf.text_box("#{@project.m_total_no_of_fsi_fixedonsite}", :at => [315, 360])
+      end   
     end
   end
 end
