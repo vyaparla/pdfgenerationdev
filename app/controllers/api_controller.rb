@@ -59,9 +59,9 @@ class ApiController < ApplicationController
       end
 
 
-      @pdfjob.u_job_start_date =  Time.now.utc
-      @pdfjob.u_job_end_date =  Time.now.utc
-      @pdfjob.u_inspected_on =  Time.now.utc
+      # @pdfjob.u_job_start_date =  Time.now.utc
+      # @pdfjob.u_job_end_date =  Time.now.utc
+      # @pdfjob.u_inspected_on =  Time.now.utc
 
       @pdfjob.save
 
