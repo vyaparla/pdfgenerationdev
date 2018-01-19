@@ -69,9 +69,17 @@ module FirestopSurveyReport
           r.border_color = 'cccccc'
         end
         table.row(0).style background_color: '444444', text_color: 'ffffff'
-        table.column(1).style { |c| c.width = 60 } # Asset #
+        table.column(1).style { |c| c.width = 60 } # Asset#
         table.column(2).style { |c| c.width = 40 } # Floor
         table.column(3).style { |c| c.width = 70 } # Location
+        table.column(4).style { |c| c.width = 65 } # Issue
+        table.column(5).style { |c| c.width = 75 } # Barrier Type
+        table.column(6).style { |c| c.width = 75 } # Penetration Type
+        table.column(7).style { |c| c.width = 100 } # Suggested Corrective Action
+        
+        # table.column(1).style { |c| c.width = 60 } # Asset #
+        # table.column(2).style { |c| c.width = 40 } # Floor
+        # table.column(3).style { |c| c.width = 70 } # Location        
         # table.column(4).style { |c| c.width = 55 } # Barrier Type
         # table.column(5).style { |c| c.width = 55 } # Penetration Type
         # table.column(6).style { |c| c.width = 60 } # Issue
