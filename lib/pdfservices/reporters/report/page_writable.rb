@@ -27,13 +27,13 @@ module Report
       options = { :at => [pdf.bounds.right - 150, 130],
       :width => 170,
       :align => :right, :size => 11,
-      :page_filter => (0..1),
+      :page_filter => (1),
       :start_count_at => 1,
       :color => "808080" }
       pdf.number_pages string, options
-      options[:at] = [pdf.bounds.right - 150, 10]
+      options[:at] = [pdf.bounds.right - 150, 23]
       options[:page_filter] = lambda{ |pg| pg > 1 }
-      options[:start_count_at] = 2
+      options[:start_count_at] = 1
       pdf.number_pages string, options
     
       # pdf.number_pages "<page>",

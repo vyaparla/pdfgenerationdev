@@ -1,5 +1,5 @@
 class DamperRepairReporter < Reporter
-  def summary_report(job, model_name, address, tech)
+  def summary_report(job, model_name, address1, address2, csz, tech)
     DamperRepairReport::GraphGenerator.new(job).generate
     generate(job.summary_report_path) do |pdf|
       Report::CoverPage.new(job, model_name, address).write(pdf)
@@ -8,10 +8,10 @@ class DamperRepairReporter < Reporter
     end
   end
 
-  def report(job, model_name, address, facility_type, tech)
+  def report(job, model_name, address1, address2, csz, facility_type, tech)
     DamperRepairReport::GraphGenerator.new(job).generate
   	generate(job.full_report_path) do |pdf|
-  	  Report::CoverPage.new(job, model_name, address).write(pdf)
+  	  Report::CoverPage.new(job, model_name, address1, address2, csz).write(pdf)
   	  DamperRepairReport::ProjectSummaryPage.new(job, tech).write(pdf)
       DamperRepairReport::GraphPage.new(job, tech).write(pdf)
   	  job.buildings(job.u_service_id).each do |b|

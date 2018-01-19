@@ -58,7 +58,6 @@ class ApiController < ApplicationController
         @pdfjob.pdf_image4 = @pdf_image4
       end
 
-
       # @pdfjob.u_job_start_date =  Time.now.utc
       # @pdfjob.u_job_end_date =  Time.now.utc
       # @pdfjob.u_inspected_on =  Time.now.utc
@@ -215,14 +214,16 @@ class ApiController < ApplicationController
     # @nfpa_url      = params[:nfpaurl]
     #@serviceID     = params[:serviceID]
     @model_name    = params[:service].delete(' ').upcase + params[:type].upcase
-    @address       = params[:address]
+    @address1      = params[:address1]
+    @address2      = params[:address2]
+    @csz           = params[:csz]
     @facility_type = params[:facilitytype]
     @tech          = params[:tech]
   
   	@pdfjob = Lsspdfasset.where(u_service_id: params[:serviceID], :u_delete => false).first
     unless @pdfjob.blank?
       #ReportGeneration.new(@pdfjob, @group_name, @facility_name, @group_url, @facility_url).generate_full_report
-      ReportGeneration.new(@pdfjob, @model_name, @address, @facility_type, @tech).generate_full_report
+      ReportGeneration.new(@pdfjob, @model_name, @address1, @address2, @csz, @facility_type, @tech).generate_full_report
   	  render json: {message: "Success"}
     else
       render json: {message: "Unsuccess"}

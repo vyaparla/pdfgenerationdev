@@ -1,14 +1,17 @@
 module Report
   class Letter
-  	def initialize(owner, model, address, facility_type, i18n_key, tech)
+  	def initialize(owner, model, address1, address2, csz, facility_type, i18n_key, tech)
       @owner = owner
       @model = model
       # @group_name = group_name
       # @facility_name = facility_name
-      @address = address.split("_")
+      @address1 = address1
+      @address2 = address2
+      @csz =  csz.split("_")
       @facility_type = facility_type
       @i18n_key = i18n_key
       @tech = tech
+
     end
 
     def draw(pdf)
@@ -71,14 +74,19 @@ module Report
 
     def complete_physical_address
       address = "#{@owner.u_facility_name}"
-      unless @address.blank?
-        address << "\n#{@address[0]}"
-        address << "\n#{@address[1]}"
-        address << "\n#{@address[2]}"
-        address << ", #{@address[3]}"
-        address << "  #{@address[4]}"
-        #address << "\n United States"
+      address << "\n#{@address1}"
+      unless @address2.blank?
+        address << "\n#{@address2}"
       end
+      address << "\n#{@csz[0]}, #{@csz[1]}, #{@csz[2]}"
+      # unless @address.blank?
+      #   address << "\n#{@address[0]}"
+      #   address << "\n#{@address[1]}"
+      #   address << "\n#{@address[2]}"
+      #   address << ", #{@address[3]}"
+      #   address << "  #{@address[4]}"
+      #   #address << "\n United States"
+      # end
     end
 
     def certified_closing
