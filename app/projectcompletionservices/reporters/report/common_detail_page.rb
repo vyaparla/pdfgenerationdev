@@ -161,7 +161,8 @@ module Report
         #pdf.text_box("Primary Contact", :at => [10, 303], :style => :bold)
         #pdf.text_box("Primary Contact", :at => [10, 355], :style => :bold) ol
         #pdf.text_box("Primary Contact", :at => [10, 522], :style => :bold) new
-        pdf.text_box("Primary Contact", :at => [10, 520], :style => :bold)
+        #pdf.text_box("Primary Contact", :at => [10, 520], :style => :bold)
+        pdf.text_box("Facility Contact", :at => [10, 520], :style => :bold)
         pdf.font_size 10
         #pdf.text_box("#{@project.m_primary_contact_name}", :at => [290, 303])
         #pdf.text_box("#{@project.m_primary_contact_name}", :at => [290, 355]) old
@@ -169,12 +170,14 @@ module Report
         pdf.text_box("#{@project.m_primary_contact_name}", :at => [290, 520])
       elsif array.length == 3
         pdf.font_size 12
-        pdf.text_box("Primary Contact", :at => [10, 533], :style => :bold)
+        #pdf.text_box("Primary Contact", :at => [10, 533], :style => :bold)
+        pdf.text_box("Facility Contact", :at => [10, 533], :style => :bold)
         pdf.font_size 10
         pdf.text_box("#{@project.m_primary_contact_name}", :at => [290, 533])
       else
         pdf.font_size 12
-        pdf.text_box("Primary Contact", :at => [10, 545], :style => :bold)
+        #pdf.text_box("Primary Contact", :at => [10, 545], :style => :bold)
+        pdf.text_box("Facility Contact", :at => [10, 545], :style => :bold)
         pdf.font_size 10
         pdf.text_box("#{@project.m_primary_contact_name}", :at => [290, 545])
       end
@@ -879,66 +882,78 @@ module Report
       if array.length >= 5
         if @project.m_servicetype == "Firedoor Inspection"
           pdf.font_size 12
-          pdf.text_box("Customer Name", :at => [10, 171], :style => :bold)
+          #pdf.text_box("Customer Name", :at => [10, 171], :style => :bold)
+          pdf.text_box("Contact Name", :at => [10, 171], :style => :bold)
           pdf.font_size 10
           pdf.text_box("#{@project.m_customer_name}", :at => [315, 171])
         elsif @project.m_servicetype == "Firestop Survey"
           pdf.font_size 12
-          pdf.text_box("Customer Name", :at => [10, 270], :style => :bold)
+          #pdf.text_box("Customer Name", :at => [10, 270], :style => :bold)
+          pdf.text_box("Contact Name", :at => [10, 270], :style => :bold)
           pdf.font_size 10
           pdf.text_box("#{@project.m_customer_name}", :at => [315, 270])
         elsif @project.m_servicetype == "Firestop Installation"
           pdf.font_size 12
-          pdf.text_box("Customer Name", :at => [10, 270], :style => :bold)
+          #pdf.text_box("Customer Name", :at => [10, 270], :style => :bold)
+          pdf.text_box("Contact Name", :at => [10, 270], :style => :bold)
           pdf.font_size 10
           pdf.text_box("#{@project.m_customer_name}", :at => [315, 270])
         else
           pdf.font_size 12
-          pdf.text_box("Customer Name", :at => [10, 139], :style => :bold)
+          #pdf.text_box("Customer Name", :at => [10, 139], :style => :bold)
+          pdf.text_box("Contact Name", :at => [10, 139], :style => :bold)
           pdf.font_size 10
           pdf.text_box("#{@project.m_customer_name}", :at => [315, 139])
         end  
       elsif array.length == 3
         if @project.m_servicetype == "Firedoor Inspection"
           pdf.font_size 12
-          pdf.text_box("Customer Name", :at => [10, 184], :style => :bold)
+          #pdf.text_box("Customer Name", :at => [10, 184], :style => :bold)
+          pdf.text_box("Contact Name", :at => [10, 184], :style => :bold)
           pdf.font_size 10
           pdf.text_box("#{@project.m_customer_name}", :at => [315, 184])
         elsif @project.m_servicetype == "Firestop Survey"
           pdf.font_size 12
-          pdf.text_box("Customer Name", :at => [10, 283], :style => :bold)
+          #pdf.text_box("Customer Name", :at => [10, 283], :style => :bold)
+          pdf.text_box("Contact Name", :at => [10, 283], :style => :bold)
           pdf.font_size 10
           pdf.text_box("#{@project.m_customer_name}", :at => [315, 283])
         elsif @project.m_servicetype == "Firestop Installation"
           pdf.font_size 12
-          pdf.text_box("Customer Name", :at => [10, 283], :style => :bold)
+          #pdf.text_box("Customer Name", :at => [10, 283], :style => :bold)
+          pdf.text_box("Contact Name", :at => [10, 283], :style => :bold)
           pdf.font_size 10
           pdf.text_box("#{@project.m_customer_name}", :at => [315, 283])
         else
           pdf.font_size 12
-          pdf.text_box("Customer Name", :at => [10, 152], :style => :bold)
+          #pdf.text_box("Customer Name", :at => [10, 152], :style => :bold)
+          pdf.text_box("Contact Name", :at => [10, 152], :style => :bold)
           pdf.font_size 10
           pdf.text_box("#{@project.m_customer_name}", :at => [315, 152])
         end
       else
         if @project.m_servicetype == "Firedoor Inspection"
           pdf.font_size 12
-          pdf.text_box("Customer Name", :at => [10, 193], :style => :bold)
+          #pdf.text_box("Customer Name", :at => [10, 193], :style => :bold)
+          pdf.text_box("Contact Name", :at => [10, 193], :style => :bold)
           pdf.font_size 10
           pdf.text_box("#{@project.m_customer_name}", :at => [315, 193])
         elsif @project.m_servicetype == "Firestop Survey"
           pdf.font_size 12
-          pdf.text_box("Customer Name", :at => [10, 295], :style => :bold)
+          #pdf.text_box("Customer Name", :at => [10, 295], :style => :bold)
+          pdf.text_box("Contact Name", :at => [10, 295], :style => :bold)
           pdf.font_size 10
           pdf.text_box("#{@project.m_customer_name}", :at => [315, 295])
         elsif @project.m_servicetype == "Firestop Installation"
           pdf.font_size 12
-          pdf.text_box("Customer Name", :at => [10, 295], :style => :bold)
+          #pdf.text_box("Customer Name", :at => [10, 295], :style => :bold)
+          pdf.text_box("Contact Name", :at => [10, 295], :style => :bold)
           pdf.font_size 10
           pdf.text_box("#{@project.m_customer_name}", :at => [315, 295])
         else
           pdf.font_size 12
-          pdf.text_box("Customer Name", :at => [10, 156], :style => :bold)
+          #pdf.text_box("Customer Name", :at => [10, 156], :style => :bold)
+          pdf.text_box("Contact Name", :at => [10, 156], :style => :bold)
           pdf.font_size 10
           pdf.text_box("#{@project.m_customer_name}", :at => [315, 156])
         end
@@ -950,21 +965,24 @@ module Report
       pdf.font_size 12
       if array.length >= 5
         if @project.m_servicetype == "Firedoor Inspection"
-          pdf.text_box("Authorization to inspect all dampers to completion", :at => [10, 136])
+          #pdf.text_box("Authorization to inspect all dampers to completion", :at => [10, 136])
+          pdf.text_box("Contact Signature", :at => [10, 136], :style => :bold)
           image = @project.m_authorization_signature.path
           unless image.blank?
             pdf.image(image, at: [315, 151], :width => 150, :height => 70)
           else
           end
         elsif @project.m_servicetype == "Firestop Survey"
-          pdf.text_box("Authorization to inspect all dampers to completion", :at => [10, 225])
+          #pdf.text_box("Authorization to inspect all dampers to completion", :at => [10, 225])
+          pdf.text_box("Contact Signature", :at => [10, 225], :style => :bold)
           image = @project.m_authorization_signature.path
           unless image.blank?
             pdf.image(image, at: [315, 250], :width => 150, :height => 70)
           else
           end
         elsif @project.m_servicetype == "Firestop Installation"
-          pdf.text_box("Authorization to inspect all dampers to completion", :at => [10, 225])
+          #pdf.text_box("Authorization to inspect all dampers to completion", :at => [10, 225])
+          pdf.text_box("Contact Signature", :at => [10, 225], :style => :bold)
           image = @project.m_authorization_signature.path
           unless image.blank?
             pdf.image(image, at: [315, 250], :width => 150, :height => 70)
@@ -974,7 +992,8 @@ module Report
           #pdf.text_box("Authorization to inspect all dampers to completion", :at => [10, 128]) old
           #pdf.text_box("Authorization to inspect all dampers to completion", :at => [10, 126]) #new
           #pdf.text_box("Authorization to inspect all dampers to completion", :at => [10, 96])
-          pdf.text_box("Authorization to inspect all dampers to completion", :at => [10, 94])
+          #pdf.text_box("Authorization to inspect all dampers to completion", :at => [10, 94])
+          pdf.text_box("Contact Signature", :at => [10, 94], :style => :bold)
           image = @project.m_authorization_signature.path
           unless image.blank?
             #pdf.image(image, at: [315, 153], :width => 150, :height => 70) old
@@ -984,21 +1003,24 @@ module Report
         end        
       elsif array.length == 3
         if @project.m_servicetype == "Firedoor Inspection"
-          pdf.text_box("Authorization to inspect all dampers to completion", :at => [10, 139])
+          #pdf.text_box("Authorization to inspect all dampers to completion", :at => [10, 139])
+          pdf.text_box("Contact Signature", :at => [10, 139], :style => :bold)
           image = @project.m_authorization_signature.path
           unless image.blank?
             pdf.image(image, at: [315, 164], :width => 150, :height => 70)
           else
           end
         elsif @project.m_servicetype == "Firestop Survey"
-          pdf.text_box("Authorization to inspect all dampers to completion", :at => [10, 238])
+          #pdf.text_box("Authorization to inspect all dampers to completion", :at => [10, 238])
+          pdf.text_box("Contact Signature", :at => [10, 238], :style => :bold)
           image = @project.m_authorization_signature.path
           unless image.blank?
             pdf.image(image, at: [315, 263], :width => 150, :height => 70)
           else
           end
         elsif @project.m_servicetype == "Firestop Installation"
-          pdf.text_box("Authorization to inspect all dampers to completion", :at => [10, 238])
+          #pdf.text_box("Authorization to inspect all dampers to completion", :at => [10, 238])
+          pdf.text_box("Contact Signature", :at => [10, 238], :style => :bold)
           image = @project.m_authorization_signature.path
           unless image.blank?
             pdf.image(image, at: [315, 263], :width => 150, :height => 70)
@@ -1007,7 +1029,8 @@ module Report
         else
           #pdf.text_box("Authorization to inspect all dampers to completion", :at => [10, 139])
           #pdf.text_box("Authorization to inspect all dampers to completion", :at => [10, 109])
-          pdf.text_box("Authorization to inspect all dampers to completion", :at => [10, 107])
+          #pdf.text_box("Authorization to inspect all dampers to completion", :at => [10, 107])
+          pdf.text_box("Contact Signature", :at => [10, 107], :style => :bold)
           image = @project.m_authorization_signature.path
           unless image.blank?
             #pdf.image(image, at: [315, 164], :width => 150, :height => 70)
@@ -1018,21 +1041,24 @@ module Report
         end        
       else
         if @project.m_servicetype == "Firedoor Inspection"
-          pdf.text_box("Authorization to inspect all dampers to completion", :at => [10, 148])
+          #pdf.text_box("Authorization to inspect all dampers to completion", :at => [10, 148])
+          pdf.text_box("Contact Signature", :at => [10, 148], :style => :bold)
           image = @project.m_authorization_signature.path
           unless image.blank?
             pdf.image(image, at: [315, 173], :width => 150, :height => 70)
           else
           end
         elsif @project.m_servicetype == "Firestop Survey"
-          pdf.text_box("Authorization to inspect all dampers to completion", :at => [10, 250])
+          #pdf.text_box("Authorization to inspect all dampers to completion", :at => [10, 250])
+          pdf.text_box("Contact Signature", :at => [10, 250], :style => :bold)
           image = @project.m_authorization_signature.path
           unless image.blank?
             pdf.image(image, at: [315, 275], :width => 150, :height => 70)
           else
           end
         elsif @project.m_servicetype == "Firestop Installation"
-          pdf.text_box("Authorization to inspect all dampers to completion", :at => [10, 250])
+          #pdf.text_box("Authorization to inspect all dampers to completion", :at => [10, 250])
+          pdf.text_box("Contact Signature", :at => [10, 250], :style => :bold)
           image = @project.m_authorization_signature.path
           unless image.blank?
             pdf.image(image, at: [315, 275], :width => 150, :height => 70)
@@ -1041,7 +1067,8 @@ module Report
         else
           #pdf.text_box("Authorization to inspect all dampers to completion", :at => [10, 151])
           #pdf.text_box("Authorization to inspect all dampers to completion", :at => [10, 113])
-          pdf.text_box("Authorization to inspect all dampers to completion", :at => [10, 111])
+          #pdf.text_box("Authorization to inspect all dampers to completion", :at => [10, 111])
+          pdf.text_box("Contact Signature", :at => [10, 111], :style => :bold)
           image = @project.m_authorization_signature.path
           unless image.blank?
             #pdf.image(image, at: [315, 176], :width => 150, :height => 70)

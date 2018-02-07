@@ -153,7 +153,7 @@ module Report
         #acknowledgeCustomer_name
         pdf.font_size 12
         #pdf.text_box("Name", :at => [8, 337], :style => :bold) old
-        pdf.text_box("Customer Name", :at => [8, 340], :style => :bold) #new
+        pdf.text_box("Contact Name", :at => [8, 340], :style => :bold) #new
         pdf.font_size 10
         #pdf.text_box("#{@project.m_technician_name}", :at => [375, 337]) old
         pdf.text_box("#{@project.m_customer_name}", :at => [375, 340]) #new
@@ -161,7 +161,7 @@ module Report
         #acknowledgeSignature
         pdf.font_size 12
         #pdf.text_box("Signature", :at => [8, 287], :style => :bold) old
-        pdf.text_box("Signature", :at => [8, 290], :style => :bold) #new
+        pdf.text_box("Contact Signature", :at => [8, 290], :style => :bold) #new
         image = @project.m_authorization_signature.path
         unless image.blank?
           #pdf.image(image, at: [375, 317], :width => 150, :height => 70) old
@@ -273,7 +273,7 @@ module Report
         #acknowledgeCustomer_name
         pdf.font_size 12
         #pdf.text_box("Name", :at => [8, 337], :style => :bold) old
-        pdf.text_box("Customer Name", :at => [8, 368], :style => :bold) #new
+        pdf.text_box("Contact Name", :at => [8, 368], :style => :bold) #new
         pdf.font_size 10
         #pdf.text_box("#{@project.m_technician_name}", :at => [375, 337]) old
         pdf.text_box("#{@project.m_customer_name}", :at => [375, 368]) #new
@@ -281,7 +281,7 @@ module Report
         #acknowledgeSignature
         pdf.font_size 12
         #pdf.text_box("Signature", :at => [8, 287], :style => :bold) old
-        pdf.text_box("Signature", :at => [8, 318], :style => :bold) #new
+        pdf.text_box("Contact Signature", :at => [8, 318], :style => :bold) #new
         image = @project.m_authorization_signature.path
         unless image.blank?
           #pdf.image(image, at: [375, 317], :width => 150, :height => 70) old
@@ -384,7 +384,7 @@ module Report
         #acknowledgeCustomer_name
         pdf.font_size 12
         #pdf.text_box("Name", :at => [8, 337], :style => :bold) old
-        pdf.text_box("Customer Name", :at => [8, 416], :style => :bold) #new426
+        pdf.text_box("Contact Name", :at => [8, 416], :style => :bold) #new426
         pdf.font_size 10
         #pdf.text_box("#{@project.m_technician_name}", :at => [375, 337]) old
         pdf.text_box("#{@project.m_customer_name}", :at => [375, 416]) #new
@@ -392,7 +392,7 @@ module Report
         #acknowledgeTech_name
         pdf.font_size 12
         #pdf.text_box("Signature", :at => [8, 287], :style => :bold) old
-        pdf.text_box("Signature", :at => [8, 366], :style => :bold) #new
+        pdf.text_box("Contact Signature", :at => [8, 366], :style => :bold) #new
         image = @project.m_authorization_signature.path
         unless image.blank?
           #pdf.image(image, at: [375, 317], :width => 150, :height => 70) old
