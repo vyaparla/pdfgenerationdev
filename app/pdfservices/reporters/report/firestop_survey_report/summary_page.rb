@@ -23,7 +23,7 @@ module FirestopSurveyReport
       pdf.font_size 30
       #pdf.fill_color "c6171e"
       pdf.fill_color 'ED1C24'
-      pdf.text("<b>Project Summary</b>", :align => :center)
+      pdf.text("Project Summary", :align => :center, :style => :bold)
     end
 
     def draw_statistics(pdf)
@@ -33,7 +33,7 @@ module FirestopSurveyReport
       pdf.font_size 20
       #pdf.fill_color "c6171e"
       pdf.fill_color 'ED1C24'
-      pdf.text("<b>Statistics</b>", :align => :center)
+      pdf.text("Statistics", :align => :center, :style => :bold)
     end
 
     def draw_overview_of_issues(pdf)      

@@ -53,7 +53,6 @@ class ApiController < ApplicationController
       @pdfjob.u_di_replace_damper = HTMLEntities.new.decode params[:u_di_replace_damper]
       @pdfjob.u_non_accessible_reasons = HTMLEntities.new.decode params[:u_non_accessible_reasons]
       @pdfjob.u_other_nonaccessible_reason = HTMLEntities.new.decode params[:u_other_nonaccessible_reason]
-      @pdfjob.u_di_replace_damper = HTMLEntities.new.decode params[:u_di_replace_damper]
       @pdfjob.u_di_installed_access_door = HTMLEntities.new.decode params[:u_di_installed_access_door]
       
       #Damper Repair Fields
@@ -67,7 +66,6 @@ class ApiController < ApplicationController
       @pdfjob.u_dr_installed_actuator_model = HTMLEntities.new.decode params[:u_dr_installed_actuator_model]
       @pdfjob.u_dr_installed_actuator_type = HTMLEntities.new.decode params[:u_dr_installed_actuator_type]
       @pdfjob.u_dr_actuator_voltage = HTMLEntities.new.decode params[:u_dr_actuator_voltage]
-      @pdfjob.u_di_installed_access_door = HTMLEntities.new.decode params[:u_di_installed_access_door]
 
       #Firedoor Inspection Fields
       @pdfjob.u_door_category = HTMLEntities.new.decode params[:u_door_category]
@@ -123,6 +121,35 @@ class ApiController < ApplicationController
           end
 
           #@pdfjob.update_attributes(:u_job_start_date =>  Time.now.utc, :u_job_end_date => Time.now.utc, :u_inspected_on => Time.now.utc)
+
+          @pdfjob.update_attributes(:u_group_name =>  HTMLEntities.new.decode params[:u_group_name],
+                                    :u_facility_name => HTMLEntities.new.decode params[:u_facility_name],
+                                    :u_building => HTMLEntities.new.decode params[:u_building],
+                                    :u_location_desc => HTMLEntities.new.decode params[:u_location_desc],
+                                    :u_reason => HTMLEntities.new.decode params[:u_reason],
+                                    :u_other_failure_reason => HTMLEntities.new.decode params[:u_other_failure_reason],
+                                    :u_di_replace_damper => HTMLEntities.new.decode params[:u_di_replace_damper],
+                                    :u_non_accessible_reasons => HTMLEntities.new.decode params[:u_non_accessible_reasons],
+                                    :u_other_nonaccessible_reason => HTMLEntities.new.decode params[:u_other_nonaccessible_reason],
+                                    :u_di_installed_access_door => HTMLEntities.new.decode params[:u_di_installed_access_door],
+                                    :u_repair_action_performed => HTMLEntities.new.decode params[:u_repair_action_performed],
+                                    :u_dr_passed_post_repair => HTMLEntities.new.decode params[:u_dr_passed_post_repair],
+                                    :u_dr_description => HTMLEntities.new.decode params[:u_dr_description],
+                                    :u_dr_damper_model => HTMLEntities.new.decode params[:u_dr_damper_model],
+                                    :u_dr_installed_damper_type => HTMLEntities.new.decode params[:u_dr_installed_damper_type],
+                                    :u_dr_installed_damper_width => HTMLEntities.new.decode params[:u_dr_installed_damper_width],
+                                    :u_dr_installed_damper_height => HTMLEntities.new.decode params[:u_dr_installed_damper_height],
+                                    :u_dr_installed_actuator_model => HTMLEntities.new.decode params[:u_dr_installed_actuator_model],
+                                    :u_dr_installed_actuator_type => HTMLEntities.new.decode params[:u_dr_installed_actuator_type],
+                                    :u_dr_actuator_voltage => HTMLEntities.new.decode params[:u_dr_actuator_voltage],                                    
+                                    :u_door_category => HTMLEntities.new.decode params[:u_door_category],
+                                    :u_fire_rating => HTMLEntities.new.decode params[:u_fire_rating],
+                                    :u_door_type => HTMLEntities.new.decode params[:u_door_type],
+                                    :u_issue_type => HTMLEntities.new.decode params[:u_issue_type],
+                                    :u_barrier_type => HTMLEntities.new.decode params[:u_barrier_type],
+                                    :u_penetration_type => HTMLEntities.new.decode params[:u_penetration_type],
+                                    :u_corrected_url_system => HTMLEntities.new.decode params[:u_corrected_url_system],
+                                    :u_suggested_ul_system => HTMLEntities.new.decode params[:u_suggested_ul_system])
 
           render json: {message: "Update Success"}
         else
