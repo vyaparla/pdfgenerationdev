@@ -122,34 +122,46 @@ class ApiController < ApplicationController
 
           #@pdfjob.update_attributes(:u_job_start_date =>  Time.now.utc, :u_job_end_date => Time.now.utc, :u_inspected_on => Time.now.utc)
 
-          @pdfjob.update_attributes(:u_group_name =>  HTMLEntities.new.decode params[:u_group_name],
-                                    :u_facility_name => HTMLEntities.new.decode params[:u_facility_name],
-                                    :u_building => HTMLEntities.new.decode params[:u_building],
-                                    :u_location_desc => HTMLEntities.new.decode params[:u_location_desc],
-                                    :u_reason => HTMLEntities.new.decode params[:u_reason],
-                                    :u_other_failure_reason => HTMLEntities.new.decode params[:u_other_failure_reason],
-                                    :u_di_replace_damper => HTMLEntities.new.decode params[:u_di_replace_damper],
-                                    :u_non_accessible_reasons => HTMLEntities.new.decode params[:u_non_accessible_reasons],
-                                    :u_other_nonaccessible_reason => HTMLEntities.new.decode params[:u_other_nonaccessible_reason],
-                                    :u_di_installed_access_door => HTMLEntities.new.decode params[:u_di_installed_access_door],
-                                    :u_repair_action_performed => HTMLEntities.new.decode params[:u_repair_action_performed],
-                                    :u_dr_passed_post_repair => HTMLEntities.new.decode params[:u_dr_passed_post_repair],
-                                    :u_dr_description => HTMLEntities.new.decode params[:u_dr_description],
-                                    :u_dr_damper_model => HTMLEntities.new.decode params[:u_dr_damper_model],
-                                    :u_dr_installed_damper_type => HTMLEntities.new.decode params[:u_dr_installed_damper_type],
-                                    :u_dr_installed_damper_width => HTMLEntities.new.decode params[:u_dr_installed_damper_width],
-                                    :u_dr_installed_damper_height => HTMLEntities.new.decode params[:u_dr_installed_damper_height],
-                                    :u_dr_installed_actuator_model => HTMLEntities.new.decode params[:u_dr_installed_actuator_model],
-                                    :u_dr_installed_actuator_type => HTMLEntities.new.decode params[:u_dr_installed_actuator_type],
-                                    :u_dr_actuator_voltage => HTMLEntities.new.decode params[:u_dr_actuator_voltage],                                    
-                                    :u_door_category => HTMLEntities.new.decode params[:u_door_category],
-                                    :u_fire_rating => HTMLEntities.new.decode params[:u_fire_rating],
-                                    :u_door_type => HTMLEntities.new.decode params[:u_door_type],
-                                    :u_issue_type => HTMLEntities.new.decode params[:u_issue_type],
-                                    :u_barrier_type => HTMLEntities.new.decode params[:u_barrier_type],
-                                    :u_penetration_type => HTMLEntities.new.decode params[:u_penetration_type],
-                                    :u_corrected_url_system => HTMLEntities.new.decode params[:u_corrected_url_system],
-                                    :u_suggested_ul_system => HTMLEntities.new.decode params[:u_suggested_ul_system])
+          gname = HTMLEntities.new.decode params[:u_group_name]
+          fname = HTMLEntities.new.decode params[:u_facility_name]
+          building = HTMLEntities.new.decode params[:u_building]
+          location_desc = HTMLEntities.new.decode params[:u_location_desc]
+          reason = HTMLEntities.new.decode params[:u_reason]
+          other_failure_reason = HTMLEntities.new.decode params[:u_other_failure_reason]
+          di_replace_damper = HTMLEntities.new.decode params[:u_di_replace_damper]
+          non_accessible_reasons  = HTMLEntities.new.decode params[:u_non_accessible_reasons]
+          other_nonaccessible_reason = HTMLEntities.new.decode params[:u_other_nonaccessible_reason]
+          installed_access_door = HTMLEntities.new.decode params[:u_di_installed_access_door]
+          repair_action_performed = HTMLEntities.new.decode params[:u_repair_action_performed]
+          dr_passed_post_repair =  HTMLEntities.new.decode params[:u_dr_passed_post_repair]
+          dr_description =  HTMLEntities.new.decode params[:u_dr_description]
+          dr_damper_model =  HTMLEntities.new.decode params[:u_dr_damper_model]
+          dr_installed_damper_type = HTMLEntities.new.decode params[:u_dr_installed_damper_type]
+          dr_installed_damper_width = HTMLEntities.new.decode params[:u_dr_installed_damper_width]
+          dr_installed_damper_height = HTMLEntities.new.decode params[:u_dr_installed_damper_height]
+          dr_installed_actuator_model = HTMLEntities.new.decode params[:u_dr_installed_actuator_model]
+          dr_installed_actuator_type = HTMLEntities.new.decode params[:u_dr_installed_actuator_type]
+          dr_actuator_voltage = HTMLEntities.new.decode params[:u_dr_actuator_voltage]
+          door_category = HTMLEntities.new.decode params[:u_door_category]
+          fire_rating =  HTMLEntities.new.decode params[:u_fire_rating]
+          door_type = HTMLEntities.new.decode params[:u_door_type]
+          issue_type =  HTMLEntities.new.decode params[:u_issue_type]
+          barrier_type = HTMLEntities.new.decode params[:u_barrier_type]
+          penetration_type = HTMLEntities.new.decode params[:u_penetration_type]
+          corrected_url_system =  HTMLEntities.new.decode params[:u_corrected_url_system]
+          suggested_ul_system = HTMLEntities.new.decode params[:u_suggested_ul_system]
+ 
+          @pdfjob.update_attributes(u_group_name: gname, u_facility_name: fname, u_building: building, u_location_desc: location_desc, 
+                                    u_reason:  reason, u_other_failure_reason:  other_failure_reason, u_di_replace_damper: di_replace_damper,
+                                    u_non_accessible_reasons: non_accessible_reasons, u_other_nonaccessible_reason: other_nonaccessible_reason,
+                                    u_di_installed_access_door:  installed_access_door, u_repair_action_performed: repair_action_performed,
+                                    u_dr_passed_post_repair:  dr_passed_post_repair, u_dr_description:  dr_description,
+                                    u_dr_damper_model:  dr_damper_model, u_dr_installed_damper_type: dr_installed_damper_type,
+                                    u_dr_installed_damper_width: dr_installed_damper_width, u_dr_installed_damper_height: dr_installed_damper_height,
+                                    u_dr_installed_actuator_model: dr_installed_actuator_model, u_dr_installed_actuator_type: dr_installed_actuator_type,
+                                    u_dr_actuator_voltage: dr_actuator_voltage, u_door_category: door_category, u_fire_rating:  fire_rating,
+                                    u_door_type: door_type, u_issue_type: issue_type, u_barrier_type: barrier_type, u_penetration_type: penetration_type,
+                                    u_corrected_url_system:  corrected_url_system, u_suggested_ul_system: suggested_ul_system)
 
           render json: {message: "Update Success"}
         else
