@@ -2,9 +2,11 @@ module DamperRepairReport
   class PhotoPage
     include Report::PhotoPageWritable
     
-    def initialize(record, options = {})
+    def initialize(record, options = {}, group_name, facility_name)
       @record = record
       @options = options
+      @group_name = group_name
+      @facility_name = facility_name
     end
 
     def write(pdf)
@@ -103,15 +105,15 @@ module DamperRepairReport
     end
 
     def draw_open_after_install_image(pdf)
-      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [35, 530], fit: [123, 123])
+      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [35, 521], fit: [123, 123])#530
       image = @record.pdf_image1.path(:pdf)
       unless image.blank?
-        pdf.image(image, at: [44, 521], fit: [105, 105])
+        pdf.image(image, at: [44, 512], fit: [105, 105])#521
       else
-        pdf.draw_text('Photo Unavailable', style: :bold, size: 11, at: [49, 464])
+        pdf.draw_text('Photo Unavailable', style: :bold, size: 11, at: [49, 455])#464
       end
       pdf.font_size 10
-      pdf.draw_text("#{DamperRepairReporting.translate('open_after_installation')}", at: [44, 403])
+      pdf.draw_text("#{DamperRepairReporting.translate('open_after_installation')}", at: [44, 394])#403
 
       # unless @record.u_image1.blank?
       #   pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_image1}")[:data])), at: [ 44, 521], fit: [105, 105]

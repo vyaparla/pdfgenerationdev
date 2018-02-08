@@ -21,7 +21,8 @@ module FirestopSurveyReport
       pdf.font "Helvetica"
       #pdf.font_size 40
       pdf.font_size 30
-      pdf.fill_color "c6171e"
+      #pdf.fill_color "c6171e"
+      pdf.fill_color 'ED1C24'
       pdf.text("Project Summary", :align => :center)
     end
 
@@ -30,7 +31,8 @@ module FirestopSurveyReport
       pdf.font "Helvetica"
       #pdf.font_size 25
       pdf.font_size 20
-      pdf.fill_color "c6171e"
+      #pdf.fill_color "c6171e"
+      pdf.fill_color 'ED1C24'
       pdf.text("Statistics", :align => :center)
     end
 
@@ -89,7 +91,7 @@ module FirestopSurveyReport
         end
       
         @firestop_survey_summary.each do |key, value|
-          survey_issue_summary << [key, value, "#{((value.to_f * 100 ) / @firestop_survey_issue_count).round(2)}%"]
+          survey_issue_summary << [key, value, "#{((value.to_f * 100 ) / @firestop_survey_issue_count).round(3)}%"]
         end
       
         pdf.font_size 10

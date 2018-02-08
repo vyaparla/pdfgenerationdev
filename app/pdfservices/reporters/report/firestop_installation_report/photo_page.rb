@@ -1,6 +1,12 @@
 module FirestopInstallationReport
   class PhotoPage
     include Report::PhotoPageWritable
+
+    def initialize(record, group_name, facility_name)
+      @record = record
+      @group_name = group_name
+      @facility_name = facility_name
+    end
     
     # def write(pdf)
     #   super
@@ -118,14 +124,14 @@ module FirestopInstallationReport
     # end
 
     def draw_before_image(pdf)
-      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [15 - pdf.bounds.absolute_left, 536])
+      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [15 - pdf.bounds.absolute_left, 521])#536
       image = @record.pdf_image1.path(:pdf)      
       unless image.blank?
-        pdf.image(image, at: [30 - pdf.bounds.absolute_left, 521], fit: [225, 225])
+        pdf.image(image, at: [30 - pdf.bounds.absolute_left, 506], fit: [225, 225])#521
       else
-        pdf.draw_text('Photo Unavailable', style: :bold, size:  12,  at: [90 - pdf.bounds.absolute_left, 404])
+        pdf.draw_text('Photo Unavailable', style: :bold, size:  12,  at: [90 - pdf.bounds.absolute_left, 389])#404
       end
-      pdf.draw_text("Before Installation", at: [30 - pdf.bounds.absolute_left, 280])      
+      pdf.draw_text("Before Installation", at: [30 - pdf.bounds.absolute_left, 265])#280
     end
 
     def draw_after_image(pdf)

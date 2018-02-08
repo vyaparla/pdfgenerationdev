@@ -19,7 +19,7 @@ module FirestopSurveyReport
       # end
       pdf.font_size 12
       pdf.fill_color '202020'
-      [[:contracted_by, owner.u_group_name],
+      [[:contracted_by, group_name],
       [place_key     , place_name],
       [building_key  , build_name],
       [date_key      , owner.work_dates]].each do |key, value|
@@ -43,5 +43,8 @@ module FirestopSurveyReport
       @tech
     end 
 
+    def relative_background_path
+      'three_hundred_dpi/final_data_page_new.jpg'
+    end
   end
 end

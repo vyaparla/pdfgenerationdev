@@ -3,9 +3,12 @@ module DamperInspectionReport
     require "resolv"
     include Report::PhotoPageWritable
 
-    def initialize(record, options = {})
+    def initialize(record, options = {}, group_name, facility_name)
       @record = record
+      #Rails.logger.debug("Photo Records :#{@record.inspect}")
       @options = options
+      @group_name = group_name
+      @facility_name = facility_name
     end
 
     def write(pdf)
@@ -160,7 +163,7 @@ module DamperInspectionReport
       end
 
       def draw_open_image(pdf)
-        top_margin_pic_offset = 235
+        top_margin_pic_offset = 250 #235
         pdf.fill_color '202020'
         pdf.font_size 12
         pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [15 - pdf.bounds.absolute_left, 771 - top_margin_pic_offset])        

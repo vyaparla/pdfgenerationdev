@@ -6,8 +6,8 @@ module DamperInspectionReport
       return if records.empty?
       BuildingSummaryPage.new(@job, @building, @tech).write(pdf)
       write_breakdown_pages(pdf, building_section, @tech)
-      @records = records.where.not(u_type: "")      
-      @records.each { |r| PhotoPage.new(r).write(pdf)}
+      @records = records.where.not(u_type: "")
+      @records.each { |r| PhotoPage.new(r, @group_name, @facility_name).write(pdf)}
     end
 
   private

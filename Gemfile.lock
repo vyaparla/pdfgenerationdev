@@ -102,6 +102,7 @@ GEM
       activesupport (>= 4.2.0)
     gruff (0.5.1)
       rmagick
+    htmlentities (4.3.4)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
     i18n (0.8.4)
@@ -120,6 +121,7 @@ GEM
       mime-types (>= 1.16, < 4)
     method_source (0.8.2)
     mime-types (2.99.3)
+    mimemagic (0.3.2)
     mini_portile2 (2.3.0)
     minitest (5.10.2)
     multi_json (1.12.1)
@@ -131,11 +133,12 @@ GEM
     nokogiri (1.8.1)
       mini_portile2 (~> 2.3.0)
     orm_adapter (0.5.0)
-    paperclip (4.2.4)
-      activemodel (>= 3.2.0)
-      activesupport (>= 3.2.0)
+    paperclip (5.2.1)
+      activemodel (>= 4.2.0)
+      activesupport (>= 4.2.0)
       cocaine (~> 0.5.5)
       mime-types
+      mimemagic (~> 0.3.0)
     pdf-core (0.6.1)
     prawn (2.0.2)
       pdf-core (~> 0.6.0)
@@ -266,11 +269,12 @@ DEPENDENCIES
   devise
   figaro
   gruff (~> 0.5.1)
+  htmlentities (~> 4.3, >= 4.3.4)
   jbuilder (~> 2.0)
   jquery-rails
   mysql2
   nokogiri (~> 1.8, >= 1.8.1)
-  paperclip (~> 4.2.2)
+  paperclip (~> 5.2, >= 5.2.1)
   prawn (~> 2.0.1)
   prawn-fast-png (~> 0.2.3)
   prawn-table (~> 0.2.1)

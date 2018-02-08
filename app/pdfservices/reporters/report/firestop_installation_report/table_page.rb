@@ -8,14 +8,18 @@ module FirestopInstallationReport
       @tech = tech
     end
 
-
     def write(pdf)
-      return if records.empty?      
+      return if records.empty?
       super
       @fixed_on_site = []
+      fixed_on_site_heading = [{:content => 'Fixed On Site = YES', :colspan => 540}]
+      @fixed_on_site << fixed_on_site_heading
       fixed_on_site = ['Date', 'Asset #', 'Floor', 'Location', 'Issue', "Barrier Type", 'Penetration Type', "Corrective Action"]
       @fixed_on_site << fixed_on_site
+
       @survey_only = []
+      survey_only_heading = [{:content => 'Fixed On Site = NO', :colspan => 540}]
+      @survey_only << survey_only_heading
       survey_only  = ['Date', 'Asset #', 'Floor', 'Location', 'Issue', "Barrier Type", 'Penetration Type', "Suggested Corrective Action"]
       @survey_only << survey_only
    
@@ -35,14 +39,15 @@ module FirestopInstallationReport
   private
 
     def draw_fixed_on_site(pdf)
-      pdf.table([["Fixed On Site = YES"]], :cell_style => {:border_color => "888888", }, :width => 540)
+      #pdf.table([["Fixed On Site = YES"]], :cell_style => {:border_color => "888888", }, :width => 540)
       pdf.table(@fixed_on_site, :column_widths => { 0 => 55 }, header: true, cell_style: { align: :center, size: 8 }) do |table|
         table.row_colors = ['ffffff', 'eaeaea']
         table.rows(0).style { |r| r.border_color = '888888' }
         table.rows(1..(table.row_length - 1)).style do |r|
           r.border_color = 'cccccc'
         end
-        table.row(0).style background_color: '444444', text_color: 'ffffff'
+        table.row(0).style text_color: '444444', size: 10, font_style: :bold
+        table.row(1).style background_color: '444444', text_color: 'ffffff'
         table.column(1).style { |c| c.width = 60 } # Asset#
         table.column(2).style { |c| c.width = 40 } # Floor
         table.column(3).style { |c| c.width = 70 } # Location
@@ -64,14 +69,15 @@ module FirestopInstallationReport
     end
 
     def draw_survey_only(pdf)      
-      pdf.table([["Fixed On Site = NO"]], :cell_style => {:border_color => "888888"}, :width => 540)
+      #pdf.table([["Fixed On Site = NO"]], :cell_style => {:border_color => "888888"}, :width => 540)
       pdf.table(@survey_only, :column_widths => { 0 => 55 }, header: true, cell_style: { align: :center, size: 8 }) do |table|
         table.row_colors = ['ffffff', 'eaeaea']
         table.rows(0).style { |r| r.border_color = '888888' }
         table.rows(1..(table.row_length - 1)).style do |r|
           r.border_color = 'cccccc'
         end
-        table.row(0).style background_color: '444444', text_color: 'ffffff'
+        table.row(0).style text_color: '444444', size: 10, font_style: :bold
+        table.row(1).style background_color: '444444', text_color: 'ffffff'
         table.column(1).style { |c| c.width = 60 } # Asset#
         table.column(2).style { |c| c.width = 40 } # Floor
         table.column(3).style { |c| c.width = 70 } # Location

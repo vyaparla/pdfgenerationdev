@@ -2,6 +2,12 @@ module FirestopSurveyReport
   class PhotoPage
   	include Report::PhotoPageWritable
 
+    def initialize(record, group_name, facility_name)
+      @record = record
+      @group_name = group_name
+      @facility_name = facility_name
+    end
+
     # def write(pdf)
     #   super
     #   pdf.indent(250) do
@@ -33,7 +39,7 @@ module FirestopSurveyReport
     # end
     
     def write(pdf)
-      super
+      super      
       pdf.indent(250) do
         draw_date(pdf)
         draw_assets(pdf)
@@ -48,13 +54,13 @@ module FirestopSurveyReport
           draw_suggested_corrective_action(pdf)
         end
       end
-
+            
       if @record.u_service_type != "Fixed On Site"
         draw_before_image(pdf) 
       else
         draw_before_image(pdf)
         draw_after_image(pdf)
-      end
+      end      
     end
 
   private
@@ -119,15 +125,15 @@ module FirestopSurveyReport
     #   #pdf.text("<b>Penetration Number :</b> #{@record.u_tag}", inline_format: true)
     # end
 
-    def draw_before_image(pdf)
-      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [15 - pdf.bounds.absolute_left, 536])
-      image = @record.pdf_image1.path(:pdf)      
+    def draw_before_image(pdf)      
+      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [15 - pdf.bounds.absolute_left, 521])#536
+      image = @record.pdf_image1.path(:pdf)
       unless image.blank?
-        pdf.image(image, at: [30 - pdf.bounds.absolute_left, 521], fit: [225, 225])
+        pdf.image(image, at: [30 - pdf.bounds.absolute_left, 506], fit: [225, 225])#521
       else
-        pdf.draw_text('Photo Unavailable', style: :bold, size:  11,  at: [90 - pdf.bounds.absolute_left, 404])
+        pdf.draw_text('Photo Unavailable', style: :bold, size:  11,  at: [90 - pdf.bounds.absolute_left, 389])#404
       end
-      pdf.draw_text("Before Installation",  at: [30 - pdf.bounds.absolute_left, 280])
+      pdf.draw_text("Before Installation",  at: [30 - pdf.bounds.absolute_left, 265])#280
 
 
       # pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at:  [35, 530], fit: [123, 123])

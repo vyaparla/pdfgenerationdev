@@ -50,7 +50,8 @@ gem 'puma'
 gem "responders"
 gem 'gruff', '~> 0.5.1'
 gem 'will_paginate'
-gem 'paperclip', '~> 4.2.2'
+#gem 'paperclip', '~> 4.2.2'
+gem 'paperclip', '~> 5.2', '>= 5.2.1'
 
 group :development do
   gem 'awesome_print'
@@ -83,3 +84,4 @@ gem 'devise'
 gem 'rest-client', '~> 1.8'
 gem 'capistrano-rails-console', require: false
 gem 'nokogiri', '~> 1.8', '>= 1.8.1'
+gem 'htmlentities', '~> 4.3', '>= 4.3.4'

@@ -1,9 +1,11 @@
 module Report
   module SectionWritable
-  	def initialize(job, building, tech)
+  	def initialize(job, building, tech, group_name, facility_name)
       @job = job
       @building = building
       @tech = tech
+      @group_name = group_name
+      @facility_name = facility_name
       #Rails.logger.debug("Section Writable JOb : #{@job.inspect}")
       #Rails.logger.debug("Section Writable Building : #{@building.inspect}")
     end

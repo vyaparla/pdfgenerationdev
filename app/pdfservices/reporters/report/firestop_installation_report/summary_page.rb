@@ -21,7 +21,8 @@ module FirestopInstallationReport
       pdf.font "Helvetica"
       #pdf.font_size 40
       pdf.font_size 30
-      pdf.fill_color "c6171e"
+      #pdf.fill_color "c6171e"
+      pdf.fill_color "ED1C24"
       pdf.text("Project Summary", :align => :center)
     end
 
@@ -30,7 +31,8 @@ module FirestopInstallationReport
       pdf.font "Helvetica"
       #pdf.font_size 25
       pdf.font_size 20
-      pdf.fill_color "c6171e"
+      #pdf.fill_color "c6171e"
+      pdf.fill_color "ED1C24"
       pdf.text("Statistics", :align => :center)
     end
 

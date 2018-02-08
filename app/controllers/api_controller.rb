@@ -1,26 +1,5 @@
 class ApiController < ApplicationController
   
-  # def save_pdf
-  #   if params[:status] == "insert"
-  #     @pdfjob = Pdfjob.new(pdfjob_params)
-  # 	  @pdfjob.save
-  # 	  render json: {message: "Save Success"}
-  #   else
-  #     if params[:status] == "update"
-  #     	@pdfjob = Pdfjob.find_by(sys_id: params[:sys_id])
-  #     	if @pdfjob.update(pdfjob_params)
-  #     	  render json: {message: "Update Success"}
-  #     	else
-  #     	  render json: {message: "Unable to Update the record!"}
-  #       end
-  #     else
-  #     	@pdfjob = Pdfjob.find_by(sys_id: params[:sys_id])
-  #     	@pdfjob.destroy
-  #     	render json: {message: "Delete Success"}
-  #     end
-  #   end
-  # end
-
   def save_pdf
     if params[:status] == "insert"
       @pdfjob = Lsspdfasset.new(lssassets_job)
@@ -61,6 +40,46 @@ class ApiController < ApplicationController
       # @pdfjob.u_job_start_date =  Time.now.utc
       # @pdfjob.u_job_end_date =  Time.now.utc
       # @pdfjob.u_inspected_on =  Time.now.utc
+      
+      #General Fields
+      @pdfjob.u_group_name = HTMLEntities.new.decode params[:u_group_name]
+      @pdfjob.u_facility_name = HTMLEntities.new.decode params[:u_facility_name]
+      @pdfjob.u_building = HTMLEntities.new.decode params[:u_building]
+      @pdfjob.u_location_desc = HTMLEntities.new.decode params[:u_location_desc]
+      
+      #Damper Inspection Fields
+      @pdfjob.u_reason = HTMLEntities.new.decode params[:u_reason]
+      @pdfjob.u_other_failure_reason = HTMLEntities.new.decode params[:u_other_failure_reason]
+      @pdfjob.u_di_replace_damper = HTMLEntities.new.decode params[:u_di_replace_damper]
+      @pdfjob.u_non_accessible_reasons = HTMLEntities.new.decode params[:u_non_accessible_reasons]
+      @pdfjob.u_other_nonaccessible_reason = HTMLEntities.new.decode params[:u_other_nonaccessible_reason]
+      @pdfjob.u_di_replace_damper = HTMLEntities.new.decode params[:u_di_replace_damper]
+      @pdfjob.u_di_installed_access_door = HTMLEntities.new.decode params[:u_di_installed_access_door]
+      
+      #Damper Repair Fields
+      @pdfjob.u_repair_action_performed = HTMLEntities.new.decode params[:u_repair_action_performed]
+      @pdfjob.u_dr_passed_post_repair = HTMLEntities.new.decode params[:u_dr_passed_post_repair]
+      @pdfjob.u_dr_description = HTMLEntities.new.decode params[:u_dr_description]
+      @pdfjob.u_dr_damper_model = HTMLEntities.new.decode params[:u_dr_damper_model]
+      @pdfjob.u_dr_installed_damper_type = HTMLEntities.new.decode params[:u_dr_installed_damper_type]
+      @pdfjob.u_dr_installed_damper_width = HTMLEntities.new.decode params[:u_dr_installed_damper_width]
+      @pdfjob.u_dr_installed_damper_height = HTMLEntities.new.decode params[:u_dr_installed_damper_height]
+      @pdfjob.u_dr_installed_actuator_model = HTMLEntities.new.decode params[:u_dr_installed_actuator_model]
+      @pdfjob.u_dr_installed_actuator_type = HTMLEntities.new.decode params[:u_dr_installed_actuator_type]
+      @pdfjob.u_dr_actuator_voltage = HTMLEntities.new.decode params[:u_dr_actuator_voltage]
+      @pdfjob.u_di_installed_access_door = HTMLEntities.new.decode params[:u_di_installed_access_door]
+
+      #Firedoor Inspection Fields
+      @pdfjob.u_door_category = HTMLEntities.new.decode params[:u_door_category]
+      @pdfjob.u_fire_rating = HTMLEntities.new.decode params[:u_fire_rating]
+      @pdfjob.u_door_type = HTMLEntities.new.decode params[:u_door_type]
+      
+      #Firestop Survey and Installation Fields
+      @pdfjob.u_issue_type = HTMLEntities.new.decode params[:u_issue_type]
+      @pdfjob.u_barrier_type = HTMLEntities.new.decode params[:u_barrier_type]
+      @pdfjob.u_penetration_type = HTMLEntities.new.decode params[:u_penetration_type]
+      @pdfjob.u_corrected_url_system = HTMLEntities.new.decode params[:u_corrected_url_system]
+      @pdfjob.u_suggested_ul_system = HTMLEntities.new.decode params[:u_suggested_ul_system]
 
       @pdfjob.save
 
@@ -109,86 +128,6 @@ class ApiController < ApplicationController
         else
           render json: {message: "Unable to Update the record!"}
         end
-
-        # unless @pdfjob.blank?
-
-        #   if @pdfjob.update(lssassets_job)
-        #     unless @pdfjob.u_image1.blank?
-        #       @pdf_image1 = StringIO.open(Base64.decode64(@pdfjob.u_image1))
-        #       @pdf_image1.class.class_eval { attr_accessor :original_filename, :content_type }
-        #       @pdf_image1.original_filename = "#{params[:image_file_name1]}.jpg"
-        #       @pdf_image1.content_type = "image/jpeg"
-        #       @pdfjob.update_attribute(:pdf_image1, @pdf_image1)
-        #     end
-
-        #     unless @pdfjob.u_image2.blank?
-        #       @pdf_image2 = StringIO.open(Base64.decode64(@pdfjob.u_image2))
-        #       @pdf_image2.class.class_eval { attr_accessor :original_filename, :content_type }
-        #       @pdf_image2.original_filename = "#{params[:image_file_name2]}.jpg"
-        #       @pdf_image2.content_type = "image/jpeg"
-        #       @pdfjob.update_attribute(:pdf_image2, @pdf_image2)
-        #     end
-      
-        #     unless @pdfjob.u_image3.blank?
-        #       @pdf_image3 = StringIO.open(Base64.decode64(@pdfjob.u_image3))
-        #       @pdf_image3.class.class_eval { attr_accessor :original_filename, :content_type }
-        #       @pdf_image3.original_filename = "#{params[:image_file_name3]}.jpg"
-        #       @pdf_image3.content_type = "image/jpeg"
-        #       @pdfjob.update_attribute(:pdf_image3, @pdf_image3)
-        #     end
-
-        #     unless @pdfjob.u_image4.blank?
-        #       @pdf_image4 = StringIO.open(Base64.decode64(@pdfjob.u_image4))
-        #       @pdf_image4.class.class_eval { attr_accessor :original_filename, :content_type }
-        #       @pdf_image4.original_filename = "#{params[:image_file_name4]}.jpg"
-        #       @pdf_image4.content_type = "image/jpeg"
-        #       @pdfjob.update_attribute(:pdf_image4, @pdf_image4)
-        #     end
-        #     render json: {message: "Update Success"}
-        #   else
-        #     render json: {message: "Unable to Update the record!"}
-        #   end
-
-        # else
-          
-        #   @pdfjob = Lsspdfasset.new(lssassets_job)
-        #   @pdfjob.save
-      
-        #   unless @pdfjob.u_image1.blank?
-        #     @pdf_image1 = StringIO.open(Base64.decode64(@pdfjob.u_image1))
-        #     @pdf_image1.class.class_eval { attr_accessor :original_filename, :content_type }
-        #     @pdf_image1.original_filename = "#{params[:image_file_name1]}.jpg"
-        #     @pdf_image1.content_type = "image/jpeg"
-        #     @pdfjob.pdf_image1 = @pdf_image1
-        #   end
-
-        #   unless @pdfjob.u_image2.blank?
-        #     @pdf_image2 = StringIO.open(Base64.decode64(@pdfjob.u_image2))
-        #     @pdf_image2.class.class_eval { attr_accessor :original_filename, :content_type }
-        #     @pdf_image2.original_filename = "#{params[:image_file_name2]}.jpg"
-        #     @pdf_image2.content_type = "image/jpeg"
-        #     @pdfjob.pdf_image2 = @pdf_image2
-        #   end
-      
-        #   unless @pdfjob.u_image3.blank?
-        #     @pdf_image3 = StringIO.open(Base64.decode64(@pdfjob.u_image3))
-        #     @pdf_image3.class.class_eval { attr_accessor :original_filename, :content_type }
-        #     @pdf_image3.original_filename = "#{params[:image_file_name3]}.jpg"
-        #     @pdf_image3.content_type = "image/jpeg"
-        #     @pdfjob.pdf_image3 = @pdf_image3
-        #   end
-
-        #   unless @pdfjob.u_image4.blank?
-        #     @pdf_image4 = StringIO.open(Base64.decode64(@pdfjob.u_image4))
-        #     @pdf_image4.class.class_eval { attr_accessor :original_filename, :content_type }
-        #     @pdf_image4.original_filename = "#{params[:image_file_name4]}.jpg"
-        #     @pdf_image4.content_type = "image/jpeg"
-        #     @pdfjob.pdf_image4 = @pdf_image4
-        #   end
-      
-        #   @pdfjob.save
-        #   render json: {message: "Save Success"}
-        # end
       else
         @pdfjob = Lsspdfasset.find_by(u_asset_id: params[:u_asset_id])
         @pdfjob.destroy
@@ -196,15 +135,6 @@ class ApiController < ApplicationController
       end
     end
   end
-
-  # def update_pdf
-  # 	@pdfjob = Pdfjob.find(params[:sys_id])
-  # 	if @pdfjob.update(pdfjob_params)
-  # 	  render json: {message: "Success"}
-  #   else
-  #     render json: {message: "Unable to Update the record!"}
-  #   end
-  # end
 
   def pdf_generation
     # @group_name    = params[:groupname]
@@ -219,11 +149,13 @@ class ApiController < ApplicationController
     @csz           = params[:csz]
     @facility_type = params[:facilitytype]
     @tech          = params[:tech]
+    @group_name    = HTMLEntities.new.decode params[:groupname]
+    @facility_name = HTMLEntities.new.decode params[:facilityname]
   
-  	@pdfjob = Lsspdfasset.where(u_service_id: params[:serviceID], :u_delete => false).first
+  	@pdfjob = Lsspdfasset.where(u_service_id: params[:serviceID], :u_delete => false).last
     unless @pdfjob.blank?
       #ReportGeneration.new(@pdfjob, @group_name, @facility_name, @group_url, @facility_url).generate_full_report
-      ReportGeneration.new(@pdfjob, @model_name, @address1, @address2, @csz, @facility_type, @tech).generate_full_report
+      ReportGeneration.new(@pdfjob, @model_name, @address1, @address2, @csz, @facility_type, @tech, @group_name, @facility_name).generate_full_report
   	  render json: {message: "Success"}
     else
       render json: {message: "Unsuccess"}
@@ -231,17 +163,9 @@ class ApiController < ApplicationController
   end
 
   def download_full_pdf_report
-    @pdfjob = Lsspdfasset.where(u_service_id: params[:serviceID], :u_delete => false).first
+    @pdfjob = Lsspdfasset.where(u_service_id: params[:serviceID], :u_delete => false).last
     @outputfile = @pdfjob.u_job_id + "_" + params[:servicetype] + "_" + Time.now.strftime("%m-%d-%Y-%r").gsub(/\s+/, "_") + "_" + "detail_report"
-    send_file @pdfjob.full_report_path, :type => 'application/pdf', :disposition =>  "attachment; filename=\"#{@outputfile}.pdf\""
-    
-    # @pdfjob = Lsspdfasset.where(u_service_id: params[:serviceID], :u_delete => false).first
-    # if @pdfjob.has_full_report?
-    #   @outputfile = @pdfjob.u_job_id + "_" + Time.now.strftime("%m-%d-%Y-%r").gsub(/\s+/, "_") + "_" + "full_report"
-    #   send_file @pdfjob.full_report_path, :type => 'application/pdf', :disposition =>  "attachment; filename=\"#{@outputfile}.pdf\""
-    # else
-    #   render json: {message: "The PDF yet not generated to download the full pdf report"}
-    # end
+    send_file @pdfjob.full_report_path, :type => 'application/pdf', :disposition =>  "attachment; filename=\"#{@outputfile}.pdf\""    
   end
 
   def summary_report
@@ -262,8 +186,8 @@ class ApiController < ApplicationController
       @firedoor_deficiency.firedoor_service_sysid                  = params[:firedoor_service_sysid]
       @firedoor_deficiency.firedoor_asset_sysid                    = params[:firedoor_asset_sysid]
       @firedoor_deficiency.firedoor_deficiencies_sysid             = params[:firedoor_deficiencies_sysid]
-      @firedoor_deficiency.firedoor_deficiencies_code              = params[:firedoor_deficiencies_code]
-      @firedoor_deficiency.firedoor_deficiencies_codename          = params[:firedoor_deficiencies_codename]
+      @firedoor_deficiency.firedoor_deficiencies_code              = HTMLEntities.new.decode params[:firedoor_deficiencies_code]
+      @firedoor_deficiency.firedoor_deficiencies_codename          = HTMLEntities.new.decode params[:firedoor_deficiencies_codename]
       @firedoor_deficiency.firedoor_u_active                       = params[:firedoor_u_active]
       @firedoor_deficiency.firedoor_u_delete                       = params[:firedoor_u_delete]
 
@@ -424,6 +348,12 @@ class ApiController < ApplicationController
       # @project_completion.m_date               =  Time.now.utc
       # @project_completion.m_project_start_date =  Time.now.utc
 
+      @project_completion.m_facility = HTMLEntities.new.decode params[:m_facility]      
+      @project_completion.m_building = HTMLEntities.new.decode params[:m_building]
+      @project_completion.m_servicetype = HTMLEntities.new.decode params[:m_servicetype]
+      @project_completion.m_primary_contact_name = HTMLEntities.new.decode params[:m_primary_contact_name]
+      @project_completion.m_customer_name = HTMLEntities.new.decode params[:m_customer_name]
+
       @project_completion.save
       render json: {message: "Save Success"}
 
@@ -466,10 +396,6 @@ class ApiController < ApplicationController
   end
 
   private
-
-  # def pdfjob_params
-  #   params.require(:api).permit(:sys_id, :u_job_id, :u_pdf_number, :u_openimage_base64code, :u_close_image_base64code)
-  # end
 
   def lssassets_job
     params.require(:api).permit(:u_job_id, :u_asset_id, :u_service_id, :u_location_desc, :u_status, :u_type, :u_floor,
