@@ -103,7 +103,7 @@ module FirestopSurveyReport
 
     def draw_penetration_type(pdf)
       pdf.font_size 12
-      pdf.text("<b>Penetration Type :</b> #{@record.u_barrier_type}", inline_format: true)
+      pdf.text("<b>Penetration Type :</b> #{@record.u_penetration_type}", inline_format: true)
       pdf.move_down 10
     end
 
