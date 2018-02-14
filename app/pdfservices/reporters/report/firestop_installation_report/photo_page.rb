@@ -75,10 +75,16 @@ module FirestopInstallationReport
       pdf.move_down 10
     end
 
-    def draw_floor(pdf)
-      pdf.font_size 12
-      pdf.text("<b>Floor :</b> #{@record.u_floor}", inline_format: true)
-      pdf.move_down 10
+    def draw_floor(pdf)      
+      if @record.u_floor == "Other"
+        pdf.font_size 12
+        pdf.text("<b>Floor :</b> #{@record.u_other_floor}", inline_format: true)
+        pdf.move_down 10
+      else
+        pdf.font_size 12
+        pdf.text("<b>Floor :</b> #{@record.u_floor}", inline_format: true)
+        pdf.move_down 10
+      end
     end
 
     def draw_location_description(pdf)

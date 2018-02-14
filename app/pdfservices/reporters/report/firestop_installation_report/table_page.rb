@@ -24,11 +24,16 @@ module FirestopInstallationReport
       @survey_only << survey_only
    
       records.each do |record|
+        if record.u_floor == "Other"
+          @floor = record.u_other_floor
+        else
+          @floor = record.u_floor
+        end
         if record.u_service_type == "Fixed On Site"
-          @fixed_on_site << [record.u_inspected_on.localtime.strftime('%m/%d/%Y'), record.u_tag, record.u_floor.to_i, record.u_location_desc,
+          @fixed_on_site << [record.u_inspected_on.localtime.strftime('%m/%d/%Y'), record.u_tag, @floor, record.u_location_desc,
                             record.u_issue_type, record.u_barrier_type, record.u_penetration_type, record.u_corrected_url_system]
         else
-          @survey_only << [record.u_inspected_on.localtime.strftime('%m/%d/%Y'), record.u_tag, record.u_floor.to_i, record.u_location_desc,
+          @survey_only << [record.u_inspected_on.localtime.strftime('%m/%d/%Y'), record.u_tag, @floor, record.u_location_desc,
                            record.u_issue_type, record.u_barrier_type, record.u_penetration_type, record.u_suggested_ul_system]
         end
       end

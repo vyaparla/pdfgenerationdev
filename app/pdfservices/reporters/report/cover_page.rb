@@ -75,14 +75,18 @@ module Report
       #pdf.fill_color 'c6171e'
       pdf.fill_color 'ED1C24'
       pdf.text("<b>#{@owner.u_facility_name}</b>", :inline_format => true)
-      pdf.move_down 5
-      pdf.text("<b>#{@address1}</b>", :inline_format => true)
+      unless @address1.blank?
+        pdf.move_down 5
+        pdf.text("<b>#{@address1}</b>", :inline_format => true)
+      end
       unless @address2.blank?
         pdf.move_down 5
         pdf.text("<b>#{@address2}</b>", :inline_format => true)
       end
       pdf.move_down 5
-      pdf.text("<b>#{@csz[0]}, #{@csz[1]} #{@csz[2]}</b>", :inline_format => true)
+      unless @csz.blank?
+        pdf.text("<b>#{@csz[0]}, #{@csz[1]} #{@csz[2]}</b>", :inline_format => true)
+      end
       # unless @address.blank?
       #   pdf.text("<b><i>#{@address[0]}, #{@address[1]}, #{@address[2]}</i></b>", :inline_format => true)
       #   pdf.text("<b><i>#{@address[3]}, #{@address[4]}</i></b>", :inline_format => true)
