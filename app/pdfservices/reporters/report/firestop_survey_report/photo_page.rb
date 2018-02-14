@@ -78,7 +78,7 @@ module FirestopSurveyReport
     end
 
     def draw_floor(pdf)
-      if @record.u_floor == "Other"
+      if @record.u_floor == "other"
         pdf.font_size 12
         pdf.text("<b>Floor :</b> #{@record.u_other_floor}", inline_format: true)
         pdf.move_down 10

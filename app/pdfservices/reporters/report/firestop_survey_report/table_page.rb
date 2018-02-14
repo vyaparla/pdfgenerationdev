@@ -20,7 +20,7 @@ module FirestopSurveyReport
       @survey_only << survey_only
 
       @records.each do |record|
-        if record.u_floor == "Other"
+        if record.u_floor == "other"
           @floor = record.u_other_floor
         else
           @floor = record.u_floor
