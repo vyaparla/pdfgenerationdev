@@ -3,17 +3,17 @@
 
 #lock "3.8.2"
 
-set :application, "pdfgenerationdev"
+set :application, "pdfgenerationpro"
 set :repo_url, 'git@github.com:vyaparla/pdfgenerationdev.git' # Edit this to match your repository
 set :branch, :master
-set :deploy_to, '/home/deploy/pdfgenerationdev'
+set :deploy_to, '/home/deploy/pdfgenerationpro'
 set :pty, true
 set :linked_files, %w{config/database.yml config/application.yml}
 set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/content}
 set :keep_releases, 5
 set :rvm_type, :user
 set :rvm_ruby_version, '2.2.2' # Edit this if you are using MRI Ruby
-set :stage, :production
+#set :stage, :production
 
 set :puma_rackup, -> { File.join(current_path, 'config.ru') }
 #set :puma_bind,  "unix:///#{shared_path}/tmp/sockets/#{fetch(:application)}-puma.sock"
@@ -31,6 +31,7 @@ set :puma_worker_timeout, nil
 set :puma_init_active_record, true
 set :puma_preload_app, true
 set :assets_roles, [:web, :app]
+set :console_env, :production
 
 after "deploy:restart", "deploy:cleanup"
 

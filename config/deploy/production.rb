@@ -1,5 +1,7 @@
-server '35.167.247.200', user: 'deploy', roles: %w{web app db}
-
+#server '35.167.247.200', user: 'deploy', roles: %w{web app db}
+server '35.172.153.162', user: 'deploy', roles: %w{web app db}
+set :stage, :production
+set :rails_env, :production
 
 # server-based syntax
 # ======================
