@@ -24,7 +24,7 @@ set :puma_conf, "#{shared_path}/puma.rb"
 set :puma_access_log, "#{shared_path}/log/puma_error.log"
 set :puma_error_log, "#{shared_path}/log/puma_access.log"
 set :puma_role, :app
-set :puma_env, fetch(:rack_env, fetch(:rails_env, 'development'))
+set :puma_env, fetch(:rack_env, fetch(:rails_env, 'production'))
 set :puma_threads, [4, 8]
 set :puma_workers, 2
 set :puma_worker_timeout, nil
@@ -32,7 +32,7 @@ set :puma_init_active_record, true
 set :puma_preload_app, true
 set :assets_roles, [:web, :app]
 
-set :console_env, :development
+set :console_env, :production
 
 after "deploy:restart", "deploy:cleanup"
 
