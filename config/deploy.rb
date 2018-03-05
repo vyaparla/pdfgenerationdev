@@ -13,7 +13,7 @@ set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public
 set :keep_releases, 5
 set :rvm_type, :user
 set :rvm_ruby_version, '2.2.2' # Edit this if you are using MRI Ruby
-set :stage, ["staging", "production"]
+#set :stage, ["staging", "production"]
 
 set :puma_rackup, -> { File.join(current_path, 'config.ru') }
 #set :puma_bind,  "unix:///#{shared_path}/tmp/sockets/#{fetch(:application)}-puma.sock"
