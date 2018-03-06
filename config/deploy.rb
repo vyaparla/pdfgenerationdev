@@ -3,10 +3,10 @@
 
 #lock "3.8.2"
 
-set :application, "pdfgenerationpro"
+set :application, "pdfgenerationprod"
 set :repo_url, 'git@github.com:vyaparla/pdfgenerationdev.git' # Edit this to match your repository
 set :branch, :master
-set :deploy_to, '/home/deploy/pdfgenerationpro'
+set :deploy_to, '/home/deploy/pdfgenerationprod'
 set :pty, true
 set :linked_files, %w{config/database.yml config/application.yml}
 set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/content}
