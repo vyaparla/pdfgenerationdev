@@ -405,9 +405,9 @@ class ApiController < ApplicationController
       url =  @project_completion.m_instance_url + '/api/x_68827_lss/project_completion_pdfreport_mobile'
       #Rails.logger.debug("URL: #{url}")
       request_body_map = {
-        "sys_id" => "#{@project_completion.m_service_sysid}",
-        "pdf_url" => "ec2-54-165-215-71.compute-1.amazonaws.com/api/download_project_completion_pdf_report?service_sysid=#{@project_completion.m_service_sysid}",
-      }.to_json
+        "sys_id" => "#{@project_completion.m_service_sysid}", 
+        "pdf_url" => "ec2-35-172-153-162.compute-1.amazonaws.com/api/download_project_completion_pdf_report?service_sysid=#{@project_completion.m_service_sysid}",
+      }.to_json 
       
       begin
         response = RestClient.post("#{url}", "#{request_body_map}",
