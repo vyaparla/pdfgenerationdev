@@ -69,7 +69,7 @@ module DamperRepairReport
         pdf.fill_color 'f39d27'
       end
       #pdf.text("<b>Status : </b> #{@record.u_dr_passed_post_repair}", inline_format: true)
-      pdf.text("<b>Post Repair Status : </b> #{@post_status}"), inline_format: true)
+      pdf.text("<b>Post Repair Status : </b> #{@post_status}", inline_format: true)
       pdf.fill_color '202020'
     end
 
