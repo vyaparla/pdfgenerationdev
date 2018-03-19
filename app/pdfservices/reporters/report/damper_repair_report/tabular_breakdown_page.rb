@@ -47,12 +47,13 @@ module DamperRepairReport
            DamperRepairReporting.column_heading(column)
       end] +
       @records.map do |record|
+        if record.u_dr_passed_post_repair == "Pass"
+          @post_status = "Passed Post Repair"
+        else
+          @post_status = "Failed Post Repair" 
+        end
+        
       	if record.u_repair_action_performed == "Damper Repaired"
-          if record.u_dr_passed_post_repair == "Pass"
-            @post_status = "Passed Post Repair"
-          else
-            @post_status = "Failed Post Repair" 
-          end 
       	  data = {
       	    :date => record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')),
       	    :damper_number     => record.u_tag,
