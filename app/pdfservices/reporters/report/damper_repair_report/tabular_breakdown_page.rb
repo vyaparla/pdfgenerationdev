@@ -48,12 +48,17 @@ module DamperRepairReport
       end] +
       @records.map do |record|
       	if record.u_repair_action_performed == "Damper Repaired"
+          if record.u_dr_passed_post_repair == "Pass"
+            @post_status = "Passed Post Repair"
+          else
+            @post_status = "Failed Post Repair" 
+          end 
       	  data = {
       	    :date => record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')),
       	    :damper_number     => record.u_tag,
             :floor             => record.u_floor.to_i,
       	    :damper_location   => record.u_location_desc,
-            :status            => record.u_dr_passed_post_repair,
+            :status            => @post_status,
             :corrective_action => record.u_dr_description
       	  }
       	  attributes.map { |column, | data[column] }
@@ -63,7 +68,7 @@ module DamperRepairReport
       	    :damper_number     => record.u_tag,
             :floor             => record.u_floor.to_i,
       	    :damper_location   => record.u_location_desc,
-            :status            => record.u_dr_passed_post_repair,
+            :status            => @post_status,
             :corrective_action => record.u_repair_action_performed
       	  }
       	  attributes.map { |column, | data[column] }

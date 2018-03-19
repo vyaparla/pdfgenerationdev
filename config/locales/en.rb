@@ -262,7 +262,8 @@
           #damper_number: 'Damper Number',
           damper_number: 'Asset #',
           damper_location: 'Damper Location',
-          status: 'Status',
+          #status: 'Status',
+          status: 'Post Repair Status',
           reason: 'Reason',
           corrective_action: 'Corrective Action',
           floor: 'Floor'
