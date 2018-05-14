@@ -53,13 +53,15 @@ module DamperInspectionReport
           draw_damper_tag(pdf)
           draw_damper_type(pdf)
           draw_floor(pdf)
-          draw_access_door_installation(pdf) #unless @record.u_access_size.blank?
+          #draw_access_door_installation(pdf) #unless @record.u_access_size.blank?
           draw_status(pdf)
           if @record.u_status == "Fail"
+            draw_access_door_installation(pdf)
             draw_failure_reasons(pdf)             
           end
 
           if @record.u_status == "NA"
+            draw_access_door_installation(pdf)
             draw_na_reasons(pdf)
           end
         end

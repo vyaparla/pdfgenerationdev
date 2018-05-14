@@ -5,8 +5,10 @@ source 'https://rubygems.org'
 gem 'rails', '4.2.7.1'
 # Use postgresql as the database for Active Record
 #gem 'pg', '~> 0.15'
-gem 'mysql2'
+#gem 'mysql2'
 # Use SCSS for stylesheets
+gem 'mysql2', '~> 0.4.0'
+
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
@@ -83,5 +85,7 @@ gem 'autoprefixer-rails'
 gem 'devise'
 gem 'rest-client', '~> 1.8'
 gem 'capistrano-rails-console', require: false
-gem 'nokogiri', '~> 1.8', '>= 1.8.1'
+gem 'nokogiri', '~> 1.8', '>= 1.8.2'
 gem 'htmlentities', '~> 4.3', '>= 4.3.4'
+gem 'loofah', '~> 2.2', '>= 2.2.1'
+gem 'rails-html-sanitizer', '~> 1.0', '>= 1.0.4'

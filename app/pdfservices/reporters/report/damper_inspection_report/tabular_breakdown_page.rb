@@ -108,8 +108,8 @@ module DamperInspectionReport
             :damper_type       => record.u_damper_name,
             :current_status    => record.u_status,
             :deficiency        => record.u_reason,
-            :corrective_action => record.u_di_replace_damper
-            #:installed_access_door    => @di_installedaccess_door
+            :corrective_action => record.u_di_replace_damper,
+            :installed_access_door    => @di_installedaccess_door
 
             #:service_type      => "Inspection",
             # :inspection_result => record.u_status,

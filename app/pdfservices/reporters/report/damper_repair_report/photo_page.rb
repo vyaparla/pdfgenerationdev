@@ -22,10 +22,16 @@ module DamperRepairReport
         draw_status(pdf)
         draw_repairs(pdf)
       end
-      draw_open_after_install_image(pdf)
-      draw_closed_after_install_image(pdf)
-      draw_reopened_after_install_image(pdf)
-      draw_new_install_image(pdf)
+      if @record.u_repair_action_performed == "Damper Repaired"
+        draw_open_after_install_image(pdf)
+        draw_closed_after_install_image(pdf)
+        draw_reopened_after_install_image(pdf)
+      else
+        draw_open_after_install_image(pdf)
+        draw_closed_after_install_image(pdf)
+        draw_reopened_after_install_image(pdf)
+        draw_new_install_image(pdf)
+      end
     end
 
   private
