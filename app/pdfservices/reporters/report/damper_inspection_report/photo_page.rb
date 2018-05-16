@@ -56,8 +56,8 @@ module DamperInspectionReport
           #draw_access_door_installation(pdf) #unless @record.u_access_size.blank?
           draw_status(pdf)
           if @record.u_status == "Fail"
-            draw_access_door_installation(pdf)
-            draw_failure_reasons(pdf)             
+            #draw_access_door_installation(pdf)
+            draw_failure_reasons(pdf)
           end
 
           if @record.u_status == "NA"
