@@ -1,6 +1,6 @@
 module FirestopSurveyReport
   class TablePage
-  	include DataPageWritable
+    include DataPageWritable
 
     def initialize(records, building_section, tech)
       @records = records
