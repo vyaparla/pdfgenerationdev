@@ -22,7 +22,7 @@ module DRProjectCompletionReport
       if array.length >= 5
         pdf.font_size 12
         #pdf.text_box("Total # of Dampers Repair:", :at => [10, 365], :style => :bold)
-        pdf.text_box(":Total Assets this Service", :at => [10, 365], :style => :bold)
+        pdf.text_box("Total Assets this Service:", :at => [10, 365], :style => :bold)
         pdf.font_size 10
         pdf.text_box("#{@project.m_total_no_of_dampers_repaired}", :at => [315, 365])
       elsif array.length == 3
