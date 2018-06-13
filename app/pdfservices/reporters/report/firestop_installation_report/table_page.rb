@@ -10,18 +10,18 @@ module FirestopInstallationReport
 
     def write(pdf)
       return if records.empty?
-      super
+      #super
       @fixed_on_site = []
-      fixed_on_site_heading = [{:content => 'Fixed On Site = YES', :colspan => 540}]
-      @fixed_on_site << fixed_on_site_heading
-      fixed_on_site = ['Date', 'Asset #', 'Floor', 'Location', 'Issue', "Barrier Type", 'Penetration Type', "Corrective Action"]
-      @fixed_on_site << fixed_on_site
+      #fixed_on_site_heading = [{:content => 'Fixed On Site = YES', :colspan => 540}]
+      #@fixed_on_site << fixed_on_site_heading
+      #fixed_on_site = ['Date', 'Asset #', 'Floor', 'Location', 'Issue', "Barrier Type", 'Penetration Type', "Corrective Action"]
+      #@fixed_on_site << fixed_on_site
 
       @survey_only = []
-      survey_only_heading = [{:content => 'Fixed On Site = NO', :colspan => 540}]
-      @survey_only << survey_only_heading
-      survey_only  = ['Date', 'Asset #', 'Floor', 'Location', 'Issue', "Barrier Type", 'Penetration Type', "Suggested Corrective Action"]
-      @survey_only << survey_only
+      #survey_only_heading = [{:content => 'Fixed On Site = NO', :colspan => 540}]
+      #@survey_only << survey_only_heading
+      #survey_only  = ['Date', 'Asset #', 'Floor', 'Location', 'Issue', "Barrier Type", 'Penetration Type', "Suggested Corrective Action"]
+      #@survey_only << survey_only
    
       records.each do |record|
         if record.u_floor == "other"
@@ -37,15 +37,43 @@ module FirestopInstallationReport
                            record.u_issue_type, record.u_barrier_type, record.u_penetration_type, record.u_suggested_ul_system]
         end
       end
-      draw_fixed_on_site(pdf)
-      draw_survey_only(pdf)      
+      if !@fixed_on_site.blank?
+        @fixed_on_site_set = @fixed_on_site.each_slice(16).to_a
+        count = 0
+        @fixed_on_site_set.count.times do
+          super
+          draw_fixed_on_site(pdf, @fixed_on_site_set[count])
+          count = count + 1
+        end
+        if !@survey_only.blank?
+          @get_surevy_data = @fixed_on_site_set.last.count - 16
+          @get_surevy_data = @get_surevy_data.abs
+          draw_survey_only(pdf , @survey_only.first(@get_surevy_data - 3))
+        end
+      end
+
+      @new_survey_data = @survey_only.drop(@get_surevy_data - 3)
+      if !@new_survey_data.blank?
+        @survey_only_set = @new_survey_data.each_slice(15).to_a
+        count = 0
+        @survey_only_set.count.times do
+          super
+          draw_survey_only(pdf, @survey_only_set[count])
+          count = count + 1
+        end
+      end
+      
+      #draw_survey_only(pdf)
     end
  
   private
 
-    def draw_fixed_on_site(pdf)
+    def draw_fixed_on_site(pdf, data)
       #pdf.table([["Fixed On Site = YES"]], :cell_style => {:border_color => "888888", }, :width => 540)
-      pdf.table(@fixed_on_site, :column_widths => { 0 => 55 }, header: true, cell_style: { align: :center, size: 8 }) do |table|
+      @content = [{:content => 'Fixed On Site = YES', :colspan => 540}]
+      @header = ['Date', 'Asset #', 'Floor', 'Location', 'Issue', "Barrier Type", 'Penetration Type', "Corrective Action"]
+      #pdf.table(@fixed_on_site, :column_widths => { 0 => 55 }, header: true, cell_style: { align: :center, size: 8 }) do |table|
+      pdf.table([@content] + [@header] +  data, :column_widths => { 0 => 55 }, header: true, cell_style: { align: :center, size: 8 }) do |table|
         table.row_colors = ['ffffff', 'eaeaea']
         table.rows(0).style { |r| r.border_color = '888888' }
         table.rows(1..(table.row_length - 1)).style do |r|
@@ -73,9 +101,12 @@ module FirestopInstallationReport
       pdf.move_down 20
     end
 
-    def draw_survey_only(pdf)      
+    def draw_survey_only(pdf, data)
       #pdf.table([["Fixed On Site = NO"]], :cell_style => {:border_color => "888888"}, :width => 540)
-      pdf.table(@survey_only, :column_widths => { 0 => 55 }, header: true, cell_style: { align: :center, size: 8 }) do |table|
+      @content = [{:content => 'Fixed On Site = NO', :colspan => 540}]
+      @header =  ['Date', 'Asset #', 'Floor', 'Location', 'Issue', "Barrier Type", 'Penetration Type', "Suggested Corrective Action"]
+      #pdf.table(@survey_only, :column_widths => { 0 => 55 }, header: true, cell_style: { align: :center, size: 8 }) do |table|
+      pdf.table([@content] + [@header] + data, :column_widths => { 0 => 55 }, header: true, cell_style: { align: :center, size: 8 }) do |table|
         table.row_colors = ['ffffff', 'eaeaea']
         table.rows(0).style { |r| r.border_color = '888888' }
         table.rows(1..(table.row_length - 1)).style do |r|
@@ -99,7 +130,7 @@ module FirestopInstallationReport
         # table.column(7).style { |c| c.width = 60 } # Corrected On Site
         # table.column(8).style { |c| c.width = 80 } # Corrected with UL System
       end
-    end 
+    end
 
     def building
       @building
