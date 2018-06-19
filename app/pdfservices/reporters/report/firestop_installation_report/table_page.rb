@@ -37,24 +37,88 @@ module FirestopInstallationReport
                            record.u_issue_type, record.u_barrier_type, record.u_penetration_type, record.u_suggested_ul_system]
         end
       end
+
+      # if !@fixed_on_site.blank?
+      #   @fixed_on_site_set = @fixed_on_site.each_slice(16).to_a
+      #   count = 0
+      #   @fixed_on_site_set.count.times do
+      #     super
+      #     draw_fixed_on_site(pdf, @fixed_on_site_set[count])
+      #     count = count + 1
+      #   end
+      #   if !@survey_only.blank?
+      #     @get_surevy_data = @fixed_on_site_set.last.count - 16
+      #     @get_surevy_data = @get_surevy_data.abs
+      #     draw_survey_only(pdf , @survey_only.first(@get_surevy_data - 3))
+      #   end
+      # end
+
+      # @new_survey_data = @survey_only.drop(@get_surevy_data - 3)
+      # if !@new_survey_data.blank?
+      #   @survey_only_set = @new_survey_data.each_slice(15).to_a
+      #   count = 0
+      #   @survey_only_set.count.times do
+      #     super
+      #     draw_survey_only(pdf, @survey_only_set[count])
+      #     count = count + 1
+      #   end
+      # end
+
       if !@fixed_on_site.blank?
-        @fixed_on_site_set = @fixed_on_site.each_slice(16).to_a
-        count = 0
-        @fixed_on_site_set.count.times do
+        if @fixed_on_site.count <= 16 && (@fixed_on_site.count >= 13 || @fixed_on_site.count == 16)
           super
-          draw_fixed_on_site(pdf, @fixed_on_site_set[count])
-          count = count + 1
+          draw_fixed_on_site(pdf, @fixed_on_site)
+
+          if !@survey_only.blank?
+            @survey_only_set = @survey_only.each_slice(15).to_a
+            count = 0
+            @survey_only_set.count.times do
+              super
+              draw_survey_only(pdf, @survey_only_set[count])
+              count = count + 1
+            end
+          end
         end
-        if !@survey_only.blank?
-          @get_surevy_data = @fixed_on_site_set.last.count - 16
-          @get_surevy_data = @get_surevy_data.abs
-          draw_survey_only(pdf , @survey_only.first(@get_surevy_data - 3))
+
+        if @fixed_on_site.count > 16
+          #super
+          @fixed_on_site_set = @fixed_on_site.each_slice(16).to_a
+          p @fixed_on_site_set.last.count
+          @get_no_of_survey_data = (@fixed_on_site_set.last.count - 16).abs
+          count = 0
+          @fixed_on_site_set.count.times do
+            super
+            draw_fixed_on_site(pdf, @fixed_on_site_set[count])
+            count = count + 1
+          end
+        end
+
+        if @fixed_on_site.count <= 12
+          @get_no_of_survey_data = 16 - @fixed_on_site.count
+          super
+          draw_fixed_on_site(pdf, @fixed_on_site)
         end
       end
 
-      @new_survey_data = @survey_only.drop(@get_surevy_data - 3)
-      if !@new_survey_data.blank?
-        @survey_only_set = @new_survey_data.each_slice(15).to_a
+      if !@get_no_of_survey_data.blank? && !@survey_only.blank?
+        if (@get_no_of_survey_data == 0 || @get_no_of_survey_data < 5)
+          super
+          draw_survey_only(pdf, @survey_only.first(15))
+          @new_survey_only = @survey_only.drop(15)
+        else
+          @first_and_drop_survey_records = @get_no_of_survey_data > 3 ? @get_no_of_survey_data - 3 : 3 - @get_no_of_survey_data
+          @new_first_and_drop_survey_records = @first_and_drop_survey_records <= 15 ? 15 : @first_and_drop_survey_records
+          if @new_first_and_drop_survey_records <= 14
+            super
+          end
+          draw_survey_only(pdf, @survey_only.first(@first_and_drop_survey_records))
+          @new_survey_only = @survey_only.drop(@first_and_drop_survey_records)
+        end
+      end
+
+      if !@new_survey_only.blank?
+        #call_survey_data(pdf, @new_survey_only)
+        @survey_only_set = @new_survey_only.each_slice(15).to_a
         count = 0
         @survey_only_set.count.times do
           super
@@ -62,7 +126,17 @@ module FirestopInstallationReport
           count = count + 1
         end
       end
-      
+
+      if @fixed_on_site.blank? && !@survey_only.blank?
+        # call_survey_data(pdf, @survey_only)
+        @survey_only_set = @survey_only.each_slice(15).to_a
+        count = 0
+        @survey_only_set.count.times do
+          super
+          draw_survey_only(pdf, @survey_only_set[count])
+          count = count + 1
+        end
+      end      
       #draw_survey_only(pdf)
     end
  
