@@ -79,12 +79,12 @@ module FirestopSurveyReport
 
     def write(pdf)
       if !@fixed_on_site.blank?
-        if @fixed_on_site.count <= 16 && (@fixed_on_site.count >= 13 || @fixed_on_site.count == 16)
+        if @fixed_on_site.count <= 11 && (@fixed_on_site.count >= 10 || @fixed_on_site.count == 11)
           super
           draw_fixed_on_site(pdf, @fixed_on_site)
 
           if !@survey_only.blank?
-            @survey_only_set = @survey_only.each_slice(15).to_a
+            @survey_only_set = @survey_only.each_slice(11).to_a
             count = 0
             @survey_only_set.count.times do
               super
@@ -93,11 +93,11 @@ module FirestopSurveyReport
             end
           end
         end
-        if @fixed_on_site.count > 16
+        if @fixed_on_site.count > 11
           #super
-          @fixed_on_site_set = @fixed_on_site.each_slice(16).to_a
+          @fixed_on_site_set = @fixed_on_site.each_slice(11).to_a
           p @fixed_on_site_set.last.count
-          @get_no_of_survey_data = (@fixed_on_site_set.last.count - 16).abs
+          @get_no_of_survey_data = (@fixed_on_site_set.last.count - 11).abs
           count = 0
           @fixed_on_site_set.count.times do
             super
@@ -106,24 +106,24 @@ module FirestopSurveyReport
           end
 
         end
-        if @fixed_on_site.count <= 12
-          @get_no_of_survey_data = 16 - @fixed_on_site.count
+        if @fixed_on_site.count <= 9
+          @get_no_of_survey_data = 11 - @fixed_on_site.count
           super
           draw_fixed_on_site(pdf, @fixed_on_site)
         end
       end
 
       if !@get_no_of_survey_data.blank? && !@survey_only.blank?
-        if (@get_no_of_survey_data == 0 || @get_no_of_survey_data < 5)
+        if (@get_no_of_survey_data == 0 || @get_no_of_survey_data < 3)
           super
-          draw_survey_only(pdf, @survey_only.first(15))
-          @new_survey_only = @survey_only.drop(15)
+          draw_survey_only(pdf, @survey_only.first(11))
+          @new_survey_only = @survey_only.drop(11)
         else
 
-          @first_and_drop_survey_records = @get_no_of_survey_data > 3 ? @get_no_of_survey_data - 3 : 3 - @get_no_of_survey_data
+          @first_and_drop_survey_records = @get_no_of_survey_data > 2 ? @get_no_of_survey_data - 2 : 2 - @get_no_of_survey_data
 
-          @new_first_and_drop_survey_records = @first_and_drop_survey_records <= 15 ? 15 : @first_and_drop_survey_records
-          if @new_first_and_drop_survey_records <= 14
+          @new_first_and_drop_survey_records = @first_and_drop_survey_records <= 11 ? 11 : @first_and_drop_survey_records
+          if @new_first_and_drop_survey_records <= 10
             super
           end
           draw_survey_only(pdf, @survey_only.first(@first_and_drop_survey_records))
@@ -133,7 +133,7 @@ module FirestopSurveyReport
 
       if !@new_survey_only.blank?
         #call_survey_data(pdf, @new_survey_only)
-        @survey_only_set = @new_survey_only.each_slice(15).to_a
+        @survey_only_set = @new_survey_only.each_slice(11).to_a
         count = 0
         @survey_only_set.count.times do
           super
@@ -144,7 +144,7 @@ module FirestopSurveyReport
 
       if @fixed_on_site.blank? && !@survey_only.blank?
         # call_survey_data(pdf, @survey_only)
-        @survey_only_set = @survey_only.each_slice(15).to_a
+        @survey_only_set = @survey_only.each_slice(11).to_a
         count = 0
         @survey_only_set.count.times do
           super
@@ -156,36 +156,64 @@ module FirestopSurveyReport
 
   private
 
+    # def draw_fixed_on_site(pdf, data)
+    #   #pdf.table([["Fixed On Site = YES"]], :cell_style => {:border_color => "888888", }, :width => 540)
+    #   @content = [{:content => 'Fixed On Site = YES', :colspan => 540}]
+    #   @header = ['Date', 'Asset #', 'Floor', 'Location', 'Issue', "Barrier Type", 'Penetration Type', "Corrective Action"]
+
+    #   #pdf.table(@fixed_on_site, :column_widths => { 0 => 55 }, header: true, cell_style: { align: :center, size: 8 }) do |table|
+    #   pdf.table([@content] + [@header] +  data, :column_widths => { 0 => 55 }, header: true, cell_style: { align: :center, size: 8 }) do |table|
+    #     table.row_colors = ['ffffff', 'eaeaea']
+    #     table.rows(0).style { |r| r.border_color = '888888' }
+    #     table.rows(1..(table.row_length - 1)).style do |r|
+    #       r.border_color = 'cccccc'
+    #     end
+    #     table.row(0).style text_color: '444444', size: 10, font_style: :bold
+    #     table.row(1).style background_color: '444444', text_color: 'ffffff'
+    #     table.column(1).style { |c| c.width = 60 } # Asset#
+    #     table.column(2).style { |c| c.width = 40 } # Floor
+    #     table.column(3).style { |c| c.width = 70 } # Location
+    #     table.column(4).style { |c| c.width = 65 } # Issue
+    #     table.column(5).style { |c| c.width = 75 } # Barrier Type
+    #     table.column(6).style { |c| c.width = 75 } # Penetration Type
+    #     table.column(7).style { |c| c.width = 100 } # Corrective Action
+
+    #     # table.column(1).style { |c| c.width = 60 } # Asset #
+    #     # table.column(2).style { |c| c.width = 40 } # Floor
+    #     # table.column(3).style { |c| c.width = 70 } # Location
+    #     # table.column(4).style { |c| c.width = 55 } # Barrier Type
+    #     # table.column(5).style { |c| c.width = 55 } # Penetration Type
+    #     # table.column(6).style { |c| c.width = 60 } # Issue
+    #     # table.column(7).style { |c| c.width = 60 } # Corrected On Site
+    #     # table.column(8).style { |c| c.width = 80 } # Corrected with UL System
+    #   end
+    #   pdf.move_down 20
+    # end
+
     def draw_fixed_on_site(pdf, data)
-      #pdf.table([["Fixed On Site = YES"]], :cell_style => {:border_color => "888888", }, :width => 540)
       @content = [{:content => 'Fixed On Site = YES', :colspan => 540}]
       @header = ['Date', 'Asset #', 'Floor', 'Location', 'Issue', "Barrier Type", 'Penetration Type', "Corrective Action"]
 
-      #pdf.table(@fixed_on_site, :column_widths => { 0 => 55 }, header: true, cell_style: { align: :center, size: 8 }) do |table|
-      pdf.table([@content] + [@header] +  data, :column_widths => { 0 => 55 }, header: true, cell_style: { align: :center, size: 8 }) do |table|
+      pdf.table([@content]+[@header]+data, :column_widths => { 0 => 55 }, header: 2, cell_style: { align: :center, size: 8 }) do |table|
         table.row_colors = ['ffffff', 'eaeaea']
         table.rows(0).style { |r| r.border_color = '888888' }
-        table.rows(1..(table.row_length - 1)).style do |r|
+        table.rows(1).style { |r| r.height = 27 }
+        table.rows(2..(table.row_length - 1)).style do |r|
           r.border_color = 'cccccc'
+          r.height = 40 #if r.height < 25
+          #r.natural_width
         end
+
         table.row(0).style text_color: '444444', size: 10, font_style: :bold
         table.row(1).style background_color: '444444', text_color: 'ffffff'
-        table.column(1).style { |c| c.width = 60 } # Asset#
+        table.column(0).style { |c| c.width = 50 } # Date
+        table.column(1).style { |c| c.width = 50 } # Asset#
         table.column(2).style { |c| c.width = 40 } # Floor
-        table.column(3).style { |c| c.width = 70 } # Location
-        table.column(4).style { |c| c.width = 65 } # Issue
-        table.column(5).style { |c| c.width = 75 } # Barrier Type
-        table.column(6).style { |c| c.width = 75 } # Penetration Type
-        table.column(7).style { |c| c.width = 100 } # Corrective Action
-
-        # table.column(1).style { |c| c.width = 60 } # Asset #
-        # table.column(2).style { |c| c.width = 40 } # Floor
-        # table.column(3).style { |c| c.width = 70 } # Location
-        # table.column(4).style { |c| c.width = 55 } # Barrier Type
-        # table.column(5).style { |c| c.width = 55 } # Penetration Type
-        # table.column(6).style { |c| c.width = 60 } # Issue
-        # table.column(7).style { |c| c.width = 60 } # Corrected On Site
-        # table.column(8).style { |c| c.width = 80 } # Corrected with UL System
+        table.column(3).style { |c| c.width = 145 } # Location
+        table.column(4).style { |c| c.width = 50 } # Issue
+        table.column(5).style { |c| c.width = 65 } # Barrier Type
+        table.column(6).style { |c| c.width = 65 } # Penetration Type
+        table.column(7).style { |c| c.width = 70 } # Corrective Action
       end
       pdf.move_down 20
     end
@@ -196,21 +224,24 @@ module FirestopSurveyReport
       @header =  ['Date', 'Asset #', 'Floor', 'Location', 'Issue', "Barrier Type", 'Penetration Type', "Suggested Corrective Action"]
 
       #pdf.table(@survey_only, :column_widths => { 0 => 55 }, header: true, cell_style: { align: :center, size: 8 }) do |table|
-      pdf.table([@content] + [@header] + data, :column_widths => { 0 => 55 }, header: true, cell_style: { align: :center, size: 8 }) do |table|
+      pdf.table([@content] + [@header] + data, :column_widths => { 0 => 55 }, header: 2, cell_style: { align: :center, size: 8 }) do |table|
         table.row_colors = ['ffffff', 'eaeaea']
         table.rows(0).style { |r| r.border_color = '888888' }
-        table.rows(1..(table.row_length - 1)).style do |r|
+        table.rows(1).style { |r| r.height = 27 }
+        table.rows(2..(table.row_length - 1)).style do |r|
           r.border_color = 'cccccc'
+          r.height = 40
         end
         table.row(0).style text_color: '444444', size: 10, font_style: :bold
         table.row(1).style background_color: '444444', text_color: 'ffffff'
-        table.column(1).style { |c| c.width = 60 } # Asset#
+        table.column(0).style { |c| c.width = 50 } # Date
+        table.column(1).style { |c| c.width = 50 } # Asset#
         table.column(2).style { |c| c.width = 40 } # Floor
-        table.column(3).style { |c| c.width = 70 } # Location
-        table.column(4).style { |c| c.width = 65 } # Issue
-        table.column(5).style { |c| c.width = 75 } # Barrier Type
-        table.column(6).style { |c| c.width = 75 } # Penetration Type
-        table.column(7).style { |c| c.width = 100 } # Suggested Corrective Action
+        table.column(3).style { |c| c.width = 145 } # Location
+        table.column(4).style { |c| c.width = 50 } # Issue
+        table.column(5).style { |c| c.width = 65 } # Barrier Type
+        table.column(6).style { |c| c.width = 65 } # Penetration Type
+        table.column(7).style { |c| c.width = 70 } # Suggested Corrective Action
         
         # table.column(1).style { |c| c.width = 60 } # Asset #
         # table.column(2).style { |c| c.width = 40 } # Floor
