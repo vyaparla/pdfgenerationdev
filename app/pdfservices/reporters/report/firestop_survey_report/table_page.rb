@@ -209,11 +209,11 @@ module FirestopSurveyReport
         table.column(0).style { |c| c.width = 50 } # Date
         table.column(1).style { |c| c.width = 50 } # Asset#
         table.column(2).style { |c| c.width = 40 } # Floor
-        table.column(3).style { |c| c.width = 145 } # Location
-        table.column(4).style { |c| c.width = 50 } # Issue
-        table.column(5).style { |c| c.width = 65 } # Barrier Type
-        table.column(6).style { |c| c.width = 65 } # Penetration Type
-        table.column(7).style { |c| c.width = 70 } # Corrective Action
+        table.column(3).style { |c| c.width = 160 } # Location
+        table.column(4).style { |c| c.width = 60 } # Issue
+        table.column(5).style { |c| c.width = 60 } # Barrier Type
+        table.column(6).style { |c| c.width = 60 } # Penetration Type
+        table.column(7).style { |c| c.width = 60 } # Corrective Action
       end
       pdf.move_down 20
     end
@@ -237,11 +237,11 @@ module FirestopSurveyReport
         table.column(0).style { |c| c.width = 50 } # Date
         table.column(1).style { |c| c.width = 50 } # Asset#
         table.column(2).style { |c| c.width = 40 } # Floor
-        table.column(3).style { |c| c.width = 145 } # Location
-        table.column(4).style { |c| c.width = 50 } # Issue
-        table.column(5).style { |c| c.width = 65 } # Barrier Type
-        table.column(6).style { |c| c.width = 65 } # Penetration Type
-        table.column(7).style { |c| c.width = 70 } # Suggested Corrective Action
+        table.column(3).style { |c| c.width = 160 } # Location
+        table.column(4).style { |c| c.width = 60 } # Issue
+        table.column(5).style { |c| c.width = 60 } # Barrier Type
+        table.column(6).style { |c| c.width = 60 } # Penetration Type
+        table.column(7).style { |c| c.width = 60 } # Suggested Corrective Action
         
         # table.column(1).style { |c| c.width = 60 } # Asset #
         # table.column(2).style { |c| c.width = 40 } # Floor
