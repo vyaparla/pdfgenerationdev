@@ -79,12 +79,12 @@ module FirestopSurveyReport
 
     def write(pdf)
       if !@fixed_on_site.blank?
-        if @fixed_on_site.count <= 11 && (@fixed_on_site.count >= 10 || @fixed_on_site.count == 11)
+        if @fixed_on_site.count <= 9 && (@fixed_on_site.count >= 8 || @fixed_on_site.count == 9)
           super
           draw_fixed_on_site(pdf, @fixed_on_site)
 
           if !@survey_only.blank?
-            @survey_only_set = @survey_only.each_slice(11).to_a
+            @survey_only_set = @survey_only.each_slice(9).to_a
             count = 0
             @survey_only_set.count.times do
               super
@@ -93,11 +93,11 @@ module FirestopSurveyReport
             end
           end
         end
-        if @fixed_on_site.count > 11
+        if @fixed_on_site.count > 9
           #super
-          @fixed_on_site_set = @fixed_on_site.each_slice(11).to_a
+          @fixed_on_site_set = @fixed_on_site.each_slice(9).to_a
           p @fixed_on_site_set.last.count
-          @get_no_of_survey_data = (@fixed_on_site_set.last.count - 11).abs
+          @get_no_of_survey_data = (@fixed_on_site_set.last.count - 9).abs
           count = 0
           @fixed_on_site_set.count.times do
             super
@@ -106,24 +106,24 @@ module FirestopSurveyReport
           end
 
         end
-        if @fixed_on_site.count <= 9
-          @get_no_of_survey_data = 11 - @fixed_on_site.count
+        if @fixed_on_site.count <= 8
+          @get_no_of_survey_data = 9 - @fixed_on_site.count
           super
           draw_fixed_on_site(pdf, @fixed_on_site)
         end
       end
 
       if !@get_no_of_survey_data.blank? && !@survey_only.blank?
-        if (@get_no_of_survey_data == 0 || @get_no_of_survey_data < 3)
+        if (@get_no_of_survey_data == 0 || @get_no_of_survey_data < 4)
           super
-          draw_survey_only(pdf, @survey_only.first(11))
-          @new_survey_only = @survey_only.drop(11)
+          draw_survey_only(pdf, @survey_only.first(9))
+          @new_survey_only = @survey_only.drop(9)
         else
 
           @first_and_drop_survey_records = @get_no_of_survey_data > 2 ? @get_no_of_survey_data - 2 : 2 - @get_no_of_survey_data
 
-          @new_first_and_drop_survey_records = @first_and_drop_survey_records <= 11 ? 11 : @first_and_drop_survey_records
-          if @new_first_and_drop_survey_records <= 10
+          @new_first_and_drop_survey_records = @first_and_drop_survey_records <= 9 ? 9 : @first_and_drop_survey_records
+          if @new_first_and_drop_survey_records <= 8
             super
           end
           draw_survey_only(pdf, @survey_only.first(@first_and_drop_survey_records))
@@ -133,23 +133,23 @@ module FirestopSurveyReport
 
       if !@new_survey_only.blank?
         #call_survey_data(pdf, @new_survey_only)
-        @survey_only_set = @new_survey_only.each_slice(11).to_a
+        @survey_only_set = @new_survey_only.each_slice(9).to_a
         count = 0
         @survey_only_set.count.times do
           super
           draw_survey_only(pdf, @survey_only_set[count])
-          count = count +1
+          count = count + 1
         end
       end
 
       if @fixed_on_site.blank? && !@survey_only.blank?
         # call_survey_data(pdf, @survey_only)
-        @survey_only_set = @survey_only.each_slice(11).to_a
+        @survey_only_set = @survey_only.each_slice(9).to_a
         count = 0
         @survey_only_set.count.times do
           super
           draw_survey_only(pdf, @survey_only_set[count])
-          count = count +1
+          count = count + 1
         end
       end
     end
@@ -191,16 +191,16 @@ module FirestopSurveyReport
     # end
 
     def draw_fixed_on_site(pdf, data)
-      @content = [{:content => 'Fixed On Site = YES', :colspan => 540}]
+      @content = [{:content => 'Fixed On Site = YES', :colspan => 540, align: :center}]
       @header = ['Date', 'Asset #', 'Floor', 'Location', 'Issue', "Barrier Type", 'Penetration Type', "Corrective Action"]
 
-      pdf.table([@content]+[@header]+data, :column_widths => { 0 => 55 }, header: 2, cell_style: { align: :center, size: 8 }) do |table|
+      pdf.table([@content]+[@header]+data, :column_widths => { 0 => 55 }, header: 2, cell_style: { size: 8 }) do |table|
         table.row_colors = ['ffffff', 'eaeaea']
         table.rows(0).style { |r| r.border_color = '888888' }
         table.rows(1).style { |r| r.height = 27 }
         table.rows(2..(table.row_length - 1)).style do |r|
           r.border_color = 'cccccc'
-          r.height = 40 #if r.height < 25
+          r.height = 49 #40 #if r.height < 25
           #r.natural_width
         end
 
@@ -215,22 +215,23 @@ module FirestopSurveyReport
         table.column(6).style { |c| c.width = 60 } # Penetration Type
         table.column(7).style { |c| c.width = 60 } # Corrective Action
       end
-      pdf.move_down 20
+      #pdf.move_down 20
+      pdf.move_down 30
     end
 
     def draw_survey_only(pdf, data)
       #pdf.table([["Fixed On Site = NO"]], :cell_style => {:border_color => "888888"}, :width => 540)
-      @content = [{:content => 'Fixed On Site = NO', :colspan => 540}]
+      @content = [{:content => 'Fixed On Site = NO', :colspan => 540, align: :center}]
       @header =  ['Date', 'Asset #', 'Floor', 'Location', 'Issue', "Barrier Type", 'Penetration Type', "Suggested Corrective Action"]
 
       #pdf.table(@survey_only, :column_widths => { 0 => 55 }, header: true, cell_style: { align: :center, size: 8 }) do |table|
-      pdf.table([@content] + [@header] + data, :column_widths => { 0 => 55 }, header: 2, cell_style: { align: :center, size: 8 }) do |table|
+      pdf.table([@content] + [@header] + data, :column_widths => { 0 => 55 }, header: 2, cell_style: { size: 8 }) do |table|
         table.row_colors = ['ffffff', 'eaeaea']
         table.rows(0).style { |r| r.border_color = '888888' }
         table.rows(1).style { |r| r.height = 27 }
         table.rows(2..(table.row_length - 1)).style do |r|
           r.border_color = 'cccccc'
-          r.height = 40
+          r.height =  49 #40
         end
         table.row(0).style text_color: '444444', size: 10, font_style: :bold
         table.row(1).style background_color: '444444', text_color: 'ffffff'

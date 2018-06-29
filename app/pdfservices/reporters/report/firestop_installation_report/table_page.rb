@@ -145,16 +145,16 @@ module FirestopInstallationReport
 
     def draw_fixed_on_site(pdf, data)
       #pdf.table([["Fixed On Site = YES"]], :cell_style => {:border_color => "888888", }, :width => 540)
-      @content = [{:content => 'Fixed On Site = YES', :colspan => 540}]
+      @content = [{:content => 'Fixed On Site = YES', :colspan => 540, align: :center }]
       @header = ['Date', 'Asset #', 'Floor', 'Location', 'Issue', "Barrier Type", 'Penetration Type', "Corrective Action"]
       #pdf.table(@fixed_on_site, :column_widths => { 0 => 55 }, header: true, cell_style: { align: :center, size: 8 }) do |table|
-      pdf.table([@content] + [@header] +  data, :column_widths => { 0 => 55 }, header: 2, cell_style: { align: :center, size: 8 }) do |table|
+      pdf.table([@content] + [@header] +  data, :column_widths => { 0 => 55 }, header: 2, cell_style: { size: 8 }) do |table|
         table.row_colors = ['ffffff', 'eaeaea']
         table.rows(0).style { |r| r.border_color = '888888' }
         table.rows(1).style { |r| r.height = 27 }
         table.rows(2..(table.row_length - 1)).style do |r|
           r.border_color = 'cccccc'
-          r.height = 40
+          r.height = 49 #40
         end
         table.row(0).style text_color: '444444', size: 10, font_style: :bold
         table.row(1).style background_color: '444444', text_color: 'ffffff'
@@ -176,21 +176,22 @@ module FirestopInstallationReport
         # table.column(7).style { |c| c.width = 60 } # Corrected On Site
         # table.column(8).style { |c| c.width = 80 } # Corrected with UL System
       end
-      pdf.move_down 20
+      #pdf.move_down 20
+      pdf.move_down 30
     end
 
     def draw_survey_only(pdf, data)
       #pdf.table([["Fixed On Site = NO"]], :cell_style => {:border_color => "888888"}, :width => 540)
-      @content = [{:content => 'Fixed On Site = NO', :colspan => 540}]
+      @content = [{:content => 'Fixed On Site = NO', :colspan => 540, align: :center}]
       @header =  ['Date', 'Asset #', 'Floor', 'Location', 'Issue', "Barrier Type", 'Penetration Type', "Suggested Corrective Action"]
       #pdf.table(@survey_only, :column_widths => { 0 => 55 }, header: true, cell_style: { align: :center, size: 8 }) do |table|
-      pdf.table([@content] + [@header] + data, :column_widths => { 0 => 55 }, header: 2, cell_style: { align: :center, size: 8 }) do |table|
+      pdf.table([@content] + [@header] + data, :column_widths => { 0 => 55 }, header: 2, cell_style: { size: 8 }) do |table|
         table.row_colors = ['ffffff', 'eaeaea']
         table.rows(0).style { |r| r.border_color = '888888' }
         table.rows(1).style { |r| r.height = 27 }
         table.rows(2..(table.row_length - 1)).style do |r|
           r.border_color = 'cccccc'
-          r.height = 40
+          r.height = 49 #40
         end
         table.row(0).style text_color: '444444', size: 10, font_style: :bold
         table.row(1).style background_color: '444444', text_color: 'ffffff'

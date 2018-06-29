@@ -28,7 +28,8 @@ module FirestopSurveyReport
       end
         pdf.move_down 3
         pdf.text("#{label(technician_key)} #{technician}", :inline_format => true)
-      pdf.move_down 30
+      #pdf.move_down 30
+      pdf.move_down 15
     end
 
     def date_key
