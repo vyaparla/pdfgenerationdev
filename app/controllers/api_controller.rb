@@ -270,9 +270,14 @@ class ApiController < ApplicationController
     elsif params[:servicetype].delete(' ').upcase == "DAMPERREPAIR"
       @records = Lsspdfasset.where(u_service_id: params[:serviceid], :u_delete => false).where.not(u_type: "")
       csv_data = CSV.generate do |csv|
-        csv << ["Asset #", "Facility", "Building", "Floor", "Damper Location", "Damper Type", "Status", "Action Taken", "Date", "Technician"]
+        csv << ["Asset #", "Facility", "Building", "Floor", "Damper Location", "Damper Type", "Post Repair Status", "Action Taken", "Date", "Technician"]
         @records.each do |record|
-          csv << [record.u_tag, record.u_facility_name, record.u_building, record.u_floor.to_i, record.u_location_desc, record.u_damper_name, record.u_dr_passed_post_repair,
+          csv << [record.u_tag, record.u_facility_name, record.u_building, record.u_floor.to_i, record.u_location_desc, record.u_damper_name, 
+                  if record.u_dr_passed_post_repair == "Pass"
+                    'Passed Post Repair'
+                  else
+                    'Failed Post Repair'
+                  end,
                   if record.u_repair_action_performed == "Damper Repaired"
                     record.u_repair_action_performed + ":" + record.u_dr_description
                   elsif record.u_repair_action_performed == "Damper Installed"
