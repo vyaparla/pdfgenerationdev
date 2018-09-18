@@ -121,18 +121,24 @@ module Report
         #acknowledge6
         pdf.font_size 12
         #pdf.text_box("6. Containment Tent Used?", :at => [8, 377], :style => :bold) old
-        pdf.text_box("6. Containment Tent Used?", :at => [8, 395], :style => :bold) #new
+
+        #pdf.text_box("6. Containment Tent Used?", :at => [8, 395], :style => :bold) #new #06-09-2018: Changed as per the client requirement of LP-275
+        pdf.text_box("6. # of days containment tent used", :at => [8, 395], :style => :bold)
+
         pdf.font_size 10
-        if @project.m_containment_tent_used == "Yes"
-          #pdf.text_box("Y", :at => [375, 377]) old
-          pdf.text_box("Y", :at => [375, 395]) #new
-        elsif @project.m_containment_tent_used == "No"
-          #pdf.text_box("N", :at => [375, 377]) old
-          pdf.text_box("N", :at => [375, 395]) #new
-        else
-          #pdf.text_box("NA", :at => [375, 377]) old
-          pdf.text_box("NA", :at => [375, 395]) #new
-        end
+
+        pdf.text_box("#{@project.m_containment_tent_used}", :at => [375, 395]) #06-09-2018: Changed as per the client requirement of LP-275
+
+        # if @project.m_containment_tent_used == "Yes"
+        #   #pdf.text_box("Y", :at => [375, 377]) old
+        #   pdf.text_box("Y", :at => [375, 395]) #new
+        # elsif @project.m_containment_tent_used == "No"
+        #   #pdf.text_box("N", :at => [375, 377]) old
+        #   pdf.text_box("N", :at => [375, 395]) #new
+        # else
+        #   #pdf.text_box("NA", :at => [375, 377]) old
+        #   pdf.text_box("NA", :at => [375, 395]) #new
+        # end
 
         #acknowledgeDate
         pdf.font_size 12
@@ -241,18 +247,24 @@ module Report
         #acknowledge5
         pdf.font_size 12
         #pdf.text_box("6. Containment Tent Used?", :at => [8, 377], :style => :bold) old
-        pdf.text_box("5. Containment Tent Used?", :at => [8, 428], :style => :bold) #new
+        #pdf.text_box("5. Containment Tent Used?", :at => [8, 428], :style => :bold) #new #06-09-2018: Changed as per the client requirement of LP-275
+        pdf.text_box("5. # of days containment tent used", :at => [8, 428], :style => :bold)
+        
         pdf.font_size 10
-        if @project.m_containment_tent_used == "Yes"
-          #pdf.text_box("Y", :at => [375, 377]) old
-          pdf.text_box("Y", :at => [375, 428]) #new
-        elsif @project.m_containment_tent_used == "No"
-          #pdf.text_box("N", :at => [375, 377]) old
-          pdf.text_box("N", :at => [375, 428]) #new
-        else
-          #pdf.text_box("NA", :at => [375, 377]) old
-          pdf.text_box("NA", :at => [375, 428]) #new
-        end
+
+        pdf.text_box("#{@project.m_containment_tent_used}", :at => [375, 428]) #06-09-2018: Changed as per the client requirement of LP-275
+
+
+        # if @project.m_containment_tent_used == "Yes"
+        #   #pdf.text_box("Y", :at => [375, 377]) old
+        #   pdf.text_box("Y", :at => [375, 428]) #new
+        # elsif @project.m_containment_tent_used == "No"
+        #   #pdf.text_box("N", :at => [375, 377]) old
+        #   pdf.text_box("N", :at => [375, 428]) #new
+        # else
+        #   #pdf.text_box("NA", :at => [375, 377]) old
+        #   pdf.text_box("NA", :at => [375, 428]) #new
+        # end
 
         #acknowledgeDate
         pdf.font_size 12
@@ -352,18 +364,23 @@ module Report
         #acknowledge3
         pdf.font_size 12
         #pdf.text_box("6. Containment Tent Used?", :at => [8, 377], :style => :bold) old
-        pdf.text_box("4. Containment Tent Used?", :at => [8, 476], :style => :bold) #new
+        #pdf.text_box("4. Containment Tent Used?", :at => [8, 476], :style => :bold) #new #06-09-2018: Changed as per the client requirement of LP-275
+        pdf.text_box("4. # of days containment tent used", :at => [8, 476], :style => :bold)
+
         pdf.font_size 10
-        if @project.m_containment_tent_used == "Yes"
-          #pdf.text_box("Y", :at => [375, 377]) old
-          pdf.text_box("Y", :at => [375, 476]) #new
-        elsif @project.m_containment_tent_used == "No"
-          #pdf.text_box("N", :at => [375, 377]) old
-          pdf.text_box("N", :at => [375, 476]) #new
-        else
-          #pdf.text_box("NA", :at => [375, 377]) old
-          pdf.text_box("NA", :at => [375, 476]) #new
-        end
+
+        pdf.text_box("#{@project.m_containment_tent_used}", :at => [375, 476]) #06-09-2018: Changed as per the client requirement of LP-275
+
+        # if @project.m_containment_tent_used == "Yes"
+        #   #pdf.text_box("Y", :at => [375, 377]) old
+        #   pdf.text_box("Y", :at => [375, 476]) #new
+        # elsif @project.m_containment_tent_used == "No"
+        #   #pdf.text_box("N", :at => [375, 377]) old
+        #   pdf.text_box("N", :at => [375, 476]) #new
+        # else
+        #   #pdf.text_box("NA", :at => [375, 377]) old
+        #   pdf.text_box("NA", :at => [375, 476]) #new
+        # end
         
         #acknowledgeDate
         pdf.font_size 12
