@@ -416,7 +416,7 @@ class ApiController < ApplicationController
       #Rails.logger.debug("URL: #{url}")
       request_body_map = {
         "sys_id" => "#{@project_completion.m_service_sysid}",
-        "pdf_url" => "ec2-54-165-215-71.compute-1.amazonaws.com/api/download_project_completion_pdf_report?service_sysid=#{@project_completion.m_service_sysid}",
+        "pdf_url" => "ec2-54-165-215-71.compute-1.amazonaws.com/api/download_project_completion_pdf_report?service_sysid=#{@project_completion.id}",
       }.to_json
       
       begin
@@ -438,8 +438,10 @@ class ApiController < ApplicationController
   end
 
   def download_project_completion_pdf_report
-    @project_completion = ProjectCompletion.where(m_service_sysid: params[:service_sysid]).last
-    @outputfile = @project_completion.m_job_id + "_" + @project_completion.m_servicetype.delete(' ').upcase + "_" + Time.now.strftime("%m-%d-%Y-%I-%M-%p").gsub(/\s+/, "_") + "_" + "project_completion_report"
+    #@project_completion = ProjectCompletion.where(m_service_sysid: params[:service_sysid]).last
+    @project_completion = ProjectCompletion.find(params[:service_sysid])
+    #@outputfile = @project_completion.m_job_id + "_" + @project_completion.m_servicetype.delete(' ').upcase + "_" + Time.now.strftime("%m-%d-%Y-%I-%M-%p").gsub(/\s+/, "_") + "_" + "project_completion_report"
+    @outputfile = @project_completion.m_job_id + "_" + @project_completion.m_servicetype.delete(' ').upcase + "_" + @project_completion.m_date.strftime("%m-%d-%Y-%I-%M-%p").gsub(/\s+/, "_") + "_" + "project_completion_report"
     #send_file @pdfjob.full_report_path, :type => 'application/pdf', :disposition =>  "attachment; filename=\"#{@outputfile}.pdf\""    
     send_file @project_completion.project_completion_full_path, :type => 'application/pdf', :disposition =>  "attachment; filename=\"#{@outputfile}.pdf\""
   end
