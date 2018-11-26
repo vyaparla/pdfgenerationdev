@@ -443,7 +443,7 @@ class ApiController < ApplicationController
     @length = params[:service_sysid].length
     if @length == 32
       #Rails.logger.debug("Equal to 32")
-      @project_completion = ProjectCompletion.where(m_service_sysid: params[:service_sysid]).last
+      @project_completion = ProjectCompletion.where(m_service_sysid: params[:service_sysid]).order(:m_date).offset(1).last
     else
       #Rails.logger.debug("Not Equal to 32")
       @project_completion = ProjectCompletion.find(params[:service_sysid])
