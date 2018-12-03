@@ -54,7 +54,7 @@ module Report
 
         #acknowledge2
         pdf.font_size 12        
-        pdf.text_box("2. Damper actutor replacement checklist provided", :at => [8, 557], :style => :bold, :align => :justify)
+        pdf.text_box("2. Damper actuator replacement checklist provided", :at => [8, 557], :style => :bold, :align => :justify)# Changed Damper actutor on 30-11-2018
         pdf.text_box("(if replacement performed)", :at => [8, 542], :style => :bold, :align => :justify)
         pdf.font_size 10
         if @project.m_replacement_checklist == "Yes"          
@@ -81,11 +81,15 @@ module Report
         #acknowledge4
         pdf.font_size 12
         #pdf.text_box("4. Customer understands that a link will be emailed to", :at => [8, 473], :style => :bold, :align => :justify) old
-        pdf.text_box("4. Customer understands that a link will be emailed to", :at => [8, 491], :style => :bold, :align => :justify) #new
+        #pdf.text_box("4. Customer understands that a link will be emailed to", :at => [8, 491], :style => :bold, :align => :justify) #new
+        pdf.text_box("4. I understand a link will be emailed to me with", :at => [8, 491], :style => :bold, :align => :justify) # Changed on 30-11-2018
         #pdf.text_box("them with access to their inspection reports on", :at => [8, 458], :style => :bold, :align => :justify) old
-        pdf.text_box("them with access to their inspection reports on", :at => [8, 476], :style => :bold, :align => :justify) #new
+        #pdf.text_box("them with access to their inspection reports on", :at => [8, 476], :style => :bold, :align => :justify) #new
+        pdf.text_box("web-based access to this damper report on the", :at => [8, 476], :style => :bold, :align => :justify) # Changed on 30-11-2018
         #pdf.text_box("their own web-based customer portal.", :at => [8, 443], :style => :bold, :align => :justify) old
-        pdf.text_box("their own web-based customer portal.", :at => [8, 461], :style => :bold, :align => :justify) #new
+        #pdf.text_box("their own web-based customer portal.", :at => [8, 461], :style => :bold, :align => :justify) #new
+        pdf.text_box("customer portal.", :at => [8, 461], :style => :bold, :align => :justify) # Changed on 30-11-2018
+
         pdf.font_size 10
         if @project.m_emailed_reports == "Yes"
           #pdf.text_box("Y", :at => [375, 473]) old
@@ -149,32 +153,48 @@ module Report
         pdf.text_box("#{@project.m_date.localtime.strftime(I18n.t('time.formats.mdY'))}", :at => [375, 375]) #new 
 
         #acknowledgeTech_name
-        pdf.font_size 12
-        #pdf.text_box("Name", :at => [8, 337], :style => :bold) old
-        pdf.text_box("Technician Name", :at => [8, 355], :style => :bold) #new
-        pdf.font_size 10
-        #pdf.text_box("#{@project.m_technician_name}", :at => [375, 337]) old
-        pdf.text_box("#{@project.m_technician_name}", :at => [375, 355]) #new
+        # pdf.font_size 12
+        # #pdf.text_box("Name", :at => [8, 337], :style => :bold) old
+        # pdf.text_box("Technician Name", :at => [8, 355], :style => :bold) #new
+        # pdf.font_size 10
+        # #pdf.text_box("#{@project.m_technician_name}", :at => [375, 337]) old
+        # pdf.text_box("#{@project.m_technician_name}", :at => [375, 355]) #new
 
         #acknowledgeCustomer_name
         pdf.font_size 12
         #pdf.text_box("Name", :at => [8, 337], :style => :bold) old
-        pdf.text_box("Contact Name", :at => [8, 340], :style => :bold) #new
+        #pdf.text_box("Contact Name", :at => [8, 340], :style => :bold) #new
+        pdf.text_box("Contact Name", :at => [8, 355], :style => :bold) #Changed on 30-11-2018
         pdf.font_size 10
         #pdf.text_box("#{@project.m_technician_name}", :at => [375, 337]) old
-        pdf.text_box("#{@project.m_customer_name}", :at => [375, 340]) #new
+        #pdf.text_box("#{@project.m_customer_name}", :at => [375, 340]) #new
+        pdf.text_box("#{@project.m_customer_name}", :at => [375, 355]) #Changed on 30-11-2018
 
         #acknowledgeSignature
         pdf.font_size 12
         #pdf.text_box("Signature", :at => [8, 287], :style => :bold) old
-        pdf.text_box("Contact Signature", :at => [8, 290], :style => :bold) #new
+        pdf.text_box("Contact Signature", :at => [8, 300], :style => :bold) #new
         image = @project.m_authorization_signature.path
         unless image.blank?
           #pdf.image(image, at: [375, 317], :width => 150, :height => 70) old
           #pdf.image(image, at: [375, 335], :width => 150, :height => 70) #new
-          pdf.image(image, at: [375, 320], :width => 150, :height => 60) #new
+          pdf.image(image, at: [375, 330], :width => 150, :height => 60) #new
         else
         end
+
+        #acknowledgeTech_name
+        pdf.font_size 12
+        pdf.text_box("Technician Name", :at => [8, 250], :style => :bold) #Added on 30-11-2018
+        pdf.text_box("#{@project.m_technician_name}", :at => [375, 250]) #Added on 30-11-2018
+
+        #acknowledgeTechnicianSignature
+        pdf.font_size 12
+        pdf.text_box("Technician Signature", :at => [8, 200], :style => :bold) #Added on 30-11-2018        
+        techniciansignature = @project.m_technician_signature.path
+        unless techniciansignature.blank?
+          pdf.image(techniciansignature, at: [375, 220], :width => 150, :height => 60)
+        end
+
       elsif @project.m_servicetype == "Firedoor Inspection"
         
         #acknowledge1

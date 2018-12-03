@@ -394,8 +394,16 @@ class ApiController < ApplicationController
         @project_completion.m_authorization_signature = @signature
       end
 
-      # @project_completion.m_date               =  Time.now.utc
-      # @project_completion.m_project_start_date =  Time.now.utc
+      unless @project_completion.m_technician_signature_base64.blank?
+        @technician_signature = StringIO.open(Base64.decode64(@project_completion.m_technician_signature_base64))
+        @technician_signature.class.class_eval {attr_accessor :original_filename, :content_type}
+        @technician_signature.original_filename =  "Authorizationsignature" + "_"  + "#{@project_completion.id}.jpg"
+        @technician_signature.content_type = "image/jpeg"
+        @project_completion.m_technician_signature = @technician_signature
+      end
+
+      #@project_completion.m_date               =  Time.now.utc
+      #@project_completion.m_project_start_date =  Time.now.utc
 
       @project_completion.m_facility = HTMLEntities.new.decode params[:m_facility]      
       @project_completion.m_building = HTMLEntities.new.decode params[:m_building]
@@ -481,6 +489,7 @@ class ApiController < ApplicationController
                                 :m_total_no_of_firestop_surveyed, :m_total_no_of_firestop_fixedonsite, :m_total_no_of_fsi_surveyed,
                                 :m_total_no_of_fsi_fixedonsite, :m_containment_tent_used, :m_base_bid_count, :m_new_total_authorized_damper_bid,
                                 :m_technician_name, :m_blueprints_facility, :m_replacement_checklist, :m_facility_items, :m_emailed_reports, :m_daily_basis,
-                                :m_authorization_signature_base64, :m_authorization_signature, :m_instance_url, :m_customer_name, :m_total_firestop_assets)
+                                :m_authorization_signature_base64, :m_authorization_signature, :m_instance_url, :m_customer_name, :m_total_firestop_assets, 
+                                :m_technician_signature_base64, :m_technician_signature, :m_total_no_of_ceiling_hatches_installed)
   end
 end

@@ -376,10 +376,15 @@ module Report
           #pdf.text_box("Containment Tent Used?", :at => [10, 305], :style => :bold)
 
           #pdf.text_box("Containment Tent Used?", :at => [10, 290], :style => :bold) #06-09-2018: Changed as per the client requirement of LP-275
-          pdf.text_box("# of days containment tent used", :at => [10, 290], :style => :bold)
+          #pdf.text_box("# of days containment tent used", :at => [10, 290], :style => :bold) 
+          #pdf.font_size 10 #Change on 03-12-2018
+          #pdf.text_box("#{@project.m_containment_tent_used}", :at => [315, 290]) #06-09-2018: Changed as per the client requirement of LP-275
+          
+          #Change on 03-12-2018
+          pdf.text_box("# of days containment tent used", :at => [10, 275], :style => :bold)
           pdf.font_size 10
-          pdf.text_box("#{@project.m_containment_tent_used}", :at => [315, 290]) #06-09-2018: Changed as per the client requirement of LP-275
-
+          pdf.text_box("#{@project.m_containment_tent_used}", :at => [315, 275])
+          
           #if @project.m_containment_tent_used == "Yes"
             # pdf.text_box("Y", :at => [290, 58])
             # pdf.text_box("Y", :at => [315, 58])
@@ -449,9 +454,15 @@ module Report
           #pdf.text_box("Containment Tent Used?", :at => [10, 318], :style => :bold)
 
           #pdf.text_box("Containment Tent Used?", :at => [10, 303], :style => :bold) #06-09-2018: Changed as per the client requirement of LP-275
-          pdf.text_box("# of days containment tent used", :at => [10, 303], :style => :bold)
+          #pdf.text_box("# of days containment tent used", :at => [10, 303], :style => :bold)
+          #pdf.font_size 10
+          #pdf.text_box("#{@project.m_containment_tent_used}", :at => [315, 303]) #06-09-2018: Changed as per the client requirement of LP-275
+
+          #Change on 03-12-2018
+          pdf.text_box("# of days containment tent used", :at => [10, 288], :style => :bold)
           pdf.font_size 10
-          pdf.text_box("#{@project.m_containment_tent_used}", :at => [315, 303]) #06-09-2018: Changed as per the client requirement of LP-275
+          pdf.text_box("#{@project.m_containment_tent_used}", :at => [315, 288])
+
 
           # if @project.m_containment_tent_used == "Yes"
           #   #pdf.text_box("Y", :at => [315, 318])
@@ -513,9 +524,14 @@ module Report
           #pdf.text_box("Containment Tent Used?", :at => [10, 330], :style => :bold)
 
           #pdf.text_box("Containment Tent Used?", :at => [10, 315], :style => :bold) #06-09-2018: Changed as per the client requirement of LP-275
-          pdf.text_box("# of days containment tent used", :at => [10, 315], :style => :bold)
+          #pdf.text_box("# of days containment tent used", :at => [10, 315], :style => :bold)
+          #pdf.font_size 10
+          #pdf.text_box("#{@project.m_containment_tent_used}", :at => [315, 315]) #06-09-2018: Changed as per the client requirement of LP-275
+
+          #Change on 03-12-2018
+          pdf.text_box("# of days containment tent used", :at => [10, 300], :style => :bold)
           pdf.font_size 10
-          pdf.text_box("#{@project.m_containment_tent_used}", :at => [315, 315]) #06-09-2018: Changed as per the client requirement of LP-275
+          pdf.text_box("#{@project.m_containment_tent_used}", :at => [315, 300])
 
           # if @project.m_containment_tent_used == "Yes"
           #   #pdf.text_box("Y", :at => [315, 330])
@@ -545,12 +561,16 @@ module Report
         elsif @project.m_servicetype == "Firestop Installation"
         else
           #pdf.text_box("INSPECTION OVER BASE BID:", :at => [10, 282], :style => :bold) #110 :at => [10, 120] old, :at => [10, 284] new
-          pdf.text_box("INSPECTION OVER BASE BID:", :at => [10, 267], :style => :bold)
+          #pdf.text_box("INSPECTION OVER BASE BID:", :at => [10, 267], :style => :bold) #Changed on 03-11-2018
+          pdf.text_box("INSPECTION OVER BASE BID:", :at => [10, 252], :style => :bold)
           #pdf.text_box("I acknowledge that the damper count stated on the proposal has", :at => [192, 282], :align => :justify)  #:at => [10, 110], :at => [192, 120] old,  :at => [192, 284] new
-          pdf.text_box("I acknowledge that the damper count stated on the proposal has", :at => [192, 267], :align => :justify)
+          #pdf.text_box("I acknowledge that the damper count stated on the proposal has", :at => [192, 267], :align => :justify)  #Changed on 03-11-2018
+          pdf.text_box("I acknowledge that the damper count stated on the proposal has", :at => [192, 252], :align => :justify)
           #pdf.text_box("been reached. I have the authority to authorize the continuation of the damper project to completion or to the new total damper count stated below. Your signature below will act as official approval - no further documents, purchase orders, or other forms shall be construed to modify this approval.", :at => [10, 267], :align => :justify) #95 :at => [10, 105] old, :at => [10, 269] new
-          pdf.text_box("been reached. I have the authority to authorize the continuation of the damper project to completion or to the new total damper count stated below. Your signature below will act as official approval - no further documents, purchase orders, or other forms shall be construed to modify this approval.", 
-                       :at => [10, 252], :align => :justify)
+          #pdf.text_box("been reached. I have the authority to authorize the continuation of the damper project to completion or to the new total damper count stated below. Your signature below will act as official approval - no further documents, purchase orders, or other forms shall be construed to modify this approval.", :at => [10, 252], :align => :justify) #Changed on 03-11-2018
+          pdf.text_box("been reached. I have the authority to authorize the continuation of the damper project to completion or to the new total damper count stated below. Your signature below will act as official approval - no further documents, purchase orders, or other forms shall be construed to modify this approval.",  
+                      :at => [10, 237], :align => :justify)
+
         end
       elsif array.length == 3
         if @project.m_servicetype == "Firedoor Inspection"
@@ -559,33 +579,39 @@ module Report
           pdf.text_box("been reached. I have the authority to authorize the continuation of the damper project to completion or to the new total damper count stated below. Your signature below will act as official approval - no further documents, purchase orders, or other forms shall be construed to modify this approval.",
                      :at => [10, 295], :align => :justify)
         elsif @project.m_servicetype == "Firestop Survey"
-        elsif @project.m_servicetype == "Firestop Installation"  
+        elsif @project.m_servicetype == "Firestop Installation"
         else
           #pdf.text_box("INSPECTION OVER BASE BID:", :at => [10, 295], :style => :bold)
-          pdf.text_box("INSPECTION OVER BASE BID:", :at => [10, 280], :style => :bold)
+          #pdf.text_box("INSPECTION OVER BASE BID:", :at => [10, 280], :style => :bold) #Changed on 03-11-2018
+          pdf.text_box("INSPECTION OVER BASE BID:", :at => [10, 265], :style => :bold)
           #pdf.text_box("I acknowledge that the damper count stated on the proposal has", :at => [192, 295], :align => :justify)
-          pdf.text_box("I acknowledge that the damper count stated on the proposal has", :at => [192, 280], :align => :justify)
+          #pdf.text_box("I acknowledge that the damper count stated on the proposal has", :at => [192, 280], :align => :justify) #Changed on 03-11-2018
+          pdf.text_box("I acknowledge that the damper count stated on the proposal has", :at => [192, 265], :align => :justify)
           #pdf.text_box("been reached. I have the authority to authorize the continuation of the damper project to completion or to the new total damper count stated below. Your signature below will act as official approval - no further documents, purchase orders, or other forms shall be construed to modify this approval.", :at => [10, 280], :align => :justify)
-          pdf.text_box("been reached. I have the authority to authorize the continuation of the damper project to completion or to the new total damper count stated below. Your signature below will act as official approval - no further documents, purchase orders, or other forms shall be construed to modify this approval.", 
-                       :at => [10, 265], :align => :justify)
+          #pdf.text_box("been reached. I have the authority to authorize the continuation of the damper project to completion or to the new total damper count stated below. Your signature below will act as official approval - no further documents, purchase orders, or other forms shall be construed to modify this approval.", :at => [10, 265], :align => :justify) #Changed on 03-11-2018
+          pdf.text_box("been reached. I have the authority to authorize the continuation of the damper project to completion or to the new total damper count stated below. Your signature below will act as official approval - no further documents, purchase orders, or other forms shall be construed to modify this approval.",  
+                      :at => [10, 250], :align => :justify)
         end        
       else
         if @project.m_servicetype == "Firedoor Inspection"
           pdf.text_box("INSPECTION OVER BASE BID:", :at => [10, 322], :style => :bold)
           pdf.text_box("I acknowledge that the damper count stated on the proposal has", :at => [192, 322], :align => :justify)
           pdf.text_box("been reached. I have the authority to authorize the continuation of the damper project to completion or to the new total damper count stated below. Your signature below will act as official approval - no further documents, purchase orders, or other forms shall be construed to modify this approval.",
-                     :at => [10, 307], :align => :justify)
+                      :at => [10, 307], :align => :justify)
         elsif @project.m_servicetype == "Firestop Survey"
         elsif @project.m_servicetype == "Firestop Installation"  
         else
           #pdf.text_box("INSPECTION OVER BASE BID:", :at => [10, 307], :style => :bold)
-          pdf.text_box("INSPECTION OVER BASE BID:", :at => [10, 284], :style => :bold)
+          #pdf.text_box("INSPECTION OVER BASE BID:", :at => [10, 284], :style => :bold) #Changed on 03-11-2018
+          pdf.text_box("INSPECTION OVER BASE BID:", :at => [10, 277], :style => :bold)
           #pdf.text_box("I acknowledge that the damper count stated on the proposal has", :at => [192, 307], :align => :justify)
-          pdf.text_box("I acknowledge that the damper count stated on the proposal has", :at => [192, 284], :align => :justify)
+          #pdf.text_box("I acknowledge that the damper count stated on the proposal has", :at => [192, 284], :align => :justify) #Changed on 03-11-2018
+          pdf.text_box("I acknowledge that the damper count stated on the proposal has", :at => [192, 277], :align => :justify)
           #pdf.text_box("been reached. I have the authority to authorize the continuation of the damper project to completion or to the new total damper count stated below. Your signature below will act as official approval - no further documents, purchase orders, or other forms shall be construed to modify this approval.", :at => [10, 292], :align => :justify)
-          pdf.text_box("been reached. I have the authority to authorize the continuation of the damper project to completion or to the new total damper count stated below. Your signature below will act as official approval - no further documents, purchase orders, or other forms shall be construed to modify this approval.", 
-                      :at => [10, 269], :align => :justify)
-        end        
+          #pdf.text_box("been reached. I have the authority to authorize the continuation of the damper project to completion or to the new total damper count stated below. Your signature below will act as official approval - no further documents, purchase orders, or other forms shall be construed to modify this approval.", :at => [10, 269], :align => :justify) #Changed on 03-11-2018
+          pdf.text_box("been reached. I have the authority to authorize the continuation of the damper project to completion or to the new total damper count stated below. Your signature below will act as official approval - no further documents, purchase orders, or other forms shall be construed to modify this approval." , 
+                      :at => [10, 262], :align => :justify)
+        end
       end
     end
 
@@ -622,14 +648,17 @@ module Report
           #pdf.text_box("Base Bid Count", :at => [10, 221], :style => :bold) new
           #pdf.text_box("Base Bid Count", :at => [10, 219], :style => :bold)
           #pdf.text_box("Base Bid Count", :at => [10, 189], :style => :bold)
-          pdf.text_box("Base Bid Count", :at => [10, 199], :style => :bold)
+          #pdf.text_box("Base Bid Count", :at => [10, 199], :style => :bold) #Change on 03-11-2018
+          pdf.text_box("Base Bid Count", :at => [10, 184], :style => :bold)
           pdf.font_size 10
           #pdf.text_box("#{@project.m_base_bid_count}", :at => [315, 11])
           #pdf.text_box("#{@project.m_base_bid_count}", :at => [315, 60]) old
           #pdf.text_box("#{@project.m_base_bid_count}", :at => [315, 221]) new
           #pdf.text_box("#{@project.m_base_bid_count}", :at => [315, 219])
           #pdf.text_box("#{@project.m_base_bid_count}", :at => [315, 189])
-          pdf.text_box("#{@project.m_base_bid_count}", :at => [315, 199])
+          #pdf.text_box("#{@project.m_base_bid_count}", :at => [315, 199]) #Change on 03-11-2018
+          pdf.text_box("#{@project.m_base_bid_count}", :at => [315, 184])
+
         end        
       elsif array.length == 3
         if @project.m_servicetype == "Firedoor Inspection"
@@ -638,15 +667,17 @@ module Report
           pdf.font_size 10
           pdf.text_box("#{@project.m_base_bid_count}", :at => [315, 247])
         elsif @project.m_servicetype == "Firestop Survey"
-        elsif @project.m_servicetype == "Firestop Installation"  
+        elsif @project.m_servicetype == "Firestop Installation"
         else
           pdf.font_size 12
           #pdf.text_box("Base Bid Count", :at => [10, 232], :style => :bold)
           #pdf.text_box("Base Bid Count", :at => [10, 202], :style => :bold)
-          pdf.text_box("Base Bid Count", :at => [10, 212], :style => :bold)
+          #pdf.text_box("Base Bid Count", :at => [10, 212], :style => :bold) #Change on 03-11-2018
+          pdf.text_box("Base Bid Count", :at => [10, 197], :style => :bold)
           pdf.font_size 10
           #pdf.text_box("#{@project.m_base_bid_count}", :at => [315, 232])
-          pdf.text_box("#{@project.m_base_bid_count}", :at => [315, 212])
+          #pdf.text_box("#{@project.m_base_bid_count}", :at => [315, 212]) #Change on 03-11-2018
+          pdf.text_box("#{@project.m_base_bid_count}", :at => [315, 197])
         end
       else
         if @project.m_servicetype == "Firedoor Inspection"
@@ -659,10 +690,12 @@ module Report
         else
           pdf.font_size 12
           #pdf.text_box("Base Bid Count", :at => [10, 244], :style => :bold)
-          pdf.text_box("Base Bid Count", :at => [10, 216], :style => :bold)
+          #pdf.text_box("Base Bid Count", :at => [10, 216], :style => :bold) #Change on 03-11-2018
+          pdf.text_box("Base Bid Count", :at => [10, 209], :style => :bold)
           pdf.font_size 10
           #pdf.text_box("#{@project.m_base_bid_count}", :at => [315, 244])
-          pdf.text_box("#{@project.m_base_bid_count}", :at => [315, 216])
+          #pdf.text_box("#{@project.m_base_bid_count}", :at => [315, 216]) #Change on 03-11-2018
+          pdf.text_box("#{@project.m_base_bid_count}", :at => [315, 209])
         end
       end
     end
@@ -684,18 +717,21 @@ module Report
           if @project.m_servicetype == "Damper Inspection"
             #pdf.text_box("New Total Authorized Damper Inspected Bid", :at => [10, 204], :style => :bold)
             #pdf.text_box("New Total Authorized Damper Inspected Bid", :at => [10, 174], :style => :bold)
-            pdf.text_box("New Total Authorized Damper Inspected Bid", :at => [10, 184], :style => :bold)
+            #pdf.text_box("New Total Authorized Damper Inspected Bid", :at => [10, 184], :style => :bold) #Change on 03-11-2018
+            pdf.text_box("New Total Authorized Damper Inspected Bid", :at => [10, 169], :style => :bold)
           else
             #pdf.text_box("New Total Authorized Damper Repaired Bid", :at => [10, 204], :style => :bold)
             #pdf.text_box("New Total Authorized Damper Repaired Bid", :at => [10, 174], :style => :bold)
-            pdf.text_box("New Total Authorized Damper Repaired Bid", :at => [10, 184], :style => :bold)
+            #pdf.text_box("New Total Authorized Damper Repaired Bid", :at => [10, 184], :style => :bold)
+            pdf.text_box("New Total Authorized Damper Repaired Bid", :at => [10, 169], :style => :bold) #Change on 03-11-2018
           end
           pdf.font_size 10
           #pdf.text_box("#{@project.m_new_total_authorized_damper_bid}", :at => [315, 45]) old
           #pdf.text_box("#{@project.m_new_total_authorized_damper_bid}", :at => [315, 206]) new
           #pdf.text_box("#{@project.m_new_total_authorized_damper_bid}", :at => [315, 204])
           #pdf.text_box("#{@project.m_new_total_authorized_damper_bid}", :at => [315, 174])
-          pdf.text_box("#{@project.m_new_total_authorized_damper_bid}", :at => [315, 184])
+          #pdf.text_box("#{@project.m_new_total_authorized_damper_bid}", :at => [315, 184])
+          pdf.text_box("#{@project.m_new_total_authorized_damper_bid}", :at => [315, 169]) #Change on 03-11-2018
         end         
       elsif array.length == 3
         if @project.m_servicetype == "Firedoor Inspection"
@@ -710,16 +746,19 @@ module Report
           if @project.m_servicetype == "Damper Inspection"
             #pdf.text_box("New Total Authorized Damper Inspected Bid", :at => [10, 217], :style => :bold)
             #pdf.text_box("New Total Authorized Damper Inspected Bid", :at => [10, 187], :style => :bold)
-            pdf.text_box("New Total Authorized Damper Inspected Bid", :at => [10, 197], :style => :bold)
+            #pdf.text_box("New Total Authorized Damper Inspected Bid", :at => [10, 197], :style => :bold)
+            pdf.text_box("New Total Authorized Damper Inspected Bid", :at => [10, 182], :style => :bold) #Change on 03-11-2018
           else
             #pdf.text_box("New Total Authorized Damper Repaired Bid", :at => [10, 217], :style => :bold)
             #pdf.text_box("New Total Authorized Damper Repaired Bid", :at => [10, 187], :style => :bold)
-            pdf.text_box("New Total Authorized Damper Repaired Bid", :at => [10, 197], :style => :bold)
+            #pdf.text_box("New Total Authorized Damper Repaired Bid", :at => [10, 197], :style => :bold) #Change on 03-11-2018
+            pdf.text_box("New Total Authorized Damper Repaired Bid", :at => [10, 182], :style => :bold)
           end
           pdf.font_size 10
           #pdf.text_box("#{@project.m_new_total_authorized_damper_bid}", :at => [315, 217])
           #pdf.text_box("#{@project.m_new_total_authorized_damper_bid}", :at => [315, 187])
-          pdf.text_box("#{@project.m_new_total_authorized_damper_bid}", :at => [315, 197])
+          #pdf.text_box("#{@project.m_new_total_authorized_damper_bid}", :at => [315, 197])
+          pdf.text_box("#{@project.m_new_total_authorized_damper_bid}", :at => [315, 182]) #Change on 03-11-2018
         end        
       else
         if @project.m_servicetype == "Firedoor Inspection"
@@ -734,17 +773,20 @@ module Report
           if @project.m_servicetype == "Damper Inspection"
             #pdf.text_box("New Total Authorized Damper Inspected Bid", :at => [10, 229], :style => :bold)
             #pdf.text_box("New Total Authorized Damper Inspected Bid", :at => [10, 191], :style => :bold)
-            pdf.text_box("New Total Authorized Damper Inspected Bid", :at => [10, 201], :style => :bold)
+            #pdf.text_box("New Total Authorized Damper Inspected Bid", :at => [10, 201], :style => :bold)
+            pdf.text_box("New Total Authorized Damper Inspected Bid", :at => [10, 186], :style => :bold) #Change on 03-11-2018
           else
             #pdf.text_box("New Total Authorized Damper Repaired Bid", :at => [10, 229], :style => :bold)
             #pdf.text_box("New Total Authorized Damper Repaired Bid", :at => [10, 191], :style => :bold)
-            pdf.text_box("New Total Authorized Damper Repaired Bid", :at => [10, 201], :style => :bold)
+            #pdf.text_box("New Total Authorized Damper Repaired Bid", :at => [10, 201], :style => :bold)
+            pdf.text_box("New Total Authorized Damper Repaired Bid", :at => [10, 186], :style => :bold) #Change on 03-11-2018
           end
           pdf.font_size 10
           #pdf.text_box("#{@project.m_new_total_authorized_damper_bid}", :at => [315, 229])
           #pdf.text_box("#{@project.m_new_total_authorized_damper_bid}", :at => [315, 191])
-          pdf.text_box("#{@project.m_new_total_authorized_damper_bid}", :at => [315, 201])
-        end        
+          #pdf.text_box("#{@project.m_new_total_authorized_damper_bid}", :at => [315, 201])
+          pdf.text_box("#{@project.m_new_total_authorized_damper_bid}", :at => [315, 186]) #Change on 03-11-2018
+        end   
       end
     end
     
@@ -772,13 +814,15 @@ module Report
           #pdf.text_box("Date", :at => [10, 188], :style => :bold) new
           #pdf.text_box("Date", :at => [10, 186], :style => :bold)
           #pdf.text_box("Date", :at => [10, 156], :style => :bold)
-          pdf.text_box("Date", :at => [10, 169], :style => :bold)
+          #pdf.text_box("Date", :at => [10, 169], :style => :bold) #Change on 03-11-2018
+          pdf.text_box("Date", :at => [10, 154], :style => :bold)
           pdf.font_size 10
           #pdf.text_box("#{@project.m_date.localtime.strftime(I18n.t('time.formats.mdY'))}", :at => [315, 30]) old
           #pdf.text_box("#{@project.m_date.localtime.strftime(I18n.t('time.formats.mdY'))}", :at => [315, 188]) new
           #pdf.text_box("#{@project.m_date.localtime.strftime(I18n.t('time.formats.mdY'))}", :at => [315, 186])
           #pdf.text_box("#{@project.m_date.localtime.strftime(I18n.t('time.formats.mdY'))}", :at => [315, 156])
-          pdf.text_box("#{@project.m_date.localtime.strftime(I18n.t('time.formats.mdY'))}", :at => [315, 169])
+          #pdf.text_box("#{@project.m_date.localtime.strftime(I18n.t('time.formats.mdY'))}", :at => [315, 169]) #Change on 03-11-2018
+          pdf.text_box("#{@project.m_date.localtime.strftime(I18n.t('time.formats.mdY'))}", :at => [315, 154])
         end        
       elsif array.length == 3
         if @project.m_servicetype == "Firedoor Inspection"
@@ -800,11 +844,13 @@ module Report
           pdf.font_size 12
           #pdf.text_box("Date", :at => [10, 199], :style => :bold)
           #pdf.text_box("Date", :at => [10, 169], :style => :bold)
-          pdf.text_box("Date", :at => [10, 182], :style => :bold)
+          #pdf.text_box("Date", :at => [10, 182], :style => :bold) #Change on 03-11-2018
+          pdf.text_box("Date", :at => [10, 167], :style => :bold)
           pdf.font_size 10
           #pdf.text_box("#{@project.m_date.localtime.strftime(I18n.t('time.formats.mdY'))}", :at => [315, 199])
           #pdf.text_box("#{@project.m_date.localtime.strftime(I18n.t('time.formats.mdY'))}", :at => [315, 169])
-          pdf.text_box("#{@project.m_date.localtime.strftime(I18n.t('time.formats.mdY'))}", :at => [315, 182])
+          #pdf.text_box("#{@project.m_date.localtime.strftime(I18n.t('time.formats.mdY'))}", :at => [315, 182]) #Change on 03-11-2018
+          pdf.text_box("#{@project.m_date.localtime.strftime(I18n.t('time.formats.mdY'))}", :at => [315, 167])
         end        
       else
         if @project.m_servicetype == "Firedoor Inspection"
@@ -826,11 +872,13 @@ module Report
           pdf.font_size 12
           #pdf.text_box("Date", :at => [10, 211], :style => :bold)
           #pdf.text_box("Date", :at => [10, 173], :style => :bold)
-          pdf.text_box("Date", :at => [10, 186], :style => :bold)
+          #pdf.text_box("Date", :at => [10, 186], :style => :bold) #Change on 03-11-2018
+          pdf.text_box("Date", :at => [10, 171], :style => :bold)
           pdf.font_size 10
           #pdf.text_box("#{@project.m_date.localtime.strftime(I18n.t('time.formats.mdY'))}", :at => [315, 211])
           #pdf.text_box("#{@project.m_date.localtime.strftime(I18n.t('time.formats.mdY'))}", :at => [315, 173])
-          pdf.text_box("#{@project.m_date.localtime.strftime(I18n.t('time.formats.mdY'))}", :at => [315, 186])
+          #pdf.text_box("#{@project.m_date.localtime.strftime(I18n.t('time.formats.mdY'))}", :at => [315, 186]) #Change on 03-11-2018
+          pdf.text_box("#{@project.m_date.localtime.strftime(I18n.t('time.formats.mdY'))}", :at => [315, 171])
         end        
       end
     end
@@ -859,13 +907,15 @@ module Report
           #pdf.text_box("Name", :at => [10, 173], :style => :bold) new
           #pdf.text_box("Name", :at => [10, 171], :style => :bold)
           #pdf.text_box("Name", :at => [10, 141], :style => :bold)
-          pdf.text_box("Technician Name", :at => [10, 154], :style => :bold)
+          #pdf.text_box("Technician Name", :at => [10, 154], :style => :bold) #Change on 03-11-2018
+          pdf.text_box("Technician Name", :at => [10, 139], :style => :bold)
           pdf.font_size 10
           #pdf.text_box("#{@project.m_technician_name}", :at => [315, 15]) old
           #pdf.text_box("#{@project.m_technician_name}", :at => [315, 173]) new
           #pdf.text_box("#{@project.m_technician_name}", :at => [315, 171])
           #pdf.text_box("#{@project.m_technician_name}", :at => [315, 141])
-          pdf.text_box("#{@project.m_technician_name}", :at => [315, 154])
+          #pdf.text_box("#{@project.m_technician_name}", :at => [315, 154]) #Change on 03-11-2018
+          pdf.text_box("#{@project.m_technician_name}", :at => [315, 139])
         end        
       elsif array.length == 3
         if @project.m_servicetype == "Firedoor Inspection"
@@ -887,11 +937,13 @@ module Report
           pdf.font_size 12
           #pdf.text_box("Name", :at => [10, 184], :style => :bold)
           #pdf.text_box("Name", :at => [10, 154], :style => :bold)
-          pdf.text_box("Technician Name", :at => [10, 167], :style => :bold)
+          #pdf.text_box("Technician Name", :at => [10, 167], :style => :bold) #Change on 03-11-2018
+          pdf.text_box("Technician Name", :at => [10, 152], :style => :bold)
           pdf.font_size 10
           #pdf.text_box("#{@project.m_technician_name}", :at => [315, 184])
           #pdf.text_box("#{@project.m_technician_name}", :at => [315, 154])
-          pdf.text_box("#{@project.m_technician_name}", :at => [315, 167])
+          #pdf.text_box("#{@project.m_technician_name}", :at => [315, 167])
+          pdf.text_box("#{@project.m_technician_name}", :at => [315, 152]) #Change on 03-11-2018
         end        
       else
         if @project.m_servicetype == "Firedoor Inspection"
@@ -913,11 +965,13 @@ module Report
           pdf.font_size 12
           #pdf.text_box("Name", :at => [10, 196], :style => :bold)
           #pdf.text_box("Name", :at => [10, 158], :style => :bold)
-          pdf.text_box("Technician Name", :at => [10, 171], :style => :bold)
+          #pdf.text_box("Technician Name", :at => [10, 171], :style => :bold) #Change on 03-11-2018
+          pdf.text_box("Technician Name", :at => [10, 156], :style => :bold)
           pdf.font_size 10
           #pdf.text_box("#{@project.m_technician_name}", :at => [315, 196])
           #pdf.text_box("#{@project.m_technician_name}", :at => [315, 158])
-          pdf.text_box("#{@project.m_technician_name}", :at => [315, 171])
+          #pdf.text_box("#{@project.m_technician_name}", :at => [315, 171]) #Change on 03-11-2018
+          pdf.text_box("#{@project.m_technician_name}", :at => [315, 156])
         end
       end
     end
@@ -946,9 +1000,11 @@ module Report
         else
           pdf.font_size 12
           #pdf.text_box("Customer Name", :at => [10, 139], :style => :bold)
-          pdf.text_box("Contact Name", :at => [10, 139], :style => :bold)
+          #pdf.text_box("Contact Name", :at => [10, 139], :style => :bold) #Change on 03-11-2018
+          pdf.text_box("Contact Name", :at => [10, 124], :style => :bold)
           pdf.font_size 10
-          pdf.text_box("#{@project.m_customer_name}", :at => [315, 139])
+          #pdf.text_box("#{@project.m_customer_name}", :at => [315, 139]) #Change on 03-11-2018 
+          pdf.text_box("#{@project.m_customer_name}", :at => [315, 124])
         end  
       elsif array.length == 3
         if @project.m_servicetype == "Firedoor Inspection"
@@ -972,9 +1028,11 @@ module Report
         else
           pdf.font_size 12
           #pdf.text_box("Customer Name", :at => [10, 152], :style => :bold)
-          pdf.text_box("Contact Name", :at => [10, 152], :style => :bold)
+          #pdf.text_box("Contact Name", :at => [10, 152], :style => :bold) #Change on 03-11-2018
+          pdf.text_box("Contact Name", :at => [10, 137], :style => :bold)
           pdf.font_size 10
-          pdf.text_box("#{@project.m_customer_name}", :at => [315, 152])
+          #pdf.text_box("#{@project.m_customer_name}", :at => [315, 152]) #Change on 03-11-2018
+          pdf.text_box("#{@project.m_customer_name}", :at => [315, 137])
         end
       else
         if @project.m_servicetype == "Firedoor Inspection"
@@ -998,9 +1056,11 @@ module Report
         else
           pdf.font_size 12
           #pdf.text_box("Customer Name", :at => [10, 156], :style => :bold)
-          pdf.text_box("Contact Name", :at => [10, 156], :style => :bold)
+          #pdf.text_box("Contact Name", :at => [10, 156], :style => :bold) #Change on 03-11-2018
+          pdf.text_box("Contact Name", :at => [10, 141], :style => :bold) 
           pdf.font_size 10
-          pdf.text_box("#{@project.m_customer_name}", :at => [315, 156])
+          #pdf.text_box("#{@project.m_customer_name}", :at => [315, 156]) #Change on 03-11-2018
+          pdf.text_box("#{@project.m_customer_name}", :at => [315, 141])
         end
       end        
     end
@@ -1038,11 +1098,13 @@ module Report
           #pdf.text_box("Authorization to inspect all dampers to completion", :at => [10, 126]) #new
           #pdf.text_box("Authorization to inspect all dampers to completion", :at => [10, 96])
           #pdf.text_box("Authorization to inspect all dampers to completion", :at => [10, 94])
-          pdf.text_box("Contact Signature", :at => [10, 94], :style => :bold)
+          pdf.text_box("Contact Signature", :at => [10, 94], :style => :bold) 
+          #pdf.text_box("Contact Signature", :at => [10, 49], :style => :bold)
           image = @project.m_authorization_signature.path
           unless image.blank?
             #pdf.image(image, at: [315, 153], :width => 150, :height => 70) old
-            pdf.image(image, at: [315, 119], :width => 150, :height => 60) #new
+            #pdf.image(image, at: [315, 119], :width => 150, :height => 60) #new
+            pdf.image(image, at: [315, 110], :width => 150, :height => 60) #Change on 03-11-2018
           else
           end
         end        
@@ -1080,7 +1142,8 @@ module Report
           unless image.blank?
             #pdf.image(image, at: [315, 164], :width => 150, :height => 70)
             #pdf.image(image, at: [315, 134], :width => 150, :height => 70)
-            pdf.image(image, at: [315, 132], :width => 150, :height => 60)
+            #pdf.image(image, at: [315, 132], :width => 150, :height => 60) 
+            pdf.image(image, at: [315, 120], :width => 150, :height => 60) #Change on 03-11-2018
           else
           end
         end        
@@ -1117,7 +1180,8 @@ module Report
           image = @project.m_authorization_signature.path
           unless image.blank?
             #pdf.image(image, at: [315, 176], :width => 150, :height => 70)
-            pdf.image(image, at: [315, 136], :width => 150, :height => 60)
+            #pdf.image(image, at: [315, 136], :width => 150, :height => 60) #Change on 03-11-2018
+            pdf.image(image, at: [315, 125], :width => 150, :height => 60)
           else
           end
         end
