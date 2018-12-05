@@ -450,15 +450,21 @@ class ApiController < ApplicationController
     #@project_completion = ProjectCompletion.where(m_service_sysid: params[:service_sysid]).last
     @length = params[:service_sysid].length
     if @length == 32
-      #Rails.logger.debug("Equal to 32")
-      @project_completion = ProjectCompletion.where(m_service_sysid: params[:service_sysid]).order(:m_date).offset(1).last
+      @projectcompletionCount = ProjectCompletion.where(m_service_sysid: params[:service_sysid]).count
+      #Rails.logger.debug("PPC: #{@projectcompletionCount}")
+      if @projectcompletionCount == 1
+        @project_completion = ProjectCompletion.find_by(m_service_sysid: params[:service_sysid])
+        #Rails.logger.debug("IF PC")
+      else
+        @project_completion = ProjectCompletion.where(m_service_sysid: params[:service_sysid]).order(:m_date).offset(1).last
+        #Rails.logger.debug("ELSE PC")
+      end
     else
-      #Rails.logger.debug("Not Equal to 32")
       @project_completion = ProjectCompletion.find(params[:service_sysid])
     end
 
     #@outputfile = @project_completion.m_job_id + "_" + @project_completion.m_servicetype.delete(' ').upcase + "_" + Time.now.strftime("%m-%d-%Y-%I-%M-%p").gsub(/\s+/, "_") + "_" + "project_completion_report"
-    @outputfile = @project_completion.m_servicetype.delete(' ').upcase + "_" + @project_completion.m_date.strftime("%m-%d-%Y-%I-%M-%p").gsub(/\s+/, "_") + "_" + "project_completion_report"
+    @outputfile = @project_completion.m_job_id + "_" + @project_completion.m_servicetype.delete(' ').upcase + "_" + @project_completion.m_date.strftime("%m-%d-%Y-%I-%M-%p").gsub(/\s+/, "_") + "_" + "project_completion_report"
     #send_file @pdfjob.full_report_path, :type => 'application/pdf', :disposition =>  "attachment; filename=\"#{@outputfile}.pdf\""    
     send_file @project_completion.project_completion_full_path, :type => 'application/pdf', :disposition =>  "attachment; filename=\"#{@outputfile}.pdf\""
   end
