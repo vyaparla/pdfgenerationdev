@@ -458,7 +458,7 @@ class ApiController < ApplicationController
     end
 
     #@outputfile = @project_completion.m_job_id + "_" + @project_completion.m_servicetype.delete(' ').upcase + "_" + Time.now.strftime("%m-%d-%Y-%I-%M-%p").gsub(/\s+/, "_") + "_" + "project_completion_report"
-    @outputfile = @project_completion.m_job_id + "_" + @project_completion.m_servicetype.delete(' ').upcase + "_" + @project_completion.m_date.strftime("%m-%d-%Y-%I-%M-%p").gsub(/\s+/, "_") + "_" + "project_completion_report"
+    @outputfile = @project_completion.m_servicetype.delete(' ').upcase + "_" + @project_completion.m_date.strftime("%m-%d-%Y-%I-%M-%p").gsub(/\s+/, "_") + "_" + "project_completion_report"
     #send_file @pdfjob.full_report_path, :type => 'application/pdf', :disposition =>  "attachment; filename=\"#{@outputfile}.pdf\""    
     send_file @project_completion.project_completion_full_path, :type => 'application/pdf', :disposition =>  "attachment; filename=\"#{@outputfile}.pdf\""
   end
