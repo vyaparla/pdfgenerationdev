@@ -89,4 +89,3 @@ gem 'nokogiri', '~> 1.8', '>= 1.8.2'
 gem 'htmlentities', '~> 4.3', '>= 4.3.4'
 gem 'loofah', '~> 2.2', '>= 2.2.1'
 gem 'rails-html-sanitizer', '~> 1.0', '>= 1.0.4'
-gem "actionview", ">= 4.2.7.1"

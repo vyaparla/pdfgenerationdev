@@ -261,7 +261,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  actionview (>= 4.2.7.1)
   autoprefixer-rails
   awesome_print
   bootstrap-sass (~> 3.2.0)
