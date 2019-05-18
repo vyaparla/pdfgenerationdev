@@ -128,7 +128,7 @@ GEM
     mini_portile2 (2.3.0)
     minitest (5.11.3)
     multi_json (1.13.1)
-    mysql2 (0.5.1)
+    mysql2 (0.3.21)
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-ssh (4.2.0)
@@ -283,7 +283,7 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   loofah (~> 2.2, >= 2.2.1)
-  mysql2
+  mysql2 (~> 0.3.18)
   net-ssh (~> 4.2)
   nokogiri (~> 1.8, >= 1.8.2)
   paperclip (~> 5.2, >= 5.2.1)
@@ -307,6 +307,3 @@ DEPENDENCIES
   web-console (~> 2.0)
   will_paginate
   wirble
-
-BUNDLED WITH
-   1.14.3
