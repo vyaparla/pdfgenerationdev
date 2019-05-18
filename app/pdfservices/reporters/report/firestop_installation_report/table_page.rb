@@ -100,13 +100,13 @@ module FirestopInstallationReport
       end
 
       if !@get_no_of_survey_data.blank? && !@survey_only.blank?
-        if (@get_no_of_survey_data == 0 || @get_no_of_survey_data < 3)
+        if (@get_no_of_survey_data == 0 || @get_no_of_survey_data < 4)
           super
           draw_survey_only(pdf, @survey_only.first(11))
           @new_survey_only = @survey_only.drop(11)
         else
 
-          @first_and_drop_survey_records = @get_no_of_survey_data > 2 ? @get_no_of_survey_data - 2 : 2 - @get_no_of_survey_data
+          @first_and_drop_survey_records = @get_no_of_survey_data > 3 ? @get_no_of_survey_data - 3 : 3 - @get_no_of_survey_data
 
           @new_first_and_drop_survey_records = @first_and_drop_survey_records <= 11 ? 11 : @first_and_drop_survey_records
           if @new_first_and_drop_survey_records <= 10
