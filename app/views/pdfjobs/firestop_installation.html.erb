@@ -48,6 +48,7 @@
               <!-- <th>Corrected URL System(u_corrected_url_system)</th>
               <th>Suggested UL System(u_suggested_ul_system)</th> -->
               <th colspan="3"></th>
+              <th colspan="3"></th>
             </tr>
           </thead>
           <tbody>
@@ -64,6 +65,7 @@
                 <td><%= fsi.u_inspected_on %></td>
                 <td><%= fsi.u_active %></td>
                 <td><%= fsi.u_delete %></td>
+                <td><%= image_tag fsi.pdf_image1.url(:pdf) %></td>
                 <% if current_user.role == "Admin" %>
                   <td><%= link_to 'Destroy', pdfjob_path(fsi), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-xs' %></td>
                 <% end %>

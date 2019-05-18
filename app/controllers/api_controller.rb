@@ -255,9 +255,14 @@ class ApiController < ApplicationController
     if params[:servicetype].delete(' ').upcase == "DAMPERINSPECTION"
       @records = Lsspdfasset.where(u_service_id: params[:serviceid], :u_delete => false).where.not(u_type: "")
       csv_data = CSV.generate do |csv|
-        csv << ["Asset #", "Facility", "Building", "Floor", "Damper Location", "Damper Type", "Status", "Deficiency", "Date", "Technician"]
+        csv << ["Asset #", "Facility", "Building", "Floor", "Damper Location", "Damper Type", "Status", "Post Repair Status", "Deficiency", "Date", "Technician"]
         @records.each do |record|
           csv << [record.u_tag, record.u_facility_name, record.u_building, record.u_floor.to_i, record.u_location_desc, record.u_type, record.u_status, 
+                  if record.u_di_repaired_onsite == "true"
+                    record.u_di_passed_post_repair
+                  else
+                    'Not Repaired'
+                  end,
                   if record.u_status == "Fail"
                     record.u_reason
                   else
@@ -270,9 +275,14 @@ class ApiController < ApplicationController
     elsif params[:servicetype].delete(' ').upcase == "DAMPERREPAIR"
       @records = Lsspdfasset.where(u_service_id: params[:serviceid], :u_delete => false).where.not(u_type: "")
       csv_data = CSV.generate do |csv|
-        csv << ["Asset #", "Facility", "Building", "Floor", "Damper Location", "Damper Type", "Status", "Action Taken", "Date", "Technician"]
+        csv << ["Asset #", "Facility", "Building", "Floor", "Damper Location", "Damper Type", "Post Repair Status", "Action Taken", "Date", "Technician"]
         @records.each do |record|
-          csv << [record.u_tag, record.u_facility_name, record.u_building, record.u_floor.to_i, record.u_location_desc, record.u_damper_name, record.u_dr_passed_post_repair,
+          csv << [record.u_tag, record.u_facility_name, record.u_building, record.u_floor.to_i, record.u_location_desc, record.u_damper_name, 
+                  if record.u_dr_passed_post_repair == "Pass"
+                    'Passed Post Repair'
+                  else
+                    'Failed Post Repair'
+                  end,
                   if record.u_repair_action_performed == "Damper Repaired"
                     record.u_repair_action_performed + ":" + record.u_dr_description
                   elsif record.u_repair_action_performed == "Damper Installed"
@@ -384,8 +394,16 @@ class ApiController < ApplicationController
         @project_completion.m_authorization_signature = @signature
       end
 
-      # @project_completion.m_date               =  Time.now.utc
-      # @project_completion.m_project_start_date =  Time.now.utc
+      unless @project_completion.m_technician_signature_base64.blank?
+        @technician_signature = StringIO.open(Base64.decode64(@project_completion.m_technician_signature_base64))
+        @technician_signature.class.class_eval {attr_accessor :original_filename, :content_type}
+        @technician_signature.original_filename =  "Authorizationsignature" + "_"  + "#{@project_completion.id}.jpg"
+        @technician_signature.content_type = "image/jpeg"
+        @project_completion.m_technician_signature = @technician_signature
+      end
+
+      #@project_completion.m_date               =  Time.now.utc
+      #@project_completion.m_project_start_date =  Time.now.utc
 
       @project_completion.m_facility = HTMLEntities.new.decode params[:m_facility]      
       @project_completion.m_building = HTMLEntities.new.decode params[:m_building]
@@ -405,9 +423,10 @@ class ApiController < ApplicationController
       url =  @project_completion.m_instance_url + '/api/x_68827_lss/project_completion_pdfreport_mobile'
       #Rails.logger.debug("URL: #{url}")
       request_body_map = {
-        "sys_id" => "#{@project_completion.m_service_sysid}", 
-        "pdf_url" => "ec2-35-172-153-162.compute-1.amazonaws.com/api/download_project_completion_pdf_report?service_sysid=#{@project_completion.m_service_sysid}",
-      }.to_json 
+        "sys_id" => "#{@project_completion.m_service_sysid}",
+        "project_completion_timestamp" => "#{@project_completion.m_date.strftime("%m-%d-%Y-%I-%M-%p")}",
+        "pdf_url" => "ec2-35-172-153-162.compute-1.amazonaws.com/api/download_project_completion_pdf_report?service_sysid=#{@project_completion.id}",
+      }.to_json
       
       begin
         response = RestClient.post("#{url}", "#{request_body_map}",
@@ -428,8 +447,24 @@ class ApiController < ApplicationController
   end
 
   def download_project_completion_pdf_report
-    @project_completion = ProjectCompletion.where(m_service_sysid: params[:service_sysid]).last
-    @outputfile = @project_completion.m_job_id + "_" + @project_completion.m_servicetype.delete(' ').upcase + "_" + Time.now.strftime("%m-%d-%Y-%I-%M-%p").gsub(/\s+/, "_") + "_" + "project_completion_report"
+    #@project_completion = ProjectCompletion.where(m_service_sysid: params[:service_sysid]).last
+    @length = params[:service_sysid].length
+    if @length == 32
+      @projectcompletionCount = ProjectCompletion.where(m_service_sysid: params[:service_sysid]).count
+      #Rails.logger.debug("PPC: #{@projectcompletionCount}")
+      if @projectcompletionCount == 1
+        @project_completion = ProjectCompletion.find_by(m_service_sysid: params[:service_sysid])
+        #Rails.logger.debug("IF PC")
+      else
+        @project_completion = ProjectCompletion.where(m_service_sysid: params[:service_sysid]).order(:m_date).offset(1).last
+        #Rails.logger.debug("ELSE PC")
+      end
+    else
+      @project_completion = ProjectCompletion.find(params[:service_sysid])
+    end
+
+    #@outputfile = @project_completion.m_job_id + "_" + @project_completion.m_servicetype.delete(' ').upcase + "_" + Time.now.strftime("%m-%d-%Y-%I-%M-%p").gsub(/\s+/, "_") + "_" + "project_completion_report"
+    @outputfile = @project_completion.m_job_id + "_" + @project_completion.m_servicetype.delete(' ').upcase + "_" + @project_completion.m_date.strftime("%m-%d-%Y-%I-%M-%p").gsub(/\s+/, "_") + "_" + "project_completion_report"
     #send_file @pdfjob.full_report_path, :type => 'application/pdf', :disposition =>  "attachment; filename=\"#{@outputfile}.pdf\""    
     send_file @project_completion.project_completion_full_path, :type => 'application/pdf', :disposition =>  "attachment; filename=\"#{@outputfile}.pdf\""
   end
@@ -445,7 +480,8 @@ class ApiController < ApplicationController
       :u_fire_rating, :u_door_inspection_result, :u_door_type, :u_report_type, :pdf_image1, :pdf_image2, :pdf_image3, :pdf_image4,
       :u_dr_passed_post_repair, :u_dr_description, :u_dr_damper_model, :u_dr_installed_damper_type, :u_dr_installed_damper_height,
       :u_dr_installed_damper_width, :u_dr_installed_actuator_model, :u_dr_installed_actuator_type, :u_dr_actuator_voltage, :u_di_replace_damper, 
-      :u_di_installed_access_door, :u_other_failure_reason, :u_other_nonaccessible_reason, :u_facility_sys_id, :u_other_floor)
+      :u_di_installed_access_door, :u_other_failure_reason, :u_other_nonaccessible_reason, :u_facility_sys_id, :u_other_floor, 
+      :u_di_repaired_onsite, :u_di_passed_post_repair)
   end
 
 
@@ -459,6 +495,7 @@ class ApiController < ApplicationController
                                 :m_total_no_of_firestop_surveyed, :m_total_no_of_firestop_fixedonsite, :m_total_no_of_fsi_surveyed,
                                 :m_total_no_of_fsi_fixedonsite, :m_containment_tent_used, :m_base_bid_count, :m_new_total_authorized_damper_bid,
                                 :m_technician_name, :m_blueprints_facility, :m_replacement_checklist, :m_facility_items, :m_emailed_reports, :m_daily_basis,
-                                :m_authorization_signature_base64, :m_authorization_signature, :m_instance_url, :m_customer_name, :m_total_firestop_assets)
+                                :m_authorization_signature_base64, :m_authorization_signature, :m_instance_url, :m_customer_name, :m_total_firestop_assets, 
+                                :m_technician_signature_base64, :m_technician_signature, :m_total_no_of_ceiling_hatches_installed)
   end
 end

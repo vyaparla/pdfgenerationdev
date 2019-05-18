@@ -22,10 +22,16 @@ module DamperRepairReport
         draw_status(pdf)
         draw_repairs(pdf)
       end
-      draw_open_after_install_image(pdf)
-      draw_closed_after_install_image(pdf)
-      draw_reopened_after_install_image(pdf)
-      draw_new_install_image(pdf)
+      if @record.u_repair_action_performed == "Damper Repaired"
+        draw_open_after_install_image(pdf)
+        draw_closed_after_install_image(pdf)
+        draw_reopened_after_install_image(pdf)
+      else
+        draw_open_after_install_image(pdf)
+        draw_closed_after_install_image(pdf)
+        draw_reopened_after_install_image(pdf)
+        draw_new_install_image(pdf)
+      end
     end
 
   private
@@ -61,12 +67,15 @@ module DamperRepairReport
     def draw_status(pdf)
       if @record.u_dr_passed_post_repair == "Pass"
         pdf.fill_color '137d08'
+        @post_status = "Passed Post Repair"
       elsif @record.u_dr_passed_post_repair == "Fail"
         pdf.fill_color 'c1171d'
+        @post_status = "Failed Post Repair"
       else
         pdf.fill_color 'f39d27'
       end
-      pdf.text("<b>Status : </b> #{@record.u_dr_passed_post_repair}", inline_format: true)
+      #pdf.text("<b>Status : </b> #{@record.u_dr_passed_post_repair}", inline_format: true)
+      pdf.text("<b>Post Repair Status : </b> #{@post_status}", inline_format: true)
       pdf.fill_color '202020'
     end
 

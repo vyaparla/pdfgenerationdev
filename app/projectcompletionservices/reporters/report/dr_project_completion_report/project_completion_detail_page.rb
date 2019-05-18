@@ -10,7 +10,8 @@ module DRProjectCompletionReport
       draw_pc_total_damperrepaired(pdf)
       draw_pc_total_dr_access_door_installed(pdf)
       draw_pc_total_dr_actuator_installed(pdf)
-      draw_pc_total_dr_damper_installed(pdf)      
+      draw_pc_total_dr_damper_installed(pdf)
+      draw_pc_total_dr_total_no_of_ceiling_hatches_installed(pdf)
       # draw_base_bid_count(pdf)
       # draw_new_total_authorized_damper_bid(pdf)
     end
@@ -21,17 +22,23 @@ module DRProjectCompletionReport
       array = @project.m_building.split(",")
       if array.length >= 5
         pdf.font_size 12
-        pdf.text_box("Total # of Dampers Repair:", :at => [10, 365], :style => :bold)
+        #pdf.text_box("Total # of Dampers Repair:", :at => [10, 365], :style => :bold)
+        #pdf.text_box("Total Assets this Service:", :at => [10, 365], :style => :bold)
+        pdf.text_box("Total # Re-Inspections:", :at => [10, 365], :style => :bold) #Changed on 30-11-2018
         pdf.font_size 10
         pdf.text_box("#{@project.m_total_no_of_dampers_repaired}", :at => [315, 365])
       elsif array.length == 3
         pdf.font_size 12
-        pdf.text_box("Total # of Dampers Repair:", :at => [10, 378], :style => :bold)
+        #pdf.text_box("Total # of Dampers Repair:", :at => [10, 378], :style => :bold)
+        #pdf.text_box("Total Assets this Service:", :at => [10, 378], :style => :bold)
+        pdf.text_box("Total # Re-Inspections:", :at => [10, 378], :style => :bold) #Changed on 30-11-2018
         pdf.font_size 10
         pdf.text_box("#{@project.m_total_no_of_dampers_repaired}", :at => [315, 378])
       else
         pdf.font_size 12
-        pdf.text_box("Total # of Dampers Repair:", :at => [10, 390], :style => :bold)
+        #pdf.text_box("Total # of Dampers Repair:", :at => [10, 390], :style => :bold)
+        #pdf.text_box("Total Assets this Service:", :at => [10, 390], :style => :bold)
+        pdf.text_box("Total # Re-Inspections:", :at => [10, 390], :style => :bold) #Changed on 30-11-2018
         pdf.font_size 10
         pdf.text_box("#{@project.m_total_no_of_dampers_repaired}", :at => [315, 390])
       end
@@ -138,6 +145,26 @@ module DRProjectCompletionReport
         pdf.font_size 10
         pdf.text_box("#{@project.m_total_no_of_dr_damper_installed}", :at => [315, 330])
       end 
+    end
+
+    def draw_pc_total_dr_total_no_of_ceiling_hatches_installed(pdf)
+      array = @project.m_building.split(",")
+      if array.length >= 5
+        pdf.font_size 12
+        pdf.text_box("Total # of Ceiling Hatches Installed:", :at => [10, 290], :style => :bold)
+        pdf.font_size 10
+        pdf.text_box("#{@project.m_total_no_of_ceiling_hatches_installed}", :at => [315, 290])
+      elsif array.length == 3
+        pdf.font_size 12
+        pdf.text_box("Total # of Ceiling Hatches Installed:", :at => [10, 303], :style => :bold)
+        pdf.font_size 10
+        pdf.text_box("#{@project.m_total_no_of_ceiling_hatches_installed}", :at => [315, 303])
+      else
+        pdf.font_size 12
+        pdf.text_box("Total # of Ceiling Hatches Installed:", :at => [10, 315], :style => :bold)
+        pdf.font_size 10
+        pdf.text_box("#{@project.m_total_no_of_ceiling_hatches_installed}", :at => [315, 315])
+      end
     end
 
     # def draw_base_bid_count(pdf)

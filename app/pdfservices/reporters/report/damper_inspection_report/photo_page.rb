@@ -53,14 +53,18 @@ module DamperInspectionReport
           draw_damper_tag(pdf)
           draw_damper_type(pdf)
           draw_floor(pdf)
-          draw_access_door_installation(pdf) #unless @record.u_access_size.blank?
+          #draw_access_door_installation(pdf) #unless @record.u_access_size.blank?
           draw_status(pdf)
           if @record.u_status == "Fail"
-            draw_failure_reasons(pdf)             
+            #draw_access_door_installation(pdf)
+            draw_failure_reasons(pdf)
+            draw_passed_postrepair(pdf)
           end
 
           if @record.u_status == "NA"
+            draw_access_door_installation(pdf)
             draw_na_reasons(pdf)
+            draw_passed_postrepair(pdf)
           end
         end
 
@@ -159,6 +163,16 @@ module DamperInspectionReport
           # pdf.indent(10) do
           #   pdf.text("<b>Other Non-Accessible Reason  : </b> #{@record.u_other_nonaccessible_reason}", inline_format: true)
           # end
+        end
+      end
+
+      def draw_passed_postrepair(pdf)
+        pdf.move_down 10
+        pdf.fill_color 'f39d27'
+        if @record.u_di_repaired_onsite == "true"
+          pdf.text("<b>Post Repair Status  : </b> #{@record.u_di_passed_post_repair}", inline_format: true)
+        else
+          pdf.text("<b>Post Repair Status  : </b> Not Repaired", inline_format: true)
         end
       end
 
