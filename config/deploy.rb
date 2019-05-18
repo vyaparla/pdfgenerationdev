@@ -12,7 +12,7 @@ set :linked_files, %w{config/database.yml config/application.yml}
 set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/content}
 set :keep_releases, 5
 set :rvm_type, :user
-set :rvm_ruby_version, '2.2.2' # Edit this if you are using MRI Ruby
+set :rvm_ruby_version, '2.3.3' # Edit this if you are using MRI Ruby
 #set :stage, ["staging", "production"]
 
 set :puma_rackup, -> { File.join(current_path, 'config.ru') }
@@ -31,6 +31,15 @@ set :puma_worker_timeout, nil
 set :puma_init_active_record, true
 set :puma_preload_app, true
 set :assets_roles, [:web, :app]
+
+# for RoR 4
+set :default_env, { rvm_bin_path: '~/.rvm/bin' }
+set :bundle_gemfile, -> { release_path.join('Gemfile') }
+set :bundle_dir, -> { shared_path.join('bundle') }
+set :bundle_flags, ''
+set :bundle_without, %w{test development}.join(' ')
+set :bundle_binstubs, -> { shared_path.join('bin') }
+set :bundle_roles, :all
 
 set :console_env, :production
 
