@@ -1,6 +1,6 @@
 module FirestopInstallationReport
   class TablePage
-  	include Report::DataPageWritable
+    include Report::DataPageWritable
 
     def initialize(job, building, tech)
       @job = job
@@ -65,12 +65,12 @@ module FirestopInstallationReport
       # end
 
       if !@fixed_on_site.blank?
-        if @fixed_on_site.count <= 11 && (@fixed_on_site.count >= 10 || @fixed_on_site.count == 11)
+        if @fixed_on_site.count <= 9 && (@fixed_on_site.count >= 8 || @fixed_on_site.count == 9)
           super
           draw_fixed_on_site(pdf, @fixed_on_site)
 
           if !@survey_only.blank?
-            @survey_only_set = @survey_only.each_slice(11).to_a
+            @survey_only_set = @survey_only.each_slice(9).to_a
             count = 0
             @survey_only_set.count.times do
               super
@@ -79,21 +79,21 @@ module FirestopInstallationReport
             end
           end
         end
-        if @fixed_on_site.count > 11
+        if @fixed_on_site.count > 9
           #super
-          @fixed_on_site_set = @fixed_on_site.each_slice(11).to_a
+          @fixed_on_site_set = @fixed_on_site.each_slice(9).to_a
           p @fixed_on_site_set.last.count
-          @get_no_of_survey_data = (@fixed_on_site_set.last.count - 11).abs
+          @get_no_of_survey_data = (@fixed_on_site_set.last.count - 9).abs
           count = 0
           @fixed_on_site_set.count.times do
             super
             draw_fixed_on_site(pdf, @fixed_on_site_set[count])
             count = count + 1
           end
-
         end
-        if @fixed_on_site.count <= 9
-          @get_no_of_survey_data = 11 - @fixed_on_site.count
+
+        if @fixed_on_site.count <= 7
+          @get_no_of_survey_data = 9 - @fixed_on_site.count
           super
           draw_fixed_on_site(pdf, @fixed_on_site)
         end
@@ -102,14 +102,14 @@ module FirestopInstallationReport
       if !@get_no_of_survey_data.blank? && !@survey_only.blank?
         if (@get_no_of_survey_data == 0 || @get_no_of_survey_data < 4)
           super
-          draw_survey_only(pdf, @survey_only.first(11))
-          @new_survey_only = @survey_only.drop(11)
+          draw_survey_only(pdf, @survey_only.first(9))
+          @new_survey_only = @survey_only.drop(9)
         else
 
-          @first_and_drop_survey_records = @get_no_of_survey_data > 3 ? @get_no_of_survey_data - 3 : 3 - @get_no_of_survey_data
+          @first_and_drop_survey_records = @get_no_of_survey_data > 2 ? @get_no_of_survey_data - 2 : 2 - @get_no_of_survey_data
 
-          @new_first_and_drop_survey_records = @first_and_drop_survey_records <= 11 ? 11 : @first_and_drop_survey_records
-          if @new_first_and_drop_survey_records <= 10
+          @new_first_and_drop_survey_records = @first_and_drop_survey_records <= 9 ? 9 : @first_and_drop_survey_records
+          if @new_first_and_drop_survey_records <= 8
             super
           end
           draw_survey_only(pdf, @survey_only.first(@first_and_drop_survey_records))
@@ -119,7 +119,7 @@ module FirestopInstallationReport
 
       if !@new_survey_only.blank?
         #call_survey_data(pdf, @new_survey_only)
-        @survey_only_set = @new_survey_only.each_slice(11).to_a
+        @survey_only_set = @new_survey_only.each_slice(9).to_a
         count = 0
         @survey_only_set.count.times do
           super
@@ -130,7 +130,7 @@ module FirestopInstallationReport
 
       if @fixed_on_site.blank? && !@survey_only.blank?
         # call_survey_data(pdf, @survey_only)
-        @survey_only_set = @survey_only.each_slice(11).to_a
+        @survey_only_set = @survey_only.each_slice(9).to_a
         count = 0
         @survey_only_set.count.times do
           super
