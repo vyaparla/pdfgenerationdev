@@ -15,7 +15,7 @@ class FirestopSurveyReporter < Reporter
   	  FirestopSurveyReport::SummaryPage.new(job, tech).write(pdf)
   	  #FirestopSurveyReport::GraphPage.new(job, tech).write(pdf)
   	  job.buildings(job.u_service_id).each do |b|
-        FirestopSurveyReport::BuildingSection.new(job, b, tech, group_name, facility_name).write(pdf)
+        FirestopSurveyReport::BuildingSection.new(job, b, tech, group_name, facility_name, with_picture).write(pdf)
       end
       Report::BackPage.new.write(pdf)
   	end
