@@ -146,7 +146,7 @@ module FirestopInstallationReport
     def draw_fixed_on_site(pdf, data)
       #pdf.table([["Fixed On Site = YES"]], :cell_style => {:border_color => "888888", }, :width => 540)
       @content = [{:content => 'Fixed On Site = YES', :colspan => 540, align: :center }]
-      @header = ['Date', 'Asset #', 'Floor', 'Location', 'Issue', "Barrier Type", 'Penetration Type', "Corrective Action"]
+      @header = ['Date', 'Issue #', 'Floor', 'Location', 'Issue', "Barrier Type", 'Penetration Type', "Corrective Action"]
       #pdf.table(@fixed_on_site, :column_widths => { 0 => 55 }, header: true, cell_style: { align: :center, size: 8 }) do |table|
       pdf.table([@content] + [@header] +  data, :column_widths => { 0 => 55 }, header: 2, cell_style: { size: 8 }) do |table|
         table.row_colors = ['ffffff', 'eaeaea']
@@ -159,7 +159,7 @@ module FirestopInstallationReport
         table.row(0).style text_color: '444444', size: 10, font_style: :bold
         table.row(1).style background_color: '444444', text_color: 'ffffff'
         table.column(0).style { |c| c.width = 50 } # Date
-        table.column(1).style { |c| c.width = 50 } # Asset#
+        table.column(1).style { |c| c.width = 50 } # Issue#
         table.column(2).style { |c| c.width = 40 } # Floor
         table.column(3).style { |c| c.width = 160 } # Location
         table.column(4).style { |c| c.width = 60 } # Issue

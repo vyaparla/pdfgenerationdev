@@ -190,11 +190,15 @@ class ApiController < ApplicationController
     @tech          = params[:tech]
     @group_name    = HTMLEntities.new.decode params[:groupname]
     @facility_name = HTMLEntities.new.decode params[:facilityname]
+    @with_picture = params[:withPictures] && (params[:withPictures] == 'no') ? false : true
   
   	@pdfjob = Lsspdfasset.where(u_service_id: params[:serviceID], :u_delete => false).last
     unless @pdfjob.blank?
       #ReportGeneration.new(@pdfjob, @group_name, @facility_name, @group_url, @facility_url).generate_full_report
-      ReportGeneration.new(@pdfjob, @model_name, @address1, @address2, @csz, @facility_type, @tech, @group_name, @facility_name).generate_full_report
+      ReportGeneration.new(@pdfjob, @model_name, @address1, 
+        @address2, @csz, @facility_type, @tech, @group_name, 
+        @facility_name, @with_picture).
+      generate_full_report
   	  render json: {message: "Success"}
     else
       render json: {message: "Unsuccess"}
@@ -481,7 +485,7 @@ class ApiController < ApplicationController
       :u_dr_passed_post_repair, :u_dr_description, :u_dr_damper_model, :u_dr_installed_damper_type, :u_dr_installed_damper_height,
       :u_dr_installed_damper_width, :u_dr_installed_actuator_model, :u_dr_installed_actuator_type, :u_dr_actuator_voltage, :u_di_replace_damper, 
       :u_di_installed_access_door, :u_other_failure_reason, :u_other_nonaccessible_reason, :u_facility_sys_id, :u_other_floor, 
-      :u_di_repaired_onsite, :u_di_passed_post_repair)
+      :u_di_repaired_onsite, :u_di_passed_post_repair, :u_department_str_firestopinstall)
   end
 
 

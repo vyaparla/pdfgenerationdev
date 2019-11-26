@@ -4,7 +4,7 @@ class ReportGeneration
   require 'damper_inspection_job'
 
 
-  def initialize(owner, model_name, address1, address2, csz, facility_type, tech, group_name, facility_name)
+  def initialize(owner, model_name, address1, address2, csz, facility_type, tech, group_name, facility_name, with_picture)
     # @group_name = group_name
     # @facility_name = facility_name
     # @group_url = group_url
@@ -19,6 +19,7 @@ class ReportGeneration
     @tech = tech
     @group_name = group_name
     @facility_name = facility_name
+    @with_picture = with_picture
   end
 
   def generate_full_report
@@ -33,7 +34,8 @@ class ReportGeneration
 
   def create_full_report
     #reporter.report(@owner)
-    reporter.report(@owner, @model_name, @address1, @address2, @csz, @facility_type, @tech, @group_name, @facility_name)
+    reporter.report(@owner, @model_name, @address1, @address2, @csz, @facility_type, 
+      @tech, @group_name, @facility_name, @with_picture)
   end
 
   def reporter

@@ -2,10 +2,11 @@ module FirestopInstallationReport
   class PhotoPage
     include Report::PhotoPageWritable
 
-    def initialize(record, group_name, facility_name)
+    def initialize(record, group_name, facility_name, with_picture)
       @record = record
       @group_name = group_name
       @facility_name = facility_name
+      @with_picture = with_picture
     end
     
     # def write(pdf)
@@ -38,31 +39,131 @@ module FirestopInstallationReport
 
     def write(pdf)
       super
-      pdf.indent(250) do
-        draw_date(pdf)
-        draw_assets(pdf)
-        draw_floor(pdf)
-        draw_location_description(pdf)
-        draw_issue(pdf)
-        draw_barrier_type(pdf)
-        draw_penetration_type(pdf)
-        if @record.u_service_type == "Fixed On Site"
-          draw_corrective_action(pdf)
-        else
-          draw_suggested_corrective_action(pdf)
-        end
-      end
 
-      if @record.u_service_type != "Fixed On Site"
-        draw_before_image(pdf) 
-      else
-        draw_before_image(pdf)
-        draw_after_image(pdf)
+      
+
+      # pdf.indent(250) do
+      #   draw_date(pdf)
+      #   draw_assets(pdf)
+      #   draw_floor(pdf)
+      #   draw_location_description(pdf)
+      #   draw_issue(pdf)
+      #   draw_barrier_type(pdf)
+      #   draw_penetration_type(pdf)
+      #   if @record.u_service_type == "Fixed On Site"
+      #     draw_corrective_action(pdf)
+      #   else
+      #     draw_suggested_corrective_action(pdf)
+      #   end
+      # end
+
+      draw_table1(pdf) 
+      draw_table2(pdf) 
+      pdf.move_down 20
+
+      if @with_picture
+        if @record.u_service_type != "Fixed On Site"
+          draw_before_image(pdf) 
+        else
+          draw_before_image(pdf)
+          draw_after_image(pdf)
+        end
       end
     end
 
   private
-    
+    def table_params
+      contracted_by = @group_name.blank? ? @facility_name : @group_name
+      floor = @record.u_floor == "other" ? @record.u_other_floor : @record.u_floor
+
+      { contracted_by: contracted_by ,
+        facility: @facility_name,
+        building: @record.u_building,
+        installation_date: @record.work_dates,
+        installed_by: @record.u_inspector,
+        floor: floor,
+        location: @record.u_location_desc,
+        technician: @record.u_inspector
+      }
+        
+    end
+
+    def draw_table1(pdf)
+      if @record.u_service_type&.upcase == 'FIXED ON SITE'
+        status_content = "<b>FIXED ONSITE</b>"
+        cell_color = '13db13'
+      else
+        status_content = "<b>NOT FIXED ONSITE</b>"
+        cell_color = 'ef3038'
+      end
+
+      pdf.table([
+        [
+          {:content => "<font size='14'><b>#{title.upcase}</b></font>", :colspan => 500, align: :center },
+          {:content => "status:", :colspan => 100, align: :left },
+          {:content => status_content, :background_color=> cell_color,:colspan => 300, align: :center },
+          {:content => "Issue #<br/><b>#{@record.u_tag}</b>", :colspan => 300, :rowspan => 2, align: :right }
+        ],
+        [  
+          { :content => "<font size='12'><b>Facility:</b>#{table_params[:facility]}</font>",
+            :colspan => 500, align: :center },
+          { :content => "<font size='12'><b>Floor:</b>#{table_params[:floor]}</font>", 
+            :colspan => 400, align: :center }
+        ],
+        [
+          { :content => "<font size='12'><b>Building:</b>#{table_params[:building]}</font>", 
+            :colspan => 500, align: :center },
+          { :content => "<font size='12'><b>Issue Location:</b>#{table_params[:location]}</font>", :colspan => 700 }          
+        ],
+        [
+          { :content => "<font size='12'><b>Date</b></font>", 
+            :colspan => 200, align: :right },
+          { :content => "<font size='12'>#{@record.u_inspected_on.localtime.strftime('%m/%d/%Y')}</font>", 
+            :colspan => 100, align: :left }, 
+          { :content => "<font size='12'><b>Time</b></font>", 
+            :colspan => 200, align: :right },
+          { :content => "<font size='12'>#{@record.u_inspected_on.localtime.strftime('%I:%M:%S %P')}</font>", 
+            :colspan => 100, align: :left },
+          { :content => "<font size='12'><b>LSS Technician</b></font>", 
+            :colspan => 300, align: :left },
+          { :content => "<font size='12'>#{table_params[:technician]}</font>", 
+            :colspan => 300, align: :right }             
+        ]  
+      ], :cell_style => { :inline_format => true })
+      pdf.move_down 20
+    end 
+
+    def draw_table2(pdf)
+       pdf.table([
+        [
+          {:content => "<font size='14'><b>ISSUE</b></font>", :colspan => 400, align: :center },
+          {:content => "<font size='14'><b>BARRIER TYPE</b></font>", :colspan => 400, align: :center },
+          {:content => "<font size='14'><b>PENETRATION TYPE</b></font>", :colspan => 400, align: :center}
+        ],
+        [  
+          {:content => "<font size='10'>#{@record.u_issue_type}</font>", :colspan => 400, align: :left },
+          {:content => "<font size='10'>#{@record.u_barrier_type}</font>", :colspan => 400, align: :left },
+          {:content => "<font size='10'>#{@record.u_penetration_type}</font>", :colspan => 400, align: :left }
+        ],
+        [
+          {:content => "<font size='14'><b>CORRECTIVE ACTION / UL SYSTEM</b></font>", 
+            :colspan => 400, align: :center },
+          {:content => "<font size='14'><b>COMMENT</b></font> <font size='10'><b>(If applicable)</b></font>", 
+            :colspan => 800, align: :center }          
+        ],
+        [
+          {:content => "<font size='12'>#{@record.u_corrected_url_system}</font>", :colspan => 400, align: :left },
+          {:content => "<font size='12'></font>", :colspan => 800, align: :left },
+        ]  
+      ], :cell_style => { :inline_format => true })
+      pdf.move_down 20
+    end 
+
+    def draw_title(pdf)
+      pdf.font_size 12
+      pdf.text("<b>FIRESTOP INSTALLATION REPORT</b>", inline_format: true)
+    end
+      
     def draw_date(pdf)
       pdf.font_size 12
       pdf.text("<b>Date :</b> #{@record.u_inspected_on.localtime.strftime('%m/%d/%Y')}", inline_format: true)
@@ -130,25 +231,26 @@ module FirestopInstallationReport
     # end
 
     def draw_before_image(pdf)
-      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [15 - pdf.bounds.absolute_left, 521])#536
       image = @record.pdf_image1.path(:pdf)      
       unless image.blank?
-        pdf.image(image, at: [30 - pdf.bounds.absolute_left, 506], fit: [225, 225])#521
+        pdf.image(image, at: [15 - pdf.bounds.absolute_left, 270], fit: [225, 225])#521
       else
-        pdf.draw_text('Photo Unavailable', style: :bold, size:  12,  at: [90 - pdf.bounds.absolute_left, 389])#404
+        pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", 
+          at: [15 - pdf.bounds.absolute_left, 270])
+        pdf.draw_text('Photo Unavailable', style: :bold, size:  12,  at: [100 - pdf.bounds.absolute_left, 270])#404
       end
-      pdf.draw_text("Before Installation", at: [30 - pdf.bounds.absolute_left, 265])#280
+      pdf.draw_text("Issue", at: [120 - pdf.bounds.absolute_left, 15])#280
     end
 
     def draw_after_image(pdf)
-      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [15 - pdf.bounds.absolute_left, 270])
       image = @record.pdf_image2.path(:pdf)      
       unless image.blank?
-        pdf.image(image, at: [30 - pdf.bounds.absolute_left, 255], fit: [225, 225])
+        pdf.image(image, at: [330 - pdf.bounds.absolute_left, 255], fit: [225, 225])
       else
-        pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at: [90 - pdf.bounds.absolute_left, 135])
+        pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [330 - pdf.bounds.absolute_left, 255])
+        pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at: [400 - pdf.bounds.absolute_left, 255])
       end
-      pdf.draw_text("After Installation", at: [30 - pdf.bounds.absolute_left, 15])      
+      pdf.draw_text("Corrected Issue", at: [410 - pdf.bounds.absolute_left, 15])      
     end
 
     def title

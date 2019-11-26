@@ -8,7 +8,7 @@ class DamperInspectionReporter < Reporter
     end
   end
 
-  def report(job, model_name, address1, address2, csz,facility_type, tech, group_name, facility_name)
+  def report(job, model_name, address1, address2, csz,facility_type, tech, group_name, facility_name, with_picture)
     Report::DamperGraphGenerator.new(job).generate
   	generate(job.full_report_path) do |pdf|
   	  Report::CoverPage.new(job, model_name, address1, address2, csz).write(pdf)
