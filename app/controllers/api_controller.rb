@@ -311,10 +311,24 @@ class ApiController < ApplicationController
       end
     elsif params[:servicetype].delete(' ').upcase == "FIRESTOPSURVEY"
       @records = Lsspdfasset.where(u_service_id: params[:serviceid], :u_delete => false)
-      csv_data = CSV.generate do |csv|
-        csv << ["Asset #", "Facility", "Building", "Floor", "Location", "Barrier Type", "Penetration Type", "Issue", "Corrected On Site", "Suggested Corrective Action", "Corrected with UL System", "Date", "Technician"]
+      p = Axlsx::Package.new
+        wb = p.workbook
+        img_path = File.expand_path(Rails.root+'app/assets/images/lss_logo.png')
+        wb.styles do |s|
+        header_row = s.add_style :sz => 11, :b => true
+        normal_style = s.add_style :sz => 11
+        title = s.add_style :b => true,
+                            :sz => 20,
+                            :alignment => { :horizontal => :center, :vertical => :center }
+        heading = s.add_style alignment: {horizontal: :center}, b: true, sz: 18, bg_color: "0066CC", fg_color: "FF"
+        wb.add_worksheet(name: "Firestop Survey List") do |sheet|
+        sheet.add_image(:image_src => img_path, :start_at => [0, 0], :width => 120, :height => 70,  :noSelect => true, :noMove => true,  :rowOff => 0, :colOff => 0)
+        sheet.add_row ["", "Firestop Survey List", "", "", ""], :style => title, :height => 55
+        sheet.merge_cells ("B1:E1")
+        sheet.add_row ["Issue #", "Facility", "Building", "Floor", "Location", "Barrier Type", "Penetration Type", "Issue", "Corrected On Site", "Suggested Corrective Action", "Corrective Action/UL System", "Date", "Technician"] , :style => header_row
+
         @records.each do |record|
-          csv << [record.u_tag, record.u_facility_name, record.u_building, record.u_floor.to_i, record.u_location_desc, record.u_barrier_type, 
+           sheet.add_row  [record.u_tag, record.u_facility_name, record.u_building, record.u_floor.to_i, record.u_location_desc, record.u_barrier_type, 
                   record.u_penetration_type, record.u_issue_type,
                   if record.u_service_type == "Fixed On Site"
                     'YES'
@@ -325,22 +339,38 @@ class ApiController < ApplicationController
                 ]
         end
       end
-    elsif params[:servicetype].delete(' ').upcase == "FIRESTOPINSTALLATION"
-      @records = Lsspdfasset.where(u_service_id: params[:serviceid], :u_delete => false)
-      csv_data = CSV.generate do |csv|
-        csv << ["Asset #", "Facility", "Building", "Floor", "Location", "Barrier Type", "Penetration Type", "Issue", "Corrected On Site", "Suggested Corrective Action", "Corrected with UL System", "Date", "Technician"]
+      end	
+      elsif params[:servicetype].delete(' ').upcase == "FIRESTOPINSTALLATION"
+        @records = Lsspdfasset.where(u_service_id: params[:serviceid], :u_delete => false)
+        p = Axlsx::Package.new
+        wb = p.workbook
+	img_path = File.expand_path(Rails.root+'app/assets/images/lss_logo.png')
+	wb.styles do |s|
+	header_row = s.add_style :sz => 11, :b => true
+	normal_style = s.add_style :sz => 11	
+        title = s.add_style :b => true,
+                            :sz => 20,
+                            :alignment => { :horizontal => :center, :vertical => :center }		
+	heading = s.add_style alignment: {horizontal: :center}, b: true, sz: 18, bg_color: "0066CC", fg_color: "FF"
+        wb.add_worksheet(name: "Firestop Installation List") do |sheet|
+	sheet.add_image(:image_src => img_path, :start_at => [0, 0], :width => 120, :height => 70,  :noSelect => true, :noMove => true, :rowOff => 0, :colOff => 0)
+	sheet.add_row ["", "Firestop Installation List", "", "", ""], :style => title, :height => 55
+	sheet.merge_cells ("B1:E1")	
+        sheet.add_row ["Issue #", "Facility", "Building", "Floor", "Location", "Barrier Type", "Penetration Type", "Issue", "Corrected On Site", "Suggested Corrective Action", "Corrective Action/UL System", "Date", "Technician"] , :style => header_row
         @records.each do |record|
-          csv << [record.u_tag, record.u_facility_name, record.u_building, record.u_floor.to_i, record.u_location_desc, record.u_barrier_type, 
-                  record.u_penetration_type, record.u_issue_type,
+          sheet.add_row [record.u_tag, record.u_facility_name, record.u_building, record.u_floor.to_i, record.u_location_desc, record.u_barrier_type,
+                 record.u_penetration_type, record.u_issue_type,
                   if record.u_service_type == "Fixed On Site"
                     'YES'
                   else
                     'NO'
                   end,
                   record.u_suggested_ul_system, record.u_corrected_url_system, record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')), record.u_inspector
-                ] 
-        end
-      end
+                ] , :style => normal_style
+          end
+       end
+ 
+     end
     else
       @records = Lsspdfasset.where(u_facility_sys_id: params[:facilityid], :u_report_type => "DAMPERINSPECTION", :u_delete => false) + 
                  Lsspdfasset.where(u_facility_sys_id: params[:facilityid], :u_report_type => "DAMPERREPAIR", :u_delete => false)
@@ -381,9 +411,13 @@ class ApiController < ApplicationController
         end
       end
     end
-    send_data csv_data,
+   if params[:servicetype].delete(' ').upcase == "FIRESTOPINSTALLATION" || params[:servicetype].delete(' ').upcase == "FIRESTOPSURVEY"
+     send_data p.to_stream.read, type: "application/xlsx", filename: "#{@outputfile}.xlsx"
+   else
+     send_data csv_data,
     :type => 'text/csv; charset=iso-8859-1; header=present',
-    :disposition => "attachment; filename=#{@outputfile}.csv"
+    :disposition => "attachment; filename=#{@outputfile}.csv"   
+   end
   end
 
   def project_completion_save_pdf

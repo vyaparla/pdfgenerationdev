@@ -91,3 +91,6 @@ gem 'htmlentities', '~> 4.3', '>= 4.3.4'
 gem 'loofah', '~> 2.2', '>= 2.2.1'
 gem 'rails-html-sanitizer', '~> 1.0', '>= 1.0.4'
 gem 'rmagick', require: false
+gem 'rubyzip', '>= 1.2.1'
+gem 'axlsx', git: 'https://github.com/randym/axlsx.git', ref: 'c8ac844'
+gem 'axlsx_rails'
