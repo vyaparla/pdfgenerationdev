@@ -263,8 +263,8 @@ class ApiController < ApplicationController
         img_path = File.expand_path(Rails.root+'app/assets/images/lss_logo.png')
         wb.styles do |s|
         header_row = s.add_style :sz => 11, :b => true, :font_name => 'Calibri'
-        normal_row_odd = s.add_style :sz => 11, :font_name => 'Calibri', :bg_color => 'DDDDDD'
-	normal_row_even = s.add_style :sz => 11, :font_name => 'Calibri', :bg_color => 'FFFFFF'
+        normal_row_odd = s.add_style :sz => 11, :font_name => 'Calibri', :bg_color => 'EEEEEE',  :border => { :style => :thin, :color => "CCCCCC" }
+	normal_row_even = s.add_style :sz => 11, :font_name => 'Calibri', :bg_color => 'FFFFFF', :border => { :style => :thin, :color => "CCCCCC" }
         title_row = s.add_style :b => true,
                             :sz => 20,
                             :alignment => { :horizontal => :center, :vertical => :center }, :font_name => 'Calibri'
@@ -335,8 +335,8 @@ class ApiController < ApplicationController
         img_path = File.expand_path(Rails.root+'app/assets/images/lss_logo.png')
         wb.styles do |s|
         header_row = s.add_style :sz => 11, :b => true, :font_name => 'Calibri'
-        normal_row_odd = s.add_style :sz => 11, :font_name => 'Calibri', :bg_color => 'DDDDDD'
-        normal_row_even = s.add_style :sz => 11, :font_name => 'Calibri', :bg_color => 'FFFFFF'
+        normal_row_odd = s.add_style :sz => 11, :font_name => 'Calibri', :bg_color =>  'EEEEEE', :border => { :style => :thin, :color => "CCCCCC" }
+        normal_row_even = s.add_style :sz => 11, :font_name => 'Calibri', :bg_color => 'FFFFFF', :border => { :style => :thin, :color => "CCCCCC" }
         title_row = s.add_style :b => true,
                             :sz => 20,
                             :alignment => { :horizontal => :center, :vertical => :center }, :font_name => 'Calibri'
@@ -369,8 +369,8 @@ class ApiController < ApplicationController
 	img_path = File.expand_path(Rails.root+'app/assets/images/lss_logo.png')
 	wb.styles do |s|
 	header_row = s.add_style :sz => 11, :b => true, :font_name => 'Calibri'
-        normal_row_odd = s.add_style :sz => 11, :font_name => 'Calibri', :bg_color => 'DDDDDD'
-        normal_row_even = s.add_style :sz => 11, :font_name => 'Calibri', :bg_color => 'FFFFFF'
+        normal_row_odd = s.add_style :sz => 11, :font_name => 'Calibri', :bg_color => 'EEEEEE', :border => { :style => :thin, :color => "CCCCCC" }
+        normal_row_even = s.add_style :sz => 11, :font_name => 'Calibri', :bg_color => 'FFFFFF', :border => { :style => :thin, :color => "CCCCCC" }
         title_row = s.add_style :b => true,
                             :sz => 20,
                             :alignment => { :horizontal => :center, :vertical => :center }, :font_name => 'Calibri'
