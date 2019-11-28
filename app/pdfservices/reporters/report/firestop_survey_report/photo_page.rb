@@ -150,6 +150,12 @@ module FirestopSurveyReport
     end 
 
     def draw_table2(pdf)
+      if @record.u_service_type&.upcase == 'FIXED ON SITE'
+        corrective_url = @record.u_corrected_url_system
+      else
+        corrective_url = @record.u_suggested_ul_system
+      end
+
        pdf.table([
         [
           {:content => "<font size='12'><b>ISSUE</b></font>",  :colspan => 1, 
@@ -174,7 +180,7 @@ module FirestopSurveyReport
             :colspan => 2, :align => :center, :width => 360 }          
         ],
         [
-          {:content => "<font size='12'>#{@record.u_corrected_url_system}</font>",
+          {:content => "<font size='12'>#{corrective_url}</font>",
            :colspan => 1, :align => :left, :overflow => :shrink_to_fit, :min_font_size => 8,
             :height => 20, :width => 180 },
           {:content => "<font size='12'></font>", :colspan => 2, :align => :left, 
