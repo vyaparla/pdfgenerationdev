@@ -262,20 +262,22 @@ class ApiController < ApplicationController
         wb = p.workbook
         img_path = File.expand_path(Rails.root+'app/assets/images/lss_logo.png')
         wb.styles do |s|
-        header_row = s.add_style :sz => 11, :b => true
-        normal_style = s.add_style :sz => 11
-        title = s.add_style :b => true,
+        header_row = s.add_style :sz => 11, :b => true, :font_name => 'Calibri'
+        normal_row_odd = s.add_style :sz => 11, :font_name => 'Calibri', :bg_color => 'DDDDDD'
+	normal_row_even = s.add_style :sz => 11, :font_name => 'Calibri', :bg_color => 'FFFFFF'
+        title_row = s.add_style :b => true,
                             :sz => 20,
-                            :alignment => { :horizontal => :center, :vertical => :center }
-        heading = s.add_style alignment: {horizontal: :center}, b: true, sz: 18, bg_color: "0066CC", fg_color: "FF"
+                            :alignment => { :horizontal => :center, :vertical => :center }, :font_name => 'Calibri'
+        #heading = s.add_style alignment: {horizontal: :center}, b: true, sz: 18, bg_color: "0066CC", fg_color: "FF"
         wb.add_worksheet(name: "Damper Inspection List") do |sheet|
         sheet.add_image(:image_src => img_path, :start_at => [0, 0], :width => 120, :height => 70,  :noSelect => true, :noMove => true,  :rowOff => 0, :colOff => 0)
-        sheet.add_row ["", "Damper Inspection List", "", "", ""], :style => title, :height => 55
+        sheet.add_row ["", "Damper Inspection List", "", "", ""], :style => title_row, :height => 55
         sheet.merge_cells ("B1:E1")
         sheet.add_row ["Issue #", "Facility", "Building", "Floor", "Damper Location", "Damper Type", "Status", "Post Repair Status", "Deficiency", "Date", "Technician"] , :style => header_row
-
+        i = 1
         @records.each do |record|
-          sheet.add_row  [record.u_tag, record.u_facility_name, record.u_building, record.u_floor.to_i, record.u_location_desc, record.u_type, record.u_status, 
+	  floor = (record.u_floor == "other" ? record.u_other_floor : record.u_floor.to_i)
+          sheet.add_row  [record.u_tag, record.u_facility_name, record.u_building, floor, record.u_location_desc, record.u_type, record.u_status, 
                   if record.u_di_repaired_onsite == "true"
                     record.u_di_passed_post_repair
                   else
@@ -287,7 +289,9 @@ class ApiController < ApplicationController
                     record.u_non_accessible_reasons
                   end,
                   record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')), record.u_inspector
-	  ] , :style => normal_style
+	  ] , :style => (i.even? ? normal_row_even : normal_row_odd)
+           i += 1
+
         end
       end
     end 	
@@ -330,20 +334,22 @@ class ApiController < ApplicationController
         wb = p.workbook
         img_path = File.expand_path(Rails.root+'app/assets/images/lss_logo.png')
         wb.styles do |s|
-        header_row = s.add_style :sz => 11, :b => true
-        normal_style = s.add_style :sz => 11
-        title = s.add_style :b => true,
+        header_row = s.add_style :sz => 11, :b => true, :font_name => 'Calibri'
+        normal_row_odd = s.add_style :sz => 11, :font_name => 'Calibri', :bg_color => 'DDDDDD'
+        normal_row_even = s.add_style :sz => 11, :font_name => 'Calibri', :bg_color => 'FFFFFF'
+        title_row = s.add_style :b => true,
                             :sz => 20,
-                            :alignment => { :horizontal => :center, :vertical => :center }
-        heading = s.add_style alignment: {horizontal: :center}, b: true, sz: 18, bg_color: "0066CC", fg_color: "FF"
-        wb.add_worksheet(name: "Firestop Survey List") do |sheet|
+                            :alignment => { :horizontal => :center, :vertical => :center }, :font_name => 'Calibri'
+
+	wb.add_worksheet(name: "Firestop Survey List") do |sheet|
         sheet.add_image(:image_src => img_path, :start_at => [0, 0], :width => 120, :height => 70,  :noSelect => true, :noMove => true,  :rowOff => 0, :colOff => 0)
-        sheet.add_row ["", "Firestop Survey List", "", "", ""], :style => title, :height => 55
+        sheet.add_row ["", "Firestop Survey List", "", "", ""], :style => title_row, :height => 55
         sheet.merge_cells ("B1:E1")
         sheet.add_row ["Issue #", "Facility", "Building", "Floor", "Location", "Barrier Type", "Penetration Type", "Issue", "Corrected On Site", "Suggested Corrective Action", "Corrective Action/UL System", "Date", "Technician"] , :style => header_row
-
+        i = 1
         @records.each do |record|
-           sheet.add_row  [record.u_tag, record.u_facility_name, record.u_building, record.u_floor.to_i, record.u_location_desc, record.u_barrier_type, 
+	   floor = (record.u_floor == "other" ? record.u_other_floor : record.u_floor.to_i)
+           sheet.add_row  [record.u_tag, record.u_facility_name, record.u_building, floor, record.u_location_desc, record.u_barrier_type, 
                   record.u_penetration_type, record.u_issue_type,
                   if record.u_service_type == "Fixed On Site"
                     'YES'
@@ -351,7 +357,8 @@ class ApiController < ApplicationController
                     'NO'
                   end,
                   record.u_suggested_ul_system, record.u_corrected_url_system, record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')), record.u_inspector
-                ]
+                ], :style => (i.even? ? normal_row_even : normal_row_odd)
+	   i += 1
         end
       end
       end	
@@ -361,19 +368,22 @@ class ApiController < ApplicationController
         wb = p.workbook
 	img_path = File.expand_path(Rails.root+'app/assets/images/lss_logo.png')
 	wb.styles do |s|
-	header_row = s.add_style :sz => 11, :b => true
-	normal_style = s.add_style :sz => 11	
-        title = s.add_style :b => true,
+	header_row = s.add_style :sz => 11, :b => true, :font_name => 'Calibri'
+        normal_row_odd = s.add_style :sz => 11, :font_name => 'Calibri', :bg_color => 'DDDDDD'
+        normal_row_even = s.add_style :sz => 11, :font_name => 'Calibri', :bg_color => 'FFFFFF'
+        title_row = s.add_style :b => true,
                             :sz => 20,
-                            :alignment => { :horizontal => :center, :vertical => :center }		
-	heading = s.add_style alignment: {horizontal: :center}, b: true, sz: 18, bg_color: "0066CC", fg_color: "FF"
+                            :alignment => { :horizontal => :center, :vertical => :center }, :font_name => 'Calibri'
+	
         wb.add_worksheet(name: "Firestop Installation List") do |sheet|
 	sheet.add_image(:image_src => img_path, :start_at => [0, 0], :width => 120, :height => 70,  :noSelect => true, :noMove => true, :rowOff => 0, :colOff => 0)
-	sheet.add_row ["", "Firestop Installation List", "", "", ""], :style => title, :height => 55
+	sheet.add_row ["", "Firestop Installation List", "", "", ""], :style => title_row, :height => 55
 	sheet.merge_cells ("B1:E1")	
         sheet.add_row ["Issue #", "Facility", "Building", "Floor", "Location", "Barrier Type", "Penetration Type", "Issue", "Corrected On Site", "Suggested Corrective Action", "Corrective Action/UL System", "Date", "Technician"] , :style => header_row
-        @records.each do |record|
-          sheet.add_row [record.u_tag, record.u_facility_name, record.u_building, record.u_floor.to_i, record.u_location_desc, record.u_barrier_type,
+        i = 1
+	@records.each do |record|
+	  floor = (record.u_floor == "other" ? record.u_other_floor : record.u_floor.to_i)	
+          sheet.add_row [record.u_tag, record.u_facility_name, record.u_building, floor, record.u_location_desc, record.u_barrier_type,
                  record.u_penetration_type, record.u_issue_type,
                   if record.u_service_type == "Fixed On Site"
                     'YES'
@@ -381,7 +391,9 @@ class ApiController < ApplicationController
                     'NO'
                   end,
                   record.u_suggested_ul_system, record.u_corrected_url_system, record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')), record.u_inspector
-                ] , :style => normal_style
+                ] , :style => (i.even? ? normal_row_even : normal_row_odd)
+           i += 1
+
           end
        end
  
