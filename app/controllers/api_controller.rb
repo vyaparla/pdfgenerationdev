@@ -258,10 +258,24 @@ class ApiController < ApplicationController
     @outputfile = params[:servicetype].delete(' ').upcase + "_" + Time.now.strftime("%m-%d-%Y-%r").gsub(/\s+/, "_") + "_" + "spreadsheet_report"
     if params[:servicetype].delete(' ').upcase == "DAMPERINSPECTION"
       @records = Lsspdfasset.where(u_service_id: params[:serviceid], :u_delete => false).where.not(u_type: "")
-      csv_data = CSV.generate do |csv|
-        csv << ["Asset #", "Facility", "Building", "Floor", "Damper Location", "Damper Type", "Status", "Post Repair Status", "Deficiency", "Date", "Technician"]
+        p = Axlsx::Package.new
+        wb = p.workbook
+        img_path = File.expand_path(Rails.root+'app/assets/images/lss_logo.png')
+        wb.styles do |s|
+        header_row = s.add_style :sz => 11, :b => true
+        normal_style = s.add_style :sz => 11
+        title = s.add_style :b => true,
+                            :sz => 20,
+                            :alignment => { :horizontal => :center, :vertical => :center }
+        heading = s.add_style alignment: {horizontal: :center}, b: true, sz: 18, bg_color: "0066CC", fg_color: "FF"
+        wb.add_worksheet(name: "Damper Inspection List") do |sheet|
+        sheet.add_image(:image_src => img_path, :start_at => [0, 0], :width => 120, :height => 70,  :noSelect => true, :noMove => true,  :rowOff => 0, :colOff => 0)
+        sheet.add_row ["", "Damper Inspection List", "", "", ""], :style => title, :height => 55
+        sheet.merge_cells ("B1:E1")
+        sheet.add_row ["Issue #", "Facility", "Building", "Floor", "Damper Location", "Damper Type", "Status", "Post Repair Status", "Deficiency", "Date", "Technician"] , :style => header_row
+
         @records.each do |record|
-          csv << [record.u_tag, record.u_facility_name, record.u_building, record.u_floor.to_i, record.u_location_desc, record.u_type, record.u_status, 
+          sheet.add_row  [record.u_tag, record.u_facility_name, record.u_building, record.u_floor.to_i, record.u_location_desc, record.u_type, record.u_status, 
                   if record.u_di_repaired_onsite == "true"
                     record.u_di_passed_post_repair
                   else
@@ -273,9 +287,10 @@ class ApiController < ApplicationController
                     record.u_non_accessible_reasons
                   end,
                   record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')), record.u_inspector
-                ]
+	  ] , :style => normal_style
         end
       end
+    end 	
     elsif params[:servicetype].delete(' ').upcase == "DAMPERREPAIR"
       @records = Lsspdfasset.where(u_service_id: params[:serviceid], :u_delete => false).where.not(u_type: "")
       csv_data = CSV.generate do |csv|
@@ -411,7 +426,7 @@ class ApiController < ApplicationController
         end
       end
     end
-   if params[:servicetype].delete(' ').upcase == "FIRESTOPINSTALLATION" || params[:servicetype].delete(' ').upcase == "FIRESTOPSURVEY"
+   if params[:servicetype].delete(' ').upcase == "FIRESTOPINSTALLATION" || params[:servicetype].delete(' ').upcase == "FIRESTOPSURVEY" || params[:servicetype].delete(' ').upcase == "DAMPERINSPECTION"
      send_data p.to_stream.read, type: "application/xlsx", filename: "#{@outputfile}.xlsx"
    else
      send_data csv_data,
