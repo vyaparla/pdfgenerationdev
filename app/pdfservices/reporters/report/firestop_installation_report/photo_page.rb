@@ -83,51 +83,59 @@ module FirestopInstallationReport
         installed_by: @record.u_inspector,
         floor: floor,
         location: @record.u_location_desc,
-        technician: @record.u_inspector
+        technician: @record.u_inspector,
+        dept_area: @record.u_department_str_firestopinstall
       }
         
     end
 
     def draw_table1(pdf)
       if @record.u_service_type&.upcase == 'FIXED ON SITE'
-        status_content = "<b>FIXED ONSITE</b>"
+        status_content = "<font size='8' color='FFFFFF'><b>FIXED ONSITE</b></font>"
         cell_color = '13db13'
       else
-        status_content = "<b>NOT FIXED ONSITE</b>"
+        status_content = "<font size='8' color='FFFFFF'><b>NOT FIXED ONSITE</b></font>"
         cell_color = 'ef3038'
       end
 
       pdf.table([
         [
-          {:content => "<font size='14'><b>#{title.upcase}</b></font>", :colspan => 500, align: :center },
-          {:content => "status:", :colspan => 100, align: :left },
+          {:content => "<font size='12'><b>#{title.upcase}</b></font>", :colspan => 500, align: :center },
+          {:content => "Status:", :colspan => 100, align: :left },
           {:content => status_content, :background_color=> cell_color,:colspan => 300, align: :center },
-          {:content => "Issue #<br/><b>#{@record.u_tag}</b>", :colspan => 300, :rowspan => 2, align: :right }
+          {:content => "Issue #<br/><b>#{@record.u_tag}</b>", :colspan => 300, 
+            :rowspan => 2, align: :right }
         ],
         [  
-          { :content => "<font size='12'><b>Facility:</b>#{table_params[:facility]}</font>",
-            :colspan => 500, align: :center },
-          { :content => "<font size='12'><b>Floor:</b>#{table_params[:floor]}</font>", 
-            :colspan => 400, align: :center }
+          { :content => "<font size='12'>Facility:  #{table_params[:facility]}</font>",
+            :colspan => 500, align: :left },
+          { :content => "<font size='12'>Floor:  #{table_params[:floor]}</font>", 
+            :colspan => 400, align: :left }
         ],
         [
-          { :content => "<font size='12'><b>Building:</b>#{table_params[:building]}</font>", 
-            :colspan => 500, align: :center },
-          { :content => "<font size='12'><b>Issue Location:</b>#{table_params[:location]}</font>", :colspan => 700 }          
+          { :content => "<font size='12'>Building:  #{table_params[:building]}</font>", 
+            :colspan => 500, :align => :left, :padding => [0, 0, 20, 10] },
+          { :content => "<font size='12'>Issue Location:  #{table_params[:location]}</font>", 
+            :colspan => 700, align: :left }          
         ],
         [
-          { :content => "<font size='12'><b>Date</b></font>", 
+          { :content => "<font size='12'>Dept/Area:  #{table_params[:dept_area]}</font>", 
+            :colspan => 500, align: :left },
+          { :content => "", :colspan => 700 }          
+        ],
+        [
+          { :content => "<font size='12'>Date:</font>", 
             :colspan => 200, align: :right },
           { :content => "<font size='12'>#{@record.u_inspected_on.localtime.strftime('%m/%d/%Y')}</font>", 
             :colspan => 100, align: :left }, 
-          { :content => "<font size='12'><b>Time</b></font>", 
+          { :content => "<font size='12'>Time:</font>", 
             :colspan => 200, align: :right },
           { :content => "<font size='12'>#{@record.u_inspected_on.localtime.strftime('%I:%M:%S %P')}</font>", 
             :colspan => 100, align: :left },
-          { :content => "<font size='12'><b>LSS Technician</b></font>", 
+          { :content => "<font size='12'>LSS Technician</font>", 
             :colspan => 300, align: :left },
           { :content => "<font size='12'>#{table_params[:technician]}</font>", 
-            :colspan => 300, align: :right }             
+            :colspan => 300, align: :center }             
         ]  
       ], :cell_style => { :inline_format => true })
       pdf.move_down 20
@@ -136,24 +144,29 @@ module FirestopInstallationReport
     def draw_table2(pdf)
        pdf.table([
         [
-          {:content => "<font size='14'><b>ISSUE</b></font>", :colspan => 400, align: :center },
-          {:content => "<font size='14'><b>BARRIER TYPE</b></font>", :colspan => 400, align: :center },
-          {:content => "<font size='14'><b>PENETRATION TYPE</b></font>", :colspan => 400, align: :center}
+          {:content => "<font size='12'><b>ISSUE</b></font>",  :colspan => 800, :align => :center },
+          {:content => "<font size='12'><b>BARRIER TYPE</b></font>", :colspan => 800, :align => :center},
+          {:content => "<font size='12'><b>PENETRATION TYPE</b></font>", :colspan => 800, :align => :center}
         ],
         [  
-          {:content => "<font size='10'>#{@record.u_issue_type}</font>", :colspan => 400, align: :left },
-          {:content => "<font size='10'>#{@record.u_barrier_type}</font>", :colspan => 400, align: :left },
-          {:content => "<font size='10'>#{@record.u_penetration_type}</font>", :colspan => 400, align: :left }
+          {:content => "<font size='10'>#{@record.u_issue_type}</font>", :colspan => 800, :align => :left },
+          {:content => "<font size='10'>#{@record.u_barrier_type}</font>", :colspan => 800, :align => :left },
+          {:content => "<font size='10'>#{@record.u_penetration_type}</font>", 
+           :colspan => 800, :align => :left }
         ],
         [
-          {:content => "<font size='14'><b>CORRECTIVE ACTION / UL SYSTEM</b></font>", 
-            :colspan => 400, align: :center },
-          {:content => "<font size='14'><b>COMMENT</b></font> <font size='10'><b>(If applicable)</b></font>", 
-            :colspan => 800, align: :center }          
+          {:content => "<font size='12'><b>CORRECTIVE ACTION / UL SYSTEM</b></font>", 
+            :colspan => 800, :align => :center  },
+          {:content => "<font size='12'><b>COMMENT</b></font>", 
+            :colspan => 1600, :align => :center }          
         ],
         [
-          {:content => "<font size='12'>#{@record.u_corrected_url_system}</font>", :colspan => 400, align: :left },
-          {:content => "<font size='12'></font>", :colspan => 800, align: :left },
+          {:content => "<font size='12'>#{@record.u_corrected_url_system}</font>",
+           :colspan => 800, :align => :left, :overflow => :shrink_to_fit, :min_font_size => 8,
+            :height => 20 },
+          {:content => "<font size='12'></font>", :colspan => 1600, :align => :left, 
+            :overflow => :shrink_to_fit, :min_font_size => 8,
+            :height => 20 },
         ]  
       ], :cell_style => { :inline_format => true })
       pdf.move_down 20
@@ -233,11 +246,11 @@ module FirestopInstallationReport
     def draw_before_image(pdf)
       image = @record.pdf_image1.path(:pdf)      
       unless image.blank?
-        pdf.image(image, at: [15 - pdf.bounds.absolute_left, 270], fit: [225, 225])#521
+        pdf.image(image, at: [60 - pdf.bounds.absolute_left, 300], fit: [225, 225])#521
       else
         pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", 
-          at: [15 - pdf.bounds.absolute_left, 270])
-        pdf.draw_text('Photo Unavailable', style: :bold, size:  12,  at: [100 - pdf.bounds.absolute_left, 270])#404
+          at: [60 - pdf.bounds.absolute_left, 300])
+        pdf.draw_text('Photo Unavailable', style: :bold, size:  12,  at: [100 - pdf.bounds.absolute_left, 300])#404
       end
       pdf.draw_text("Issue", at: [120 - pdf.bounds.absolute_left, 15])#280
     end
@@ -245,10 +258,10 @@ module FirestopInstallationReport
     def draw_after_image(pdf)
       image = @record.pdf_image2.path(:pdf)      
       unless image.blank?
-        pdf.image(image, at: [330 - pdf.bounds.absolute_left, 255], fit: [225, 225])
+        pdf.image(image, at: [330 - pdf.bounds.absolute_left, 300], fit: [225, 225])
       else
-        pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [330 - pdf.bounds.absolute_left, 255])
-        pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at: [400 - pdf.bounds.absolute_left, 255])
+        pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [330 - pdf.bounds.absolute_left, 300])
+        pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at: [400 - pdf.bounds.absolute_left, 300])
       end
       pdf.draw_text("Corrected Issue", at: [410 - pdf.bounds.absolute_left, 15])      
     end

@@ -192,7 +192,7 @@ module FirestopSurveyReport
 
     def draw_fixed_on_site(pdf, data)
       @content = [{:content => 'Fixed On Site = YES', :colspan => 540, align: :center}]
-      @header = ['Date', 'Asset #', 'Floor', 'Location', 'Issue', "Barrier Type", 'Penetration Type', "Corrective Action"]
+      @header = ['Date', 'Issue #', 'Floor', 'Location', 'Issue', "Barrier Type", 'Penetration Type', "Corrective Action"]
 
       pdf.table([@content]+[@header]+data, :column_widths => { 0 => 55 }, header: 2, cell_style: { size: 8 }) do |table|
         table.row_colors = ['ffffff', 'eaeaea']
@@ -222,7 +222,7 @@ module FirestopSurveyReport
     def draw_survey_only(pdf, data)
       #pdf.table([["Fixed On Site = NO"]], :cell_style => {:border_color => "888888"}, :width => 540)
       @content = [{:content => 'Fixed On Site = NO', :colspan => 540, align: :center}]
-      @header =  ['Date', 'Asset #', 'Floor', 'Location', 'Issue', "Barrier Type", 'Penetration Type', "Suggested Corrective Action"]
+      @header =  ['Date', 'Issue #', 'Floor', 'Location', 'Issue', "Barrier Type", 'Penetration Type', "Suggested Corrective Action"]
 
       #pdf.table(@survey_only, :column_widths => { 0 => 55 }, header: true, cell_style: { align: :center, size: 8 }) do |table|
       pdf.table([@content] + [@header] + data, :column_widths => { 0 => 55 }, header: 2, cell_style: { size: 8 }) do |table|
