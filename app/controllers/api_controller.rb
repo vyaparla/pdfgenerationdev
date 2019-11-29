@@ -348,7 +348,9 @@ class ApiController < ApplicationController
         sheet.add_row ["Issue #", "Facility", "Building", "Floor", "Location", "Barrier Type", "Penetration Type", "Issue", "Corrected On Site", "Suggested Corrective Action", "Corrective Action/UL System", "Date", "Technician"] , :style => header_row
         i = 1
         @records.each do |record|
-	   floor = (record.u_floor == "other" ? record.u_other_floor : record.u_floor.to_i)
+	  # floor = (record.u_floor == "other" ? record.u_other_floor : record.u_floor.to_i)
+          floor =  ( record.u_floor == "other" ? record.u_other_floor : record.u_floor)
+
            sheet.add_row  [record.u_tag, record.u_facility_name, record.u_building, floor, record.u_location_desc, record.u_barrier_type, 
                   record.u_penetration_type, record.u_issue_type,
                   if record.u_service_type == "Fixed On Site"
@@ -382,7 +384,7 @@ class ApiController < ApplicationController
         sheet.add_row ["Issue #", "Facility", "Building", "Floor", "Location", "Barrier Type", "Penetration Type", "Issue", "Corrected On Site", "Suggested Corrective Action", "Corrective Action/UL System", "Date", "Technician"] , :style => header_row
         i = 1
 	@records.each do |record|
-	  floor = (record.u_floor == "other" ? record.u_other_floor : record.u_floor.to_i)	
+          floor =  (record.u_floor == "other" ? record.u_other_floor : record.u_floor)
           sheet.add_row [record.u_tag, record.u_facility_name, record.u_building, floor, record.u_location_desc, record.u_barrier_type,
                  record.u_penetration_type, record.u_issue_type,
                   if record.u_service_type == "Fixed On Site"
