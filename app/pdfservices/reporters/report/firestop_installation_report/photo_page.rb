@@ -91,10 +91,10 @@ module FirestopInstallationReport
 
     def draw_table1(pdf)
       if @record.u_service_type&.upcase == 'FIXED ON SITE'
-        status_content = "<font size='8' color='FFFFFF'><b>FIXED ONSITE</b></font>"
+        status_content = "<font size='8'><b>FIXED ONSITE</b></font>"
         cell_color = '13db13'
       else
-        status_content = "<font size='8' color='FFFFFF'><b>NOT FIXED ONSITE</b></font>"
+        status_content = "<font size='8'><b>NOT FIXED ONSITE</b></font>"
         cell_color = 'ef3038'
       end
 
@@ -102,7 +102,8 @@ module FirestopInstallationReport
         [
           {:content => "<font size='12'><b>#{title.upcase}</b></font>", :colspan => 500, align: :center },
           {:content => "Status:", :colspan => 100, align: :left },
-          {:content => status_content, :background_color=> cell_color,:colspan => 300, align: :center },
+          {:content => status_content, :background_color=> cell_color,:colspan => 300, 
+            :align => :center, :text_color => "ffffff" },
           {:content => "Issue #<br/><b>#{@record.u_tag}</b>", :colspan => 300, 
             :rowspan => 2, align: :right }
         ],
@@ -114,7 +115,7 @@ module FirestopInstallationReport
         ],
         [
           { :content => "<font size='12'>Building:  #{table_params[:building]}</font>", 
-            :colspan => 500, :align => :left, :padding => [0, 0, 20, 10] },
+            :colspan => 500, :align => :left },
           { :content => "<font size='12'>Issue Location:  #{table_params[:location]}</font>", 
             :colspan => 700, align: :left }          
         ],
@@ -142,31 +143,42 @@ module FirestopInstallationReport
     end 
 
     def draw_table2(pdf)
+      if @record.u_service_type&.upcase == 'FIXED ON SITE'
+        corrective_url = @record.u_corrected_url_system
+      else
+        corrective_url = @record.u_suggested_ul_system
+      end
+
        pdf.table([
         [
-          {:content => "<font size='12'><b>ISSUE</b></font>",  :colspan => 800, :align => :center },
-          {:content => "<font size='12'><b>BARRIER TYPE</b></font>", :colspan => 800, :align => :center},
-          {:content => "<font size='12'><b>PENETRATION TYPE</b></font>", :colspan => 800, :align => :center}
+          {:content => "<font size='12'><b>ISSUE</b></font>",  :colspan => 1, 
+            :align => :center, :width => 180 },
+          {:content => "<font size='12'><b>BARRIER TYPE</b></font>", :colspan => 1, 
+            :align => :center, :width => 180},
+          {:content => "<font size='12'><b>PENETRATION TYPE</b></font>", :colspan => 1,
+           :align => :center, :width => 180}
         ],
         [  
-          {:content => "<font size='10'>#{@record.u_issue_type}</font>", :colspan => 800, :align => :left },
-          {:content => "<font size='10'>#{@record.u_barrier_type}</font>", :colspan => 800, :align => :left },
+          {:content => "<font size='10'>#{@record.u_issue_type}</font>", :colspan => 1, 
+            :align => :left, :width => 180 },
+          {:content => "<font size='10'>#{@record.u_barrier_type}</font>", :colspan => 1, 
+            :align => :left, :width => 180 },
           {:content => "<font size='10'>#{@record.u_penetration_type}</font>", 
-           :colspan => 800, :align => :left }
+           :colspan => 1, :align => :left, :width => 180 }
         ],
         [
           {:content => "<font size='12'><b>CORRECTIVE ACTION / UL SYSTEM</b></font>", 
-            :colspan => 800, :align => :center  },
+            :colspan => 1, :align => :center, :width => 180  },
           {:content => "<font size='12'><b>COMMENT</b></font>", 
-            :colspan => 1600, :align => :center }          
+            :colspan => 2, :align => :center, :width => 360 }          
         ],
         [
-          {:content => "<font size='12'>#{@record.u_corrected_url_system}</font>",
-           :colspan => 800, :align => :left, :overflow => :shrink_to_fit, :min_font_size => 8,
-            :height => 20 },
-          {:content => "<font size='12'></font>", :colspan => 1600, :align => :left, 
+          {:content => "<font size='12'>#{corrective_url}</font>",
+           :colspan => 1, :align => :left, :overflow => :shrink_to_fit, :min_font_size => 8,
+            :height => 20, :width => 180 },
+          {:content => "<font size='12'></font>", :colspan => 2, :align => :left, 
             :overflow => :shrink_to_fit, :min_font_size => 8,
-            :height => 20 },
+            :height => 20, :width => 360 },
         ]  
       ], :cell_style => { :inline_format => true })
       pdf.move_down 20
