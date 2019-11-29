@@ -72,10 +72,20 @@ module FirestopInstallationReport
     end
 
   private
-    def table_params
+def table_params
       contracted_by = @group_name.blank? ? @facility_name : @group_name
       floor = @record.u_floor == "other" ? @record.u_other_floor : @record.u_floor
-
+      # technician = if @record.u_inspector.blank? 
+      #   ' '*100
+      # else
+      #   if @record.u_inspector.length < 100
+      #     blank_space = 100 - @record.u_inspector.length
+      #     "#{@record.u_inspector}#{' '*blank_space}"
+      #   else  
+      #     @record.u_inspector
+      #   end  
+      # end
+          
       { contracted_by: contracted_by ,
         facility: @facility_name,
         building: @record.u_building,
@@ -254,26 +264,26 @@ module FirestopInstallationReport
     #   pdf.text("<b>Asset # :</b> #{@record.u_tag}", inline_format: true)
     #   #pdf.text("<b>Penetration Number :</b> #{@record.u_tag}", inline_format: true)
     # end
-
     def draw_before_image(pdf)
+      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", 
+        at: [60 - pdf.bounds.absolute_left, 300])
       image = @record.pdf_image1.path(:pdf)      
       unless image.blank?
-        pdf.image(image, at: [60 - pdf.bounds.absolute_left, 300], fit: [225, 225])#521
-      else
-        pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", 
-          at: [60 - pdf.bounds.absolute_left, 300])
-        pdf.draw_text('Photo Unavailable', style: :bold, size:  12,  at: [100 - pdf.bounds.absolute_left, 300])#404
+        pdf.image(image, at: [90 - pdf.bounds.absolute_left, 280], fit: [200, 200])#521
+      else        
+        pdf.draw_text('Photo Unavailable', style: :bold, size:  12,  at: [100 - pdf.bounds.absolute_left, 220])#404
       end
       pdf.draw_text("Issue", at: [120 - pdf.bounds.absolute_left, 15])#280
     end
 
     def draw_after_image(pdf)
+      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", 
+        at: [330 - pdf.bounds.absolute_left, 300])
       image = @record.pdf_image2.path(:pdf)      
       unless image.blank?
-        pdf.image(image, at: [330 - pdf.bounds.absolute_left, 300], fit: [225, 225])
-      else
-        pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [330 - pdf.bounds.absolute_left, 300])
-        pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at: [400 - pdf.bounds.absolute_left, 300])
+        pdf.image(image, at: [360 - pdf.bounds.absolute_left, 280], fit: [200, 200])
+      else        
+        pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at: [400 - pdf.bounds.absolute_left, 220])
       end
       pdf.draw_text("Corrected Issue", at: [410 - pdf.bounds.absolute_left, 15])      
     end
