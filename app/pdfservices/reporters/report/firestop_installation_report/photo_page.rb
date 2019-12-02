@@ -110,44 +110,44 @@ def table_params
 
       pdf.table([
         [
-          {:content => "<font size='12'><b>#{title.upcase}</b></font>", :colspan => 500, align: :center },
-          {:content => "Status:", :colspan => 100, align: :left },
-          {:content => status_content, :background_color=> cell_color,:colspan => 300, 
+          {:content => "<font size='12'><b>#{title.upcase}</b></font>", :colspan => 3, :width => 225, align: :center },
+          {:content => "Status:", :colspan => 1, :width => 55, align: :left },
+          {:content => status_content, :background_color=> cell_color,:colspan => 1, :width => 125, 
             :align => :center, :text_color => "ffffff" },
-          {:content => "Issue #<br/><b>#{@record.u_tag}</b>", :colspan => 300, 
+          {:content => "Issue #<br/><b>#{@record.u_tag}</b>", :colspan => 1, :width => 135, 
             :rowspan => 2, align: :right }
         ],
         [  
           { :content => "<font size='12'>Facility:  #{table_params[:facility]}</font>",
-            :colspan => 500, align: :left },
+            :colspan => 3, :width => 225, align: :left },
           { :content => "<font size='12'>Floor:  #{table_params[:floor]}</font>", 
-            :colspan => 400, align: :left }
+            :colspan => 2, :width => 180, align: :left }
         ],
         [
           { :content => "<font size='12'>Building:  #{table_params[:building]}</font>", 
-            :colspan => 500, :align => :left },
+            :colspan => 3, :width => 225, :align => :left },
           { :content => "<font size='12'>Issue Location:  #{table_params[:location]}</font>", 
-            :colspan => 700, align: :left }          
+            :colspan => 3, :width => 315, align: :left }          
         ],
         [
           { :content => "<font size='12'>Dept/Area:  #{table_params[:dept_area]}</font>", 
-            :colspan => 500, align: :left },
-          { :content => "", :colspan => 700 }          
+            :colspan => 3, :width => 225, align: :left },
+          { :content => "", :colspan => 3, :width => 315 }          
         ],
         [
           { :content => "<font size='12'>Date:</font>", 
-            :colspan => 200, align: :right },
-          { :content => "<font size='12'>#{@record.u_inspected_on.localtime.strftime('%m/%d/%Y')}</font>", 
-            :colspan => 100, align: :left }, 
+            :colspan => 1, :width => 80, align: :right },
+          { :content => "<font size='8'>#{@record.u_inspected_on.localtime.strftime('%m/%d/%Y')}</font>", 
+            :colspan => 1, :width => 55, align: :left }, 
           { :content => "<font size='12'>Time:</font>", 
-            :colspan => 200, align: :right },
-          { :content => "<font size='12'>#{@record.u_inspected_on.localtime.strftime('%I:%M:%S %P')}</font>", 
-            :colspan => 100, align: :left },
+            :colspan => 1, :width => 90, align: :right },
+          { :content => "<font size='8'>#{@record.u_inspected_on.localtime.strftime('%I:%M:%S %P')}</font>", 
+            :colspan => 1, :width => 55, align: :left },
           { :content => "<font size='12'>LSS Technician</font>", 
-            :colspan => 300, align: :left },
+            :colspan => 1, :width => 125, align: :left },
           { :content => "<font size='12'>#{table_params[:technician]}</font>", 
-            :colspan => 300, align: :center }             
-        ]  
+            :colspan => 1, :width => 135, align: :center }             
+        ]
       ], :cell_style => { :inline_format => true })
       pdf.move_down 20
     end 
@@ -159,7 +159,7 @@ def table_params
         corrective_url = @record.u_suggested_ul_system
       end
 
-      pdf.table([
+       pdf.table([
         [
           {:content => "<font size='12'><b>ISSUE</b></font>",  :colspan => 1, 
             :align => :center, :width => 180 },
@@ -185,7 +185,7 @@ def table_params
         [
           {:content => "<font size='10'>#{corrective_url}</font>",
            :colspan => 1, :align => :left, :overflow => :shrink_to_fit, :min_font_size => 8,
-           :width => 180 },
+            :width => 180 },
           {:content => "<font size='10'></font>", :colspan => 2, :align => :left, 
             :overflow => :shrink_to_fit, :min_font_size => 8,
             :height => 20, :width => 360 },
@@ -265,27 +265,43 @@ def table_params
     #   #pdf.text("<b>Penetration Number :</b> #{@record.u_tag}", inline_format: true)
     # end
     def draw_before_image(pdf)
-      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", 
-        at: [60 - pdf.bounds.absolute_left, 300])
-      image = @record.pdf_image1.path(:pdf)      
+      # pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", 
+      #   at: [60 - pdf.bounds.absolute_left, 60])
+      # image = @record.pdf_image1.path(:pdf)      
+      # unless image.blank?
+      #   pdf.image(image, at: [60 - pdf.bounds.absolute_left, 60], fit: [225, 225])#521
+      # else        
+      #   pdf.draw_text('Photo Unavailable', style: :bold, size:  12,  at: [100 - pdf.bounds.absolute_left, 120])#404
+      # end
+      # pdf.draw_text("Issue", at: [60 - pdf.bounds.absolute_left, 15])#280
+      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [15 - pdf.bounds.absolute_left, 270])#536
+      image = @record.pdf_image1.path(:pdf)
       unless image.blank?
-        pdf.image(image, at: [90 - pdf.bounds.absolute_left, 280], fit: [200, 200])#521
-      else        
-        pdf.draw_text('Photo Unavailable', style: :bold, size:  12,  at: [100 - pdf.bounds.absolute_left, 220])#404
+        pdf.image(image, at: [45 - pdf.bounds.absolute_left, 245], fit: [200, 200])#521
+      else
+        pdf.draw_text('Photo Unavailable', style: :bold, size:  11,  at: [90 - pdf.bounds.absolute_left, 135])#404
       end
-      pdf.draw_text("Issue", at: [120 - pdf.bounds.absolute_left, 15])#280
+      pdf.draw_text("Issue",  at: [60 - pdf.bounds.absolute_left, 15])#280
     end
 
     def draw_after_image(pdf)
-      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", 
-        at: [330 - pdf.bounds.absolute_left, 300])
+      # pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", 
+      #   at: [300 - pdf.bounds.absolute_left, 60])
+      # image = @record.pdf_image2.path(:pdf)      
+      # unless image.blank?
+      #   pdf.image(image, at: [300 - pdf.bounds.absolute_left, 60], fit: [200, 200])
+      # else        
+      #   pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at: [300 - pdf.bounds.absolute_left, 120])
+      # end
+      # pdf.draw_text("Corrected Issue", at: [410 - pdf.bounds.absolute_left, 15]) 
+      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [300 - pdf.bounds.absolute_left, 270])
       image = @record.pdf_image2.path(:pdf)      
       unless image.blank?
-        pdf.image(image, at: [360 - pdf.bounds.absolute_left, 280], fit: [200, 200])
-      else        
-        pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at: [400 - pdf.bounds.absolute_left, 220])
+        pdf.image(image, at: [330 - pdf.bounds.absolute_left, 245], fit: [200, 200])
+      else
+        pdf.draw_text('Photo Unavailable', style: :bold, size:  11, at: [90 - pdf.bounds.absolute_left, 135])
       end
-      pdf.draw_text("Corrected Issue", at: [410 - pdf.bounds.absolute_left, 15])      
+      pdf.draw_text("Corrected Issue", at: [330 - pdf.bounds.absolute_left, 15])     
     end
 
     def title

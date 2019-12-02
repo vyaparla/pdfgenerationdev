@@ -117,44 +117,44 @@ module FirestopSurveyReport
 
       pdf.table([
         [
-          {:content => "<font size='12'><b>#{title.upcase}</b></font>", :colspan => 500, align: :center },
-          {:content => "Status:", :colspan => 100, align: :left },
-          {:content => status_content, :background_color=> cell_color,:colspan => 300, 
+          {:content => "<font size='12'><b>#{title.upcase}</b></font>", :colspan => 3, :width => 225, align: :center },
+          {:content => "Status:", :colspan => 1, :width => 55, align: :left },
+          {:content => status_content, :background_color=> cell_color,:colspan => 1, :width => 125, 
             :align => :center, :text_color => "ffffff" },
-          {:content => "Issue #<br/><b>#{@record.u_tag}</b>", :colspan => 300, 
+          {:content => "Issue #<br/><b>#{@record.u_tag}</b>", :colspan => 1, :width => 135, 
             :rowspan => 2, align: :right }
         ],
         [  
           { :content => "<font size='12'>Facility:  #{table_params[:facility]}</font>",
-            :colspan => 500, align: :left },
+            :colspan => 3, :width => 225, align: :left },
           { :content => "<font size='12'>Floor:  #{table_params[:floor]}</font>", 
-            :colspan => 400, align: :left }
+            :colspan => 2, :width => 180, align: :left }
         ],
         [
           { :content => "<font size='12'>Building:  #{table_params[:building]}</font>", 
-            :colspan => 500, :align => :left },
+            :colspan => 3, :width => 225, :align => :left },
           { :content => "<font size='12'>Issue Location:  #{table_params[:location]}</font>", 
-            :colspan => 700, align: :left }          
+            :colspan => 3, :width => 315, align: :left }          
         ],
         [
           { :content => "<font size='12'>Dept/Area:  #{table_params[:dept_area]}</font>", 
-            :colspan => 500, align: :left },
-          { :content => "", :colspan => 700 }          
+            :colspan => 3, :width => 225, align: :left },
+          { :content => "", :colspan => 3, :width => 315 }          
         ],
         [
           { :content => "<font size='12'>Date:</font>", 
-            :colspan => 200, align: :right },
-          { :content => "<font size='12'>#{@record.u_inspected_on.localtime.strftime('%m/%d/%Y')}</font>", 
-            :colspan => 100, align: :left }, 
+            :colspan => 1, :width => 80, align: :right },
+          { :content => "<font size='8'>#{@record.u_inspected_on.localtime.strftime('%m/%d/%Y')}</font>", 
+            :colspan => 1, :width => 55, align: :left }, 
           { :content => "<font size='12'>Time:</font>", 
-            :colspan => 200, align: :right },
-          { :content => "<font size='12'>#{@record.u_inspected_on.localtime.strftime('%I:%M:%S %P')}</font>", 
-            :colspan => 100, align: :left },
+            :colspan => 1, :width => 90, align: :right },
+          { :content => "<font size='8'>#{@record.u_inspected_on.localtime.strftime('%I:%M:%S %P')}</font>", 
+            :colspan => 1, :width => 55, align: :left },
           { :content => "<font size='12'>LSS Technician</font>", 
-            :colspan => 300, align: :left },
+            :colspan => 1, :width => 125, align: :left },
           { :content => "<font size='12'>#{table_params[:technician]}</font>", 
-            :colspan => 300, align: :center }             
-        ]  
+            :colspan => 1, :width => 135, align: :center }             
+        ]
       ], :cell_style => { :inline_format => true })
       pdf.move_down 20
     end 
