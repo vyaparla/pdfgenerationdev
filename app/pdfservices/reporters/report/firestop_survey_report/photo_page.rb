@@ -144,11 +144,11 @@ module FirestopSurveyReport
         [
           { :content => "<font size='12'>Date:</font>", 
             :colspan => 1, :width => 80, align: :right },
-          { :content => "<font size='8'>#{@record.u_inspected_on.localtime.strftime('%m/%d/%Y')}</font>", 
+          { :content => "<font size='10'>#{@record.u_inspected_on.localtime.strftime('%m/%d/%Y')}</font>", 
             :colspan => 1, :width => 55, align: :left }, 
           { :content => "<font size='12'>Time:</font>", 
             :colspan => 1, :width => 90, align: :right },
-          { :content => "<font size='8'>#{@record.u_inspected_on.localtime.strftime('%I:%M:%S %P')}</font>", 
+          { :content => "<font size='10'>#{@record.u_inspected_on.localtime.strftime('%I:%M:%S %P')}</font>", 
             :colspan => 1, :width => 55, align: :left },
           { :content => "<font size='12'>LSS Technician</font>", 
             :colspan => 1, :width => 125, align: :left },
@@ -320,14 +320,22 @@ module FirestopSurveyReport
       #   pdf.draw_text('Photo Unavailable', style: :bold, size:  12,  at: [100 - pdf.bounds.absolute_left, 120])#404
       # end
       # pdf.draw_text("Issue", at: [60 - pdf.bounds.absolute_left, 15])#280
-      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [15 - pdf.bounds.absolute_left, 270])#536
-      image = @record.pdf_image1.path(:pdf)
+      # pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [15 - pdf.bounds.absolute_left, 270])#536
+      # image = @record.pdf_image1.path(:pdf)
+      # unless image.blank?
+      #   pdf.image(image, at: [15 - pdf.bounds.absolute_left, 270], fit: [200, 200])#521
+      # else
+      #   pdf.draw_text('Photo Unavailable', style: :bold, size:  11,  at: [90 - pdf.bounds.absolute_left, 135])#404
+      # end
+      # pdf.draw_text("Issue",  at: [60 - pdf.bounds.absolute_left, 15])#280
+      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [15 - pdf.bounds.absolute_left, 290])#536
+      image =  @record.pdf_image1.path(:pdf)      
       unless image.blank?
-        pdf.image(image, at: [45 - pdf.bounds.absolute_left, 245], fit: [200, 200])#521
+        pdf.image(image, at: [30 - pdf.bounds.absolute_left, 275], fit: [225, 225])#521
       else
-        pdf.draw_text('Photo Unavailable', style: :bold, size:  11,  at: [90 - pdf.bounds.absolute_left, 135])#404
+        pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at: [90 - pdf.bounds.absolute_left, 189])#404
       end
-      pdf.draw_text("Issue",  at: [60 - pdf.bounds.absolute_left, 15])#280
+      pdf.draw_text("Issue",  at: [60 - pdf.bounds.absolute_left, 15])
     end
 
     def draw_after_image(pdf)
@@ -340,14 +348,23 @@ module FirestopSurveyReport
       #   pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at: [300 - pdf.bounds.absolute_left, 120])
       # end
       # pdf.draw_text("Corrected Issue", at: [410 - pdf.bounds.absolute_left, 15]) 
-      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [300 - pdf.bounds.absolute_left, 270])
-      image = @record.pdf_image2.path(:pdf)      
+      # pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [300 - pdf.bounds.absolute_left, 270])
+      # image = @record.pdf_image2.path(:pdf)      
+      # unless image.blank?
+      #   pdf.image(image, at: [330 - pdf.bounds.absolute_left, 245], fit: [200, 200])
+      # else
+      #   pdf.draw_text('Photo Unavailable', style: :bold, size:  11, at: [90 - pdf.bounds.absolute_left, 135])
+      # end
+      # pdf.draw_text("Corrected Issue", at: [330 - pdf.bounds.absolute_left, 15])     
+      # pdf.draw_text("Issue",  at: [60 - pdf.bounds.absolute_left, 15])#280
+      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [315 - pdf.bounds.absolute_left, 290])#536
+      image =  @record.pdf_image1.path(:pdf)      
       unless image.blank?
-        pdf.image(image, at: [330 - pdf.bounds.absolute_left, 245], fit: [200, 200])
+        pdf.image(image, at: [330 - pdf.bounds.absolute_left, 275], fit: [225, 225])#521
       else
-        pdf.draw_text('Photo Unavailable', style: :bold, size:  11, at: [90 - pdf.bounds.absolute_left, 135])
+        pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at: [90 - pdf.bounds.absolute_left, 189])#404
       end
-      pdf.draw_text("Corrected Issue", at: [330 - pdf.bounds.absolute_left, 15])     
+      pdf.draw_text("Corrected Issue",  at: [330 - pdf.bounds.absolute_left, 15])
     end
 
     def title

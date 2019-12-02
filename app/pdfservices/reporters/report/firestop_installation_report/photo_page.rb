@@ -137,11 +137,11 @@ def table_params
         [
           { :content => "<font size='12'>Date:</font>", 
             :colspan => 1, :width => 80, align: :right },
-          { :content => "<font size='8'>#{@record.u_inspected_on.localtime.strftime('%m/%d/%Y')}</font>", 
+          { :content => "<font size='10'>#{@record.u_inspected_on.localtime.strftime('%m/%d/%Y')}</font>", 
             :colspan => 1, :width => 55, align: :left }, 
           { :content => "<font size='12'>Time:</font>", 
             :colspan => 1, :width => 90, align: :right },
-          { :content => "<font size='8'>#{@record.u_inspected_on.localtime.strftime('%I:%M:%S %P')}</font>", 
+          { :content => "<font size='10'>#{@record.u_inspected_on.localtime.strftime('%I:%M:%S %P')}</font>", 
             :colspan => 1, :width => 55, align: :left },
           { :content => "<font size='12'>LSS Technician</font>", 
             :colspan => 1, :width => 125, align: :left },

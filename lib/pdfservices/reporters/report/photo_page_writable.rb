@@ -110,26 +110,26 @@ module Report
       #       pdf.text("<b>#{key}</b> #{value}", :inline_format => true)
       #     end
       #   end
-      elsif @record.u_report_type == "FIRESTOPSURVEY"
-        unless @group_name.blank?
-          [["Contracted By :", "#{@group_name}"],
-          ["Facility :", "#{@facility_name}"],
-          ["Building :" , "#{@record.u_building}"],
-          ["Survey Date :", @record.work_dates],
-          ["Surveyed By :", "#{@record.u_inspector}"]].each do |key, value|
-            pdf.move_down 3
-            pdf.text("<b>#{key}</b> #{value}", :inline_format => true)
-          end   
-        else
-          [["Contracted By :", "#{@facility_name}"],
-          ["Facility :", "#{@facility_name}"],
-          ["Building :" , "#{@record.u_building}"],
-          ["Survey Date :", @record.work_dates],
-          ["Surveyed By :", "#{@record.u_inspector}"]].each do |key, value|
-            pdf.move_down 3
-            pdf.text("<b>#{key}</b> #{value}", :inline_format => true)
-          end
-        end
+      # elsif @record.u_report_type == "FIRESTOPSURVEY"
+      #   unless @group_name.blank?
+      #     [["Contracted By :", "#{@group_name}"],
+      #     ["Facility :", "#{@facility_name}"],
+      #     ["Building :" , "#{@record.u_building}"],
+      #     ["Survey Date :", @record.work_dates],
+      #     ["Surveyed By :", "#{@record.u_inspector}"]].each do |key, value|
+      #       pdf.move_down 3
+      #       pdf.text("<b>#{key}</b> #{value}", :inline_format => true)
+      #     end   
+      #   else
+      #     [["Contracted By :", "#{@facility_name}"],
+      #     ["Facility :", "#{@facility_name}"],
+      #     ["Building :" , "#{@record.u_building}"],
+      #     ["Survey Date :", @record.work_dates],
+      #     ["Surveyed By :", "#{@record.u_inspector}"]].each do |key, value|
+      #       pdf.move_down 3
+      #       pdf.text("<b>#{key}</b> #{value}", :inline_format => true)
+      #     end
+      #   end
       end
       pdf.move_down 18
     end
