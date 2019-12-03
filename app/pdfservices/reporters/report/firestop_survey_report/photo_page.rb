@@ -118,8 +118,8 @@ module FirestopSurveyReport
       pdf.table([
         [
           {:content => "<font size='12'><b>#{title.upcase}</b></font>", :colspan => 3, :width => 225, align: :center },
-          {:content => "Status:", :colspan => 1, :width => 55, align: :left },
-          {:content => status_content, :background_color=> cell_color,:colspan => 1, :width => 125, 
+          {:content => "Status:", :colspan => 1, :width => 75, align: :left },
+          {:content => status_content, :background_color=> cell_color,:colspan => 1, :width => 105, 
             :align => :center, :text_color => "ffffff" },
           {:content => "Issue #<br/><b>#{@record.u_tag}</b>", :colspan => 1, :width => 135, 
             :rowspan => 2, align: :right }
@@ -143,21 +143,21 @@ module FirestopSurveyReport
         ],
         [
           { :content => "<font size='12'>Date:</font>", 
-            :colspan => 1, :width => 80, align: :right },
-          { :content => "<font size='10'>#{@record.u_inspected_on.localtime.strftime('%m/%d/%Y')}</font>", 
-            :colspan => 1, :width => 55, align: :left }, 
+            :colspan => 1, :width => 60, align: :right },
+          { :content => "<font size='11'>#{@record.u_inspected_on.localtime.strftime('%m/%d/%Y')}</font>", 
+            :colspan => 1, :width => 75, align: :left }, 
           { :content => "<font size='12'>Time:</font>", 
             :colspan => 1, :width => 90, align: :right },
-          { :content => "<font size='10'>#{@record.u_inspected_on.localtime.strftime('%I:%M:%S %P')}</font>", 
-            :colspan => 1, :width => 55, align: :left },
+          { :content => "<font size='11'>#{@record.u_inspected_on.localtime.strftime('%I:%M:%S %p')}</font>", 
+            :colspan => 1, :width => 75, align: :left },
           { :content => "<font size='12'>LSS Technician</font>", 
-            :colspan => 1, :width => 125, align: :left },
+            :colspan => 1, :width => 105, align: :left },
           { :content => "<font size='12'>#{table_params[:technician]}</font>", 
             :colspan => 1, :width => 135, align: :center }             
         ]
       ], :cell_style => { :inline_format => true })
       pdf.move_down 20
-    end 
+    end
 
     def draw_table2(pdf)
       if @record.u_service_type&.upcase == 'FIXED ON SITE'
@@ -311,23 +311,6 @@ module FirestopSurveyReport
     # end
 
     def draw_before_image(pdf)
-      # pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", 
-      #   at: [60 - pdf.bounds.absolute_left, 60])
-      # image = @record.pdf_image1.path(:pdf)      
-      # unless image.blank?
-      #   pdf.image(image, at: [60 - pdf.bounds.absolute_left, 60], fit: [225, 225])#521
-      # else        
-      #   pdf.draw_text('Photo Unavailable', style: :bold, size:  12,  at: [100 - pdf.bounds.absolute_left, 120])#404
-      # end
-      # pdf.draw_text("Issue", at: [60 - pdf.bounds.absolute_left, 15])#280
-      # pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [15 - pdf.bounds.absolute_left, 270])#536
-      # image = @record.pdf_image1.path(:pdf)
-      # unless image.blank?
-      #   pdf.image(image, at: [15 - pdf.bounds.absolute_left, 270], fit: [200, 200])#521
-      # else
-      #   pdf.draw_text('Photo Unavailable', style: :bold, size:  11,  at: [90 - pdf.bounds.absolute_left, 135])#404
-      # end
-      # pdf.draw_text("Issue",  at: [60 - pdf.bounds.absolute_left, 15])#280
       pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [15 - pdf.bounds.absolute_left, 290])#536
       image =  @record.pdf_image1.path(:pdf)      
       unless image.blank?
@@ -339,24 +322,6 @@ module FirestopSurveyReport
     end
 
     def draw_after_image(pdf)
-      # pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", 
-      #   at: [300 - pdf.bounds.absolute_left, 60])
-      # image = @record.pdf_image2.path(:pdf)      
-      # unless image.blank?
-      #   pdf.image(image, at: [300 - pdf.bounds.absolute_left, 60], fit: [200, 200])
-      # else        
-      #   pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at: [300 - pdf.bounds.absolute_left, 120])
-      # end
-      # pdf.draw_text("Corrected Issue", at: [410 - pdf.bounds.absolute_left, 15]) 
-      # pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [300 - pdf.bounds.absolute_left, 270])
-      # image = @record.pdf_image2.path(:pdf)      
-      # unless image.blank?
-      #   pdf.image(image, at: [330 - pdf.bounds.absolute_left, 245], fit: [200, 200])
-      # else
-      #   pdf.draw_text('Photo Unavailable', style: :bold, size:  11, at: [90 - pdf.bounds.absolute_left, 135])
-      # end
-      # pdf.draw_text("Corrected Issue", at: [330 - pdf.bounds.absolute_left, 15])     
-      # pdf.draw_text("Issue",  at: [60 - pdf.bounds.absolute_left, 15])#280
       pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [315 - pdf.bounds.absolute_left, 290])#536
       image =  @record.pdf_image1.path(:pdf)      
       unless image.blank?
