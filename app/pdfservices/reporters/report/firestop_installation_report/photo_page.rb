@@ -266,10 +266,10 @@ def table_params
     # end
     def draw_before_image(pdf)
       pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", 
-        at: [50 - pdf.bounds.absolute_left, 290], :width => 225, :height => 225)#536
+        at: [60 - pdf.bounds.absolute_left, 275], :width => 230, :height => 230)#536
       image =  @record.pdf_image1.path(:pdf)      
       unless image.blank?
-        pdf.image(image, at: [50 - pdf.bounds.absolute_left, 275], :width => 225, :height => 225)#521
+        pdf.image(image, at: [60 - pdf.bounds.absolute_left, 280], :width => 220, :height => 220)#521
       else
         pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at: [90 - pdf.bounds.absolute_left, 189])#404
       end
@@ -278,10 +278,10 @@ def table_params
 
     def draw_after_image(pdf)
       pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png",
-        at: [330 - pdf.bounds.absolute_left, 290], :width => 225, :height => 225)#536
-      image =  @record.pdf_image1.path(:pdf)      
+        at: [340 - pdf.bounds.absolute_left, 275], :width => 230, :height => 230)#536
+      image =  @record.pdf_image2.path(:pdf)      
       unless image.blank?
-        pdf.image(image, at: [330 - pdf.bounds.absolute_left, 275], :width => 225, :height => 225)#521
+        pdf.image(image, at: [340 - pdf.bounds.absolute_left, 280], :width => 220, :height => 220)#521
       else
         pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at: [90 - pdf.bounds.absolute_left, 189])#404
       end
