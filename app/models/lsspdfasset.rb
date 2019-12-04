@@ -37,9 +37,11 @@ class Lsspdfasset < ActiveRecord::Base
     Lsspdfasset.where(:u_building => building, :u_service_id => service_ID, :u_delete => false)
   end
 
-  def full_report_path
-    File.join(pdf_path, 'inspection_report.pdf')
+  def full_report_path(with_picture=true)
+     with_pic = (with_picture == "true" || with_picture == true) ? "with_picture" : "without_picture"	  
+     File.join(pdf_path, "inspection_report_"+ with_pic + ".pdf")
   end
+
 
   def summary_report_path
     File.join(pdf_path, 'summary_report.pdf')

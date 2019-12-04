@@ -206,9 +206,11 @@ class ApiController < ApplicationController
   end
 
   def download_full_pdf_report
+    with_pic = (params[:withPictures] && params[:withPictures] == "false") ? "without_picture" : "with_picture"
+    with_picture = params[:withPictures]
     @pdfjob = Lsspdfasset.where(u_service_id: params[:serviceID], :u_delete => false).last
-    @outputfile = @pdfjob.u_job_id + "_" + params[:servicetype] + "_" + Time.now.strftime("%m-%d-%Y-%r").gsub(/\s+/, "_") + "_" + "detail_report"
-    send_file @pdfjob.full_report_path, :type => 'application/pdf', :disposition =>  "attachment; filename=\"#{@outputfile}.pdf\""    
+    @outputfile = @pdfjob.u_job_id + "_" + params[:servicetype] + "_" + with_pic + "_" + Time.now.strftime("%m-%d-%Y-%r").gsub(/\s+/, "_") + "_" + "detail_report"
+    send_file @pdfjob.full_report_path(with_picture), :type => 'application/pdf', :disposition =>  "attachment; filename=\"#{@outputfile}.pdf\""    
   end
 
   def summary_report
