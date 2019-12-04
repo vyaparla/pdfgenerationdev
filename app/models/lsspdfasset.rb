@@ -38,8 +38,8 @@ class Lsspdfasset < ActiveRecord::Base
   end
 
   def full_report_path(with_picture=true)
-     with_pic = (with_picture == "true" || with_picture == true) ? "with_picture" : "without_picture"	  
-     File.join(pdf_path, "inspection_report_"+ with_pic + ".pdf")
+     report_name  = (with_picture == "true" || with_picture == true) ? "inspection_report.pdf" :  "inspection_report_without_picture.pdf"	  
+     File.join(pdf_path, report_name)
   end
 
 
