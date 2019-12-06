@@ -16,7 +16,7 @@ class DamperInspectionReporter < Reporter
       DamperInspectionReport::ProjectSummaryPage.new(job, tech).write(pdf)
       DamperInspectionReport::GraphPage.new(job, tech).write(pdf)
       job.buildings(job.u_service_id).each do |b|
-        DamperInspectionReport::BuildingSection.new(job, b, tech, group_name, facility_name).write(pdf)
+        DamperInspectionReport::BuildingSection.new(job, b, tech, group_name, facility_name, with_picture).write(pdf)
       end
   	  Report::BackPage.new.write(pdf)
   	end
