@@ -256,71 +256,109 @@ class ApiController < ApplicationController
   end
 
   def spreadsheets
-    #@outputfile = params[:jobID] + "_" + params[:servicetype] + "_" + Time.now.strftime("%m-%d-%Y-%r").gsub(/\s+/, "_") + "_" + "spreadsheet_report"
     @outputfile = params[:servicetype].delete(' ').upcase + "_" + Time.now.strftime("%m-%d-%Y-%r").gsub(/\s+/, "_") + "_" + "spreadsheet_report"
     if params[:servicetype].delete(' ').upcase == "DAMPERINSPECTION"
       @records = Lsspdfasset.where(u_service_id: params[:serviceid], :u_delete => false).where.not(u_type: "")
-        p = Axlsx::Package.new
-        wb = p.workbook
-        img_path = File.expand_path(Rails.root+'app/assets/images/lss_logo.png')
+	p, wb, img_path = initialize_spreadsheet
+	facility_name, tech, date, damper_excel_para = initialize_damper_params
         wb.styles do |s|
-        header_row = s.add_style :sz => 11, :b => true, :font_name => 'Calibri'
-        normal_row_odd = s.add_style :sz => 11, :font_name => 'Calibri', :bg_color => 'EEEEEE',  :border => { :style => :thin, :color => "CCCCCC" }
-	normal_row_even = s.add_style :sz => 11, :font_name => 'Calibri', :bg_color => 'FFFFFF', :border => { :style => :thin, :color => "CCCCCC" }
-        title_row = s.add_style :b => true,
-                            :sz => 20,
-                            :alignment => { :horizontal => :center, :vertical => :center }, :font_name => 'Calibri'
-        #heading = s.add_style alignment: {horizontal: :center}, b: true, sz: 18, bg_color: "0066CC", fg_color: "FF"
+	header_row, normal_row_odd, normal_row_even, title_row = initialize_spreadsheet_rows(s)
+	title_desc = s.add_style :i => true,
+                            :sz => 8,
+                            :alignment => { :horizontal => :left, :wrap_text => true, :vertical => :top }, :font_name => 'Calibri'
+
         wb.add_worksheet(name: "Damper Inspection List") do |sheet|
         sheet.add_image(:image_src => img_path, :start_at => [0, 0], :width => 120, :height => 70,  :noSelect => true, :noMove => true,  :rowOff => 0, :colOff => 0)
-        sheet.add_row ["", "Damper Inspection List", "", "", ""], :style => title_row, :height => 55
-        sheet.merge_cells ("B1:E1")
-        sheet.add_row ["Issue #", "Facility", "Building", "Floor", "Damper Location", "Damper Type", "Status", "Post Repair Status", "Deficiency", "Date", "Technician"] , :style => header_row
+        sheet.add_row ["", "Damper Inspection List", "", damper_excel_para, "", "", "", "", "", "", "", ""], :style => [title_row,title_row,title_row,title_desc,title_desc, title_desc, title_desc, title_desc, title_desc, title_desc, title_desc, title_desc] , :height => 55
+        sheet.merge_cells ("B1:C1")
+        sheet.merge_cells ("D1:L1")
+        sheet.add_row ["Damper #", "Facility", "Building", "Floor", "Damper Location", "Damper Type", "Status", "Deficiencies", "Repair Action Performed", "Subsequent Failure Reason", "Technician", "Date"] , :style => header_row
         i = 1
         @records.each do |record|
-	  floor = (record.u_floor == "other" ? record.u_other_floor : record.u_floor.to_i)
+	  floor = (record.u_floor == "other" ? record.u_other_floor : record.u_floor)
           sheet.add_row  [record.u_tag, record.u_facility_name, record.u_building, floor, record.u_location_desc, record.u_type, record.u_status, 
-                  if record.u_di_repaired_onsite == "true"
-                    record.u_di_passed_post_repair
-                  else
-                    'Not Repaired'
-                  end,
                   if record.u_status == "Fail"
                     record.u_reason
                   else
                     record.u_non_accessible_reasons
                   end,
-                  record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')), record.u_inspector
+		  record.u_repair_action_performed,
+		  record.u_reason2,
+		  record.u_inspector,
+                  record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY'))
 	  ] , :style => (i.even? ? normal_row_even : normal_row_odd)
            i += 1
 
         end
+	sheet.column_widths nil, nil, nil, 20, 50, nil, nil, 40, nil, nil, nil, nil
       end
     end 	
     elsif params[:servicetype].delete(' ').upcase == "DAMPERREPAIR"
       @records = Lsspdfasset.where(u_service_id: params[:serviceid], :u_delete => false).where.not(u_type: "")
-      csv_data = CSV.generate do |csv|
-        csv << ["Asset #", "Facility", "Building", "Floor", "Damper Location", "Damper Type", "Post Repair Status", "Action Taken", "Date", "Technician"]
+       p, wb, img_path = initialize_spreadsheet
+        facility_name, tech, date, damper_excel_para = initialize_damper_params
+        wb.styles do |s|
+        header_row, normal_row_odd, normal_row_even, title_row = initialize_spreadsheet_rows(s)
+        title_desc = s.add_style :i => true,
+                            :sz => 8,
+                            :alignment => { :horizontal => :left, :wrap_text => true, :vertical => :top }, :font_name => 'Calibri'
+
+        wb.add_worksheet(name: "Damper Repair List") do |sheet|
+        sheet.add_image(:image_src => img_path, :start_at => [0, 0], :width => 120, :height => 70,  :noSelect => true, :noMove => true,  :rowOff => 0, :colOff => 0)
+        sheet.add_row ["", "Damper Repair List", "",  damper_excel_para, "", "", "", "", "", "", "", ""], :style => [title_row,title_row,title_row,title_desc,title_desc, title_desc, title_desc, title_desc, title_desc, title_desc, title_desc, title_desc] , :height => 55
+        sheet.merge_cells ("B1:C1")
+        sheet.merge_cells ("D1:L1")
+        sheet.add_row ["Damper #", "Facility", "Building", "Floor", "Damper Location", "Damper Type", "Status", "Deficiencies", "Repair Action Performed", "Subsequent Failure Reason", "Technician", "Date"] , :style => header_row
+        i = 1
+
+
+      #csv_data = CSV.generate do |csv|
+       # csv << ["Asset #", "Facility", "Building", "Floor", "Damper Location", "Damper Type", "Post Repair Status", "Action Taken", "Date", "Technician"]
         @records.each do |record|
-          csv << [record.u_tag, record.u_facility_name, record.u_building, record.u_floor.to_i, record.u_location_desc, record.u_damper_name, 
-                  if record.u_dr_passed_post_repair == "Pass"
-                    'Passed Post Repair'
+		floor = (record.u_floor == "other" ? record.u_other_floor : record.u_floor)
+          sheet.add_row  [record.u_tag, record.u_facility_name, record.u_building, floor, record.u_location_desc, record.u_type, record.u_status,
+                  if record.u_status == "Fail"
+                    record.u_reason
                   else
-                    'Failed Post Repair'
+                    record.u_non_accessible_reasons
                   end,
-                  if record.u_repair_action_performed == "Damper Repaired"
+		  if record.u_repair_action_performed == "Damper Repaired"
                     record.u_repair_action_performed + ":" + record.u_dr_description
                   elsif record.u_repair_action_performed == "Damper Installed"
                     record.u_repair_action_performed + ":" + record.u_dr_damper_model
                   elsif record.u_repair_action_performed == "Actuator Installed"
                     record.u_repair_action_performed + ":" + record.u_dr_installed_actuator_model
                   else
-                    record.u_repair_action_performed + ":" + record.u_access_size 
+                    record.u_repair_action_performed + ":" + record.u_access_size
                   end,
-                  record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')), record.u_inspector
-                ]
+
+                  record.u_reason2,
+                  record.u_inspector,
+                  record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY'))
+          ] , :style => (i.even? ? normal_row_even : normal_row_odd)
+           i += 1
+
+        #  csv << [record.u_tag, record.u_facility_name, record.u_building, record.u_floor.to_i, record.u_location_desc, record.u_damper_name, 
+        #          if record.u_dr_passed_post_repair == "Pass"
+        #            'Passed Post Repair'
+        #          else
+        #            'Failed Post Repair'
+        #          end,
+        #          if record.u_repair_action_performed == "Damper Repaired"
+        #            record.u_repair_action_performed + ":" + record.u_dr_description
+        #          elsif record.u_repair_action_performed == "Damper Installed"
+        #            record.u_repair_action_performed + ":" + record.u_dr_damper_model
+        #          elsif record.u_repair_action_performed == "Actuator Installed"
+        #            record.u_repair_action_performed + ":" + record.u_dr_installed_actuator_model
+        #          else
+        #            record.u_repair_action_performed + ":" + record.u_access_size 
+        #          end,
+        #          record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')), record.u_inspector
+        #        ]
         end
-      end  
+	sheet.column_widths nil, nil, nil, 20, 50, nil, nil, 40, nil, nil, nil, nil
+      end
+    end	
     elsif params[:servicetype].delete(' ').upcase == "FIREDOORINSPECTION"
       @records = Lsspdfasset.where(u_service_id: params[:serviceid], :u_delete => false)
       csv_data = CSV.generate do |csv|                 
@@ -442,7 +480,8 @@ class ApiController < ApplicationController
         end
       end
     end
-   if params[:servicetype].delete(' ').upcase == "FIRESTOPINSTALLATION" || params[:servicetype].delete(' ').upcase == "FIRESTOPSURVEY" || params[:servicetype].delete(' ').upcase == "DAMPERINSPECTION"
+   if params[:servicetype].delete(' ').upcase == "FIRESTOPINSTALLATION" || params[:servicetype].delete(' ').upcase == "FIRESTOPSURVEY" || params[:servicetype].delete(' ').upcase == "DAMPERINSPECTION" || params[:servicetype].delete(' ').upcase == "DAMPERREPAIR"
+
      send_data p.to_stream.read, type: "application/xlsx", filename: "#{@outputfile}.xlsx"
    else
      send_data csv_data,
@@ -566,5 +605,31 @@ class ApiController < ApplicationController
                                 :m_technician_name, :m_blueprints_facility, :m_replacement_checklist, :m_facility_items, :m_emailed_reports, :m_daily_basis,
                                 :m_authorization_signature_base64, :m_authorization_signature, :m_instance_url, :m_customer_name, :m_total_firestop_assets, 
                                 :m_technician_signature_base64, :m_technician_signature, :m_total_no_of_ceiling_hatches_installed)
+  end
+
+  def initialize_spreadsheet
+    p = Axlsx::Package.new
+    wb = p.workbook
+    img_path = File.expand_path(Rails.root+'app/assets/images/lss_logo.png')
+    return p, wb, img_path
+  end
+
+  def initialize_damper_params
+    facility_name, tech, date = params["fname"], params["tech"], @records.last.work_dates
+    damper_excel_para = "LSS Life Safety Services, LLC, in accordance with The National Fire Protection Association’s (NFPA) Code(s) 80, 105, and 101 inspected fire and smoke dampers located in #{facility_name} during #{date}. The project was managed by #{tech}, who is an independent inspector and employee of LSS Life Safety Services, LLC, and is not affiliated with any supplier, manufacturer, or distributor of fire dampers, smoke dampers, or affiliated damper components. This report provides the result of the inspection for the dampers that were inspected. This report is intended to describe the location and operability of the dampers for the dates in which LSS Life Safety Services’ representatives performed the inspection of the dampers, and is not intended to constitute any warranty as to the continued operation of any damper. Thank you for contracting LSS Life Safety Services for this project and we look forward to the opportunity of working with you in the future on additional projects."
+    return facility_name, tech, date, damper_excel_para
+  end
+
+  def initialize_spreadsheet_rows(s)
+    header_row = s.add_style :sz => 11, :b => true, :font_name => 'Calibri'
+    normal_row_odd = s.add_style :sz => 11, :font_name => 'Calibri', :bg_color => 'EEEEEE',  :border => { :style => :thin, :color => "CCCCCC" }
+    normal_row_even = s.add_style :sz => 11, :font_name => 'Calibri', :bg_color => 'FFFFFF', :border => { :style => :thin, :color => "CCCCCC" }
+    title_row = s.add_style :b => true,
+                            :sz => 20,
+                            :alignment => { :horizontal => :center, :vertical => :center }, :font_name => 'Calibri'
+    title_desc = s.add_style :i => true,
+                            :sz => 8,
+                            :alignment => { :horizontal => :left, :wrap_text => true, :vertical => :top }, :font_name => 'Calibri'
+    return header_row, normal_row_odd, normal_row_even, title_row
   end
 end
