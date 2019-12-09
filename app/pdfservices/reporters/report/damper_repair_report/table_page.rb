@@ -2,10 +2,11 @@ module DamperRepairReport
   class TablePage
   	include Report::RepairDataPageWritable
 
-    def initialize(job, building, tech)
+    def initialize(job, building, tech, group_name, facility_name, with_picture)
       @job = job
       @building = building
       @tech = tech
+      @with_picture = with_picture
     end
 
     def write(pdf)

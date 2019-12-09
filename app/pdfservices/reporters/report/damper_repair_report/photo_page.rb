@@ -2,39 +2,193 @@ module DamperRepairReport
   class PhotoPage
     include Report::PhotoPageWritable
     
-    def initialize(record, options = {}, group_name, facility_name)
+    def initialize(record, group_name, facility_name, with_picture)
       @record = record
-      @options = options
       @group_name = group_name
       @facility_name = facility_name
+      @with_picture = with_picture
     end
+
+    # def write(pdf)
+    #   super
+    #   pdf.indent(250) do
+    #     draw_location_description(pdf)
+    #     draw_damper_tag(pdf)
+    #     draw_damper_type(pdf)
+    #     draw_floor(pdf)
+    #     # unless @record.u_access_size.blank?
+    #     #   draw_access_door_installation(pdf)
+    #     # end
+    #     draw_status(pdf)
+    #     draw_repairs(pdf)
+    #   end
+    #   if @record.u_repair_action_performed == "Damper Repaired"
+    #     draw_open_after_install_image(pdf)
+    #     draw_closed_after_install_image(pdf)
+    #     draw_reopened_after_install_image(pdf)
+    #   else
+    #     draw_open_after_install_image(pdf)
+    #     draw_closed_after_install_image(pdf)
+    #     draw_reopened_after_install_image(pdf)
+    #     draw_new_install_image(pdf)
+    #   end
+    # end
 
     def write(pdf)
       super
-      pdf.indent(250) do
-        draw_location_description(pdf)
-        draw_damper_tag(pdf)
-        draw_damper_type(pdf)
-        draw_floor(pdf)
-        # unless @record.u_access_size.blank?
-        #   draw_access_door_installation(pdf)
-        # end
-        draw_status(pdf)
-        draw_repairs(pdf)
-      end
-      if @record.u_repair_action_performed == "Damper Repaired"
-        draw_open_after_install_image(pdf)
-        draw_closed_after_install_image(pdf)
-        draw_reopened_after_install_image(pdf)
-      else
-        draw_open_after_install_image(pdf)
-        draw_closed_after_install_image(pdf)
-        draw_reopened_after_install_image(pdf)
-        draw_new_install_image(pdf)
+
+      draw_table1(pdf)
+      draw_table2(pdf)
+      draw_table3(pdf)
+      draw_table4(pdf)
+      pdf.move_down 20
+
+      if @with_picture
+        if @record.u_repair_action_performed == "Damper Repaired"
+          draw_open_after_install_image(pdf)
+          draw_closed_after_install_image(pdf)
+          draw_reopened_after_install_image(pdf)
+        else
+          draw_open_after_install_image(pdf)
+          draw_closed_after_install_image(pdf)
+          draw_reopened_after_install_image(pdf)
+          draw_new_install_image(pdf)
+        end
       end
     end
 
   private
+
+  def table_params
+      contracted_by = @group_name.blank? ? @facility_name : @group_name
+      floor = @record.u_floor == "other" ? @record.u_other_floor : @record.u_floor
+          
+      { contracted_by: contracted_by ,
+        facility: @facility_name,
+        building: @record.u_building,
+        installation_date: @record.work_dates,
+        installed_by: @record.u_inspector,
+        floor: floor,
+        location: @record.u_location_desc,
+        technician: @record.u_inspector,
+        dept_area: @record.u_department_str_firestopinstall
+      }
+        
+    end
+
+    def draw_table1(pdf)
+      if @record.u_dr_passed_post_repair == "Pass"
+        status_content = "<font size='12'><b>Pass</b></font>"
+        cell_color = '13db13'
+      else
+        status_content = "<font size='12'><b>Fail</b></font>"
+        cell_color = 'ef3038'
+      end
+
+      pdf.table([
+        [
+          {:content => "<font size='12'><b>FIRE DAMPER REPAIR REPORT</b></font>", :colspan => 3, :width => 225, align: :center },
+          {:content => "Status:", :colspan => 1, :width => 75, align: :left },
+          {:content => status_content, :background_color=> cell_color,:colspan => 1, :width => 105, 
+            :align => :center, :text_color => "ffffff" },
+          {:content => "Issue #<br/><b>#{@record.u_tag}</b>", :colspan => 1, :width => 135, 
+            :rowspan => 2, align: :right }
+        ],
+        [  
+          { :content => "<font size='12'>Facility:  #{table_params[:facility]}</font>",
+            :colspan => 3, :width => 225, align: :left },
+          { :content => "<font size='12'>Floor:  #{table_params[:floor]}</font>", 
+            :colspan => 2, :width => 180, align: :left }
+        ],
+        [
+          { :content => "<font size='12'>Building:  #{table_params[:building]}</font>", 
+            :colspan => 3, :width => 225, :align => :left },
+          { :content => "<font size='12'>Damper Location:  #{table_params[:location]}</font>", 
+            :colspan => 3, :width => 315, align: :left }          
+        ],
+        [
+          { :content => "<font size='12'>Dept/Area:  #{table_params[:dept_area]}</font>", 
+            :colspan => 3, :width => 225, align: :left },
+          { :content => "", :colspan => 3, :width => 315 }          
+        ],
+        [
+          { :content => "<font size='12'>Date:</font>", 
+            :colspan => 1, :width => 60, align: :right },
+          { :content => "<font size='11'>#{@record.u_inspected_on.localtime.strftime('%m/%d/%Y')}</font>", 
+            :colspan => 1, :width => 75, align: :left }, 
+          { :content => "<font size='12'>Time:</font>", 
+            :colspan => 1, :width => 90, align: :right },
+          { :content => "<font size='11'>#{@record.u_inspected_on.localtime.strftime('%I:%M:%S %p')}</font>", 
+            :colspan => 1, :width => 75, align: :left },
+          { :content => "<font size='12'>Technician</font>", 
+            :colspan => 1, :width => 105, align: :left },
+          { :content => "<font size='12'>#{table_params[:technician]}</font>", 
+            :colspan => 1, :width => 135, align: :center }             
+        ]
+      ], :cell_style => { :inline_format => true })
+      pdf.move_down 5
+    end
+
+    def draw_table2(pdf)
+      if @record.u_damper_name.upcase == "FIRE"
+        damper_type = 'Fire Damper (FD)'
+      elsif @record.u_damper_name.upcase == "SMOKE"
+        damper_type = 'Fire Smoke Damper (FSD)'
+      else
+        damper_type = 'Combination'
+      end
+
+      pdf.table([
+        [
+          { :content => "<font size='14'><b>DAMPER DESCRIPTION:</b></font>", 
+            :colspan => 6, :width => 515, align: :center }
+        ],
+        [ { :content => "<font size='12'>Damper Type:</font>", 
+            :colspan => 1, :width => 60, align: :center },
+          { :content => "<font size='12'>#{damper_type}</font>", 
+            :colspan => 5, :width => 455, align: :left }   
+        ]
+      ], :cell_style => { :inline_format => true })
+      pdf.move_down 5 
+    end  
+
+    def draw_table3(pdf)
+      pdf.table([
+        [
+          { :content => "<font size='14'><b>DEFICIENCY DESCRIPTION(s):</b></font>", 
+            :colspan => 2, :width => 225, align: :left },
+          { :content => "<font size='14'><b>COMMENT</b></font>", 
+            :colspan => 4, :width => 315, align: :left }  
+        ],
+        [
+          { :content => "<font size='12'></font>", 
+            :colspan => 2, :width => 225, align: :left },
+          { :content => "<font size='12'></font>", 
+            :colspan => 4, :width => 315, align: :left }  
+        ],
+        
+      ], :cell_style => { :inline_format => true })
+      pdf.move_down 5 
+    end  
+
+    def draw_table4(pdf)
+      pdf.table([
+        [
+          { :content => "<font size='12'><b>REPAIR ACTION(s) PERFORMED:</b></font>", 
+            :colspan => 2, :width => 225, align: :left },
+          { :content => "<font size='12'><b>SUBSEQUENT FAILURE REASON:</b></font>", 
+            :colspan => 4, :width => 315, align: :left }  
+        ],
+        [
+          { :content => "<font size='12'></font>", 
+            :colspan => 2, :width => 225, align: :left },
+          { :content => "<font size='12'></font>", 
+            :colspan => 4, :width => 315, align: :left }  
+        ],
+        
+      ], :cell_style => { :inline_format => true })
+      pdf.move_down 5 
+    end  
 
     def draw_location_description(pdf)
       pdf.font_size 20
@@ -114,16 +268,19 @@ module DamperRepairReport
     end
 
     def draw_open_after_install_image(pdf)
-      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [35, 521], fit: [123, 123])#530
+      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", 
+        at: [60 - pdf.bounds.absolute_left, 275], :width => 123, :height => 123)#530
       image = @record.pdf_image1.path(:pdf)
       unless image.blank?
-        pdf.image(image, at: [44, 512], fit: [105, 105])#521
+        pdf.image(image, at: [60 - pdf.bounds.absolute_left, 275], :width => 120, :height => 120)
       else
-        pdf.draw_text('Photo Unavailable', style: :bold, size: 11, at: [49, 455])#464
+        pdf.draw_text('Photo Unavailable', style: :bold, size: 10,
+          at: [70 - pdf.bounds.absolute_left, 210])#464
       end
-      pdf.font_size 10
-      pdf.draw_text("#{DamperRepairReporting.translate('open_after_installation')}", at: [44, 394])#403
-
+      #pdf.font_size 10
+      #pdf.draw_text("#{DamperRepairReporting.translate('open_after_installation')}", at: [44, 394])#403
+      pdf.draw_text("Open",  at: [100 - pdf.bounds.absolute_left, 140])
+      pdf.move_down 5
       # unless @record.u_image1.blank?
       #   pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_image1}")[:data])), at: [ 44, 521], fit: [105, 105]
       # else
@@ -132,16 +289,17 @@ module DamperRepairReport
     end
 
     def draw_closed_after_install_image(pdf)
-      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [35, 395], fit: [123, 123])
+      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", 
+        at: [340 - pdf.bounds.absolute_left, 275], :width => 123, :height => 123)
       image = @record.pdf_image2.path(:pdf)      
       unless image.blank?
-        pdf.image(image, at: [44, 386], fit: [105, 105])
+        pdf.image(image, at: [340 - pdf.bounds.absolute_left, 275], :width => 120, :height => 120)
       else
-        pdf.draw_text('Photo Unavailable', style: :bold, size: 11, at: [49, 329])
+        pdf.draw_text('Photo Unavailable', style: :bold, size: 10, 
+          at: [350 - pdf.bounds.absolute_left, 210])
       end
-      pdf.font_size 10
-      pdf.draw_text("#{DamperRepairReporting.translate('closed_after_installation')}", at: [44, 268])
-
+      pdf.draw_text("Closed",  at: [400 - pdf.bounds.absolute_left, 140])
+      pdf.move_down 5
       # unless @record.u_image2.blank?
       #   pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_image2}")[:data])), at:  [ 44, 386], fit: [105, 105]
       # else
@@ -149,16 +307,17 @@ module DamperRepairReport
       # end
     end
 
-    def draw_reopened_after_install_image(pdf)
-      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [35, 260], fit: [123, 123])
+    def draw_new_install_image(pdf)
+      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", 
+        at: [60 - pdf.bounds.absolute_left, 125], :width => 123, :height => 123)
       image = @record.pdf_image3.path(:pdf)      
       unless image.blank?
-        pdf.image(image, at:  [44, 251], fit: [105, 105])
+        pdf.image(image, at: [60 - pdf.bounds.absolute_left, 60], :width => 120, :height => 120)
       else
-        pdf.draw_text('Photo Unavailable', style: :bold, size: 11, at: [49, 194])
+        pdf.draw_text('Photo Unavailable', style: :bold, size: 10, 
+          at: [70 - pdf.bounds.absolute_left, 70])
       end
-      pdf.font_size 10
-      pdf.draw_text("#{DamperRepairReporting.translate('reopened_after_installation')}", at: [44, 133])
+      pdf.draw_text("After Installation",  at: [90 - pdf.bounds.absolute_left, -5])
 
       # unless @record.u_image3.blank?
       #   pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_image3}")[:data])), at:  [ 44, 251], fit: [105, 105]
@@ -167,22 +326,18 @@ module DamperRepairReport
       # end
     end
 
-    def draw_new_install_image(pdf)
-      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", at: [35, 125], fit: [123, 123])
+    def draw_reopened_after_install_image(pdf)
+      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", 
+        at: [340 - pdf.bounds.absolute_left, 125], :width => 123, :height => 123)
       image = @record.pdf_image4.path(:pdf)
       unless image.blank?
-        pdf.image(image, at:  [44, 116], fit: [105, 105])
+        pdf.image(image, at: [340 - pdf.bounds.absolute_left, 145], 
+          :width => 120, :height => 120)
       else
-        pdf.draw_text('Photo Unavailable', style: :bold, size: 11, at: [49, 59])
+        pdf.draw_text('Photo Unavailable', style: :bold, size: 10, 
+          at: [350 - pdf.bounds.absolute_left, 70])
       end
-      pdf.font_size 10
-      pdf.draw_text("#{DamperRepairReporting.translate('new_actuator_installed')}", at: [44, -2])
-
-      # unless @record.u_image4.blank?
-      #   pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_image4}")[:data])), at:  [ 44, 116], fit: [105, 105]
-      # else
-      #   pdf.draw_text('Photo Unavailable', style: :bold, size: 11, at: [49, 59])
-      # end
+      pdf.draw_text("Re‐Opened",  at: [380 - pdf.bounds.absolute_left, -5])
     end
 
     # def splitBase64(uri)
@@ -197,7 +352,8 @@ module DamperRepairReport
     # end
 
     def comprehensive?
-      @options[:comprehensive] == true
+      #@options[:comprehensive] == true
+      true
     end
 
     def title
