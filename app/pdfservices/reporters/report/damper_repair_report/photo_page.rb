@@ -80,7 +80,7 @@ module DamperRepairReport
       if @record.u_dr_passed_post_repair == "Pass"
         status_content = "<font size='12'><b>Pass</b></font>"
         cell_color = '13db13'
-      else
+      elsif 
         status_content = "<font size='12'><b>Fail</b></font>"
         cell_color = 'ef3038'
       end
@@ -91,7 +91,7 @@ module DamperRepairReport
           {:content => "Status:", :colspan => 1, :width => 75, align: :left },
           {:content => status_content, :background_color=> cell_color,:colspan => 1, :width => 105, 
             :align => :center, :text_color => "ffffff" },
-          {:content => "Issue #<br/><b>#{@record.u_tag}</b>", :colspan => 1, :width => 135, 
+          {:content => "Asset #<br/><b>#{@record.u_tag}</b>", :colspan => 1, :width => 135, 
             :rowspan => 2, align: :right }
         ],
         [  
@@ -180,9 +180,9 @@ module DamperRepairReport
             :colspan => 4, :width => 315, align: :left }  
         ],
         [
-          { :content => "<font size='12'></font>", 
+          { :content => "<font size='12'>#{@record.u_repair_action_performed}</font>", 
             :colspan => 2, :width => 225, align: :left },
-          { :content => "<font size='12'></font>", 
+          { :content => "<font size='12'>u_reason2(wil be implemented)</font>", 
             :colspan => 4, :width => 315, align: :left }  
         ],
         
@@ -310,7 +310,7 @@ module DamperRepairReport
     def draw_new_install_image(pdf)
       pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", 
         at: [60 - pdf.bounds.absolute_left, 125], :width => 123, :height => 123)
-      image = @record.pdf_image3.path(:pdf)      
+      image = @record.pdf_image4.path(:pdf)      
       unless image.blank?
         pdf.image(image, at: [60 - pdf.bounds.absolute_left, 60], :width => 120, :height => 120)
       else
@@ -329,7 +329,7 @@ module DamperRepairReport
     def draw_reopened_after_install_image(pdf)
       pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", 
         at: [340 - pdf.bounds.absolute_left, 125], :width => 123, :height => 123)
-      image = @record.pdf_image4.path(:pdf)
+      image = @record.pdf_image3.path(:pdf)
       unless image.blank?
         pdf.image(image, at: [340 - pdf.bounds.absolute_left, 145], 
           :width => 120, :height => 120)
@@ -337,7 +337,7 @@ module DamperRepairReport
         pdf.draw_text('Photo Unavailable', style: :bold, size: 10, 
           at: [350 - pdf.bounds.absolute_left, 70])
       end
-      pdf.draw_text("Re‐Opened",  at: [380 - pdf.bounds.absolute_left, -5])
+      pdf.draw_text("Operational",  at: [380 - pdf.bounds.absolute_left, -5])
     end
 
     # def splitBase64(uri)
