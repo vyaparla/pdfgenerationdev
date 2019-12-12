@@ -10,6 +10,7 @@ module DamperInspectionReport
     end
 
     def write(pdf)
+	    puts "is this writing???"
       return if @records.empty?
       super
       pdf.font_size 10
@@ -38,20 +39,29 @@ module DamperInspectionReport
 
     def summary_table_attributes
       attributes = []
-      attributes += [[:date, nil],
-                     [:damper_number, nil]]
+    #  attributes += [[:date, nil],
+    #                 [:damper_number, nil]]
+      attributes += [[:damper_number, nil]]
 
-      attributes += [[:floor, nil],
+     # attributes += [[:floor, nil],
+     #                [:damper_location, contains_all_results ? 85 : 60],
+     #                [:damper_type, 55], 
+     #                [:current_status, 60]]
+     attributes += [[:floor, nil],
                      [:damper_location, contains_all_results ? 85 : 60],
-                     [:damper_type, 55], 
-                     [:current_status, 60]]
+                     [:damper_type, 55],
+                     [:transactional_status, 60]]
+
 
       #attributes   <<  [:service_type, 60]
       #attributes   <<  [:current_status, 60]
-      attributes   <<  [:deficiency, 75]
-      attributes   +=  [[:corrective_action, 60]]
-      
-      attributes   +=  [[:installed_access_door, 60]]
+     # attributes   <<  [:deficiency, 75]
+     attributes   <<  [:deficiency_s, 75]
+#      attributes   +=  [[:corrective_action, 60]]
+      attributes   +=  [[:repair_action, 60]]
+
+     # attributes   +=  [[:installed_access_door, 60]]
+      attributes += [[:date, nil]]
         # attributes <<  [:fpm_reading, 60]
         # attributes += [[:corrective_action, 60],
         #                  [:forty_five_days, 29],
@@ -78,7 +88,8 @@ module DamperInspectionReport
             :floor             => record.u_floor.to_i,
             :damper_location   => record.u_location_desc,
             :damper_type       => record.u_damper_name,
-            :current_status    => record.u_status
+           # :current_status    => record.u_status
+	    :transactional_status    => record.u_status
             #:installed_access_door    => @di_installedaccess_door
 
             #:service_type      => "Inspection",
@@ -106,9 +117,9 @@ module DamperInspectionReport
             :floor             => record.u_floor.to_i,
             :damper_location   => record.u_location_desc,
             :damper_type       => record.u_damper_name,
-            :current_status    => record.u_status,
-            :deficiency        => record.u_reason,
-            :corrective_action => record.u_di_replace_damper
+            :transactional_status    => record.u_status,
+            :deficiency_s        => record.u_reason,
+            :repair_action => record.u_di_replace_damper
             #:installed_access_door    => @di_installedaccess_door
 
             #:service_type      => "Inspection",
@@ -135,9 +146,9 @@ module DamperInspectionReport
             :floor             => record.u_floor.to_i,
             :damper_location   => record.u_location_desc,
             :damper_type       => record.u_damper_name,
-            :current_status    => record.u_status,
-            :deficiency        => record.u_non_accessible_reasons,
-            :installed_access_door    => @di_installedaccess_door
+            :transactional_status    => record.u_status,
+            :deficiency_s        => record.u_non_accessible_reasons
+           # :installed_access_door    => @di_installedaccess_door
 
             #:service_type      => "Inspection",
             # :inspection_result => record.u_status,
@@ -162,7 +173,7 @@ module DamperInspectionReport
             :damper_number     => record.u_tag,
             :floor             => record.u_floor.to_i,
             :damper_location   => record.u_location_desc,
-            :current_status    => record.u_status,
+            :transactional_status    => record.u_status,
             :damper_type       => record.u_damper_name
             #:installed_access_door    => @di_installedaccess_door
 

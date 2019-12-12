@@ -159,6 +159,9 @@
           ilsm: 'ILSM',
           service_type: 'Service Type',
           deficiency: 'Deficiency',
+	  deficiency_s: 'Deficiency(s)',
+	  transactional_status: '(transactional) Status',
+	  repair_action: 'Repair Action',
           current_status: 'Current Status',
           installed_access_door: "Installed Access Door"
         },
@@ -422,17 +425,18 @@ CORPORATE: 1-888-675-4519)
 
 # _____________________________
 # %{pm_name})
-          content: %(LSS Life Safety Services, LLC, in accordance with The National Fire Protection Association’s (NFPA) Code inspected fire and smoke dampers located in %{location_name} during the period of %{work_dates}.  The project was managed by %{pm_name}, who is an independent inspector and representative of LSS Life Safety Services, LLC, and is not affiliated with any supplier, manufacturer, or distributor of fire dampers, smoke dampers, or affiliated damper components.
+          content: %(LSS Life Safety Services, LLC, in accordance with The National Fire Protection Association’s (NFPA) Code(s) 80, 105, and 101 inspected fire and smoke dampers located in %{location_name} during the period of %{work_dates}.  The project was managed by %{pm_name}, who is an independent inspector and employee of LSS Life Safety Services, LLC, and is not affiliated with any supplier, manufacturer, or distributor of fire dampers, smoke dampers, or affiliated damper components. 
 
-The following report and digital pictures provide the result of the inspection for the dampers that were inspected.  This report is intended to describe the location and operability of the dampers for the dates in which LSS Life Safety Services’ representatives performed the inspection of the dampers, and is not intended to constitute any warranty as to the continued operation of any damper.
+The following report and supporting documentation provide the result of the inspection for the dampers that were inspected. This report is intended to describe the location and operability of the dampers for the dates in which LSS Life Safety Services’ representatives performed the inspection of the dampers, and is not intended to constitute any warranty as to the continued operation of any damper.
 
-Thank you for contracting LSS Life Safety Services for this project and we look forward to the opportunity of working with you in the future on additional projects.
+ Thank you for contracting LSS Life Safety Services for this project and we look forward to the opportunity of working with you in the future on additional projects.
 
-Quality Assurance inspected by %{qa_inspected_by}.
+
+Quality Assurance inspected by %{technician_list}.
 
 
 _____________________________
-%{qa_inspected_by}),
+%{technician_list}),
           certified_content: %(TESTING FREQUENCY: 6 YEARS FOR HEALTHCARE OCCUPANCY
 
 EC.02.03.05 - EP 18 - FIRE AND SMOKE DAMPERS
