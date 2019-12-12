@@ -260,7 +260,7 @@ class ApiController < ApplicationController
     if params[:servicetype].delete(' ').upcase == "DAMPERINSPECTION"
       @records = Lsspdfasset.where(u_service_id: params[:serviceid], :u_delete => false).where.not(u_type: "")
 	p, wb, img_path = initialize_spreadsheet
-	facility_name, tech, date, damper_excel_para = initialize_damper_params
+	facility_name, tech, date, damper_inspection_para, damper_repair_para = initialize_damper_params
         wb.styles do |s|
 	header_row, normal_row_odd, normal_row_even, title_row = initialize_spreadsheet_rows(s)
 	title_desc = s.add_style :i => true,
@@ -269,7 +269,7 @@ class ApiController < ApplicationController
 
         wb.add_worksheet(name: "Damper Inspection List") do |sheet|
         sheet.add_image(:image_src => img_path, :start_at => [0, 0], :width => 120, :height => 70,  :noSelect => true, :noMove => true,  :rowOff => 0, :colOff => 0)
-        sheet.add_row ["", "Damper Inspection List", "", damper_excel_para, "", "", "", "", "", "", "", ""], :style => [title_row,title_row,title_row,title_desc,title_desc, title_desc, title_desc, title_desc, title_desc, title_desc, title_desc, title_desc] , :height => 55
+        sheet.add_row ["", "Damper Inspection List", "", damper_inspection_para, "", "", "", "", "", "", "", ""], :style => [title_row,title_row,title_row,title_desc,title_desc, title_desc, title_desc, title_desc, title_desc, title_desc, title_desc, title_desc] , :height => 55
         sheet.merge_cells ("B1:C1")
         sheet.merge_cells ("D1:L1")
         sheet.add_row ["Damper #", "Facility", "Building", "Floor", "Damper Location", "Damper Type", "Status", "Deficiencies", "Repair Action Performed", "Subsequent Failure Reason", "Technician", "Date"] , :style => header_row
@@ -296,7 +296,7 @@ class ApiController < ApplicationController
     elsif params[:servicetype].delete(' ').upcase == "DAMPERREPAIR"
       @records = Lsspdfasset.where(u_service_id: params[:serviceid], :u_delete => false).where.not(u_type: "")
        p, wb, img_path = initialize_spreadsheet
-        facility_name, tech, date, damper_excel_para = initialize_damper_params
+       facility_name, tech, date, damper_inspection_para, damper_repair_para = initialize_damper_params
         wb.styles do |s|
         header_row, normal_row_odd, normal_row_even, title_row = initialize_spreadsheet_rows(s)
         title_desc = s.add_style :i => true,
@@ -305,7 +305,7 @@ class ApiController < ApplicationController
 
         wb.add_worksheet(name: "Damper Repair List") do |sheet|
         sheet.add_image(:image_src => img_path, :start_at => [0, 0], :width => 120, :height => 70,  :noSelect => true, :noMove => true,  :rowOff => 0, :colOff => 0)
-        sheet.add_row ["", "Damper Repair List", "",  damper_excel_para, "", "", "", "", "", "", "", ""], :style => [title_row,title_row,title_row,title_desc,title_desc, title_desc, title_desc, title_desc, title_desc, title_desc, title_desc, title_desc] , :height => 55
+        sheet.add_row ["", "Damper Repair List", "",  damper_repair_para, "", "", "", "", "", "", "", ""], :style => [title_row,title_row,title_row,title_desc,title_desc, title_desc, title_desc, title_desc, title_desc, title_desc, title_desc, title_desc] , :height => 55
         sheet.merge_cells ("B1:C1")
         sheet.merge_cells ("D1:L1")
         sheet.add_row ["Damper #", "Facility", "Building", "Floor", "Damper Location", "Damper Type", "Status", "Deficiencies", "Repair Action Performed", "Subsequent Failure Reason", "Technician", "Date"] , :style => header_row
@@ -616,8 +616,9 @@ class ApiController < ApplicationController
 
   def initialize_damper_params
     facility_name, tech, date = params["fname"], params["tech"], @records.last.work_dates
-    damper_excel_para = "LSS Life Safety Services, LLC, in accordance with The National Fire Protection Association’s (NFPA) Code(s) 80, 105, and 101 repaired and inspected fire and smoke dampers located in #{facility_name} during the period of #{date}. The project was managed by #{tech}, who is an independent technician and employee of LSS Life Safety Services, LLC, and is not affiliated with any supplier, manufacturer, or distributor of fire dampers, smoke dampers, or affiliated damper components. The following report and supporting documentation provide the result of the repair and inspection for the dampers that were addressed. This report is intended to describe the location, repair actions performed and subsequent operability of the dampers for the dates in which LSS Life Safety Services’ representatives performed the repair and inspection of the dampers, and is not intended to constitute any warranty as to the continued operation of any damper. Thank you for contracting LSS Life Safety Services for this project and we look forward to the opportunity of working with you in the future on additional projects."
-    return facility_name, tech, date, damper_excel_para
+    damper_repair_para = "LSS Life Safety Services, LLC, in accordance with The National Fire Protection Association’s (NFPA) Code(s) 80, 105, and 101 repaired and inspected fire and smoke dampers located in #{facility_name} during the period of #{date}. The project was managed by #{tech}, who is an independent technician and employee of LSS Life Safety Services, LLC, and is not affiliated with any supplier, manufacturer, or distributor of fire dampers, smoke dampers, or affiliated damper components. The following report and supporting documentation provide the result of the repair and inspection for the dampers that were addressed. This report is intended to describe the location, repair actions performed and subsequent operability of the dampers for the dates in which LSS Life Safety Services’ representatives performed the repair and inspection of the dampers, and is not intended to constitute any warranty as to the continued operation of any damper. Thank you for contracting LSS Life Safety Services for this project and we look forward to the opportunity of working with you in the future on additional projects."
+    damper_inspection_para = "LSS Life Safety Services, LLC, in accordance with The National Fire Protection Association’s (NFPA) Code(s) 80, 105, and 101 inspected fire and smoke dampers located in #{facility_name} during the period of #{date}. The project was managed by #{tech}, who is an independent inspector and employee of LSS Life Safety Services, LLC, and is not affiliated with any supplier, manufacturer, or distributor of fire dampers, smoke dampers, or affiliated damper components. The following report and supporting documentation provide the result of the inspection for the dampers that were inspected. This report is intended to describe the location and operability of the dampers for the dates in which LSS Life Safety Services’ representatives performed the inspection of the dampers, and is not intended to constitute any warranty as to the continued operation of any damper. Thank you for contracting LSS Life Safety Services for this project and we look forward to the opportunity of working with you in the future on additional projects. "
+    return facility_name, tech, date, damper_repair_para, damper_inspection_para
   end
 
   def initialize_spreadsheet_rows(s)
