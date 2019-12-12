@@ -615,10 +615,11 @@ class ApiController < ApplicationController
   end
 
   def initialize_damper_params
-    facility_name, tech, date = params["fname"], params["tech"], @records.last.work_dates
+    facility_name, tech, date = params["fname"], params["tech"]
+    date =  @records.last.present? ? @records.last.work_dates : ""
     damper_repair_para = "LSS Life Safety Services, LLC, in accordance with The National Fire Protection Association’s (NFPA) Code(s) 80, 105, and 101 repaired and inspected fire and smoke dampers located in #{facility_name} during the period of #{date}. The project was managed by #{tech}, who is an independent technician and employee of LSS Life Safety Services, LLC, and is not affiliated with any supplier, manufacturer, or distributor of fire dampers, smoke dampers, or affiliated damper components. The following report and supporting documentation provide the result of the repair and inspection for the dampers that were addressed. This report is intended to describe the location, repair actions performed and subsequent operability of the dampers for the dates in which LSS Life Safety Services’ representatives performed the repair and inspection of the dampers, and is not intended to constitute any warranty as to the continued operation of any damper. Thank you for contracting LSS Life Safety Services for this project and we look forward to the opportunity of working with you in the future on additional projects."
     damper_inspection_para = "LSS Life Safety Services, LLC, in accordance with The National Fire Protection Association’s (NFPA) Code(s) 80, 105, and 101 inspected fire and smoke dampers located in #{facility_name} during the period of #{date}. The project was managed by #{tech}, who is an independent inspector and employee of LSS Life Safety Services, LLC, and is not affiliated with any supplier, manufacturer, or distributor of fire dampers, smoke dampers, or affiliated damper components. The following report and supporting documentation provide the result of the inspection for the dampers that were inspected. This report is intended to describe the location and operability of the dampers for the dates in which LSS Life Safety Services’ representatives performed the inspection of the dampers, and is not intended to constitute any warranty as to the continued operation of any damper. Thank you for contracting LSS Life Safety Services for this project and we look forward to the opportunity of working with you in the future on additional projects. "
-    return facility_name, tech, date, damper_repair_para, damper_inspection_para
+    return facility_name, tech, date,  damper_inspection_para, damper_repair_para
   end
 
   def initialize_spreadsheet_rows(s)
