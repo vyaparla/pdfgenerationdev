@@ -21,7 +21,7 @@ module DamperRepairReport
       Report::Table.new(dr_project_statistics_data).draw(pdf) do |formatter|
         formatter.cell[1,0] = { :text_color => '137d08' }
         formatter.cell[2,0] = { :text_color => 'c1171d' }
-        formatter.cell[3,0] = { :text_color => 'f39d27' }
+        #formatter.cell[3,0] = { :text_color => 'f39d27' }
       end
       pdf.move_down 25
     end
@@ -135,7 +135,7 @@ module DamperRepairReport
     end
 
     def dr_project_summary_table_headings
-      ["Building", "Type", "Pass", "Fail", "Non-Accessible", "Total", "% of Total"]
+      ["Building", "Type", "Pass", "Fail", "Total", "% of Total"]
     end
 
     def dr_project_summary_table_content
@@ -222,7 +222,7 @@ module DamperRepairReport
 
       @dr_project_grand_total_data.push($dr_p_pass_total)
       @dr_project_grand_total_data.push($dr_p_fail_total)
-      @dr_project_grand_total_data.push($dr_p_na_total)
+     # @dr_project_grand_total_data.push($dr_p_na_total)
       @dr_project_grand_total_data.push($dr_p_pass_total + $dr_p_fail_total + $dr_p_na_total)
       @dr_project_grand_total_data.push("100.00%")
       
@@ -253,8 +253,8 @@ module DamperRepairReport
       [[DamperInspectionReporting.column_heading(:test_result),
        DamperInspectionReporting.column_heading(:percent_of_dampers)]] +
        [[DamperInspectionReporting.column_heading(:pass), $project_pass_stat],
-       [DamperInspectionReporting.column_heading(:fail), $project_fail_stat],
-       [DamperInspectionReporting.column_heading(:na), $project_na_stat]]
+       [DamperInspectionReporting.column_heading(:fail), $project_fail_stat]]
+      # [DamperInspectionReporting.column_heading(:na), $project_na_stat]]
     end
   end
 end

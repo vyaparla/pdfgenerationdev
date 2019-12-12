@@ -163,7 +163,7 @@ module DamperRepairReport
         [
           { :content => "<font size='12'></font>", 
             :colspan => 2, :width => 225, align: :left },
-          { :content => "<font size='12'></font>", 
+          { :content => "<font size='12'>#{@record.u_dr_description}</font>", 
             :colspan => 4, :width => 315, align: :left }  
         ],
         
@@ -182,7 +182,7 @@ module DamperRepairReport
         [
           { :content => "<font size='12'>#{@record.u_repair_action_performed}</font>", 
             :colspan => 2, :width => 225, align: :left },
-          { :content => "<font size='12'>u_reason2(wil be implemented)</font>", 
+          { :content => "<font size='12'>#{@record.u_reason2}</font>", 
             :colspan => 4, :width => 315, align: :left }  
         ],
         

@@ -12,8 +12,9 @@ class DamperRepairReporter < Reporter
     facility_name, with_picture=true)
     DamperRepairReport::GraphGenerator.new(job).generate
   	generate(job.full_report_path(with_picture)) do |pdf|
-  	  Report::CoverPage.new(job, model_name, address1, address2, csz).write(pdf)
-  	  DamperRepairReport::ProjectSummaryPage.new(job, tech).write(pdf)
+  	  Report::CoverPage.new(job, model_name, address1, address2, csz, facility_name, tech ).write(pdf)
+  	  DamperRepairReport::LetterPage.new(job, model_name, address1, address2, csz, facility_type, facility_name, tech).write(pdf)
+      DamperRepairReport::ProjectSummaryPage.new(job, tech).write(pdf)
       DamperRepairReport::GraphPage.new(job, tech).write(pdf)
   	  job.buildings(job.u_service_id).each do |b|
         DamperRepairReport::BuildingSection.new(job, b, tech, group_name, facility_name, with_picture).write(pdf)

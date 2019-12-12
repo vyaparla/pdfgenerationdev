@@ -482,8 +482,24 @@ Quality Assurance inspected by %{qa_inspected_by}.
 
 _____________________________
 %{qa_inspected_by})
+        },
+        damper_repair_report: {
+          title: 'Damper Repair Report',
+          content: %(LSS Life Safety Services, LLC, in accordance with The National Fire Protection Association’s (NFPA) Code(s) 80, 105, and 101 repaired and inspected fire and smoke dampers located in %{location_name} during the period of %{work_dates}. The project was managed by %{pm_name}, who is an independent technician and employee of LSS Life Safety Services, LLC, and is not affiliated with any supplier, manufacturer, or distributor of fire dampers, smoke dampers, or affiliated damper components.
+
+The following report and digital pictures provide the result of the inspection of the doors that were inspected.  This report is intended to describe the location and compliance and non-compliance of the doors for the dates in which Life Safety Services’ representatives performed the inspection of the doors, and is not intended to constitute any warranty as to the continued operation of any doors and/or door hardware.
+
+Thank you for contracting Life Safety Services (LSS) for this project and we look forward to the opportunity of working with you in the future on additional projects.
+
+Quality Assurance inspected by %{pm_name}.
+
+
+_____________________________
+%{pm_name})
+
         }
       },
+
       summary_page: {
         project_summary: 'Project Summary'
       },

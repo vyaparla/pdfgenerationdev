@@ -55,11 +55,7 @@ class ReportGeneration
   end
 
   def try_create_full_report
-    begin
+    #begin
       create_full_report
-    rescue => error
-      Rails.logger.debug("Error Class :#{error.class.name.inspect}")
-      Rails.logger.debug("Error Message :#{error.message.inspect}")
-    end
   end
 end
