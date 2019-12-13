@@ -135,7 +135,7 @@ module DamperRepairReport
     end
 
     def dr_project_summary_table_headings
-      ["Building", "Type", "Pass", "Fail", "Total", "% of Total"]
+      ["Building", "Type", "Pass", "Fail","Non-Accessible", "Total", "% of Total"]
     end
 
     def dr_project_summary_table_content
@@ -222,7 +222,7 @@ module DamperRepairReport
 
       @dr_project_grand_total_data.push($dr_p_pass_total)
       @dr_project_grand_total_data.push($dr_p_fail_total)
-     # @dr_project_grand_total_data.push($dr_p_na_total)
+      @dr_project_grand_total_data.push($dr_p_na_total)
       @dr_project_grand_total_data.push($dr_p_pass_total + $dr_p_fail_total + $dr_p_na_total)
       @dr_project_grand_total_data.push("100.00%")
       
