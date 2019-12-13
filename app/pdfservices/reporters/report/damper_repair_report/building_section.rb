@@ -7,7 +7,7 @@ module DamperRepairReport
       BuildingSummaryPage.new(@job, @building, @tech).write(pdf)
       write_breakdown_pages(pdf, building_section, @tech)
       @records = records.where.not(u_type: "")
-      @records.each { |r| PhotoPage.new(r, @group_name, @facility_name).write(pdf)}
+      @records.each { |r| PhotoPage.new(r, @group_name, @facility_name, @with_picture).write(pdf)}
     end
 
   private
