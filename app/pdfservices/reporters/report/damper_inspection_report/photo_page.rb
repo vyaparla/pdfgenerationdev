@@ -266,7 +266,7 @@ module DamperInspectionReport
         [
           { :content => "<font size='12'>#{@record.u_repair_action_performed}</font>",
             :colspan => 2, :width => 225, align: :left },
-          { :content => "<font size='12'>u_reason2(wil be implemented)</font>",
+          { :content => "<font size='12'>#{DamperInspectionReporting.translate(:failure_reasons)} : </b> #{@record.u_reason}</font>",
             :colspan => 4, :width => 315, align: :left }
         ],
 

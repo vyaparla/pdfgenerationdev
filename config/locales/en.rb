@@ -432,11 +432,11 @@ The following report and supporting documentation provide the result of the insp
  Thank you for contracting LSS Life Safety Services for this project and we look forward to the opportunity of working with you in the future on additional projects.
 
 
-Quality Assurance inspected by %{technician_list}.
+Quality Assurance inspected by %{pm_name}.
 
 
 _____________________________
-%{technician_list}),
+%{pm_name}),
           certified_content: %(TESTING FREQUENCY: 6 YEARS FOR HEALTHCARE OCCUPANCY
 
 EC.02.03.05 - EP 18 - FIRE AND SMOKE DAMPERS
