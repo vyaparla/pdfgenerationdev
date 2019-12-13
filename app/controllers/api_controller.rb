@@ -49,6 +49,7 @@ class ApiController < ApplicationController
       
       #Damper Inspection Fields
       @pdfjob.u_reason = HTMLEntities.new.decode params[:u_reason]
+      @pdfjob.u_reason2 = HTMLEntities.new.decode params[:u_reason2]
       @pdfjob.u_other_failure_reason = HTMLEntities.new.decode params[:u_other_failure_reason]
       @pdfjob.u_di_replace_damper = HTMLEntities.new.decode params[:u_di_replace_damper]
       @pdfjob.u_non_accessible_reasons = HTMLEntities.new.decode params[:u_non_accessible_reasons]
@@ -316,18 +317,18 @@ class ApiController < ApplicationController
        # csv << ["Asset #", "Facility", "Building", "Floor", "Damper Location", "Damper Type", "Post Repair Status", "Action Taken", "Date", "Technician"]
         @records.each do |record|
 		floor = (record.u_floor == "other" ? record.u_other_floor : record.u_floor)
-          sheet.add_row  [record.u_tag, record.u_facility_name, record.u_building, floor, record.u_location_desc, record.u_type, record.u_status,
+          sheet.add_row  [record.u_tag, record.u_facility_name, record.u_building, floor, record.u_location_desc, record.u_type, record.u_dr_passed_post_repair,
                   if record.u_status == "Fail"
                     record.u_reason
                   else
                     record.u_non_accessible_reasons
                   end,
 		  if record.u_repair_action_performed == "Damper Repaired"
-                    record.u_repair_action_performed + ":" + record.u_dr_description
+			  res = record.u_dr_description.present? ? record.u_repair_action_performed + ":" + record.u_dr_description : record.u_repair_action_performed
                   elsif record.u_repair_action_performed == "Damper Installed"
-                    record.u_repair_action_performed + ":" + record.u_dr_damper_model
+			  res = record.u_dr_damper_model.present? ? record.u_repair_action_performed + ":" + record.u_dr_damper_model: record.u_repair_action_performed
                   elsif record.u_repair_action_performed == "Actuator Installed"
-                    record.u_repair_action_performed + ":" + record.u_dr_installed_actuator_model
+			  res = record.u_dr_installed_actuator_model.present? ? record.u_repair_action_performed + ":" + record.u_dr_installed_actuator_model : record.u_repair_action_performed
                   else
                     record.u_repair_action_performed + ":" + record.u_access_size
                   end,
@@ -491,6 +492,7 @@ class ApiController < ApplicationController
   end
 
   def project_completion_save_pdf
+
     @project_completion = ProjectCompletion.new(project_completion)
     if @project_completion.save
 
