@@ -290,13 +290,13 @@ module DamperRepairReport
 
     def draw_closed_after_install_image(pdf)
       pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", 
-        at: [340 - pdf.bounds.absolute_left, 275], :width => 123, :height => 123)
+        at: [380 - pdf.bounds.absolute_left, 275], :width => 123, :height => 123)
       image = @record.pdf_image2.path(:pdf)      
       unless image.blank?
-        pdf.image(image, at: [340 - pdf.bounds.absolute_left, 275], :width => 120, :height => 120)
+        pdf.image(image, at: [380 - pdf.bounds.absolute_left, 275], :width => 120, :height => 120)
       else
         pdf.draw_text('Photo Unavailable', style: :bold, size: 10, 
-          at: [350 - pdf.bounds.absolute_left, 210])
+          at: [395 - pdf.bounds.absolute_left, 210])
       end
       pdf.draw_text("Closed",  at: [400 - pdf.bounds.absolute_left, 140])
       pdf.move_down 5
@@ -312,12 +312,12 @@ module DamperRepairReport
         at: [60 - pdf.bounds.absolute_left, 125], :width => 123, :height => 123)
       image = @record.pdf_image4.path(:pdf)      
       unless image.blank?
-        pdf.image(image, at: [60 - pdf.bounds.absolute_left, 60], :width => 120, :height => 120)
+        pdf.image(image, at: [60 - pdf.bounds.absolute_left, 125], :width => 120, :height => 120)
       else
         pdf.draw_text('Photo Unavailable', style: :bold, size: 10, 
           at: [70 - pdf.bounds.absolute_left, 70])
       end
-      pdf.draw_text("After Installation",  at: [90 - pdf.bounds.absolute_left, -5])
+      pdf.draw_text("After Installation",  at: [80 - pdf.bounds.absolute_left, -5])
 
       # unless @record.u_image3.blank?
       #   pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_image3}")[:data])), at:  [ 44, 251], fit: [105, 105]
@@ -328,16 +328,16 @@ module DamperRepairReport
 
     def draw_reopened_after_install_image(pdf)
       pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", 
-        at: [340 - pdf.bounds.absolute_left, 125], :width => 123, :height => 123)
+        at: [380 - pdf.bounds.absolute_left, 125], :width => 123, :height => 123)
       image = @record.pdf_image3.path(:pdf)
       unless image.blank?
-        pdf.image(image, at: [340 - pdf.bounds.absolute_left, 145], 
+        pdf.image(image, at: [380 - pdf.bounds.absolute_left, 145], 
           :width => 120, :height => 120)
       else
         pdf.draw_text('Photo Unavailable', style: :bold, size: 10, 
-          at: [350 - pdf.bounds.absolute_left, 70])
+          at: [395 - pdf.bounds.absolute_left, 60])
       end
-      pdf.draw_text("Operational",  at: [380 - pdf.bounds.absolute_left, -5])
+      pdf.draw_text("Operational",  at: [400 - pdf.bounds.absolute_left, -5])
     end
 
     # def splitBase64(uri)
