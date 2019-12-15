@@ -310,7 +310,7 @@ module DamperRepairReport
     def draw_new_install_image(pdf)
       pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", 
         at: [60 - pdf.bounds.absolute_left, 125], :width => 123, :height => 123)
-      image = @record.pdf_image4.path(:pdf)      
+      image = @record.pdf_image4.path(:pdf) 
       unless image.blank?
         pdf.image(image, at: [60 - pdf.bounds.absolute_left, 125], :width => 120, :height => 120)
       else
@@ -331,7 +331,7 @@ module DamperRepairReport
         at: [380 - pdf.bounds.absolute_left, 125], :width => 123, :height => 123)
       image = @record.pdf_image3.path(:pdf)
       unless image.blank?
-        pdf.image(image, at: [380 - pdf.bounds.absolute_left, 145], 
+        pdf.image(image, at: [380 - pdf.bounds.absolute_left, 125], 
           :width => 120, :height => 120)
       else
         pdf.draw_text('Photo Unavailable', style: :bold, size: 10, 
