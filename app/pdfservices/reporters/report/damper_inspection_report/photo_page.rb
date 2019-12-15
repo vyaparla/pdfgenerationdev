@@ -157,18 +157,17 @@ module DamperInspectionReport
     end
  
      def draw_table1(pdf)
-      if @record.u_dr_passed_post_repair == "Pass"
+	if @record.u_status.upcase == "PASS" 
         status_content = "<font size='12'><b>Pass</b></font>"
         cell_color = '13db13'
-       elsif @record.u_dr_passed_post_repair == "Fail" || @record.u_dr_passed_post_repair == "NA"
-        status_content = "<font size='12'><b>#{@record.u_dr_passed_post_repair}</b></font>"
+	elsif @record.u_status.upcase == "FAIL" || @record.u_status.upcase == "NA"
+	  status_details = @record.u_status.upcase == "FAIL" ? "Fail" : "Non-Accessible"
+        status_content = "<font size='12'><b>#{status_details}</b></font>"
         cell_color = 'ef3038'
        else
-
-        status_content = "<font size='12'><b>Fail</b></font>"
-        cell_color = 'ef3038'
-      
-      end
+        status_content = "<font size='12'><b>Removed</b></font>"
+        cell_color = '000000'
+       end
       pdf.table([
         [
           {:content => "<font size='12'><b>FIRE DAMPER INSPECTION REPORT</b></font>", :colspan => 3, :width => 225, align: :center },
@@ -237,6 +236,14 @@ module DamperInspectionReport
     end
 
     def draw_table3(pdf)
+       failure_reason = @record.u_reason.delete(' ').upcase == "OTHER" ? @record.u_other_failure_reason : @record.u_reason
+      na_reason = @record.u_non_accessible_reasons.delete(' ').upcase == "OTHER" ? @record.u_other_nonaccessible_reason : @record.u_non_accessible_reasons
+      na_reasons_label = "Other Non-Accessible Reason"
+      deficiencies =  if @record.u_status == "Fail"
+                    failure_reason
+                  else
+                    na_reason
+                  end
       pdf.table([
         [
           { :content => "<font size='14'><b>DEFICIENCY DESCRIPTION(s):</b></font>",
@@ -245,9 +252,9 @@ module DamperInspectionReport
             :colspan => 4, :width => 315, align: :left }
         ],
         [
-          { :content => "<font size='12'></font>",
+          { :content => "<font size='12'>#{deficiencies}</font>",
             :colspan => 2, :width => 225, align: :left },
-          { :content => "<font size='12'></font>",
+          { :content => "<font size='12'>#{@record.u_dr_description}</font>",
             :colspan => 4, :width => 315, align: :left }
         ],
 
@@ -256,6 +263,16 @@ module DamperInspectionReport
     end
 
     def draw_table4(pdf)
+      if @record.u_repair_action_performed == "Damper Repaired"
+                          repair_action = @record.u_dr_description.present? ? @record.u_repair_action_performed + ":" + @record.u_dr_description : @record.u_repair_action_performed
+                  elsif @record.u_repair_action_performed == "Damper Installed"
+                          repair_action =  r_damper_model.present? ? @record.u_repair_action_performed + ":" + @record.u_dr_damper_model: @record.u_repair_action_performed
+                  elsif @record.u_repair_action_performed == "Actuator Installed"
+                          repair_action = @record.u_dr_installed_actuator_model.present? ? @record.u_repair_action_performed + ":" + @record.u_dr_installed_actuator_model : @record.u_repair_action_performed
+                  else
+                       repair_action = @record.u_access_size.present? ? @record.u_repair_action_performed + ":" + @record.u_access_size : @record.u_repair_action_performed
+                  end
+
       pdf.table([
         [
           { :content => "<font size='12'><b>REPAIR ACTION(s) PERFORMED:</b></font>",
@@ -264,9 +281,9 @@ module DamperInspectionReport
             :colspan => 4, :width => 315, align: :left }
         ],
         [
-          { :content => "<font size='12'>#{@record.u_repair_action_performed}</font>",
+          { :content => "<font size='12'>#{repair_action}</font>",
             :colspan => 2, :width => 225, align: :left },
-          { :content => "<font size='12'>#{DamperInspectionReporting.translate(:failure_reasons)} : </b> #{@record.u_reason}</font>",
+          { :content => "<font size='12'>#{DamperInspectionReporting.translate(:failure_reasons)} : </b> #{@record.u_reason2}</font>",
             :colspan => 4, :width => 315, align: :left }
         ],
 
@@ -370,6 +387,7 @@ module DamperInspectionReport
 	      
      # pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png",
      #   at: [60 - pdf.bounds.absolute_left, 215], :width => 250, :height => 230)#536
+      #
       image =  @record.pdf_image1.path(:pdf)
       unless image.blank?
         pdf.image(image, at: [50 - pdf.bounds.absolute_left, 255], :width => 220, :height => 220)#521
@@ -377,22 +395,24 @@ module DamperInspectionReport
         pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at: [90 - pdf.bounds.absolute_left, 189])#404
       end
       pdf.move_down 5
-      pdf.draw_text("Issue",  at: [100 - pdf.bounds.absolute_left, 25])
+      pdf.draw_text("Before Inspection",  at: [100 - pdf.bounds.absolute_left, 25])
     end
 
     def draw_closed_image(pdf)
-     pdf.move_down 20
+     unless @record.u_status == "NA"	    
+       pdf.move_down 20
 	 #   pdf.image "#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", :at => [50,450], :width => 450    
       #pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png",
       #  at: [290 - pdf.bounds.absolute_left, 215], :width => 230, :height => 230)#536
-      image =  @record.pdf_image2.path(:pdf)
-      unless image.blank?
-        pdf.image(image, at: [280 - pdf.bounds.absolute_left, 255], :width => 220, :height => 220)#521
-      else
-        pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at: [90 - pdf.bounds.absolute_left, 189])#404
-      end
-      pdf.move_down 5
-      pdf.draw_text("Corrected Issue",  at: [350 - pdf.bounds.absolute_left, 25])
+       image =  @record.pdf_image2.path(:pdf)
+        unless image.blank?
+          pdf.image(image, at: [280 - pdf.bounds.absolute_left, 255], :width => 220, :height => 220)#521
+        else
+          pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at: [90 - pdf.bounds.absolute_left, 189])#404
+        end
+        pdf.move_down 5
+        pdf.draw_text("After Inspection",  at: [350 - pdf.bounds.absolute_left, 25])
+     end
     end
 
 
@@ -473,6 +493,9 @@ module DamperInspectionReport
     
       def comprehensive?
         @options[:comprehensive] == true
+      end
+      
+      def draw_heading(pdf)
       end
 
       def title

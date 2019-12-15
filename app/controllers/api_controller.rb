@@ -50,6 +50,7 @@ class ApiController < ApplicationController
       #Damper Inspection Fields
       @pdfjob.u_reason = HTMLEntities.new.decode params[:u_reason]
       @pdfjob.u_reason2 = HTMLEntities.new.decode params[:u_reason2]
+      @pdfjob.u_department_str_firestopinstall = HTMLEntities.new.decode params[:u_department_str_firestopinstall]
       @pdfjob.u_other_failure_reason = HTMLEntities.new.decode params[:u_other_failure_reason]
       @pdfjob.u_di_replace_damper = HTMLEntities.new.decode params[:u_di_replace_damper]
       @pdfjob.u_non_accessible_reasons = HTMLEntities.new.decode params[:u_non_accessible_reasons]
@@ -128,6 +129,8 @@ class ApiController < ApplicationController
           building = HTMLEntities.new.decode params[:u_building]
           location_desc = HTMLEntities.new.decode params[:u_location_desc]
           reason = HTMLEntities.new.decode params[:u_reason]
+	  reason2 = HTMLEntities.new.decode params[:u_reason2]
+          department_str_firestopinstall = HTMLEntities.new.decode params[:u_department_str_firestopinstall]
           other_failure_reason = HTMLEntities.new.decode params[:u_other_failure_reason]
           di_replace_damper = HTMLEntities.new.decode params[:u_di_replace_damper]
           non_accessible_reasons  = HTMLEntities.new.decode params[:u_non_accessible_reasons]
@@ -162,7 +165,7 @@ class ApiController < ApplicationController
                                     u_dr_installed_actuator_model: dr_installed_actuator_model, u_dr_installed_actuator_type: dr_installed_actuator_type,
                                     u_dr_actuator_voltage: dr_actuator_voltage, u_door_category: door_category, u_fire_rating:  fire_rating,
                                     u_door_type: door_type, u_issue_type: issue_type, u_barrier_type: barrier_type, u_penetration_type: penetration_type,
-                                    u_corrected_url_system:  corrected_url_system, u_suggested_ul_system: suggested_ul_system)
+                                    u_corrected_url_system:  corrected_url_system, u_suggested_ul_system: suggested_ul_system, u_reason2: reason2, u_department_str_firestopinstall: department_str_firestopinstall )
 
           render json: {message: "Update Success"}
         else
@@ -277,7 +280,8 @@ class ApiController < ApplicationController
         i = 1
         @records.each do |record|
 	  floor = (record.u_floor == "other" ? record.u_other_floor : record.u_floor)
-          sheet.add_row  [record.u_tag, record.u_facility_name, record.u_building, floor, record.u_location_desc, record.u_type, record.u_status, 
+          sheet.add_row  [record.u_tag, record.u_facility_name, record.u_building, floor, record.u_location_desc, record.u_type, 
+	          record.u_status == "NA" ?  "Non-Accessible": record.u_status,		     
                   if record.u_status == "Fail"
                     record.u_reason
                   else
@@ -319,9 +323,9 @@ class ApiController < ApplicationController
 		floor = (record.u_floor == "other" ? record.u_other_floor : record.u_floor)
           sheet.add_row  [record.u_tag, record.u_facility_name, record.u_building, floor, record.u_location_desc, record.u_type, record.u_dr_passed_post_repair,
                   if record.u_status == "Fail"
-                    record.u_reason
+			  record.u_reason.upcase == "OTHER" ? record.u_reason2 : record.u_reason
                   else
-                    record.u_non_accessible_reasons
+                    record.u_non_accessible_reasons.delete(' ').upcase == "OTHER" ? record.u_other_nonaccessible_reason : record.u_non_accessible_reasons 
                   end,
 		  if record.u_repair_action_performed == "Damper Repaired"
 			  res = record.u_dr_description.present? ? record.u_repair_action_performed + ":" + record.u_dr_description : record.u_repair_action_performed
