@@ -45,7 +45,7 @@ module Report
       # @owner.damper_types.map { |type| Damper.damper_types[type].capitalize } +
       # %i(pass fail na total_dampers).map { |k| column_heading(k) }
       [column_heading(heading)] +
-      ["Fire", "Somke", "Combination"] +
+      ["Fire", "Smoke", "Combination"] +
       %i(pass fail na removed total_dampers damper_per).map { |k| column_heading(k)}
     end
 

@@ -32,12 +32,15 @@ module DamperRepairReport
 
     def summary_table_attributes
       attributes = []
-      attributes += [[:date, nil],
+      attributes += [
                      [:damper_number, nil],
                      [:floor, nil],
                      [:damper_location, 85],
+                     [:damper_type, nil],
                      [:status, 60],
-                     [:corrective_action, 100]] 
+                     [:dificiancy, nil],
+                     [:corrective_action, 100],
+                     [:date, nil]] 
 
       attributes
     end
@@ -55,22 +58,26 @@ module DamperRepairReport
         
       	if record.u_repair_action_performed == "Damper Repaired"
       	  data = {
-      	    :date => record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')),
       	    :damper_number     => record.u_tag,
             :floor             => record.u_floor.to_i,
       	    :damper_location   => record.u_location_desc,
+            :damper_type       => record.u_damper_name,
             :status            => @post_status,
-            :corrective_action => record.u_dr_description
+            :dificiancy        => record.u_reason,
+            :corrective_action => record.u_dr_description,
+            :date => record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY'))
       	  }
       	  attributes.map { |column, | data[column] }
       	else
-      	  data = {
-      	    :date => record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')),
+      	  data = {      	    
       	    :damper_number     => record.u_tag,
             :floor             => record.u_floor.to_i,
       	    :damper_location   => record.u_location_desc,
+            :damper_type       => record.u_damper_name,
             :status            => @post_status,
-            :corrective_action => record.u_repair_action_performed
+            :dificiancy        => record.u_reason,
+            :corrective_action => record.u_repair_action_performed,
+            :date => record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY'))
       	  }
       	  attributes.map { |column, | data[column] }
         end
