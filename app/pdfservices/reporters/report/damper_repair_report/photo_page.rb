@@ -312,12 +312,12 @@ module DamperRepairReport
       #   at: [60 - pdf.bounds.absolute_left, 125], :width => 123, :height => 123)
       image = @record.pdf_image4.path(:pdf) 
       unless image.blank?
-        pdf.image(image, at: [60 - pdf.bounds.absolute_left, 175], :width => 120, :height => 120)
+        pdf.image(image, at: [60 - pdf.bounds.absolute_left, 125], :width => 120, :height => 120)
       # else
       #   pdf.draw_text('Photo Unavailable', style: :bold, size: 10, 
       #     at: [70 - pdf.bounds.absolute_left, 70])
       # Looped inside - no image no lable
-        pdf.draw_text("After Installation",  at: [80 - pdf.bounds.absolute_left, -5])
+        pdf.draw_text("After Installation",  at: [80 - pdf.bounds.absolute_left, -9])
       end
       # unless @record.u_image3.blank?
       #   pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_image3}")[:data])), at:  [ 44, 251], fit: [105, 105]
@@ -331,13 +331,13 @@ module DamperRepairReport
       #  at: [380 - pdf.bounds.absolute_left, 125], :width => 123, :height => 123)
       image = @record.pdf_image3.path(:pdf)
       unless image.blank?
-        pdf.image(image, at: [395 - pdf.bounds.absolute_left, 125], 
+        pdf.image(image, at: [380 - pdf.bounds.absolute_left, 125], 
           :width => 120, :height => 120)
       # else
       #   pdf.draw_text('Photo Unavailable', style: :bold, size: 10, 
       #     at: [395 - pdf.bounds.absolute_left, 60])
       # Looped inside - no image no lable
-       pdf.draw_text("Operational",  at: [400 - pdf.bounds.absolute_left, -5])
+       pdf.draw_text("Operational",  at: [400 - pdf.bounds.absolute_left, -9])
       end
     end
 
