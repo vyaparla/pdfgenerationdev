@@ -157,6 +157,7 @@ module DamperInspectionReport
     end
  
      def draw_table1(pdf)
+	pdf.move_down 20     
 	if @record.u_status.upcase == "PASS" 
         status_content = "<font size='12'><b>Pass</b></font>"
         cell_color = '13db13'
@@ -248,7 +249,7 @@ module DamperInspectionReport
         [
           { :content => "<font size='14'><b>DEFICIENCY DESCRIPTION(s):</b></font>",
             :colspan => 2, :width => 225, align: :left },
-          { :content => "<font size='14'><b>COMMENT</b></font>",
+          { :content => "<font size='14'><b>COMMENT:</b></font>",
             :colspan => 4, :width => 315, align: :left }
         ],
         [
@@ -263,15 +264,15 @@ module DamperInspectionReport
     end
 
     def draw_table4(pdf)
-      if @record.u_repair_action_performed == "Damper Repaired"
-                          repair_action = @record.u_dr_description.present? ? @record.u_repair_action_performed + ":" + @record.u_dr_description : @record.u_repair_action_performed
-                  elsif @record.u_repair_action_performed == "Damper Installed"
-                          repair_action =  r_damper_model.present? ? @record.u_repair_action_performed + ":" + @record.u_dr_damper_model: @record.u_repair_action_performed
-                  elsif @record.u_repair_action_performed == "Actuator Installed"
-                          repair_action = @record.u_dr_installed_actuator_model.present? ? @record.u_repair_action_performed + ":" + @record.u_dr_installed_actuator_model : @record.u_repair_action_performed
-                  else
-                       repair_action = @record.u_access_size.present? ? @record.u_repair_action_performed + ":" + @record.u_access_size : @record.u_repair_action_performed
-                  end
+     # if @record.u_repair_action_performed == "Damper Repaired"
+     #                     repair_action = @record.u_dr_description.present? ? @record.u_repair_action_performed + ":" + @record.u_dr_description : @record.u_repair_action_performed
+     #             elsif @record.u_repair_action_performed == "Damper Installed"
+     #                     repair_action =  r_damper_model.present? ? @record.u_repair_action_performed + ":" + @record.u_dr_damper_model: @record.u_repair_action_performed
+     #             elsif @record.u_repair_action_performed == "Actuator Installed"
+     #                     repair_action = @record.u_dr_installed_actuator_model.present? ? @record.u_repair_action_performed + ":" + @record.u_dr_installed_actuator_model : @record.u_repair_action_performed
+     #             else
+     #                  repair_action = @record.u_access_size.present? ? @record.u_repair_action_performed + ":" + @record.u_access_size : @record.u_repair_action_performed
+     #             end
 
       pdf.table([
         [
@@ -281,9 +282,9 @@ module DamperInspectionReport
             :colspan => 4, :width => 315, align: :left }
         ],
         [
-          { :content => "<font size='12'>#{repair_action}</font>",
+          { :content => "<font size='12'>#{@record.u_repair_action_performed}</font>",
             :colspan => 2, :width => 225, align: :left },
-          { :content => "<font size='12'>#{DamperInspectionReporting.translate(:failure_reasons)} : </b> #{@record.u_reason2}</font>",
+          { :content => "<font size='12'>#{@record.u_reason2}</font>",
             :colspan => 4, :width => 315, align: :left }
         ],
 
@@ -496,6 +497,7 @@ module DamperInspectionReport
       end
       
       def draw_heading(pdf)
+	pdf.fill_color '202020'
       end
 
       def title
