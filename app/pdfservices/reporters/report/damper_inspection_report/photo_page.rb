@@ -217,7 +217,7 @@ module DamperInspectionReport
       if @record.u_damper_name.upcase == "FIRE"
         damper_type = 'Fire Damper (FD)'
       elsif @record.u_damper_name.upcase == "SMOKE"
-        damper_type = 'Fire Smoke Damper (FSD)'
+        damper_type = 'Smoke Damper (FSD)'
       else
         damper_type = 'Combination (FSD)'
       end

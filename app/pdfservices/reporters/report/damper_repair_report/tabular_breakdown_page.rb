@@ -55,11 +55,13 @@ module DamperRepairReport
         else
           @post_status = "Failed Post Repair" 
         end
+
+        @floor = record.u_floor == "other" ? record.u_other_floor : record.u_floor
         
       	if record.u_repair_action_performed == "Damper Repaired"
       	  data = {
       	    :damper_number     => record.u_tag,
-            :floor             => record.u_floor.to_i,
+            :floor             => @floor,
       	    :damper_location   => record.u_location_desc,
             :damper_type       => record.u_damper_name,
             :status            => @post_status,
@@ -71,7 +73,7 @@ module DamperRepairReport
       	else
       	  data = {      	    
       	    :damper_number     => record.u_tag,
-            :floor             => record.u_floor.to_i,
+            :floor             => @floor,
       	    :damper_location   => record.u_location_desc,
             :damper_type       => record.u_damper_name,
             :status            => @post_status,

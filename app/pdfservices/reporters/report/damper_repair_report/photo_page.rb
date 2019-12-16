@@ -133,7 +133,7 @@ module DamperRepairReport
       if @record.u_damper_name.upcase == "FIRE"
         damper_type = 'Fire Damper (FD)'
       elsif @record.u_damper_name.upcase == "SMOKE"
-        damper_type = 'Fire Smoke Damper (FSD)'
+        damper_type = 'Smoke Damper (FSD)'
       else
         damper_type = 'Combination (FD)'
       end
@@ -312,7 +312,7 @@ module DamperRepairReport
       #   at: [60 - pdf.bounds.absolute_left, 125], :width => 123, :height => 123)
       image = @record.pdf_image4.path(:pdf) 
       unless image.blank?
-        pdf.image(image, at: [60 - pdf.bounds.absolute_left, 125], :width => 120, :height => 120)
+        pdf.image(image, at: [60 - pdf.bounds.absolute_left, 175], :width => 120, :height => 120)
       # else
       #   pdf.draw_text('Photo Unavailable', style: :bold, size: 10, 
       #     at: [70 - pdf.bounds.absolute_left, 70])

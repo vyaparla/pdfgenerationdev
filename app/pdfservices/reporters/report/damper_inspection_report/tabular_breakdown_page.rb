@@ -111,10 +111,13 @@ module DamperInspectionReport
           else
             @di_installedaccess_door = ""
           end
+          
+          @floor = record.u_floor == "other" ? record.u_other_floor : record.u_floor 
+
           data = {
             :date              => record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')),
             :damper_number     => record.u_tag,
-            :floor             => record.u_floor.to_i,
+            :floor             => @floor,
             :damper_location   => record.u_location_desc,
             :damper_type       => record.u_damper_name,
             :transactional_status    => record.u_status,
@@ -143,7 +146,7 @@ module DamperInspectionReport
           data = {
             :date              => record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')),
             :damper_number     => record.u_tag,
-            :floor             => record.u_floor.to_i,
+            :floor             => @floor,
             :damper_location   => record.u_location_desc,
             :damper_type       => record.u_damper_name,
             :transactional_status    => record.u_status,
