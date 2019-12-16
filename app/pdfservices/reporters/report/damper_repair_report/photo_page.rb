@@ -331,7 +331,7 @@ module DamperRepairReport
         at: [380 - pdf.bounds.absolute_left, 125], :width => 123, :height => 123)
       image = @record.pdf_image3.path(:pdf)
       unless image.blank?
-        pdf.image(image, at: [380 - pdf.bounds.absolute_left, 125], 
+        pdf.image(image, at: [395 - pdf.bounds.absolute_left, 125], 
           :width => 120, :height => 120)
       else
         pdf.draw_text('Photo Unavailable', style: :bold, size: 10, 
