@@ -135,7 +135,7 @@ module DamperRepairReport
       elsif @record.u_damper_name.upcase == "SMOKE"
         damper_type = 'Fire Smoke Damper (FSD)'
       else
-        damper_type = 'Combination'
+        damper_type = 'Combination (FD)'
       end
 
       pdf.table([
