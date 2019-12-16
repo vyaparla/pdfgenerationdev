@@ -1,6 +1,7 @@
 #server '35.167.247.200', user: 'deploy', roles: %w{web app db}
 #server '54.165.215.71', user: 'deploy', roles: %w{web app db}
-server '54.165.215.71', user: 'deploy', roles: %w{web app db}
+#server '54.165.215.71', user: 'deploy', roles: %w{web app db}
+server '34.229.178.3', user: 'deploy', roles: %w{web app db}
 set :stage, :production
 set :rails_env, :production
 
