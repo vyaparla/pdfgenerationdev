@@ -237,13 +237,13 @@ module DamperInspectionReport
     end
 
     def draw_table3(pdf)
-       failure_reason = @record.u_reason.delete(' ').upcase == "OTHER" ? @record.u_other_failure_reason : @record.u_reason
-      na_reason = @record.u_non_accessible_reasons.delete(' ').upcase == "OTHER" ? @record.u_other_nonaccessible_reason : @record.u_non_accessible_reasons
-      na_reasons_label = "Other Non-Accessible Reason"
+      # failure_reason = @record.u_reason.delete(' ').upcase == "OTHER" ? @record.u_other_failure_reason : @record.u_reason
+      #na_reason = @record.u_non_accessible_reasons.delete(' ').upcase == "OTHER" ? @record.u_other_nonaccessible_reason : @record.u_non_accessible_reasons
+      #na_reasons_label = "Other Non-Accessible Reason"
       deficiencies =  if @record.u_status == "Fail"
-                    failure_reason
+                    @record.u_reason
                   else
-                    na_reason
+                    @record.u_non_accessible_reasons
                   end
       pdf.table([
         [

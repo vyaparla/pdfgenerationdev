@@ -313,7 +313,7 @@ class ApiController < ApplicationController
         sheet.add_row ["", "Damper Repair List", "",  damper_repair_para, "", "", "", "", "", "", "", ""], :style => [title_row,title_row,title_row,title_desc,title_desc, title_desc, title_desc, title_desc, title_desc, title_desc, title_desc, title_desc] , :height => 55
         sheet.merge_cells ("B1:C1")
         sheet.merge_cells ("D1:L1")
-        sheet.add_row ["Damper #", "Facility", "Building", "Floor", "Damper Location", "Damper Type", "Status", "Deficiencies", "Repair Action Performed", "Subsequent Failure Reason", "Technician", "Date"] , :style => header_row
+        sheet.add_row ["Damper #", "Facility", "Building", "Floor", "Damper Location", "Damper Type", "Status",  "Repair Action Performed", "Subsequent Failure Reason", "Technician", "Date"] , :style => header_row
         i = 1
 
 
@@ -322,21 +322,7 @@ class ApiController < ApplicationController
         @records.each do |record|
 		floor = (record.u_floor == "other" ? record.u_other_floor : record.u_floor)
           sheet.add_row  [record.u_tag, record.u_facility_name, record.u_building, floor, record.u_location_desc, record.u_type, record.u_dr_passed_post_repair,
-                  if record.u_status == "Fail"
-			  record.u_reason.upcase == "OTHER" ? record.u_reason2 : record.u_reason
-                  else
-                    record.u_non_accessible_reasons.delete(' ').upcase == "OTHER" ? record.u_other_nonaccessible_reason : record.u_non_accessible_reasons 
-                  end,
-		  if record.u_repair_action_performed == "Damper Repaired"
-			  res = record.u_dr_description.present? ? record.u_repair_action_performed + ":" + record.u_dr_description : record.u_repair_action_performed
-                  elsif record.u_repair_action_performed == "Damper Installed"
-			  res = record.u_dr_damper_model.present? ? record.u_repair_action_performed + ":" + record.u_dr_damper_model: record.u_repair_action_performed
-                  elsif record.u_repair_action_performed == "Actuator Installed"
-			  res = record.u_dr_installed_actuator_model.present? ? record.u_repair_action_performed + ":" + record.u_dr_installed_actuator_model : record.u_repair_action_performed
-                  else
-                    record.u_repair_action_performed + ":" + record.u_access_size
-                  end,
-
+                  record.u_repair_action_performed,
                   record.u_reason2,
                   record.u_inspector,
                   record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY'))
