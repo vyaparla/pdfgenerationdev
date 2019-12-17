@@ -65,7 +65,7 @@ module DamperRepairReport
       	    :damper_location   => record.u_location_desc,
             :damper_type       => record.u_damper_name,
             :status            => @post_status,
-            :dificiancy        => record.u_reason,
+            :dificiancy        => record.u_reason2,
             :corrective_action => record.u_dr_description,
             :date => record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY'))
       	  }
@@ -77,7 +77,7 @@ module DamperRepairReport
       	    :damper_location   => record.u_location_desc,
             :damper_type       => record.u_damper_name,
             :status            => @post_status,
-            :dificiancy        => record.u_reason,
+            :dificiancy        => record.u_reason2,
             :corrective_action => record.u_repair_action_performed,
             :date => record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY'))
       	  }

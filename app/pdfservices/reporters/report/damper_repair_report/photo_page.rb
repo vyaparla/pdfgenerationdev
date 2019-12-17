@@ -133,9 +133,9 @@ module DamperRepairReport
       if @record.u_damper_name.upcase == "FIRE"
         damper_type = 'Fire Damper (FD)'
       elsif @record.u_damper_name.upcase == "SMOKE"
-        damper_type = 'Smoke Damper (FSD)'
+        damper_type = 'Smoke Damper (SD)'
       else
-        damper_type = 'Combination (FD)'
+        damper_type = 'Combination (FSD)'
       end
 
       pdf.table([
@@ -154,18 +154,27 @@ module DamperRepairReport
 
     def draw_table3(pdf)
       pdf.table([
-        [
-          { :content => "<font size='14'><b>DEFICIENCY DESCRIPTION(s):</b></font>", 
-            :colspan => 2, :width => 225, align: :left },
+       # [
+       #   { :content => "<font size='14'><b>DEFICIENCY DESCRIPTION(s):</b></font>", 
+       #     :colspan => 2, :width => 225, align: :left },
+       #   { :content => "<font size='14'><b>COMMENT</b></font>", 
+       #     :colspan => 4, :width => 315, align: :left }  
+       # ],
+	[
           { :content => "<font size='14'><b>COMMENT</b></font>", 
-            :colspan => 4, :width => 315, align: :left }  
+            :colspan => 6, :width => 540, align: :left }  
         ],
-        [
-          { :content => "<font size='12'></font>", 
-            :colspan => 2, :width => 225, align: :left },
-          { :content => "<font size='12'>#{@record.u_dr_description}</font>", 
-            :colspan => 4, :width => 315, align: :left }  
+     #   [
+     #     { :content => "<font size='12'></font>", 
+     #       :colspan => 2, :width => 225, align: :left },
+     #     { :content => "<font size='12'>#{@record.u_dr_description}</font>", 
+     #       :colspan => 4, :width => 315, align: :left }  
+     #   ],
+	 [
+          { :content => "<font size='12'>#{@record.u_dr_description}</font>",
+            :colspan => 6, :width => 540, align: :left }
         ],
+
         
       ], :cell_style => { :inline_format => true })
       pdf.move_down 5 
