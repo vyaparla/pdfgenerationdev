@@ -356,7 +356,7 @@ class ApiController < ApplicationController
         csv << ["Door No.", "Facility", "Building", "Floor", "Door Location", "Fire Rating", "Door Deficiencies", "Date", "Technician"]
         @records.each do |record|
           @firedoor_deficiency_codes = FiredoorDeficiency.where(:firedoor_service_sysid => record.u_service_id, :firedoor_asset_sysid => record.u_asset_id).collect { |w| w.firedoor_deficiencies_code }.join(", ")
-          csv << [record.u_tag, record.u_facility_name, record.u_building, record.u_floor.to_i, record.u_location_desc, record.u_fire_rating, @firedoor_deficiency_codes, record.u_inspected_on.localtime.strftime('%m/%d/%Y'), record.u_inspector]
+          csv << [record.u_tag, record.u_facility_name, record.u_building, record.u_floor, record.u_location_desc, record.u_fire_rating, @firedoor_deficiency_codes, record.u_inspected_on.localtime.strftime('%m/%d/%Y'), record.u_inspector]
         end
       end
     elsif params[:servicetype].delete(' ').upcase == "FIRESTOPSURVEY"
@@ -379,7 +379,6 @@ class ApiController < ApplicationController
         sheet.add_row ["Issue #", "Facility", "Building", "Floor", "Location", "Barrier Type", "Penetration Type", "Issue", "Corrected On Site", "Suggested Corrective Action", "Corrective Action/UL System", "Date", "Technician"] , :style => header_row
         i = 1
         @records.each do |record|
-	  # floor = (record.u_floor == "other" ? record.u_other_floor : record.u_floor.to_i)
           floor =  ( record.u_floor == "other" ? record.u_other_floor : record.u_floor)
 
            sheet.add_row  [record.u_tag, record.u_facility_name, record.u_building, floor, record.u_location_desc, record.u_barrier_type, 
@@ -438,7 +437,7 @@ class ApiController < ApplicationController
         csv << ["Date", "Asset #", "Facility", "Building", "Floor", "Damper Location", "Damper Type",  "Service Type", "Technician", "Result", "Issues", "Action Taken", "Current Status"]
         @records.each do |record|
           result_and_current_result = record.comperhensive_result(record)
-          csv << [record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')), record.u_tag, record.u_facility_name, record.u_building, record.u_floor.to_i, 
+          csv << [record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')), record.u_tag, record.u_facility_name, record.u_building, record.u_floor, 
                   record.u_location_desc, record.u_type, record.u_report_type, record.u_inspector, result_and_current_result,
                   if record.u_report_type == "DAMPERINSPECTION"
                     if result_and_current_result == "FAIL"
