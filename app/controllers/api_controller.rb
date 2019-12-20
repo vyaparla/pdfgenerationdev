@@ -1,176 +1,22 @@
 class ApiController < ApplicationController
   
   def save_pdf
+    #@pdfjob.u_suggested_ul_system = HTMLEntities.new.decode params[:u_suggested_ul_system]
     if params[:status] == "insert"
-      @pdfjob = Lsspdfasset.new(lssassets_job)
-      @pdfjob.save
-      
-      unless @pdfjob.u_image1.blank?
-        @pdf_image1 = StringIO.open(Base64.decode64(@pdfjob.u_image1))
-        @pdf_image1.class.class_eval { attr_accessor :original_filename, :content_type }
-        @pdf_image1.original_filename = "#{params[:image_file_name1]}.jpg"
-        @pdf_image1.content_type = "image/jpeg"
-        @pdfjob.pdf_image1 = @pdf_image1
-      end
-
-      unless @pdfjob.u_image2.blank?
-        @pdf_image2 = StringIO.open(Base64.decode64(@pdfjob.u_image2))
-        @pdf_image2.class.class_eval { attr_accessor :original_filename, :content_type }
-        @pdf_image2.original_filename = "#{params[:image_file_name2]}.jpg"
-        @pdf_image2.content_type = "image/jpeg"
-        @pdfjob.pdf_image2 = @pdf_image2
-      end
-      
-      unless @pdfjob.u_image3.blank?
-        @pdf_image3 = StringIO.open(Base64.decode64(@pdfjob.u_image3))
-        @pdf_image3.class.class_eval { attr_accessor :original_filename, :content_type }
-        @pdf_image3.original_filename = "#{params[:image_file_name3]}.jpg"
-        @pdf_image3.content_type = "image/jpeg"
-        @pdfjob.pdf_image3 = @pdf_image3
-      end
-
-      unless @pdfjob.u_image4.blank?
-        @pdf_image4 = StringIO.open(Base64.decode64(@pdfjob.u_image4))
-        @pdf_image4.class.class_eval { attr_accessor :original_filename, :content_type }
-        @pdf_image4.original_filename = "#{params[:image_file_name4]}.jpg"
-        @pdf_image4.content_type = "image/jpeg"
-        @pdfjob.pdf_image4 = @pdf_image4
-      end
-
-      # @pdfjob.u_job_start_date =  Time.now.utc
-      # @pdfjob.u_job_end_date =  Time.now.utc
-      # @pdfjob.u_inspected_on =  Time.now.utc
-      
-      #General Fields
-      @pdfjob.u_group_name = HTMLEntities.new.decode params[:u_group_name]
-      @pdfjob.u_facility_name = HTMLEntities.new.decode params[:u_facility_name]
-      @pdfjob.u_building = HTMLEntities.new.decode params[:u_building]
-      @pdfjob.u_location_desc = HTMLEntities.new.decode params[:u_location_desc]
-      
-      #Damper Inspection Fields
-      @pdfjob.u_reason = HTMLEntities.new.decode params[:u_reason]
-      @pdfjob.u_reason2 = HTMLEntities.new.decode params[:u_reason2]
-      @pdfjob.u_department_str_firestopinstall = HTMLEntities.new.decode params[:u_department_str_firestopinstall]
-      @pdfjob.u_other_failure_reason = HTMLEntities.new.decode params[:u_other_failure_reason]
-      @pdfjob.u_di_replace_damper = HTMLEntities.new.decode params[:u_di_replace_damper]
-      @pdfjob.u_non_accessible_reasons = HTMLEntities.new.decode params[:u_non_accessible_reasons]
-      @pdfjob.u_other_nonaccessible_reason = HTMLEntities.new.decode params[:u_other_nonaccessible_reason]
-      @pdfjob.u_di_installed_access_door = HTMLEntities.new.decode params[:u_di_installed_access_door]
-      
-      #Damper Repair Fields
-      @pdfjob.u_repair_action_performed = HTMLEntities.new.decode params[:u_repair_action_performed]
-      @pdfjob.u_dr_passed_post_repair = HTMLEntities.new.decode params[:u_dr_passed_post_repair]
-      @pdfjob.u_dr_description = HTMLEntities.new.decode params[:u_dr_description]
-      @pdfjob.u_dr_damper_model = HTMLEntities.new.decode params[:u_dr_damper_model]
-      @pdfjob.u_dr_installed_damper_type = HTMLEntities.new.decode params[:u_dr_installed_damper_type]
-      @pdfjob.u_dr_installed_damper_width = HTMLEntities.new.decode params[:u_dr_installed_damper_width]
-      @pdfjob.u_dr_installed_damper_height = HTMLEntities.new.decode params[:u_dr_installed_damper_height]
-      @pdfjob.u_dr_installed_actuator_model = HTMLEntities.new.decode params[:u_dr_installed_actuator_model]
-      @pdfjob.u_dr_installed_actuator_type = HTMLEntities.new.decode params[:u_dr_installed_actuator_type]
-      @pdfjob.u_dr_actuator_voltage = HTMLEntities.new.decode params[:u_dr_actuator_voltage]
-
-      #Firedoor Inspection Fields
-      @pdfjob.u_door_category = HTMLEntities.new.decode params[:u_door_category]
-      @pdfjob.u_fire_rating = HTMLEntities.new.decode params[:u_fire_rating]
-      @pdfjob.u_door_type = HTMLEntities.new.decode params[:u_door_type]
-      
-      #Firestop Survey and Installation Fields
-      @pdfjob.u_issue_type = HTMLEntities.new.decode params[:u_issue_type]
-      @pdfjob.u_barrier_type = HTMLEntities.new.decode params[:u_barrier_type]
-      @pdfjob.u_penetration_type = HTMLEntities.new.decode params[:u_penetration_type]
-      @pdfjob.u_corrected_url_system = HTMLEntities.new.decode params[:u_corrected_url_system]
-      @pdfjob.u_suggested_ul_system = HTMLEntities.new.decode params[:u_suggested_ul_system]
-
-      @pdfjob.save
-
+      @pdfjob = create_assets
       render json: {message: "Save Success"}
     else
       if params[:status] == "update"
         @pdfjob = Lsspdfasset.find_by(u_asset_id: params[:u_asset_id])
-
-        if @pdfjob.update(lssassets_job)
-          
-          unless @pdfjob.u_image1.blank?
-            @pdf_image1 = StringIO.open(Base64.decode64(@pdfjob.u_image1))
-            @pdf_image1.class.class_eval { attr_accessor :original_filename, :content_type }
-            @pdf_image1.original_filename = "#{params[:image_file_name1]}.jpg"
-            @pdf_image1.content_type = "image/jpeg"
-            @pdfjob.update_attribute(:pdf_image1, @pdf_image1)
+	if @pdfjob == nil
+         @pdfjob = create_assets
+	end	
+          if @pdfjob.update(lssassets_job)
+            update_assets
+            render json: {message: "Update Success"}
+          else
+            render json: {message: "Unable to Update the record!"}
           end
-
-          unless @pdfjob.u_image2.blank?
-            @pdf_image2 = StringIO.open(Base64.decode64(@pdfjob.u_image2))
-            @pdf_image2.class.class_eval { attr_accessor :original_filename, :content_type }
-            @pdf_image2.original_filename = "#{params[:image_file_name2]}.jpg"
-            @pdf_image2.content_type = "image/jpeg"
-            @pdfjob.update_attribute(:pdf_image2, @pdf_image2)
-          end
-      
-          unless @pdfjob.u_image3.blank?
-            @pdf_image3 = StringIO.open(Base64.decode64(@pdfjob.u_image3))
-            @pdf_image3.class.class_eval { attr_accessor :original_filename, :content_type }
-            @pdf_image3.original_filename = "#{params[:image_file_name3]}.jpg"
-            @pdf_image3.content_type = "image/jpeg"
-            @pdfjob.update_attribute(:pdf_image3, @pdf_image3)
-          end
-
-          unless @pdfjob.u_image4.blank?
-            @pdf_image4 = StringIO.open(Base64.decode64(@pdfjob.u_image4))
-            @pdf_image4.class.class_eval { attr_accessor :original_filename, :content_type }
-            @pdf_image4.original_filename = "#{params[:image_file_name4]}.jpg"
-            @pdf_image4.content_type = "image/jpeg"
-            @pdfjob.update_attribute(:pdf_image4, @pdf_image4)
-          end
-
-          #@pdfjob.update_attributes(:u_job_start_date =>  Time.now.utc, :u_job_end_date => Time.now.utc, :u_inspected_on => Time.now.utc)
-
-          gname = HTMLEntities.new.decode params[:u_group_name]
-          fname = HTMLEntities.new.decode params[:u_facility_name]
-          building = HTMLEntities.new.decode params[:u_building]
-          location_desc = HTMLEntities.new.decode params[:u_location_desc]
-          reason = HTMLEntities.new.decode params[:u_reason]
-	  reason2 = HTMLEntities.new.decode params[:u_reason2]
-          department_str_firestopinstall = HTMLEntities.new.decode params[:u_department_str_firestopinstall]
-          other_failure_reason = HTMLEntities.new.decode params[:u_other_failure_reason]
-          di_replace_damper = HTMLEntities.new.decode params[:u_di_replace_damper]
-          non_accessible_reasons  = HTMLEntities.new.decode params[:u_non_accessible_reasons]
-          other_nonaccessible_reason = HTMLEntities.new.decode params[:u_other_nonaccessible_reason]
-          installed_access_door = HTMLEntities.new.decode params[:u_di_installed_access_door]
-          repair_action_performed = HTMLEntities.new.decode params[:u_repair_action_performed]
-          dr_passed_post_repair =  HTMLEntities.new.decode params[:u_dr_passed_post_repair]
-          dr_description =  HTMLEntities.new.decode params[:u_dr_description]
-          dr_damper_model =  HTMLEntities.new.decode params[:u_dr_damper_model]
-          dr_installed_damper_type = HTMLEntities.new.decode params[:u_dr_installed_damper_type]
-          dr_installed_damper_width = HTMLEntities.new.decode params[:u_dr_installed_damper_width]
-          dr_installed_damper_height = HTMLEntities.new.decode params[:u_dr_installed_damper_height]
-          dr_installed_actuator_model = HTMLEntities.new.decode params[:u_dr_installed_actuator_model]
-          dr_installed_actuator_type = HTMLEntities.new.decode params[:u_dr_installed_actuator_type]
-          dr_actuator_voltage = HTMLEntities.new.decode params[:u_dr_actuator_voltage]
-          door_category = HTMLEntities.new.decode params[:u_door_category]
-          fire_rating =  HTMLEntities.new.decode params[:u_fire_rating]
-          door_type = HTMLEntities.new.decode params[:u_door_type]
-          issue_type =  HTMLEntities.new.decode params[:u_issue_type]
-          barrier_type = HTMLEntities.new.decode params[:u_barrier_type]
-          penetration_type = HTMLEntities.new.decode params[:u_penetration_type]
-          corrected_url_system =  HTMLEntities.new.decode params[:u_corrected_url_system]
-          suggested_ul_system = HTMLEntities.new.decode params[:u_suggested_ul_system]
- 
-          @pdfjob.update_attributes(u_group_name: gname, u_facility_name: fname, u_building: building, u_location_desc: location_desc, 
-                                    u_reason:  reason, u_other_failure_reason:  other_failure_reason, u_di_replace_damper: di_replace_damper,
-                                    u_non_accessible_reasons: non_accessible_reasons, u_other_nonaccessible_reason: other_nonaccessible_reason,
-                                    u_di_installed_access_door:  installed_access_door, u_repair_action_performed: repair_action_performed,
-                                    u_dr_passed_post_repair:  dr_passed_post_repair, u_dr_description:  dr_description,
-                                    u_dr_damper_model:  dr_damper_model, u_dr_installed_damper_type: dr_installed_damper_type,
-                                    u_dr_installed_damper_width: dr_installed_damper_width, u_dr_installed_damper_height: dr_installed_damper_height,
-                                    u_dr_installed_actuator_model: dr_installed_actuator_model, u_dr_installed_actuator_type: dr_installed_actuator_type,
-                                    u_dr_actuator_voltage: dr_actuator_voltage, u_door_category: door_category, u_fire_rating:  fire_rating,
-                                    u_door_type: door_type, u_issue_type: issue_type, u_barrier_type: barrier_type, u_penetration_type: penetration_type,
-                                    u_corrected_url_system:  corrected_url_system, u_suggested_ul_system: suggested_ul_system, u_reason2: reason2, u_department_str_firestopinstall: department_str_firestopinstall )
-
-          render json: {message: "Update Success"}
-        else
-          render json: {message: "Unable to Update the record!"}
-        end
       else
         @pdfjob = Lsspdfasset.find_by(u_asset_id: params[:u_asset_id])
         @pdfjob.destroy
@@ -180,12 +26,6 @@ class ApiController < ApplicationController
   end
 
   def pdf_generation
-    # @group_name    = params[:groupname]
-    # @facility_name = params[:facilityname]
-    # @group_url     = params[:groupurl]
-    # @facility_url  = params[:facilityurl]
-    # @nfpa_url      = params[:nfpaurl]
-    #@serviceID     = params[:serviceID]
     @model_name    = params[:service].delete(' ').upcase + params[:type].upcase
     @address1      = params[:address1]
     @address2      = params[:address2]
@@ -196,14 +36,14 @@ class ApiController < ApplicationController
     @facility_name = HTMLEntities.new.decode params[:facilityname]
     @with_picture = params[:withPictures] && (params[:withPictures] == 'no') ? false : true
   
-  	@pdfjob = Lsspdfasset.where(u_service_id: params[:serviceID], :u_delete => false).last
+    @pdfjob = Lsspdfasset.where(u_service_id: params[:serviceID], :u_delete => false).last
     unless @pdfjob.blank?
       #ReportGeneration.new(@pdfjob, @group_name, @facility_name, @group_url, @facility_url).generate_full_report
       ReportGeneration.new(@pdfjob, @model_name, @address1, 
         @address2, @csz, @facility_type, @tech, @group_name, 
         @facility_name, @with_picture).
       generate_full_report
-  	  render json: {message: "Success"}
+      render json: {message: "Success"}
     else
       render json: {message: "Unsuccess"}
     end
@@ -570,6 +410,171 @@ class ApiController < ApplicationController
 
   private
 
+  def create_assets
+     @pdfjob = Lsspdfasset.new(lssassets_job)
+      @pdfjob.save
+
+      unless @pdfjob.u_image1.blank?
+        @pdf_image1 = StringIO.open(Base64.decode64(@pdfjob.u_image1))
+        @pdf_image1.class.class_eval { attr_accessor :original_filename, :content_type }
+        @pdf_image1.original_filename = "#{params[:image_file_name1]}.jpg"
+        @pdf_image1.content_type = "image/jpeg"
+        @pdfjob.pdf_image1 = @pdf_image1
+      end
+
+      unless @pdfjob.u_image2.blank?
+        @pdf_image2 = StringIO.open(Base64.decode64(@pdfjob.u_image2))
+        @pdf_image2.class.class_eval { attr_accessor :original_filename, :content_type }
+        @pdf_image2.original_filename = "#{params[:image_file_name2]}.jpg"
+        @pdf_image2.content_type = "image/jpeg"
+        @pdfjob.pdf_image2 = @pdf_image2
+      end
+
+      unless @pdfjob.u_image3.blank?
+        @pdf_image3 = StringIO.open(Base64.decode64(@pdfjob.u_image3))
+        @pdf_image3.class.class_eval { attr_accessor :original_filename, :content_type }
+        @pdf_image3.original_filename = "#{params[:image_file_name3]}.jpg"
+        @pdf_image3.content_type = "image/jpeg"
+        @pdfjob.pdf_image3 = @pdf_image3
+      end
+
+      unless @pdfjob.u_image4.blank?
+        @pdf_image4 = StringIO.open(Base64.decode64(@pdfjob.u_image4))
+        @pdf_image4.class.class_eval { attr_accessor :original_filename, :content_type }
+        @pdf_image4.original_filename = "#{params[:image_file_name4]}.jpg"
+        @pdf_image4.content_type = "image/jpeg"
+        @pdfjob.pdf_image4 = @pdf_image4
+      end
+
+      # @pdfjob.u_job_start_date =  Time.now.utc
+      # @pdfjob.u_job_end_date =  Time.now.utc
+      # @pdfjob.u_inspected_on =  Time.now.utc
+
+      #General Fields
+      @pdfjob.u_group_name = HTMLEntities.new.decode params[:u_group_name]
+      @pdfjob.u_facility_name = HTMLEntities.new.decode params[:u_facility_name]
+      @pdfjob.u_building = HTMLEntities.new.decode params[:u_building]
+      @pdfjob.u_location_desc = HTMLEntities.new.decode params[:u_location_desc]
+      
+      #Damper Inspection Fields
+      @pdfjob.u_reason = HTMLEntities.new.decode params[:u_reason]
+      @pdfjob.u_reason2 = HTMLEntities.new.decode params[:u_reason2]
+      @pdfjob.u_department_str_firestopinstall = HTMLEntities.new.decode params[:u_department_str_firestopinstall]
+      @pdfjob.u_other_failure_reason = HTMLEntities.new.decode params[:u_other_failure_reason]
+      @pdfjob.u_di_replace_damper = HTMLEntities.new.decode params[:u_di_replace_damper]
+      @pdfjob.u_non_accessible_reasons = HTMLEntities.new.decode params[:u_non_accessible_reasons]
+      @pdfjob.u_other_nonaccessible_reason = HTMLEntities.new.decode params[:u_other_nonaccessible_reason]
+      @pdfjob.u_di_installed_access_door = HTMLEntities.new.decode params[:u_di_installed_access_door]
+
+      #Damper Repair Fields
+      @pdfjob.u_repair_action_performed = HTMLEntities.new.decode params[:u_repair_action_performed]
+      @pdfjob.u_dr_passed_post_repair = HTMLEntities.new.decode params[:u_dr_passed_post_repair]
+      @pdfjob.u_dr_description = HTMLEntities.new.decode params[:u_dr_description]
+      @pdfjob.u_dr_damper_model = HTMLEntities.new.decode params[:u_dr_damper_model]
+      @pdfjob.u_dr_installed_damper_type = HTMLEntities.new.decode params[:u_dr_installed_damper_type]
+      @pdfjob.u_dr_installed_damper_width = HTMLEntities.new.decode params[:u_dr_installed_damper_width]
+      @pdfjob.u_dr_installed_damper_height = HTMLEntities.new.decode params[:u_dr_installed_damper_height]
+      @pdfjob.u_dr_installed_actuator_model = HTMLEntities.new.decode params[:u_dr_installed_actuator_model]
+      @pdfjob.u_dr_installed_actuator_type = HTMLEntities.new.decode params[:u_dr_installed_actuator_type]
+      @pdfjob.u_dr_actuator_voltage = HTMLEntities.new.decode params[:u_dr_actuator_voltage]
+
+      #Firedoor Inspection Fields
+      @pdfjob.u_door_category = HTMLEntities.new.decode params[:u_door_category]
+      @pdfjob.u_fire_rating = HTMLEntities.new.decode params[:u_fire_rating]
+      @pdfjob.u_door_type = HTMLEntities.new.decode params[:u_door_type]
+
+      #Firestop Survey and Installation Fields
+      @pdfjob.u_issue_type = HTMLEntities.new.decode params[:u_issue_type]
+      @pdfjob.u_barrier_type = HTMLEntities.new.decode params[:u_barrier_type]
+      @pdfjob.u_penetration_type = HTMLEntities.new.decode params[:u_penetration_type]
+      @pdfjob.u_corrected_url_system = HTMLEntities.new.decode params[:u_corrected_url_system]
+      @pdfjob.u_suggested_ul_system = HTMLEntities.new.decode params[:u_suggested_ul_system]
+
+      @pdfjob.save
+      
+      return @pdfjob
+
+  end	 
+
+  def update_assets
+     unless @pdfjob.u_image1.blank?
+            @pdf_image1 = StringIO.open(Base64.decode64(@pdfjob.u_image1))
+            @pdf_image1.class.class_eval { attr_accessor :original_filename, :content_type }
+            @pdf_image1.original_filename = "#{params[:image_file_name1]}.jpg"
+            @pdf_image1.content_type = "image/jpeg"
+            @pdfjob.update_attribute(:pdf_image1, @pdf_image1)
+          end
+
+          unless @pdfjob.u_image2.blank?
+            @pdf_image2 = StringIO.open(Base64.decode64(@pdfjob.u_image2))
+            @pdf_image2.class.class_eval { attr_accessor :original_filename, :content_type }
+            @pdf_image2.original_filename = "#{params[:image_file_name2]}.jpg"
+            @pdf_image2.content_type = "image/jpeg"
+            @pdfjob.update_attribute(:pdf_image2, @pdf_image2)
+          end
+
+          unless @pdfjob.u_image3.blank?
+            @pdf_image3 = StringIO.open(Base64.decode64(@pdfjob.u_image3))
+            @pdf_image3.class.class_eval { attr_accessor :original_filename, :content_type }
+            @pdf_image3.original_filename = "#{params[:image_file_name3]}.jpg"
+            @pdf_image3.content_type = "image/jpeg"
+            @pdfjob.update_attribute(:pdf_image3, @pdf_image3)
+          end
+
+          unless @pdfjob.u_image4.blank?
+            @pdf_image4 = StringIO.open(Base64.decode64(@pdfjob.u_image4))
+            @pdf_image4.class.class_eval { attr_accessor :original_filename, :content_type }
+            @pdf_image4.original_filename = "#{params[:image_file_name4]}.jpg"
+            @pdf_image4.content_type = "image/jpeg"
+            @pdfjob.update_attribute(:pdf_image4, @pdf_image4)
+          end
+
+	            gname = HTMLEntities.new.decode params[:u_group_name]
+          fname = HTMLEntities.new.decode params[:u_facility_name]
+          building = HTMLEntities.new.decode params[:u_building]
+          location_desc = HTMLEntities.new.decode params[:u_location_desc]
+          reason = HTMLEntities.new.decode params[:u_reason]
+          reason2 = HTMLEntities.new.decode params[:u_reason2]
+          department_str_firestopinstall = HTMLEntities.new.decode params[:u_department_str_firestopinstall]
+          other_failure_reason = HTMLEntities.new.decode params[:u_other_failure_reason]
+          di_replace_damper = HTMLEntities.new.decode params[:u_di_replace_damper]
+          non_accessible_reasons  = HTMLEntities.new.decode params[:u_non_accessible_reasons]
+          other_nonaccessible_reason = HTMLEntities.new.decode params[:u_other_nonaccessible_reason]
+          installed_access_door = HTMLEntities.new.decode params[:u_di_installed_access_door]
+          repair_action_performed = HTMLEntities.new.decode params[:u_repair_action_performed]
+          dr_passed_post_repair =  HTMLEntities.new.decode params[:u_dr_passed_post_repair]
+          dr_description =  HTMLEntities.new.decode params[:u_dr_description]
+          dr_damper_model =  HTMLEntities.new.decode params[:u_dr_damper_model]
+          dr_installed_damper_type = HTMLEntities.new.decode params[:u_dr_installed_damper_type]
+          dr_installed_damper_width = HTMLEntities.new.decode params[:u_dr_installed_damper_width]
+          dr_installed_damper_height = HTMLEntities.new.decode params[:u_dr_installed_damper_height]
+          dr_installed_actuator_model = HTMLEntities.new.decode params[:u_dr_installed_actuator_model]
+          dr_installed_actuator_type = HTMLEntities.new.decode params[:u_dr_installed_actuator_type]
+          dr_actuator_voltage = HTMLEntities.new.decode params[:u_dr_actuator_voltage]
+          door_category = HTMLEntities.new.decode params[:u_door_category]
+          fire_rating =  HTMLEntities.new.decode params[:u_fire_rating]
+          door_type = HTMLEntities.new.decode params[:u_door_type]
+          issue_type =  HTMLEntities.new.decode params[:u_issue_type]
+          barrier_type = HTMLEntities.new.decode params[:u_barrier_type]
+          penetration_type = HTMLEntities.new.decode params[:u_penetration_type]
+          corrected_url_system =  HTMLEntities.new.decode params[:u_corrected_url_system]
+          suggested_ul_system = HTMLEntities.new.decode params[:u_suggested_ul_system]
+
+          @pdfjob.update_attributes(u_group_name: gname, u_facility_name: fname, u_building: building, u_location_desc: location_desc,
+                                    u_reason:  reason, u_other_failure_reason:  other_failure_reason, u_di_replace_damper: di_replace_damper,
+                                    u_non_accessible_reasons: non_accessible_reasons, u_other_nonaccessible_reason: other_nonaccessible_reason,
+                                    u_di_installed_access_door:  installed_access_door, u_repair_action_performed: repair_action_performed,
+                                    u_dr_passed_post_repair:  dr_passed_post_repair, u_dr_description:  dr_description,
+                                    u_dr_damper_model:  dr_damper_model, u_dr_installed_damper_type: dr_installed_damper_type,
+                                    u_dr_installed_damper_width: dr_installed_damper_width, u_dr_installed_damper_height: dr_installed_damper_height,
+                                    u_dr_installed_actuator_model: dr_installed_actuator_model, u_dr_installed_actuator_type: dr_installed_actuator_type,
+                                    u_dr_actuator_voltage: dr_actuator_voltage, u_door_category: door_category, u_fire_rating:  fire_rating,
+                                    u_door_type: door_type, u_issue_type: issue_type, u_barrier_type: barrier_type, u_penetration_type: penetration_type,
+                                    u_corrected_url_system:  corrected_url_system, u_suggested_ul_system: suggested_ul_system, u_reason2: reason2, u_department_str_firestopinstall: department_str_firestopinstall )
+
+
+  end 
+
   def lssassets_job
     params.require(:api).permit(:u_job_id, :u_asset_id, :u_service_id, :u_location_desc, :u_status, :u_type, :u_floor,
       :u_tag, :u_image1, :u_image2, :u_image3, :u_image4, :u_image5, :u_job_start_date, :u_job_end_date, :u_job_scale_rep,
@@ -580,7 +585,7 @@ class ApiController < ApplicationController
       :u_dr_passed_post_repair, :u_dr_description, :u_dr_damper_model, :u_dr_installed_damper_type, :u_dr_installed_damper_height,
       :u_dr_installed_damper_width, :u_dr_installed_actuator_model, :u_dr_installed_actuator_type, :u_dr_actuator_voltage, :u_di_replace_damper, 
       :u_di_installed_access_door, :u_other_failure_reason, :u_other_nonaccessible_reason, :u_facility_sys_id, :u_other_floor, 
-      :u_di_repaired_onsite, :u_di_passed_post_repair, :u_department_str_firestopinstall)
+      :u_di_repaired_onsite, :u_di_passed_post_repair, :u_department_str_firestopinstall, :u_reason2)
   end
 
 
