@@ -63,7 +63,7 @@ module Report
         if @floorInfo.length == 0
           
           floor_json["building"] = key[0]
-          floor_json["floor"] = key[1].to_i
+	  floor_json["floor"] = key[1]
 
           if key[2] == "FSD"
             floor_json["FSD"] = value
@@ -108,7 +108,7 @@ module Report
           @floorInfo.each do |info|
             @damperType = key[2]
             if info.has_key?(key[2])
-              if info["floor"] == key[1].to_i
+              if info["floor"] == key[1]
                 info[key[2]] = value
                 @boolean = 1
               end
@@ -118,7 +118,7 @@ module Report
           if @boolean == 0
             #floor_json = {}
             floor_json["building"] = key[0]
-            floor_json["floor"] = key[1].to_i
+            floor_json["floor"] = key[1]
             if key[2] == "FSD"
               floor_json["FSD"] = value
               floor_json["FD"] = 0
