@@ -30,26 +30,26 @@ module Report
 
       pdf.font_size 12
       pdf.fill_color '202020'
-      if @record.u_report_type == "DAMPERINSPECTION"
-        unless @group_name.blank?
-          [["Contracted By :", "#{@group_name}"],
-          ["Facility :", "#{@facility_name}"],
-          ["Building :" , "#{@record.u_building}"],
-          ["Inspection Date :", @record.work_dates],
-          ["Inspected By :", "#{@record.u_inspector}"]].each do |key, value|
-            pdf.move_down 3
-            pdf.text("<b>#{key}</b> #{value}", :inline_format => true)
-          end   
-        else
-          [["Contracted By :", "#{@facility_name}"],
-          ["Facility :", "#{@facility_name}"],
-          ["Building :" , "#{@record.u_building}"],
-          ["Inspection Date :", @record.work_dates],
-          ["Inspected By :", "#{@record.u_inspector}"]].each do |key, value|
-            pdf.move_down 3
-            pdf.text("<b>#{key}</b> #{value}", :inline_format => true)
-          end
-        end
+      # if @record.u_report_type == "DAMPERINSPECTION"
+      #   unless @group_name.blank?
+      #     [["Contracted By :", "#{@group_name}"],
+      #     ["Facility :", "#{@facility_name}"],
+      #     ["Building :" , "#{@record.u_building}"],
+      #     ["Inspection Date :", @record.work_dates],
+      #     ["Inspected By :", "#{@record.u_inspector}"]].each do |key, value|
+      #       pdf.move_down 3
+      #       pdf.text("<b>#{key}</b> #{value}", :inline_format => true)
+      #     end   
+      #   else
+      #     [["Contracted By :", "#{@facility_name}"],
+      #     ["Facility :", "#{@facility_name}"],
+      #     ["Building :" , "#{@record.u_building}"],
+      #     ["Inspection Date :", @record.work_dates],
+      #     ["Inspected By :", "#{@record.u_inspector}"]].each do |key, value|
+      #       pdf.move_down 3
+      #       pdf.text("<b>#{key}</b> #{value}", :inline_format => true)
+      #     end
+      #   end
       # elsif @record.u_report_type == "DAMPERREPAIR"
       #   unless @group_name.blank?
       #     [["Contracted By :", "#{@group_name}"],
@@ -70,7 +70,7 @@ module Report
       #       pdf.text("<b>#{key}</b> #{value}", :inline_format => true)
       #     end
       #   end
-      elsif @record.u_report_type == "FIREDOORINSPECTION"
+      if @record.u_report_type == "FIREDOORINSPECTION"
         unless @group_name.blank?
           [["Contracted By :", "#{@group_name}"],
           ["Facility :", "#{@facility_name}"],

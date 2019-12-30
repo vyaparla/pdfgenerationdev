@@ -16,6 +16,9 @@ Rails.application.routes.draw do
   match  '/api/project_completion_save_pdf' => 'api#project_completion_save_pdf', via:[:post]
   match  '/api/download_project_completion_pdf_report' => 'api#download_project_completion_pdf_report', via:[:get]
 
+  match '/api/facility_wise_pdf_report_generation' => 'api#facility_wise_pdf_report_generation', via:[:get]
+  match  '/api/facility_wise_pdf_report_download' => 'api#facility_wise_pdf_report_download', via:[:get]
+
   resources :pdfjobs do
     collection do
       get 'generate_full_pdf_report'

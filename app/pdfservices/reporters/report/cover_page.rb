@@ -56,6 +56,9 @@ module Report
         pdf.text("<b><i>Firestop Installation Report</i></b>", :inline_format => true)
       elsif @model_name == "FIRESTOPSURVEY"
         pdf.text("<b><i>Firestop Survey Report</i></b>", :inline_format => true)
+      elsif @model_name == "DAMPER"
+        pdf.text("<b><i>Damper Comprehensive Report</i></b>", :inline_format => true)
+            
       end
       pdf.move_down 25
     end
