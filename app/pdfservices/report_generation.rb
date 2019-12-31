@@ -4,12 +4,7 @@ class ReportGeneration
   require 'damper_inspection_job'
 
 
-  def initialize(owner, model_name, address1, address2, csz, facility_type, tech, group_name, facility_name, with_picture)
-    # @group_name = group_name
-    # @facility_name = facility_name
-    # @group_url = group_url
-    # @facility_url = facility_url
-    # @nfpa_url = nfpa_url
+  def initialize(owner, model_name, address1, address2, csz, facility_type, tech, group_name, facility_name, facility_id=nil, service=nil, report_type=nil, with_picture)
     @owner = owner    
     @model_name = model_name
     @address1 = address1
@@ -19,7 +14,10 @@ class ReportGeneration
     @tech = tech
     @group_name = group_name
     @facility_name = facility_name
+    @facility_id = facility_id
     @with_picture = with_picture
+    @service = service
+    @report_type = report_type
   end
 
   def generate_full_report
@@ -29,6 +27,16 @@ class ReportGeneration
   def generate_summary_report
     reporter.summary_report(@owner, @model_name, @address1, @address2, @csz, @tech, @group_name, @facility_name)
   end
+
+  def generate_report_facility_wise
+    if @service.upcase == "FIRESTOP"	  
+       FirestopComprehensiveJob.reporter_class.new.comprehensive_report(@owner, @model_name, @address1, @address2, @csz, @facility_type,
+      @tech, @group_name, @facility_name, @facility_id, @with_picture)
+    elsif @service.upcase == "DAMPER"
+       DamperComprehensive.reporter_class.new.report(@owner, @model_name, @address1, @address2, @csz, @facility_type, @tech, @group_name,
+    @facility_name, @facility_id, @with_picture)         
+    end   
+  end	  
 
   private
 

@@ -42,6 +42,10 @@ class Lsspdfasset < ActiveRecord::Base
      File.join(pdf_path, report_name)
   end
 
+  def full_comprehensive_report_path(with_picture=true)
+     report_name  = (with_picture == "true" || with_picture == true) ? "inspection_report.pdf" :  "inspection_report_without_picture.pdf"
+     File.join(comprehensive_pdf_path, report_name)
+  end
 
   def summary_report_path
     File.join(pdf_path, 'summary_report.pdf')
@@ -129,6 +133,10 @@ class Lsspdfasset < ActiveRecord::Base
   def pdf_path
     File.join(Rails.root, %w(public content pdfjobs pdf_reports), "#{id}")
   end
+
+  def comprehensive_pdf_path
+    File.join(Rails.root, %w(public content pdfjobs pdf_reports), "#{u_facility_id}")
+  end	  
 
   def graph_path
     File.join(Rails.root, %w(public content pdfgraph graphs), "#{id}")

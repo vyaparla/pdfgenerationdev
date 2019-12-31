@@ -46,6 +46,7 @@ module Report
       # end
       pdf.move_down 300
       pdf.font_size 30
+      
       if @model_name == "DAMPERINSPECTION"
         pdf.text("<b><i>Damper Inspection Report</i></b>", :inline_format => true)
       elsif @model_name == "DAMPERREPAIR"
@@ -58,7 +59,8 @@ module Report
         pdf.text("<b><i>Firestop Survey Report</i></b>", :inline_format => true)
       elsif @model_name == "DAMPER"
         pdf.text("<b><i>Damper Comprehensive Report</i></b>", :inline_format => true)
-            
+      elsif @model_name == "Firestop Comprehensive"
+        pdf.text("<b><i>Firestop Comprehensive Report</i></b>", :inline_format => true)
       end
       pdf.move_down 25
     end
