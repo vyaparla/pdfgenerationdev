@@ -1,7 +1,10 @@
 #server '35.167.247.200', user: 'deploy', roles: %w{web app db}
 #server '54.165.215.71', user: 'deploy', roles: %w{web app db}
 #server '54.165.215.71', user: 'deploy', roles: %w{web app db}
-server '34.229.178.3', user: 'deploy', roles: %w{web app db}
+
+server '54.196.89.5', user: 'deploy', roles: %w{web app db} # VSoft QA  Server
+
+#server '34.229.178.3', user: 'deploy', roles: %w{web app db} # UAT Server
 set :stage, :production
 set :rails_env, :production
 
