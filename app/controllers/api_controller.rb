@@ -46,34 +46,34 @@ class ApiController < ApplicationController
     end
   end
 
-  def facility_wise_pdf_report_generation
-    @model_name    = params[:serviceName].delete(' ').upcase
-    @report_type   = params[:reportType]
-    @address1      = params[:address1]
-    @address2      = params[:address2]
-    @csz           = " "
-    @facility_type = params[:facilitytype]
-    @tech          = params[:tech]
-    @group_name    = HTMLEntities.new.decode params[:groupname]
-    @facility_name = HTMLEntities.new.decode params[:facilityname]
-    @with_picture = params[:withPictures] && (params[:withPictures] == 'no') ? false : true
+  # def facility_wise_pdf_report_generation
+  #   @model_name    = params[:serviceName].delete(' ').upcase
+  #   @report_type   = params[:reportType]
+  #   @address1      = params[:address1]
+  #   @address2      = params[:address2]
+  #   @csz           = " "
+  #   @facility_type = params[:facilitytype]
+  #   @tech          = params[:tech]
+  #   @group_name    = HTMLEntities.new.decode params[:groupname]
+  #   @facility_name = HTMLEntities.new.decode params[:facilityname]
+  #   @with_picture = params[:withPictures] && (params[:withPictures] == 'no') ? false : true
   
-    if params[:serviceName] == "Damper"
-     # @pdfjob = Lsspdfasset.where(u_facility_name: params[:facility_name], u_report_type: ("DAMPERREPAIR"),  :u_delete => false).group(["u_report_type"])
-       @pdfjob = Lsspdfasset.where(u_facility_name: params[:facility_name], u_report_type: ["DAMPERREPAIR" ,"DAMPERINSPECTION"],  :u_delete => false)
-    end
+  #   if params[:serviceName] == "Damper"
+  #    # @pdfjob = Lsspdfasset.where(u_facility_name: params[:facility_name], u_report_type: ("DAMPERREPAIR"),  :u_delete => false).group(["u_report_type"])
+  #      @pdfjob = Lsspdfasset.where(u_facility_name: params[:facility_name], u_report_type: ["DAMPERREPAIR" ,"DAMPERINSPECTION"],  :u_delete => false)
+  #   end
           
-    unless @pdfjob.blank?
-      #ReportGeneration.new(@pdfjob, @group_name, @facility_name, @group_url, @facility_url).generate_full_report
-      ReportGeneration.new(@pdfjob, @model_name, @address1, 
-        @address2, @csz, @facility_type, @tech, @group_name, 
-        @facility_name, @with_picture).
-      generate_full_report
-      render json: {message: "Success"}
-    else
-      render json: {message: "Unsuccess"}
-    end
-  end
+  #   unless @pdfjob.blank?
+  #     #ReportGeneration.new(@pdfjob, @group_name, @facility_name, @group_url, @facility_url).generate_full_report
+  #     ReportGeneration.new(@pdfjob, @model_name, @address1, 
+  #       @address2, @csz, @facility_type, @tech, @group_name, 
+  #       @facility_name, @with_picture).
+  #     generate_full_report
+  #     render json: {message: "Success"}
+  #   else
+  #     render json: {message: "Unsuccess"}
+  #   end
+  # end
 
   def download_full_pdf_report
     with_pic = (params[:withPictures] && params[:withPictures] == "false") ? "without_picture" : "with_picture"
