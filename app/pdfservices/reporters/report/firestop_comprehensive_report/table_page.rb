@@ -227,7 +227,7 @@ module FirestopComprehensiveReport
       @header =  ['Date', 'Issue #', 'Floor', 'Location', 'Issue', "Barrier Type", 'Penetration Type', "Suggested Corrective Action"]
 
       #pdf.table(@survey_only, :column_widths => { 0 => 55 }, header: true, cell_style: { align: :center, size: 8 }) do |table|
-      pdf.table([@content] + [@header] + data, :column_widths => { 0 => 55 }, header: 2, cell_style: { size: 8 }) do |table|
+      pdf.table([@content] + [@header] + data.to_s, :column_widths => { 0 => 55 }, header: 2, cell_style: { size: 8 }) do |table|
         table.row_colors = ['ffffff', 'eaeaea']
         table.rows(0).style { |r| r.border_color = '888888' }
         table.rows(1).style { |r| r.height = 27 }
