@@ -32,7 +32,9 @@ class ReportGeneration
     if @service.upcase == "FIRESTOP"	  
        FirestopComprehensiveJob.reporter_class.new.comprehensive_report(@owner, @model_name, @address1, @address2, @csz, @facility_type,
       @tech, @group_name, @facility_name, @facility_id, @with_picture)
-    else
+    elsif @service.upcase == "DAMPER"
+       DamperComprehensive.reporter_class.new.report(@owner, @model_name, @address1, @address2, @csz, @facility_type, @tech, @group_name,
+    @facility_name, @facility_id, @with_picture)         
     end   
   end	  
 
