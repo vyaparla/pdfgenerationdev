@@ -25,24 +25,21 @@ class ApiController < ApplicationController
     end
   end
 
-  def pdf_generation
-    @model_name    = params[:service].delete(' ').upcase + params[:type].upcase
-    @address1      = params[:address1]
-    @address2      = params[:address2]
-    @csz           = params[:csz]
-    @facility_type = params[:facilitytype]
-    @tech          = params[:tech]
-    @group_name    = HTMLEntities.new.decode params[:groupname]
-    @facility_name = HTMLEntities.new.decode params[:facilityname]
-    @with_picture = params[:withPictures] && (params[:withPictures] == 'no') ? false : true
+  def facility_wise_pdf_report_generation
+    model, address1, address2, csz, facility_type, facility_id, tech, group, facility, with_pic, pdfjob = comprehensive_pdf_generation_params
+    service, report_type = params[:service], params[:report_type]
+    unless pdfjob.blank?
+      ReportGeneration.new(pdfjob, model, address1, address2, csz, facility_type, tech, group, facility, facility_id, service, report_type, with_pic).generate_report_facility_wise
+      render json: {message: "Success"}
+    else
+      render json: {message: "Unsuccess"}
+    end
+  end
   
-    @pdfjob = Lsspdfasset.where(u_service_id: params[:serviceID], :u_delete => false).last
-    unless @pdfjob.blank?
-      #ReportGeneration.new(@pdfjob, @group_name, @facility_name, @group_url, @facility_url).generate_full_report
-      ReportGeneration.new(@pdfjob, @model_name, @address1, 
-        @address2, @csz, @facility_type, @tech, @group_name, 
-        @facility_name, @with_picture).
-      generate_full_report
+  def pdf_generation
+    model, address1, address2, csz, facility_type, tech, group, facility, with_pic, pdfjob = pdf_generation_params
+    unless pdfjob.blank?
+      ReportGeneration.new(pdfjob, model, address1, address2, csz, facility_type, tech, group, facility, facility_id=nil, service=nil, report_type=nil, with_pic).generate_full_report
       render json: {message: "Success"}
     else
       render json: {message: "Unsuccess"}
@@ -52,9 +49,17 @@ class ApiController < ApplicationController
   def download_full_pdf_report
     with_pic = (params[:withPictures] && params[:withPictures] == "false") ? "without_picture" : "with_picture"
     with_picture = params[:withPictures]
-    @pdfjob = Lsspdfasset.where(u_service_id: params[:serviceID], :u_delete => false).last
-    @outputfile = @pdfjob.u_job_id + "_" + params[:servicetype] + "_" + with_pic + "_" + Time.now.strftime("%m-%d-%Y-%r").gsub(/\s+/, "_") + "_" + "detail_report"
-    send_file @pdfjob.full_report_path(with_picture), :type => 'application/pdf', :disposition =>  "attachment; filename=\"#{@outputfile}.pdf\""    
+    pdfjob = Lsspdfasset.where(u_service_id: params[:serviceID], :u_delete => false).last
+    outputfile = pdfjob.u_job_id + "_" + params[:servicetype] + "_" + with_pic + "_" + Time.now.strftime("%m-%d-%Y-%r").gsub(/\s+/, "_") + "_" + "detail_report"
+    send_file pdfjob.full_report_path(with_picture), :type => 'application/pdf', :disposition =>  "attachment; filename=\"#{outputfile}.pdf\""    
+  end
+
+  def facility_wise_pdf_report_download
+    with_pic = (params[:withPictures] && params[:withPictures] == "false") ? "without_picture" : "with_picture"
+    with_picture = params[:withPictures]
+    pdfjob = Lsspdfasset.where(u_facility_id: params[:facility_id], :u_delete => false).last
+    outputfile = pdfjob.u_job_id + "_" + params[:reportType] + "_" + with_pic + "_" + Time.now.strftime("%m-%d-%Y-%r").gsub(/\s+/, "_") + "_" + "detail_report"
+    send_file pdfjob.full_comprehensive_report_path(with_picture), :type => 'application/pdf', :disposition =>  "attachment; filename=\"#{outputfile}.pdf\""
   end
 
   def summary_report
@@ -630,4 +635,33 @@ class ApiController < ApplicationController
                             :alignment => { :horizontal => :left, :wrap_text => true, :vertical => :top }, :font_name => 'Calibri'
     return header_row, normal_row_odd, normal_row_even, title_row
   end
+
+  def pdf_generation_params
+    model    = params[:service].delete(' ').upcase + params[:type].upcase
+    address1      = params[:address1]
+    address2      = params[:address2]
+    csz           = params[:csz]
+    facility_type = params[:facilitytype]
+    tech          = params[:tech]
+    group    = HTMLEntities.new.decode params[:groupname]
+    facility = HTMLEntities.new.decode params[:facilityname]
+    with_pic = params[:withPictures] && (params[:withPictures] == 'no') ? false : true
+    pdfjob = Lsspdfasset.where(u_service_id: params[:serviceID], :u_delete => false).last
+    return model, address1, address2, csz, facility_type, tech, group, facility, with_pic, pdfjob    
+  end	  
+
+  def comprehensive_pdf_generation_params
+    model    = params[:service].delete(' ').upcase 
+    address1      = params[:address1]
+    address2      = params[:address2]
+    csz           = params[:csz]
+    facility_type = "both"
+    tech          = params[:tech]
+    group    = HTMLEntities.new.decode params[:groupname]
+    facility = HTMLEntities.new.decode params[:facilityname]
+    facility_id = HTMLEntities.new.decode params[:facility_id]
+    with_pic = params[:withPictures] && (params[:withPictures] == 'no') ? false : true
+    job = Lsspdfasset.where(u_facility_id: params[:facility_id], :u_delete => false).last
+    return model, address1, address2, csz, facility_type, facility_id, tech, group, facility, with_pic, job
+   end
 end
