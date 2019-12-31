@@ -13,8 +13,6 @@ class DamperComprehensiveReporter < Reporter
   
     work_dates = job.order('updated_at DESC')
     @start_date  = work_dates.first
-    puts "**********************"
-    puts @start_date
     @end_date = work_dates.last
 
      job.each do |j|

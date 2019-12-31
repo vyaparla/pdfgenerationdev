@@ -51,8 +51,6 @@ class ReportGeneration
       FirestopInstallationJob.reporter_class.new
     elsif @model_name == "FIRESTOPSURVEY"
       FirestopSurveyJob.reporter_class.new
-    elsif @model_name == "DAMPER"
-      DamperComprehensive.reporter_class.new          
     end
   end
 
