@@ -87,7 +87,7 @@ class ApiController < ApplicationController
     with_pic = (params[:withPictures] && params[:withPictures] == "false") ? "without_picture" : "with_picture"
     with_picture = params[:withPictures]
     pdfjob = Lsspdfasset.where(u_facility_id: params[:facility_id], :u_delete => false).last
-    outputfile = pdfjob.u_job_id + "_" + params[:reportType] + "_" + with_pic + "_" + Time.now.strftime("%m-%d-%Y-%r").gsub(/\s+/, "_") + "_" + "detail_report"
+    outputfile = params[:facilityname]+ "_" + params[:service] + "_" + params[:reportType] + "_" + with_pic + "_" + Time.now.strftime("%m-%d-%Y-%r").gsub(/\s+/, "_") + "_" + "detail_report"
     send_file pdfjob.full_comprehensive_report_path(with_picture), :type => 'application/pdf', :disposition =>  "attachment; filename=\"#{outputfile}.pdf\""
   end
 
@@ -748,7 +748,11 @@ class ApiController < ApplicationController
     facility = HTMLEntities.new.decode params[:facilityname]
     facility_id = HTMLEntities.new.decode params[:facility_id]
     with_pic = params[:withPictures] && (params[:withPictures] == 'no') ? false : true
-    job = Lsspdfasset.where(u_facility_id: params[:facility_id], :u_delete => false).last
+    if model = "DAMPER"
+      job = Lsspdfasset.where(u_facility_id: params[:facility_id], u_report_type: ["DAMPERREPAIR" ,"DAMPERINSPECTION"], :u_delete => false).last
+    else
+      job = Lsspdfasset.where(u_facility_id: params[:facility_id], :u_delete => false).last
+    end  
     return model, address1, address2, csz, facility_type, facility_id, tech, group, facility, with_pic, job
    end
 end
