@@ -91,17 +91,6 @@ class ApiController < ApplicationController
     send_file pdfjob.full_comprehensive_report_path(with_picture), :type => 'application/pdf', :disposition =>  "attachment; filename=\"#{outputfile}.pdf\""
   end
 
-    def facility_wise_pdf_report_download
-    with_pic = (params[:withPictures] && params[:withPictures] == "false") ? "without_picture" : "with_picture"
-    with_picture = params[:withPictures]
-    #@pdfjob = Lsspdfasset.where(u_service_id: params[:serviceID], :u_delete => false).last
-    @pdfjob = Lsspdfasset.where(u_facility_name: params[:facilityname], u_report_type: ["DAMPERREPAIR" ,"DAMPERINSPECTION"], :u_delete => false).last
-
-
-    @outputfile = params[:facilityname]+ "_" + params[:service] + "_" + with_pic + "_" + Time.now.strftime("%m-%d-%Y-%r").gsub(/\s+/, "_") + "_" + "detail_report"
-
-    send_file @pdfjob.full_report_path(with_picture), :type => 'application/pdf', :disposition =>  "attachment; filename=\"#{@outputfile}.pdf\""    
-  end
 
   def summary_report
     @model_name    = params[:service].delete(' ').upcase + params[:type].upcase
@@ -146,7 +135,8 @@ class ApiController < ApplicationController
   end
 
   def spreadsheets
-    @outputfile = params[:servicetype].delete(' ').upcase + "_" + Time.now.strftime("%m-%d-%Y-%r").gsub(/\s+/, "_") + "_" + "spreadsheet_report"
+    #comprehensive_data =  "Comprehensive_" if params[:servicetype].delete(' ').upcase == "DAMPER" || params[:servicetype].delete(' ').upcase == "FIRESTOP" 
+    @outputfile = params[:servicetype].delete(' ').upcase + "_" +  Time.now.strftime("%m-%d-%Y-%r").gsub(/\s+/, "_") + "_" + "spreadsheet_report"
     if params[:servicetype].delete(' ').upcase == "DAMPERINSPECTION"
       @records = Lsspdfasset.where(u_service_id: params[:serviceid], :u_delete => false).where.not(u_type: "")
 	p, wb, img_path = initialize_spreadsheet

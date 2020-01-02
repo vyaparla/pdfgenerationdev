@@ -20,7 +20,7 @@ class DamperComprehensiveReporter < Reporter
 
     DamperComprehensiveReport::GraphGenerator.new(job).generate
   
-  	generate(job.full_report_path(with_picture)) do |pdf|
+  	generate(job.full_comprehensive_report_path(with_picture)) do |pdf|
   	  Report::CoverPage.new(job, model_name, address1, address2, csz, facility_name, tech ).write(pdf)
   	  DamperComprehensiveReport::LetterPage.new(job, model_name, address1, address2, csz, facility_type, 
       facility_name, tech).write(pdf)

@@ -225,9 +225,9 @@ module FirestopComprehensiveReport
       #pdf.table([["Fixed On Site = NO"]], :cell_style => {:border_color => "888888"}, :width => 540)
       @content = [{:content => 'Fixed On Site = NO', :colspan => 540, align: :center}]
       @header =  ['Date', 'Issue #', 'Floor', 'Location', 'Issue', "Barrier Type", 'Penetration Type', "Suggested Corrective Action"]
-
+      main_content  = data.nil? ? [@content] + [@header] : [@content] + [@header] + data
       #pdf.table(@survey_only, :column_widths => { 0 => 55 }, header: true, cell_style: { align: :center, size: 8 }) do |table|
-      pdf.table([@content] + [@header] + data.to_s, :column_widths => { 0 => 55 }, header: 2, cell_style: { size: 8 }) do |table|
+      pdf.table(main_content, :column_widths => { 0 => 55 }, header: 2, cell_style: { size: 8 }) do |table|
         table.row_colors = ['ffffff', 'eaeaea']
         table.rows(0).style { |r| r.border_color = '888888' }
         table.rows(1).style { |r| r.height = 27 }
