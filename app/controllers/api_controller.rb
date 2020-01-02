@@ -201,10 +201,6 @@ class ApiController < ApplicationController
         sheet.merge_cells ("D1:L1")
         sheet.add_row ["Damper #", "Facility", "Building", "Floor", "Damper Location", "Damper Type", "Status",  "Repair Action Performed", "Subsequent Failure Reason", "Technician", "Date"] , :style => header_row
         i = 1
-
-
-      #csv_data = CSV.generate do |csv|
-       # csv << ["Asset #", "Facility", "Building", "Floor", "Damper Location", "Damper Type", "Post Repair Status", "Action Taken", "Date", "Technician"]
         @records.each do |record|
 		floor = (record.u_floor == "other" ? record.u_other_floor : record.u_floor)
           sheet.add_row  [record.u_tag, record.u_facility_name, record.u_building, floor, record.u_location_desc, record.u_type, record.u_dr_passed_post_repair,
@@ -214,24 +210,6 @@ class ApiController < ApplicationController
                   record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY'))
           ] , :style => (i.even? ? normal_row_even : normal_row_odd)
            i += 1
-
-        #  csv << [record.u_tag, record.u_facility_name, record.u_building, record.u_floor.to_i, record.u_location_desc, record.u_damper_name, 
-        #          if record.u_dr_passed_post_repair == "Pass"
-        #            'Passed Post Repair'
-        #          else
-        #            'Failed Post Repair'
-        #          end,
-        #          if record.u_repair_action_performed == "Damper Repaired"
-        #            record.u_repair_action_performed + ":" + record.u_dr_description
-        #          elsif record.u_repair_action_performed == "Damper Installed"
-        #            record.u_repair_action_performed + ":" + record.u_dr_damper_model
-        #          elsif record.u_repair_action_performed == "Actuator Installed"
-        #            record.u_repair_action_performed + ":" + record.u_dr_installed_actuator_model
-        #          else
-        #            record.u_repair_action_performed + ":" + record.u_access_size 
-        #          end,
-        #          record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')), record.u_inspector
-        #        ]
         end
 	sheet.column_widths nil, nil, nil, 20, 50, nil, nil, 40, nil, nil, nil, nil
       end
@@ -279,7 +257,83 @@ class ApiController < ApplicationController
 	   i += 1
         end
       end
-      end	
+      end
+      elsif params[:servicetype].delete(' ').upcase == "FIRESTOP"
+        records = Lsspdfasset.where(u_facility_id: params[:facility_id], :u_delete => false)
+        p = Axlsx::Package.new
+        wb = p.workbook
+        img_path = File.expand_path(Rails.root+'app/assets/images/lss_logo.png')
+        wb.styles do |s|
+        header_row = s.add_style :sz => 11, :b => true, :font_name => 'Calibri'
+        normal_row_odd = s.add_style :sz => 11, :font_name => 'Calibri', :bg_color => 'EEEEEE', :border => { :style => :thin, :color => "CCCCCC" }
+        normal_row_even = s.add_style :sz => 11, :font_name => 'Calibri', :bg_color => 'FFFFFF', :border => { :style => :thin, :color => "CCCCCC" }
+        title_row = s.add_style :b => true,
+                            :sz => 20,
+                            :alignment => { :horizontal => :center, :vertical => :center }, :font_name => 'Calibri'
+
+        wb.add_worksheet(name: "Firestop Comprehensive  List") do |sheet|
+        sheet.add_image(:image_src => img_path, :start_at => [0, 0], :width => 120, :height => 70,  :noSelect => true, :noMove => true, :rowOff => 0, :colOff => 0)
+        sheet.add_row ["", "Firestop Comprehensive List", "", "", "", "", ""], :style => title_row, :height => 55
+        sheet.merge_cells ("B1:E1")
+        sheet.add_row ["Issue #", "Facility", "Building", "Floor", "Location", "Barrier Type", "Penetration Type", "Issue", "Corrected On Site", "Suggested Corrective Action", "Corrective Action/UL System", "Date", "Technician"] , :style => header_row
+        i = 1
+        records.each do |record|
+          floor =  (record.u_floor == "other" ? record.u_other_floor : record.u_floor)
+          sheet.add_row [record.u_tag, record.u_facility_name, record.u_building, floor, record.u_location_desc, record.u_barrier_type,
+                 record.u_penetration_type, record.u_issue_type,
+                  if record.u_service_type == "Fixed On Site"
+                    'YES'
+                  else
+                    'NO'
+                  end,
+                  record.u_suggested_ul_system, record.u_corrected_url_system, record.u_inspected_on, #.localtime.strftime(I18n.t('time.formats.mdY'))
+		  record.u_inspector
+                ] , :style => (i.even? ? normal_row_even : normal_row_odd)
+           i += 1
+
+          end
+       end
+
+     end
+     elsif params[:servicetype].delete(' ').upcase == "DAMPER"
+      @records = Lsspdfasset.where(u_facility_id: params[:facility_id], :u_delete => false)
+        p, wb, img_path = initialize_spreadsheet
+        facility_name, tech, date, damper_inspection_para, damper_repair_para = initialize_damper_params
+        wb.styles do |s|
+        header_row, normal_row_odd, normal_row_even, title_row = initialize_spreadsheet_rows(s)
+        title_desc = s.add_style :i => true,
+                            :sz => 8,
+                            :alignment => { :horizontal => :left, :wrap_text => true, :vertical => :top }, :font_name => 'Calibri'
+
+        wb.add_worksheet(name: "Damper Comprehensive List") do |sheet|
+        sheet.add_image(:image_src => img_path, :start_at => [0, 0], :width => 120, :height => 70,  :noSelect => true, :noMove => true,  :rowOff => 0, :colOff => 0)
+        sheet.add_row ["", "Damper Comprehensive List", "", damper_inspection_para, "", "", "", "", "", "", "", ""], :style => [title_row,title_row,title_row,title_desc,title_desc, title_desc, title_desc, title_desc, title_desc, title_desc, title_desc, title_desc] , :height => 55
+        sheet.merge_cells ("B1:C1")
+        sheet.merge_cells ("D1:L1")
+        sheet.add_row ["Damper #", "Facility", "Building", "Floor", "Damper Location", "Damper Type", "Status", "Deficiencies", "Repair Action Performed", "Subsequent Failure Reason", "Technician", "Date"] , :style => header_row
+        i = 1
+        @records.each do |record|
+          floor = (record.u_floor == "other" ? record.u_other_floor : record.u_floor)
+          sheet.add_row  [record.u_tag, record.u_facility_name, record.u_building, floor, record.u_location_desc, record.u_type,
+                  record.u_status == "NA" ?  "Non-Accessible": record.u_status,
+                  if record.u_status == "Fail"
+                    record.u_reason
+                  else
+                    record.u_non_accessible_reasons
+                  end,
+                  record.u_repair_action_performed,
+                  record.u_reason2,
+                  record.u_inspector,
+                  record.u_inspected_on #.localtime.strftime(I18n.t('time.formats.mdY'))
+          ] , :style => (i.even? ? normal_row_even : normal_row_odd)
+           i += 1
+
+        end
+        sheet.column_widths nil, nil, nil, 20, 50, nil, nil, 40, nil, nil, nil, nil
+      end
+    end
+
+	      
       elsif params[:servicetype].delete(' ').upcase == "FIRESTOPINSTALLATION"
         @records = Lsspdfasset.where(u_service_id: params[:serviceid], :u_delete => false)
         p = Axlsx::Package.new
@@ -356,7 +410,7 @@ class ApiController < ApplicationController
         end
       end
     end
-   if params[:servicetype].delete(' ').upcase == "FIRESTOPINSTALLATION" || params[:servicetype].delete(' ').upcase == "FIRESTOPSURVEY" || params[:servicetype].delete(' ').upcase == "DAMPERINSPECTION" || params[:servicetype].delete(' ').upcase == "DAMPERREPAIR"
+   if params[:servicetype].delete(' ').upcase == "FIRESTOPINSTALLATION" || params[:servicetype].delete(' ').upcase == "FIRESTOPSURVEY" || params[:servicetype].delete(' ').upcase == "DAMPERINSPECTION" || params[:servicetype].delete(' ').upcase == "DAMPERREPAIR" || params[:servicetype].delete(' ').upcase == "FIRESTOP" || params[:servicetype].delete(' ').upcase == "DAMPER"
 
      send_data p.to_stream.read, type: "application/xlsx", filename: "#{@outputfile}.xlsx"
    else
