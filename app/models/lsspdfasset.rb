@@ -42,8 +42,9 @@ class Lsspdfasset < ActiveRecord::Base
      File.join(pdf_path, report_name)
   end
 
-  def full_comprehensive_report_path(with_picture=true)
-     report_name  = (with_picture == "true" || with_picture == true) ? "inspection_report.pdf" :  "inspection_report_without_picture.pdf"
+  def full_comprehensive_report_path(with_picture=true, model)
+     name =  model.downcase  
+     report_name  = (with_picture == "true" || with_picture == true) ? name.to_s + "_report.pdf" : name.to_s + "_report_without_picture.pdf"
      File.join(comprehensive_pdf_path, report_name)
   end
 

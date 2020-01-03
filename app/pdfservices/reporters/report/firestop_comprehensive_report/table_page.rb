@@ -29,8 +29,9 @@ module FirestopComprehensiveReport
           @fixed_on_site << [record.u_inspected_on.localtime.strftime('%m/%d/%Y'), record.u_tag, @floor, record.u_location_desc,
                              record.u_issue_type, record.u_barrier_type, record.u_penetration_type, record.u_corrected_url_system]
         else
+		inspected_on = record.u_inspected_on.nil? ? record.u_inspected_on : record.u_inspected_on.localtime.strftime('%m/%d/%Y')	
 		#TODO
-          @survey_only << [record.u_inspected_on, #.localtime.strftime('%m/%d/%Y'),
+          @survey_only << [inspected_on,
 			   record.u_tag, @floor, record.u_location_desc,
                            record.u_issue_type, record.u_barrier_type, record.u_penetration_type, record.u_suggested_ul_system]
         end
@@ -193,6 +194,7 @@ module FirestopComprehensiveReport
     # end
 
     def draw_fixed_on_site(pdf, data)
+
       @content = [{:content => 'Fixed On Site = YES', :colspan => 540, align: :center}]
       @header = ['Date', 'Issue #', 'Floor', 'Location', 'Issue', "Barrier Type", 'Penetration Type', "Corrective Action"]
 
@@ -225,13 +227,7 @@ module FirestopComprehensiveReport
       #pdf.table([["Fixed On Site = NO"]], :cell_style => {:border_color => "888888"}, :width => 540)
       @content = [{:content => 'Fixed On Site = NO', :colspan => 540, align: :center}]
       @header =  ['Date', 'Issue #', 'Floor', 'Location', 'Issue', "Barrier Type", 'Penetration Type', "Suggested Corrective Action"]
-      #puts "------------------------"
-      #puts data
-      #puts data.nil?
-      #puts  [@content] + [@header]
-      #puts [@content] + [@header] + data
-      #raise data.first.inspect
-      main_content  =  [@content] + [@header] + [data.first]
+      main_content  =  [@content] + [@header] + data
       #pdf.table(@survey_only, :column_widths => { 0 => 55 }, header: true, cell_style: { align: :center, size: 8 }) do |table|
       pdf.table(main_content, :column_widths => { 0 => 55 }, header: 2, cell_style: { size: 8 }) do |table|
         table.row_colors = ['ffffff', 'eaeaea']
