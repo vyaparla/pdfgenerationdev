@@ -27,7 +27,7 @@ module DamperComprehensiveReport
     end
 
     def title
-      DamperInspectionReporting.translate(@damper_type)
+      DamperComprehensiveReport.translate(@damper_type)
     end
 
     def summary_table_attributes
@@ -47,7 +47,7 @@ module DamperComprehensiveReport
 
     def summary_table_data(attributes)
        [attributes.map do |column, _|
-           DamperRepairReporting.column_heading(column)
+           DamperComprehensiveReport.column_heading(column)
       end] +
       @records.map do |record|
         if record.u_dr_passed_post_repair == "Pass"
@@ -102,9 +102,9 @@ module DamperComprehensiveReport
         end
         result_index && table.column(result_index).rows(1..last).each do |cell|
           cell.text_color = case cell.content
-          when DamperInspectionReporting.translate(:fail)
+          when DamperComprehensiveReport.translate(:fail)
             'c1171d'
-          when DamperInspectionReporting.translate(:na)
+          when DamperComprehensiveReport.translate(:na)
             'f39d27'
           else
             '202020'

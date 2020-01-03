@@ -135,7 +135,7 @@ module DamperComprehensiveReport
       elsif @record.u_damper_name.upcase == "SMOKE"
         damper_type = 'Smoke Damper (SD)'
       else
-        damper_type = 'Combination (FSD)'
+        damper_type = 'Fire Smoke Damper (FSD)'
       end
 
       pdf.table([
@@ -165,7 +165,7 @@ module DamperComprehensiveReport
  #            :colspan => 6, :width => 540, align: :left }  
  #        ],
        [
-         { :content => "<font size='12'>ImmovableObjec</font>", 
+         { :content => "<font size='12'>#{@record.u_reason}</font>", 
            :colspan => 2, :width => 225, align: :left },
          { :content => "<font size='12'>#{@record.u_dr_description}</font>", 
            :colspan => 4, :width => 315, align: :left }  
@@ -305,11 +305,12 @@ module DamperComprehensiveReport
       image = @record.pdf_image2.path(:pdf)      
       unless image.blank?
         pdf.image(image, at: [380 - pdf.bounds.absolute_left, 275], :width => 120, :height => 120)
-      else
-        pdf.draw_text('Photo Unavailable', style: :bold, size: 10, 
-          at: [395 - pdf.bounds.absolute_left, 210])
+      # else
+      #   pdf.draw_text('Photo Unavailable', style: :bold, size: 10, 
+      #     at: [395 - pdf.bounds.absolute_left, 210])
+      
+        pdf.draw_text("Closed",  at: [400 - pdf.bounds.absolute_left, 140])
       end
-      pdf.draw_text("Closed",  at: [400 - pdf.bounds.absolute_left, 140])
       pdf.move_down 5
       # unless @record.u_image2.blank?
       #   pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_image2}")[:data])), at:  [ 44, 386], fit: [105, 105]
