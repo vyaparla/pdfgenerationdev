@@ -1,6 +1,7 @@
 module Report
   module SectionWritable
-  	def initialize(job, building, tech, group_name, facility_name, with_picture)
+
+ 	  def initialize(job, building, tech, group_name, facility_name, with_picture)
       @job = job
       @building = building
       @tech = tech
@@ -15,6 +16,11 @@ module Report
 
     def records
       @records ||= @job.building_records(@building, @job.u_service_id)
+      #@records = Lsspdfasset.where(:u_building => building, :u_service_id => job.u_service_id)
+    end
+ 
+    def comprehensive_records
+      @comprehensive_records ||= @job.comprehensive_building_records(@building, @job.u_facility_id)
       #@records = Lsspdfasset.where(:u_building => building, :u_service_id => job.u_service_id)
     end
 

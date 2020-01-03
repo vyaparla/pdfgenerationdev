@@ -5,7 +5,7 @@ module FirestopComprehensiveReport
     def initialize(record, group_name, facility_name, with_picture)
       @record = record
       @group_name = group_name
-      @facility_name = facility_name
+      @facility_name = record.u_facility_name
       @with_picture = with_picture
     end
 
@@ -114,7 +114,8 @@ module FirestopComprehensiveReport
         status_content = "<font size='8'><b>NOT FIXED ONSITE</b></font>"
         cell_color = 'ef3038'
       end
-
+      record_date = @record.u_inspected_on.nil? ?  @record.u_inspected_on : @record.u_inspected_on.localtime.strftime('%m/%d/%Y')
+      record_time = @record.u_inspected_on.nil? ? @record.u_inspected_on : @record.u_inspected_on.localtime.strftime('%I:%M:%S %p')
       pdf.table([
         [
           {:content => "<font size='12'><b>#{title.upcase}</b></font>", :colspan => 3, :width => 225, align: :center },
@@ -145,14 +146,14 @@ module FirestopComprehensiveReport
           { :content => "<font size='12'>Date:</font>", 
             :colspan => 1, :width => 60, align: :right },
 	   #TODO
-	  #  { :content => "<font size='11'>#{@record.u_inspected_on.localtime.strftime('%m/%d/%Y')}</font>",  
-          { :content => "<font size='11'>#{@record.u_inspected_on}</font>", 
+	    { :content => "<font size='11'>#{record_date}</font>",  
+         # { :content => "<font size='11'>#{@record.u_inspected_on}</font>", 
             :colspan => 1, :width => 75, align: :left }, 
           { :content => "<font size='12'>Time:</font>", 
             :colspan => 1, :width => 90, align: :right },
 	 #TODO   
-         # { :content => "<font size='11'>#{@record.u_inspected_on.localtime.strftime('%I:%M:%S %p')}</font>", 
-	    { :content => "<font size='11'>#{@record.u_inspected_on}</font>",
+          { :content => "<font size='11'>#{record_time}</font>", 
+	 #   { :content => "<font size='11'>#{@record.u_inspected_on}</font>",
             :colspan => 1, :width => 75, align: :left },
           { :content => "<font size='12'>LSS Technician</font>", 
             :colspan => 1, :width => 105, align: :left },

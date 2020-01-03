@@ -26,7 +26,8 @@ module FirestopComprehensiveReport
           @floor = record.u_floor
         end  
         if record.u_service_type == "Fixed On Site"
-          @fixed_on_site << [record.u_inspected_on.localtime.strftime('%m/%d/%Y'), record.u_tag, @floor, record.u_location_desc,
+		inspected_on = record.u_inspected_on.nil? ? record.u_inspected_on : record.u_inspected_on.localtime.strftime('%m/%d/%Y')
+          @fixed_on_site << [inspected_on, record.u_tag, @floor, record.u_location_desc,
                              record.u_issue_type, record.u_barrier_type, record.u_penetration_type, record.u_corrected_url_system]
         else
 		inspected_on = record.u_inspected_on.nil? ? record.u_inspected_on : record.u_inspected_on.localtime.strftime('%m/%d/%Y')	

@@ -32,10 +32,20 @@ class Lsspdfasset < ActiveRecord::Base
     Lsspdfasset.where(:u_service_id => serviceID, :u_delete => false).pluck('DISTINCT u_building')
   end
 
+  def comprehensive_buildings(facility_id)
+	  Lsspdfasset.where(:u_facility_id => facility_id, :u_report_type => ["FIRESTOPSURVEY" ,"FIRESTOPINSTALLATION"],  :u_delete => false).order('updated_at desc').pluck('DISTINCT u_building')
+  end	  
+
   def building_records(building, service_ID)
     #Rails.logger.debug("Asset: #{building.inspect}")
     Lsspdfasset.where(:u_building => building, :u_service_id => service_ID, :u_delete => false)
   end
+
+  def comprehensive_building_records(building, facility_id)
+    #Rails.logger.debug("Asset: #{building.inspect}")
+	  Lsspdfasset.where(:u_building => building, :u_facility_id => facility_id, :u_report_type => ["FIRESTOPSURVEY" ,"FIRESTOPINSTALLATION"], :u_delete => false).order('updated_at desc')
+  end
+
 
   def full_report_path(with_picture=true)
      report_name  = (with_picture == "true" || with_picture == true) ? "inspection_report.pdf" :  "inspection_report_without_picture.pdf"	  

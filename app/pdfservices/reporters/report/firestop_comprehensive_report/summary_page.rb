@@ -41,11 +41,11 @@ module FirestopComprehensiveReport
       pdf.move_down 12
       pdf.font_size 10
       #@total_issue = Lsspdfasset.where(:u_service_id => @job.u_service_id, :u_delete => false).collect(&:u_issue_type).count
-      @total_issue = Lsspdfasset.where(:u_facility_id => @job.u_facility_id, :u_delete => false).collect(&:u_issue_type).count
-      @issue_types = Lsspdfasset.select(:u_issue_type, :u_service_type).where(:u_facility_id => @job.u_facility_id, :u_delete => false).group(["u_service_type"]).count(:u_service_type)
+      @total_issue = Lsspdfasset.where(:u_facility_id => @job.u_facility_id, :u_report_type => ["FIRESTOPSURVEY" ,"FIRESTOPINSTALLATION"], :u_delete => false).collect(&:u_issue_type).count
+      @issue_types = Lsspdfasset.select(:u_issue_type, :u_service_type).where(:u_facility_id => @job.u_facility_id,  :u_report_type => ["FIRESTOPSURVEY" ,"FIRESTOPINSTALLATION"],  :u_delete => false).group(["u_service_type"]).count(:u_service_type)
       @issue_fixed_on_site = 0
       @issue_survey_only = 0
-      @issue_types = Lsspdfasset.select(:u_issue_type, :u_service_type).where(:u_facility_id => @job.u_facility_id, :u_delete => false).group(["u_service_type"]).count(:u_service_type)      
+      @issue_types = Lsspdfasset.select(:u_issue_type, :u_service_type).where(:u_facility_id => @job.u_facility_id,  :u_report_type => ["FIRESTOPSURVEY" ,"FIRESTOPINSTALLATION"], :u_delete => false).group(["u_service_type"]).count(:u_service_type)      
       @issue_types.each do |key, value|
         if key == "Fixed On Site"
           @issue_fixed_on_site = value
@@ -98,7 +98,7 @@ module FirestopComprehensiveReport
         pdf.font_size 10
         survey_issue_summary = []
         survey_issue_summary << ["Issues by Category", "Count", "%"]
-        @firestop_survey_summary = Lsspdfasset.select(:u_issue_type).where(:u_facility_id => @job.u_facility_id, :u_delete => false).group(["u_issue_type"]).count(:u_issue_type)
+        @firestop_survey_summary = Lsspdfasset.select(:u_issue_type).where(:u_facility_id => @job.u_facility_id, :u_report_type => ["FIRESTOPSURVEY" ,"FIRESTOPINSTALLATION"], :u_delete => false).group(["u_issue_type"]).count(:u_issue_type)
         @firestop_survey_issue_count = 0
         @firestop_survey_summary.each do |key, value|
           @firestop_survey_issue_count += value        
