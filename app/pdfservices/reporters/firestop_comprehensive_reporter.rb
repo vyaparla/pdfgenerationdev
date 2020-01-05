@@ -5,9 +5,9 @@ class FirestopComprehensiveReporter < Reporter
      generate(job.full_comprehensive_report_path(with_picture, model_name)) do |pdf|
        Report::CoverPage.new(job, model_name="Firestop Comprehensive", address1, address2, csz, facility_name, tech).write(pdf)
        FirestopComprehensiveReport::SummaryPage.new(job, tech).write(pdf)
-       job.comprehensive_buildings(facility_id).each do |b|
-         FirestopComprehensiveReport::BuildingSection.new(job, b, tech, group_name, facility_id, with_picture).write(pdf)
-       end
+       #job.comprehensive_buildings(facility_id).each do |b|
+       #  FirestopComprehensiveReport::BuildingSection.new(job, b, tech, group_name, facility_id, with_picture).write(pdf)
+       #end
        Report::BackPage.new.write(pdf)
      end
   end
