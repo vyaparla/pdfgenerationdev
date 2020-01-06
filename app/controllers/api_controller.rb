@@ -269,6 +269,7 @@ class ApiController < ApplicationController
         sheet.add_row ["Issue #", "Facility", "Building", "Floor", "Location", "Barrier Type", "Penetration Type", "Issue", "Corrected On Site", "Suggested Corrective Action", "Corrective Action/UL System", "Date", "Technician"] , :style => header_row
         i = 1
         records.each do |record|
+	  inspected_date = record.u_inspected_on.nil? ? record.u_inspected_on : record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY'))	
           floor =  (record.u_floor == "other" ? record.u_other_floor : record.u_floor)
           sheet.add_row [record.u_tag, record.u_facility_name, record.u_building, floor, record.u_location_desc, record.u_barrier_type,
                  record.u_penetration_type, record.u_issue_type,
@@ -277,7 +278,7 @@ class ApiController < ApplicationController
                   else
                     'NO'
                   end,
-                  record.u_suggested_ul_system, record.u_corrected_url_system, record.u_inspected_on, #.localtime.strftime(I18n.t('time.formats.mdY'))
+                  record.u_suggested_ul_system, record.u_corrected_url_system, inspected_date
 		  record.u_inspector
                 ] , :style => (i.even? ? normal_row_even : normal_row_odd)
            i += 1
@@ -304,6 +305,7 @@ class ApiController < ApplicationController
         sheet.add_row ["Damper #", "Facility", "Building", "Floor", "Damper Location", "Damper Type", "Status", "Deficiencies", "Repair Action Performed", "Subsequent Failure Reason", "Technician", "Date"] , :style => header_row
         i = 1
         @records.each do |record|
+	  inspected_date = record.u_inspected_on.nil? ? record.u_inspected_on : record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY'))	
           floor = (record.u_floor == "other" ? record.u_other_floor : record.u_floor)
           sheet.add_row  [record.u_tag, record.u_facility_name, record.u_building, floor, record.u_location_desc, record.u_type,
                   record.u_status == "NA" ?  "Non-Accessible": record.u_status,
@@ -315,7 +317,7 @@ class ApiController < ApplicationController
                   record.u_repair_action_performed,
                   record.u_reason2,
                   record.u_inspector,
-                  record.u_inspected_on #.localtime.strftime(I18n.t('time.formats.mdY'))
+                  inspected_date
           ] , :style => (i.even? ? normal_row_even : normal_row_odd)
            i += 1
 
