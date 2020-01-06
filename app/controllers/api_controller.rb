@@ -250,7 +250,7 @@ class ApiController < ApplicationController
       end
       end
       elsif params[:servicetype].delete(' ').upcase == "FIRESTOP"
-        records = Lsspdfasset.where(u_facility_id: params[:facility_id], u_report_type: ["FIRESTOPSURVEY" ,"FIRESTOPINSTALLATION"], :u_delete => false)
+        records = Lsspdfasset.where(u_facility_id: params[:facility_id], u_report_type: ["FIRESTOPSURVEY" ,"FIRESTOPINSTALLATION"], :u_delete => false).order("updated_at desc")
         p = Axlsx::Package.new
         wb = p.workbook
         img_path = File.expand_path(Rails.root+'app/assets/images/lss_logo.png')
@@ -288,7 +288,7 @@ class ApiController < ApplicationController
 
      end
      elsif params[:servicetype].delete(' ').upcase == "DAMPER"
-        @records  = Lsspdfasset.where(u_facility_id: params[:facility_id], u_report_type: ["DAMPERREPAIR" ,"DAMPERINSPECTION"], :u_delete => false)
+	     @records  = Lsspdfasset.where(u_facility_id: params[:facility_id], u_report_type: ["DAMPERREPAIR" ,"DAMPERINSPECTION"], :u_delete => false).order("updated_at desc")
         p, wb, img_path = initialize_spreadsheet
         facility_name, tech, date, damper_inspection_para, damper_repair_para = initialize_damper_params
         wb.styles do |s|
