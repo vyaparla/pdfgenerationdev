@@ -3,18 +3,26 @@ class ApiController < ApplicationController
   def save_pdf
     #@pdfjob.u_suggested_ul_system = HTMLEntities.new.decode params[:u_suggested_ul_system]
     if params[:status] == "insert"
+      puts "in insert"	    
       @pdfjob = create_assets
       render json: {message: "Save Success"}
     else
       if params[:status] == "update"
+	puts "in update"      
         @pdfjob = Lsspdfasset.find_by(u_asset_id: params[:u_asset_id])
+	puts @pdfjob
 	if @pdfjob == nil
+	 puts "nil and need to create"	
          @pdfjob = create_assets
+	 puts "created"
 	end	
           if @pdfjob.update(lssassets_job)
+	   puts "need to update"	  
             update_assets
+	    puts "updated"
             render json: {message: "Update Success"}
           else
+	    puts "not updated"	  
             render json: {message: "Unable to Update the record!"}
           end
       else
