@@ -278,7 +278,7 @@ class ApiController < ApplicationController
                   else
                     'NO'
                   end,
-                  record.u_suggested_ul_system, record.u_corrected_url_system, inspected_date
+                  record.u_suggested_ul_system, record.u_corrected_url_system, inspected_date,
 		  record.u_inspector
                 ] , :style => (i.even? ? normal_row_even : normal_row_odd)
            i += 1
