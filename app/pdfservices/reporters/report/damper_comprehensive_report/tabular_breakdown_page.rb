@@ -2,9 +2,9 @@ module DamperComprehensiveReport
   class TabularBreakdownPage
   	include Report::RepairDataPageWritable
 
-  	def initialize(records, damper_type, building_section, tech)
+ def initialize(records, damper_type, building_section, tech)
       @records = records
-      @damper_type = damper_type      
+      @damper_type = damper_type
       @building_section = building_section
       @tech = tech
     end
@@ -18,76 +18,126 @@ module DamperComprehensiveReport
       draw_summary_table(pdf, summary_table_data(attributes), attributes)
     end
 
+  private
+
     def owner
       @job ||= @records.first
     end
 
     def building
       @building ||= @building_section
-    end
+    end    
 
     def title
-      DamperComprehensiveReport.translate(@damper_type)
+      DamperInspectionReporting.translate(@damper_type)
+    end
+
+    def contains_all_results
+      @damper_type == :pass_dampers
     end
 
     def summary_table_attributes
       attributes = []
-      attributes += [
-                     [:damper_number, nil],
-                     [:floor, nil],
-                     [:damper_location, 85],
-                     [:damper_type, nil],
-                     [:status, 60],
-                     [:dificiancy, nil],
-                     [:corrective_action, 100],
-                     [:date, nil]] 
+      attributes += [[:damper_number, nil]]
+      attributes += [[:floor, nil],
+                     [:damper_location, contains_all_results ? 85 : 60],
+                     [:damper_type, 55],
+                     [:transactional_status, 60]]
+      attributes   <<  [:deficiency_s, 75]
+      attributes   +=  [[:repair_action, 60]]
 
+      attributes += [[:date, nil]]
+    
       attributes
     end
 
     def summary_table_data(attributes)
-       [attributes.map do |column, _|
-           DamperComprehensiveReport.column_heading(column)
+      [attributes.map do |column, _|
+           DamperInspectionReporting.column_heading(column)
       end] +
-      @records.map do |record|
-        if record.u_dr_passed_post_repair == "Pass"
-          @post_status = "Passed Post Repair"
-        else
-          @post_status = "Failed Post Repair" 
-        end
+      if @damper_type == :pass_dampers
+        @records.map do |record|
+          if record.u_di_installed_access_door == "true"
+            @di_installedaccess_door = "YES"
+          else
+            @di_installedaccess_door = ""
+          end
+    floor = record.u_floor == "other" ? record.u_other_floor : record.u_floor
 
-        floor = record.u_floor == "other" ? record.u_other_floor : record.u_floor
-        
-      	if record.u_repair_action_performed == "Damper Repaired"
-      	  data = {
-      	    :damper_number     => record.u_tag,
+          data = {            
+            :date              => record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')),
+            :damper_number     => record.u_tag,
             :floor             => floor,
-      	    :damper_location   => record.u_location_desc,
+            :damper_location   => record.u_location_desc,
             :damper_type       => record.u_damper_name,
-            :status            => @post_status,
-            :dificiancy        => record.u_reason2,
-            :corrective_action => record.u_dr_description,
-            :date => record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY'))
-      	  }
-      	  attributes.map { |column, | data[column] }
-      	else
-      	  data = {      	    
-      	    :damper_number     => record.u_tag,
+            :transactional_status    => record.u_status
+          }
+          attributes.map { |column, | data[column] }
+        end 
+      elsif @damper_type == :failed_dampers
+        @records.map do |record|
+          if record.u_di_installed_access_door == "true"
+            @di_installedaccess_door = "YES"
+          else
+            @di_installedaccess_door = ""
+          end
+          
+          floor = record.u_floor == "other" ? record.u_other_floor : record.u_floor 
+
+          data = {
+            :date              => record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')),
+            :damper_number     => record.u_tag,
             :floor             => floor,
-      	    :damper_location   => record.u_location_desc,
+            :damper_location   => record.u_location_desc,
             :damper_type       => record.u_damper_name,
-            :status            => @post_status,
-            :dificiancy        => record.u_reason2,
-            :corrective_action => record.u_repair_action_performed,
-            :date => record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY'))
-      	  }
-      	  attributes.map { |column, | data[column] }
+            :transactional_status    => record.u_status,
+            :deficiency_s        => record.u_reason,
+            :repair_action => record.u_di_replace_damper
+          }
+          attributes.map { |column, | data[column] }
+        end
+      elsif @damper_type == :na_dampers        
+        @records.map do |record|
+          if record.u_di_installed_access_door == "true"
+            @di_installedaccess_door = "YES"
+          else
+            @di_installedaccess_door = ""
+          end
+    floor = record.u_floor == "other" ? record.u_other_floor : record.u_floor
+          data = {
+            :date              => record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')),
+            :damper_number     => record.u_tag,
+            :floor             => floor,
+            :damper_location   => record.u_location_desc,
+            :damper_type       => record.u_damper_name,
+            :transactional_status    => record.u_status,
+            :deficiency_s        => record.u_non_accessible_reasons
+          }
+          attributes.map { |column, | data[column] }
+        end
+      else
+        @records.map do |record|
+          if record.u_di_installed_access_door == "true"
+            @di_installedaccess_door = "YES"
+          else
+            @di_installedaccess_door = ""
+          end
+    floor = record.u_floor == "other" ? record.u_other_floor : record.u_floor
+          data = {
+            :date              => record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')),
+            :damper_number     => record.u_tag,
+            :floor             => floor,
+            :damper_location   => record.u_location_desc,
+            :transactional_status    => record.u_status,
+            :damper_type       => record.u_damper_name
+          }
+          attributes.map { |column, | data[column] }
         end
       end
     end
-
+    
     def draw_summary_table(pdf, data, attributes)
-      pdf.table(data, :header => true, :cell_style => { :size => 8, :padding => 4, :align => :center }) do |table|
+      pdf.table(data, :header => true, :cell_style => { :size => 7, :padding => 4, :align => :center }) do |table|
         last = table.row_length - 1
         table.row_colors = %w(ffffff eaeaea)
         table.row(0).style :border_color     => '888888',
@@ -102,16 +152,15 @@ module DamperComprehensiveReport
         end
         result_index && table.column(result_index).rows(1..last).each do |cell|
           cell.text_color = case cell.content
-          when DamperComprehensiveReport.translate(:fail)
+          when DamperInspectionReporting.translate(:fail)
             'c1171d'
-          when DamperComprehensiveReport.translate(:na)
+          when DamperInspectionReporting.translate(:na)
             'f39d27'
           else
             '202020'
           end
         end
       end
-    end 
-
+    end
   end
 end

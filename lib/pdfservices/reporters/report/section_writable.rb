@@ -20,7 +20,12 @@ module Report
     end
  
     def comprehensive_records
-      @comprehensive_records ||= @job.comprehensive_building_records(@building, @job.u_facility_id)
+      if @job.u_report_type == "DAMPERREPAIR" || "DAMPERINSPECTION"
+        report_type = ["DAMPERREPAIR", "DAMPERINSPECTION"]
+      else
+        report_type = ["FIRESTOPSURVEY" ,"FIRESTOPINSTALLATION"]
+      end 
+      @comprehensive_records ||= @job.comprehensive_building_records(@building, @job.u_facility_id, report_type)
       #@records = Lsspdfasset.where(:u_building => building, :u_service_id => job.u_service_id)
     end
 

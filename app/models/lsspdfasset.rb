@@ -41,9 +41,9 @@ class Lsspdfasset < ActiveRecord::Base
     Lsspdfasset.where(:u_building => building, :u_service_id => service_ID, :u_delete => false)
   end
 
-  def comprehensive_building_records(building, facility_id)
+  def comprehensive_building_records(building, facility_id, report_type)
     #Rails.logger.debug("Asset: #{building.inspect}")
-	  Lsspdfasset.where(:u_building => building, :u_facility_id => facility_id, :u_report_type => ["FIRESTOPSURVEY" ,"FIRESTOPINSTALLATION"], :u_delete => false).order('updated_at desc')
+	  Lsspdfasset.where(:u_building => building, :u_facility_id => facility_id, :u_report_type => report_type, :u_delete => false).order('updated_at desc')
   end
 
 
