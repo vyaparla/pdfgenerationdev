@@ -36,6 +36,10 @@ class Lsspdfasset < ActiveRecord::Base
 	  Lsspdfasset.where(:u_facility_id => facility_id, :u_report_type => ["FIRESTOPSURVEY" ,"FIRESTOPINSTALLATION"],  :u_delete => false).order('updated_at desc').pluck('DISTINCT u_building')
   end	  
 
+  def damper_comprehensive_buildings(facility_id)
+    Lsspdfasset.where(:u_facility_id => facility_id, :u_report_type => ["DAMPERREPAIR" ,"DAMPERINSPECTION"],  :u_delete => false).order('updated_at desc').pluck('DISTINCT u_building')
+  end 
+
   def building_records(building, service_ID)
     #Rails.logger.debug("Asset: #{building.inspect}")
     Lsspdfasset.where(:u_building => building, :u_service_id => service_ID, :u_delete => false)

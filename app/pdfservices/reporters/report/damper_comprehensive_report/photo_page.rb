@@ -80,7 +80,7 @@ module DamperComprehensiveReport
       if @record.u_dr_passed_post_repair == "Pass"
         status_content = "<font size='12'><b>Pass</b></font>"
         cell_color = '13db13'
-      elsif 
+      else 
         status_content = "<font size='12'><b>Fail</b></font>"
         cell_color = 'ef3038'
       end
@@ -300,8 +300,8 @@ module DamperComprehensiveReport
     end
 
     def draw_closed_after_install_image(pdf)
-      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", 
-        at: [380 - pdf.bounds.absolute_left, 275], :width => 123, :height => 123)
+      # pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", 
+      #   at: [380 - pdf.bounds.absolute_left, 275], :width => 123, :height => 123)
       image = @record.pdf_image2.path(:pdf)      
       unless image.blank?
         pdf.image(image, at: [380 - pdf.bounds.absolute_left, 275], :width => 120, :height => 120)

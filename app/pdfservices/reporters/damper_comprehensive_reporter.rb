@@ -11,7 +11,7 @@ class DamperComprehensiveReporter < Reporter
       facility_name, tech).write(pdf)
       DamperComprehensiveReport::ProjectSummaryPage.new(job, tech).write(pdf)
       DamperComprehensiveReport::GraphPage.new(job, tech).write(pdf)
-  	  job.buildings(job.u_service_id).each do |b|
+  	  job.damper_comprehensive_buildings(facility_id).each do |b|
         DamperComprehensiveReport::BuildingSection.new(job, b, tech, group_name, facility_name, with_picture).write(pdf)
         #DamperRepairReport::TablePage.new(job, b, tech, group_name, facility_name, with_picture).write(pdf)
         DamperComprehensiveReport::PhotoSection.new(job, b, tech, group_name, facility_name, with_picture).write(pdf)

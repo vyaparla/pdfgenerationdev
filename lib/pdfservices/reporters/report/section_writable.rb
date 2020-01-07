@@ -20,7 +20,7 @@ module Report
     end
  
     def comprehensive_records
-      if @job.u_report_type == "DAMPERREPAIR" || "DAMPERINSPECTION"
+      if (@job.u_report_type == "DAMPERREPAIR" || @job.u_report_type ==  "DAMPERINSPECTION")
         report_type = ["DAMPERREPAIR", "DAMPERINSPECTION"]
       else
         report_type = ["FIRESTOPSURVEY" ,"FIRESTOPINSTALLATION"]
