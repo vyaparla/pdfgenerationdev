@@ -44,6 +44,7 @@ module DamperComprehensiveReport
       pdf.move_down 20
 
       if @with_picture
+
         if @record.u_repair_action_performed == "Damper Repaired"
           draw_open_after_install_image(pdf)
           draw_closed_after_install_image(pdf)

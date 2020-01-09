@@ -8,6 +8,7 @@ module DamperComprehensiveReport
       write_breakdown_pages(pdf, building_section, @tech)
       @records = comprehensive_records.where.not(u_type: "")
       @records.each { |r| PhotoPage.new(r, @group_name, @facility_name, @with_picture).write(pdf)}
+      #comprehensive_records.each { |r| PhotoPage.new(r, @group_name, @facility_name, @with_picture).write(pdf)}
     end
 
   private
