@@ -78,14 +78,18 @@ module DamperComprehensiveReport
     end
 
     def draw_table1(pdf)
-      if @record.u_dr_passed_post_repair == "Pass"
+      if @record.u_status.upcase == "PASS" 
         status_content = "<font size='12'><b>Pass</b></font>"
         cell_color = '13db13'
-      else 
-        status_content = "<font size='12'><b>Fail</b></font>"
+      elsif @record.u_status.upcase == "FAIL" || @record.u_status.upcase == "NA"
+        status_details = @record.u_status.upcase == "FAIL" ? "Fail" : "Non-Accessible"
+        status_content = "<font size='12'><b>#{status_details}</b></font>"
         cell_color = 'ef3038'
+      else
+        status_content = "<font size='12'><b>Removed</b></font>"
+        cell_color = '000000'
       end
-
+      
       pdf.table([
         [
           {:content => "<font size='12'><b>FIRE DAMPER COMPREHENSIVE REPORT</b></font>", :colspan => 3, :width => 225, align: :center },
@@ -154,6 +158,11 @@ module DamperComprehensiveReport
     end  
 
     def draw_table3(pdf)
+      deficiencies =  if @record.u_status == "Fail"
+        @record.u_reason
+      else
+        @record.u_non_accessible_reasons
+      end
       pdf.table([
        [
          { :content => "<font size='14'><b>DEFICIENCY DESCRIPTION(s):</b></font>", 
@@ -161,24 +170,13 @@ module DamperComprehensiveReport
          { :content => "<font size='14'><b>COMMENT</b></font>", 
            :colspan => 4, :width => 315, align: :left }  
        ],
-	# [
- #          { :content => "<font size='14'><b>COMMENT</b></font>", 
- #            :colspan => 6, :width => 540, align: :left }  
- #        ],
+
        [
-         { :content => "<font size='12'>#{@record.u_reason}</font>", 
+         { :content => "<font size='12'>#{deficiencies}</font>", 
            :colspan => 2, :width => 225, align: :left },
          { :content => "<font size='12'>#{@record.u_dr_description}</font>", 
            :colspan => 4, :width => 315, align: :left }  
        ],
-	 # [
-  #         { :content => "<font size='12'>#{@record.u_dr_description}</font>",
-  #           :colspan => 6, :width => 540, align: :left },
-  #         { :content => "<font size='12'>#{@record.u_dr_description}</font>",
-  #           :colspan => 6, :width => 540, align: :left }
-  #       ],
-
-        
       ], :cell_style => { :inline_format => true })
       pdf.move_down 5 
     end  
