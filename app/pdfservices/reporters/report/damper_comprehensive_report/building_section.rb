@@ -6,7 +6,7 @@ module DamperComprehensiveReport
       return if comprehensive_records.empty?
       BuildingSummaryPage.new(@job, @building, @tech).write(pdf)
       write_breakdown_pages(pdf, building_section, @tech)
-      @records = comprehensive_records.where.not(u_type: "")
+      @records = comprehensive_records.where.not(u_type: "", u_status: "Removed")
       @records.each { |r| PhotoPage.new(r, @group_name, @facility_name, @with_picture).write(pdf)}
       #comprehensive_records.each { |r| PhotoPage.new(r, @group_name, @facility_name, @with_picture).write(pdf)}
     end

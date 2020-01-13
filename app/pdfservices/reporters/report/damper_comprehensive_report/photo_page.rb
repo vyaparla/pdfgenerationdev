@@ -85,10 +85,10 @@ module DamperComprehensiveReport
         status_details = @record.u_status.upcase == "FAIL" ? "Fail" : "Non-Accessible"
         status_content = "<font size='12'><b>#{status_details}</b></font>"
         cell_color = 'ef3038'
-      else
-        status_content = "<font size='12'><b>Removed</b></font>"
-        cell_color = '000000'
-      end
+      elsif @record.u_status.upcase == "" 
+        status_content = "<font size='12'><b>#{status_details}</b></font>"
+        #cell_color = '000000'
+    end
       
       pdf.table([
         [
