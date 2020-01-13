@@ -8,9 +8,9 @@ class ApiController < ApplicationController
     else
       if params[:status] == "update"
         @pdfjob = Lsspdfasset.find_by(u_asset_id: params[:u_asset_id])
-	if @pdfjob == nil
-         @pdfjob = create_assets
-	end	
+#	if @pdfjob == nil
+#         @pdfjob = create_assets
+#	end	
           if @pdfjob.update(lssassets_job)
             update_assets
             render json: {message: "Update Success"}
