@@ -223,10 +223,10 @@ module Report
         $project_na_per = "00.00%"
         $project_removed_per = "00.00%"
       else
-        $project_pass_per  = '%.2f%' %  (($ptotal.to_f * 100) / ($ptotal + $ftotal + $natotal))
-        $project_fail_per  = '%.2f%' %  (($ftotal.to_f * 100) / ($ptotal + $ftotal + $natotal))
-        $project_na_per = '%.2f%' %  (($natotal.to_f * 100) / ($ptotal + $ftotal + $natotal))  
-        $project_removed_per = '%.2f%' %  (($removedtotal.to_f * 100) / ($ptotal + $ftotal + $natotal))
+        $project_pass_per  = '%.2f%' %  (($ptotal.to_f * 100) / ($ptotal + $ftotal + $natotal + $removedtotal))
+        $project_fail_per  = '%.2f%' %  (($ftotal.to_f * 100) / ($ptotal + $ftotal + $natotal + $removedtotal))
+        $project_na_per = '%.2f%' %  (($natotal.to_f * 100) / ($ptotal + $ftotal + $natotal + $removedtotal))  
+        $project_removed_per = '%.2f%' %  (($removedtotal.to_f * 100) / ($ptotal + $ftotal + $natotal + $removedtotal))
       end  
       
       @project_final_table_data + [['GRAND TOTAL', ''] + @project_grand_total_data]
