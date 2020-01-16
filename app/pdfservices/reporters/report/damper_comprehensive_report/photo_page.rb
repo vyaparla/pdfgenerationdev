@@ -78,17 +78,28 @@ module DamperComprehensiveReport
     end
 
     def draw_table1(pdf)
-      if @record.u_status.upcase == "PASS" 
-        status_content = "<font size='12'><b>Pass</b></font>"
-        cell_color = '13db13'
-      elsif @record.u_status.upcase == "FAIL" || @record.u_status.upcase == "NA"
-        status_details = @record.u_status.upcase == "FAIL" ? "Fail" : "Non-Accessible"
-        status_content = "<font size='12'><b>#{status_details}</b></font>"
-        cell_color = 'ef3038'
-      elsif @record.u_status.upcase == "" 
-        status_content = "<font size='12'><b>#{status_details}</b></font>"
-        #cell_color = '000000'
-    end
+      if @record.u_report_type == "DAMPERREPAIR"
+        if @record.u_dr_passed_post_repair == "Pass"
+          status_content = "<font size='12'><b>Pass</b></font>"
+          cell_color = '13db13'
+        else
+          status_content = "<font size='12'><b>Fail</b></font>"
+          cell_color = 'ef3038'
+        end
+      else        
+        if @record.u_status.upcase == "PASS" 
+          status_content = "<font size='12'><b>Pass</b></font>"
+          cell_color = '13db13'
+        elsif @record.u_status.upcase == "FAIL" || @record.u_status.upcase == "NA"
+          status_details = @record.u_status.upcase == "FAIL" ? "Fail" : "Non-Accessible"
+          status_content = "<font size='12'><b>#{status_details}</b></font>"
+          cell_color = 'ef3038'
+        elsif @record.u_status.upcase == "" 
+          status_content = "<font size='12'><b>#{status_details}</b></font>"
+          #cell_color = '000000'
+        end
+      end  
+
       
       pdf.table([
         [
