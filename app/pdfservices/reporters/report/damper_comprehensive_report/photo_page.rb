@@ -169,6 +169,20 @@ module DamperComprehensiveReport
     end  
 
     def draw_table3(pdf)
+      if @record.u_report_type == "DAMPERREPAIR"
+        pdf.table([
+         [
+          { :content => "<font size='14'><b>COMMENT</b></font>", 
+            :colspan => 6, :width => 540, align: :left }  
+         ],
+ 
+         [
+           { :content => "<font size='12'>#{@record.u_dr_description}</font>",
+            :colspan => 6, :width => 540, align: :left }
+         ],
+       
+        ], :cell_style => { :inline_format => true })
+      else
       deficiencies =  if @record.u_status == "Fail"
         @record.u_reason
       else
@@ -189,6 +203,7 @@ module DamperComprehensiveReport
            :colspan => 4, :width => 315, align: :left }  
        ],
       ], :cell_style => { :inline_format => true })
+    end
       pdf.move_down 5 
     end  
 

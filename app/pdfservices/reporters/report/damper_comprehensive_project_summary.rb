@@ -254,11 +254,21 @@ module Report
 
     def facility_summary_table_data
       #@facility_serviceInfo = Lsspdfasset.select(:u_building, :u_status).where(:u_service_id => @owner.u_service_id, :u_delete => false).where("u_status !=?", "Removed").group(["u_building", "u_status"]).count(:u_status)
-      @facility_serviceInfo = Lsspdfasset.select(:u_building, :u_status).where(:u_facility_id => @owner.u_facility_id, :u_report_type => ["DAMPERREPAIR" ,"DAMPERINSPECTION"], :u_delete => false).where.not(u_type: "").group(["u_building", "u_status"]).count(:u_status)
+      #@facility_serviceInfo = Lsspdfasset.select(:u_building, :u_status).where(:u_facility_id => @owner.u_facility_id, :u_report_type => ["DAMPERREPAIR" ,"DAMPERINSPECTION"], :u_delete => false).where.not(u_type: "").group(["u_building", "u_status"]).count(:u_status)
+
+     @damper_repair = Lsspdfasset.select(:u_building, :u_dr_passed_post_repair).where(:u_facility_id => @owner.u_facility_id, :u_report_type => ["DAMPERREPAIR" ,"DAMPERINSPECTION"], :u_delete => false).where.not(u_type: "").group(["u_building", "u_dr_passed_post_repair"]).count(:u_dr_passed_post_repair)
+     @damper_inspection = Lsspdfasset.select(:u_building, :u_status).where(:u_facility_id => @owner.u_facility_id, :u_report_type => ["DAMPERREPAIR" ,"DAMPERINSPECTION"], :u_delete => false).where.not(u_type: "").group(["u_building", "u_status"]).count(:u_status)
+      
+      new_array = @damper_repair.keys.to_a + @damper_inspection.keys.to_a
+      status_counts = new_array.group_by{|i| i}.map{|k,v| [k, v.count] }
+      @facility_serviceInfo = status_counts.to_h
+
       @facility_buildingInfo = []
       
       @facility_serviceInfo.each do |key,value|
+
         facility_building_json = {}
+
         if @facility_buildingInfo.length == 0
           facility_building_json["building"] = key[0]
           if key[1] == "Pass"
@@ -282,6 +292,7 @@ module Report
             facility_building_json["NA"] = 0
             facility_building_json["Removed"] = value
           end
+
           @facility_buildingInfo.push(facility_building_json)
         else
           @boolean = 0
