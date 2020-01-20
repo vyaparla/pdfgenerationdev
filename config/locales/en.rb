@@ -160,7 +160,7 @@
           service_type: 'Service Type',
           deficiency: 'Deficiency',
 	  deficiency_s: 'Deficiency(s)',
-	  transactional_status: '(transactional) Status',
+	  status: 'Status',
 	  repair_action: 'Repair Action',
           current_status: 'Current Status',
           installed_access_door: "Installed Access Door"
