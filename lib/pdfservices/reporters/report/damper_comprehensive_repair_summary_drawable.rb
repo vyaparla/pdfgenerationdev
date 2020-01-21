@@ -52,6 +52,8 @@ module Report
     
     def summary_table_data
       @buildingInfo = Lsspdfasset.select(:u_building, :u_floor, :u_type).where(:u_facility_id => @owner.u_facility_id, :u_report_type => ["DAMPERREPAIR" ,"DAMPERINSPECTION"], :u_building => @building, :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_type"]).order(:u_floor).count(:u_type)
+      
+
       @floorInfo = []
 
       @buildingInfo.each do |key,value|
@@ -74,7 +76,16 @@ module Report
             floor_json["FD"] = 0
             floor_json["SD"] = value
           end
-          @building_result = Lsspdfasset.select(:u_building, :u_floor, :u_dr_passed_post_repair).where(:u_facility_id => @owner.u_facility_id, :u_report_type => ["DAMPERREPAIR" ,"DAMPERINSPECTION"], :u_delete => false, :u_building => @building, :u_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_dr_passed_post_repair"]).count(:u_dr_passed_post_repair)
+
+          @building_repair = Lsspdfasset.select(:u_building, :u_floor, :u_dr_passed_post_repair).where(:u_facility_id => @owner.u_facility_id, :u_report_type => "DAMPERREPAIR", :u_building => @building, :u_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_dr_passed_post_repair"]).count(:u_dr_passed_post_repair)
+
+          @building_inspection = Lsspdfasset.select(:u_building, :u_floor, :u_status).where(:u_facility_id => @owner.u_facility_id, :u_report_type => "DAMPERINSPECTION", :u_building => @building, :u_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_status"]).count(:u_status)
+
+          new_array = @building_repair.to_a + @building_inspection.to_a
+          status_counts = new_array.group_by{|i| i[0]}.map{|k,v| [k, v.map(&:last).sum] } 
+     
+          @building_result = status_counts.to_h
+
 
           @building_result.each do |fstatus, fvalue|
             if !floor_json.has_key?(fstatus[2])
@@ -128,8 +139,18 @@ module Report
               floor_json["FD"] = 0
               floor_json["SD"] = value
             end
+
+            @building_repair_result = Lsspdfasset.select(:u_building, :u_floor, :u_dr_passed_post_repair).where(:u_facility_id => @owner.u_facility_id, :u_report_type => "DAMPERREPAIR", :u_building => @building, :u_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_dr_passed_post_repair"]).count(:u_dr_passed_post_repair)
+
+            @building_inspection__result = Lsspdfasset.select(:u_building, :u_floor, :u_status).where(:u_facility_id => @owner.u_facility_id, :u_report_type => "DAMPERINSPECTION", :u_building => @building, :u_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_status"]).count(:u_status)
+
+            new_array_result = @building_repair.to_a + @building_inspection.to_a
+            status_count_result = new_array_result.group_by{|i| i[0]}.map{|k,v| [k, v.map(&:last).sum] } 
+     
+            @building_result = status_count_result.to_h
+
             
-            @building_result = Lsspdfasset.select(:u_building, :u_floor, :u_dr_passed_post_repair).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_floor => key[1], :u_delete => false).group(["u_building", "u_floor", "u_dr_passed_post_repair"]).count(:u_dr_passed_post_repair)
+            #@building_result = Lsspdfasset.select(:u_building, :u_floor, :u_dr_passed_post_repair).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_floor => key[1], :u_delete => false).group(["u_building", "u_floor", "u_dr_passed_post_repair"]).count(:u_dr_passed_post_repair)
             @building_result_len =  @building_result.length
     
             @building_result.each do |fstatus, fvalue|
@@ -193,7 +214,7 @@ module Report
       @floorInfo.each do |resultInfo|
         @damperTotal = resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"]
         @damperGrandtotal = $ptotal + $ftotal + $natotal
-        @damperPer = 0 #'%.2f%' % ((100 * @damperTotal) / (@damperGrandtotal))
+        @damperPer = '%.2f%' % ((100 * @damperTotal) / (@damperGrandtotal))
         #@damperPer = '%.2f%' % ((resultInfo["Pass"] * 100) / (resultInfo["FSD"] + resultInfo["FD"] + resultInfo["SD"]))
         @final_table_data << [resultInfo["floor"], resultInfo["FD"], resultInfo["SD"], resultInfo["FSD"], resultInfo["Pass"], resultInfo["Fail"], resultInfo["NA"],  resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"], @damperPer]
       end
