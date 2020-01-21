@@ -57,12 +57,20 @@ module DamperComprehensiveReport
       end] +
       if @damper_type == :pass_dampers
         @records.map do |record|
-          if record.u_di_installed_access_door == "true"
-            @di_installedaccess_door = "YES"
+          if record.u_report_type == "DAMPERREPAIR"
+            if record.u_dr_passed_post_repair == "Pass"
+              @post_status = "Passed Post Repair"
+            else
+             @post_status = "Failed Post Repair" 
+            end
+            @deficiency = record.u_reason2
+            @action = record.u_dr_description
           else
-            @di_installedaccess_door = ""
-          end
-    floor = record.u_floor == "other" ? record.u_other_floor : record.u_floor
+            @post_status = record.u_status
+            @deficiency = record.u_reason
+            @action = record.u_di_replace_damper
+          end  
+        floor = record.u_floor == "other" ? record.u_other_floor : record.u_floor
 
           data = {            
             :date              => record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')),
@@ -70,17 +78,27 @@ module DamperComprehensiveReport
             :floor             => floor,
             :damper_location   => record.u_location_desc,
             :damper_type       => record.u_damper_name,
-            :transactional_status    => record.u_status
+            :transactional_status    => @post_status,
+            :deficiency_s        => @deficiency,
+            :repair_action => @action
           }
           attributes.map { |column, | data[column] }
         end 
       elsif @damper_type == :failed_dampers
         @records.map do |record|
-          if record.u_di_installed_access_door == "true"
-            @di_installedaccess_door = "YES"
+          if record.u_report_type == "DAMPERREPAIR"
+            if record.u_dr_passed_post_repair == "Pass"
+              @post_status = "Passed Post Repair"
+            else
+             @post_status = "Failed Post Repair" 
+            end
+            @deficiency = record.u_reason2
+            @action = record.u_dr_description
           else
-            @di_installedaccess_door = ""
-          end
+            @post_status = record.u_status
+            @deficiency = record.u_reason
+            @action = record.u_di_replace_damper
+          end  
           
           floor = record.u_floor == "other" ? record.u_other_floor : record.u_floor 
 
@@ -90,20 +108,16 @@ module DamperComprehensiveReport
             :floor             => floor,
             :damper_location   => record.u_location_desc,
             :damper_type       => record.u_damper_name,
-            :transactional_status    => record.u_status,
-            :deficiency_s        => record.u_reason,
-            :repair_action => record.u_di_replace_damper
+            :transactional_status    =>  @post_status,
+            :deficiency_s        => @deficiency,
+            :repair_action => @action
           }
           attributes.map { |column, | data[column] }
         end
       elsif @damper_type == :na_dampers        
         @records.map do |record|
-          if record.u_di_installed_access_door == "true"
-            @di_installedaccess_door = "YES"
-          else
-            @di_installedaccess_door = ""
-          end
-    floor = record.u_floor == "other" ? record.u_other_floor : record.u_floor
+
+          floor = record.u_floor == "other" ? record.u_other_floor : record.u_floor
           data = {
             :date              => record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')),
             :damper_number     => record.u_tag,

@@ -77,12 +77,12 @@ module DamperInspectionReport
       end] +
       if @damper_type == :pass_dampers
         @records.map do |record|
-          if record.u_di_installed_access_door == "true"
-            @di_installedaccess_door = "YES"
-          else
-            @di_installedaccess_door = ""
-          end
-	  floor = record.u_floor == "other" ? record.u_other_floor : record.u_floor
+          # if record.u_di_installed_access_door == "true"
+          #   @di_installedaccess_door = "YES"
+          # else
+          #   @di_installedaccess_door = ""
+          # end
+	      floor = record.u_floor == "other" ? record.u_other_floor : record.u_floor
 
           data = {            
             :date              => record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')),

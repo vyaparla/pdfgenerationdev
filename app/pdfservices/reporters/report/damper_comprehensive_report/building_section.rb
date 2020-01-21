@@ -14,11 +14,11 @@ module DamperComprehensiveReport
   private
 
     def pass_records
-      @pass_records ||= comprehensive_records.where(:u_dr_passed_post_repair => "Pass").where.not(u_type: "")
+      @pass_records ||= comprehensive_records.where(["u_status=? OR u_dr_passed_post_repair = ?", "Pass", "Pass"]).where.not(u_type: "") 
     end
 
     def failed_records
-      @failed_records ||= comprehensive_records.where(:u_dr_passed_post_repair => "Fail").where.not(u_type: "")
+      @failed_records ||= comprehensive_records.where(["u_status=? OR u_dr_passed_post_repair = ?", "Fail", "Fail"]).where.not(u_type: "")   
     end
 
     def na_records
