@@ -65,7 +65,14 @@ namespace :deploy do
     on roles(:app) do
      # unless `git rev-parse HEAD` == `git rev-parse origin/development` # For production and UAT
      #   puts "WARNING: HEAD is not the same as origin/development" # For production and UAT
-     unless `git rev-parse HEAD` == `git rev-parse origin/vsoft_qa` # For VSoft QA
+     # Enable UAT Server
+     #unless `git rev-parse HEAD` == `git rev-parse origin/development`
+     #   puts "WARNING: HEAD is not the same as origin/development" 
+     #   puts "Run `git push` to sync changes."
+     #   exit
+     # end
+     # Enable Vsoft QA Server
+      unless `git rev-parse HEAD` == `git rev-parse origin/vsoft_qa` # For VSoft QA
         puts "WARNING: HEAD is not the same as origin/vsoft_qa" # For VSoft QA
         puts "Run `git push` to sync changes."
         exit
