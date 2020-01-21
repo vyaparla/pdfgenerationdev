@@ -83,7 +83,7 @@ module DamperInspectionReport
           #   @di_installedaccess_door = ""
           # end
 	  floor = record.u_floor == "other" ? record.u_other_floor : record.u_floor
-         status = record.u_status == "NA" ? "Non-Accessible" : record.u_status
+          status = record.u_status == "NA" ? "Non-Accessible" : record.u_status
           data = {            
             :date              => record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')),
             :damper_number     => record.u_tag,
