@@ -42,7 +42,7 @@ module DamperComprehensiveReport
       attributes += [[:floor, nil],
                      [:damper_location, contains_all_results ? 85 : 60],
                      [:damper_type, 55],
-                     [:transactional_status, 60]]
+                     [:status, 60]]
       attributes   <<  [:deficiency_s, 75]
       attributes   +=  [[:repair_action, 60]]
 
@@ -78,7 +78,7 @@ module DamperComprehensiveReport
             :floor             => floor,
             :damper_location   => record.u_location_desc,
             :damper_type       => record.u_damper_name,
-            :transactional_status    => @post_status,
+            :status    => @post_status,
             :deficiency_s        => @deficiency,
             :repair_action => @action
           }
@@ -108,7 +108,7 @@ module DamperComprehensiveReport
             :floor             => floor,
             :damper_location   => record.u_location_desc,
             :damper_type       => record.u_damper_name,
-            :transactional_status    =>  @post_status,
+            :status    =>  @post_status,
             :deficiency_s        => @deficiency,
             :repair_action => @action
           }
@@ -124,7 +124,7 @@ module DamperComprehensiveReport
             :floor             => floor,
             :damper_location   => record.u_location_desc,
             :damper_type       => record.u_damper_name,
-            :transactional_status    => record.u_status,
+            :status    => record.u_status,
             :deficiency_s        => record.u_non_accessible_reasons
           }
           attributes.map { |column, | data[column] }
@@ -142,7 +142,7 @@ module DamperComprehensiveReport
             :damper_number     => record.u_tag,
             :floor             => floor,
             :damper_location   => record.u_location_desc,
-            :transactional_status    => record.u_status,
+            :status    => record.u_status,
             :damper_type       => record.u_damper_name
           }
           attributes.map { |column, | data[column] }
