@@ -215,8 +215,8 @@ module Report
         @damperTotal = resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"]
         @getdamperGrandtotal= $ptotal + $ftotal + $natotal
 
-        if @getdamperGrandtotal == 0
-            @damperPer = 0.00
+        if  @getdamperGrandtotal == 0
+            @damperPer = 0
         else
            @damperPer = '%.2f%' % ((100 * @damperTotal) / (@getdamperGrandtotal))
         end   
@@ -230,10 +230,10 @@ module Report
         $natotal_damperPer = "00.00%"
         $rmtotal_damperPer = "00.00%"
       else
-        $ptotal_damperPer  = '%.2f%' %  (($ptotal.to_f * 100) / ($ptotal + $ftotal + $natotal))
-        $ftotal_damperPer  = '%.2f%' %  (($ftotal.to_f * 100) / ($ptotal + $ftotal + $natotal))
-        $natotal_damperPer = '%.2f%' %  (($natotal.to_f * 100) / ($ptotal + $ftotal + $natotal))  
-        $rmtotal_damperPer = '%.2f%' %  (($rmtotal.to_f * 100) / ($ptotal + $ftotal + $natotal))
+        $ptotal_damperPer  = '%.2f%' %  (($ptotal.to_f * 100) / ($ptotal + $ftotal + $natotal + $rmtotal))
+        $ftotal_damperPer  = '%.2f%' %  (($ftotal.to_f * 100) / ($ptotal + $ftotal + $natotal + $rmtotal))
+        $natotal_damperPer = '%.2f%' %  (($natotal.to_f * 100) / ($ptotal + $ftotal + $natotal + $rmtotal))  
+        $rmtotal_damperPer = '%.2f%' %  (($rmtotal.to_f * 100) / ($ptotal + $ftotal + $natotal + $rmtotal))
       end  
 
 
