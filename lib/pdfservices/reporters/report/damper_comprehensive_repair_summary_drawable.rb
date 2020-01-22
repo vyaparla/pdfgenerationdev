@@ -202,7 +202,7 @@ module Report
       @final_table_data_total.push($ftotal)
       @final_table_data_total.push($natotal)
       @final_table_data_total.push($rmtotal)
-      @final_table_data_total.push($sdtotal + $fdtotal + $fsdtotal + $rmtotal)
+      @final_table_data_total.push($sdtotal + $fdtotal + $fsdtotal)
       @final_table_data_total.push("100.00%")
 
 
