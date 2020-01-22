@@ -119,7 +119,7 @@ module FirestopComprehensiveReport
       pdf.table([
         [
           {:content => "<font size='12'><b>#{title.upcase}</b></font>", :colspan => 3, :width => 225, align: :center },
-          {:content => "Status:", :colspan => 1, :width => 75, align: :left },
+          {:content => "Current Status:", :colspan => 1, :width => 75, align: :left },
           {:content => status_content, :background_color=> cell_color,:colspan => 1, :width => 105, 
             :align => :center, :text_color => "ffffff" },
           {:content => "Issue #<br/><b>#{@record.u_tag}</b>", :colspan => 1, :width => 135, 

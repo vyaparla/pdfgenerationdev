@@ -49,7 +49,7 @@ module DamperInspectionReport
      attributes += [[:floor, nil],
                      [:damper_location, contains_all_results ? 85 : 60],
                      [:damper_type, 55],
-                     [:current_status, 60]]
+                     [:status, 60]]
 
 
       #attributes   <<  [:service_type, 60]
@@ -89,7 +89,7 @@ module DamperInspectionReport
             :floor             => floor,
             :damper_location   => record.u_location_desc,
             :damper_type       => record.u_damper_name,
-            :current_status    => status
+            :status    => status
 	  #  :status    => status
             #:installed_access_door    => @di_installedaccess_door
 
@@ -121,7 +121,7 @@ module DamperInspectionReport
             :floor             => floor,
             :damper_location   => record.u_location_desc,
             :damper_type       => record.u_damper_name,
-            :current_status    => status,
+            :status    => status,
             :deficiency_s        => record.u_reason,
             :repair_action => record.u_di_replace_damper
             #:installed_access_door    => @di_installedaccess_door
@@ -152,7 +152,7 @@ module DamperInspectionReport
             :floor             => floor,
             :damper_location   => record.u_location_desc,
             :damper_type       => record.u_damper_name,
-            :current_status    => status,
+            :status    => status,
             :deficiency_s        => record.u_non_accessible_reasons
            # :installed_access_door    => @di_installedaccess_door
 
@@ -181,7 +181,7 @@ module DamperInspectionReport
             :damper_number     => record.u_tag,
             :floor             => floor,
             :damper_location   => record.u_location_desc,
-            :current_status    => status,
+            :status    => status,
             :damper_type       => record.u_damper_name
             #:installed_access_door    => @di_installedaccess_door
 
