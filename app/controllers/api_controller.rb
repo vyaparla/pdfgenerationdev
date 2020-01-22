@@ -106,7 +106,6 @@ class ApiController < ApplicationController
   end
 
   def spreadsheets
-    #comprehensive_data =  "Comprehensive_" if params[:servicetype].delete(' ').upcase == "DAMPER" || params[:servicetype].delete(' ').upcase == "FIRESTOP" 
     @outputfile = params[:servicetype].delete(' ').upcase + "_" +  Time.now.strftime("%m-%d-%Y-%r").gsub(/\s+/, "_") + "_" + "spreadsheet_report"
     if params[:servicetype].delete(' ').upcase == "DAMPERINSPECTION"
       @records = Lsspdfasset.where(u_service_id: params[:serviceid], :u_delete => false).where.not(u_type: "")
@@ -275,10 +274,11 @@ class ApiController < ApplicationController
         sheet.add_row ["Damper #", "Facility", "Building", "Floor", "Damper Location", "Damper Type", "Status", "Deficiencies", "Repair Action Performed", "Subsequent Failure Reason", "Technician", "Date"] , :style => header_row
         i = 1
         @records.each do |record|
+	  status = record.u_report_type == "DAMPERREPAIR" ? record.u_dr_passed_post_repair : (record.u_status == "NA" ?  "Non-Accessible": record.u_status) 	
 	  inspected_date = record.u_inspected_on.nil? ? record.u_inspected_on : record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY'))	
           floor = (record.u_floor == "other" ? record.u_other_floor : record.u_floor)
           sheet.add_row  [record.u_tag, record.u_facility_name, record.u_building, floor, record.u_location_desc, record.u_type,
-                  record.u_status == "NA" ?  "Non-Accessible": record.u_status,
+                  status,
                   if record.u_status == "Fail"
                     record.u_reason
                   else
