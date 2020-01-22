@@ -118,13 +118,16 @@ module DamperComprehensiveReport
         @records.map do |record|
 
           floor = record.u_floor == "other" ? record.u_other_floor : record.u_floor
+          status = record.u_status == "NA" ? "Non-Accessible" : " "
+
+
           data = {
             :date              => record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')),
             :damper_number     => record.u_tag,
             :floor             => floor,
             :damper_location   => record.u_location_desc,
             :damper_type       => record.u_damper_name,
-            :status    => record.u_status,
+            :status    => status,
             :deficiency_s        => record.u_non_accessible_reasons
           }
           attributes.map { |column, | data[column] }

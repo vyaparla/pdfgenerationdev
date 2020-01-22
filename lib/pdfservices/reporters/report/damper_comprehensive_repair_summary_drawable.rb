@@ -52,14 +52,14 @@ module Report
     
     def summary_table_data
       @buildingInfo = Lsspdfasset.select(:u_building, :u_floor, :u_type).where(:u_facility_id => @owner.u_facility_id, :u_report_type => ["DAMPERREPAIR" ,"DAMPERINSPECTION"], :u_building => @building, :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_type"]).order(:u_floor).count(:u_type)
-      
 
       @floorInfo = []
 
       @buildingInfo.each do |key,value|
         floor_json = {}
+
         if @floorInfo.length == 0
-          
+         
           floor_json["building"] = key[0]
           floor_json["floor"] = key[1].to_i
 
@@ -77,19 +77,17 @@ module Report
             floor_json["SD"] = value
           end
 
-          @building_repair = Lsspdfasset.select(:u_building, :u_floor, :u_dr_passed_post_repair).where(:u_facility_id => @owner.u_facility_id, :u_report_type => "DAMPERREPAIR", :u_building => @building, :u_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_dr_passed_post_repair"]).count(:u_dr_passed_post_repair)
-
-          @building_inspection = Lsspdfasset.select(:u_building, :u_floor, :u_status).where(:u_facility_id => @owner.u_facility_id, :u_report_type => "DAMPERINSPECTION", :u_building => @building, :u_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_status"]).count(:u_status)
+          @building_repair = Lsspdfasset.select(:u_building, :u_floor, :u_dr_passed_post_repair).where(:u_facility_id => @owner.u_facility_id, :u_building => @building, :u_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_dr_passed_post_repair"]).count(:u_dr_passed_post_repair)
+          @building_inspection = Lsspdfasset.select(:u_building, :u_floor, :u_status).where(:u_facility_id => @owner.u_facility_id, :u_building => @building, :u_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_status"]).count(:u_status)
 
           new_array = @building_repair.to_a + @building_inspection.to_a
           status_counts = new_array.group_by{|i| i[0]}.map{|k,v| [k, v.map(&:last).sum] } 
      
           @building_result = status_counts.to_h
 
-
           @building_result.each do |fstatus, fvalue|
             if !floor_json.has_key?(fstatus[2])
-              floor_json[fstatus[2]] = fvalue
+                floor_json[fstatus[2]] = fvalue
             end
           end
 
@@ -141,15 +139,12 @@ module Report
             end
 
             @building_repair_result = Lsspdfasset.select(:u_building, :u_floor, :u_dr_passed_post_repair).where(:u_facility_id => @owner.u_facility_id, :u_report_type => "DAMPERREPAIR", :u_building => @building, :u_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_dr_passed_post_repair"]).count(:u_dr_passed_post_repair)
+            @building_inspection_result = Lsspdfasset.select(:u_building, :u_floor, :u_status).where(:u_facility_id => @owner.u_facility_id, :u_report_type => "DAMPERINSPECTION", :u_building => @building, :u_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_status"]).count(:u_status)
 
-            @building_inspection__result = Lsspdfasset.select(:u_building, :u_floor, :u_status).where(:u_facility_id => @owner.u_facility_id, :u_report_type => "DAMPERINSPECTION", :u_building => @building, :u_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_status"]).count(:u_status)
-
-            new_array_result = @building_repair.to_a + @building_inspection.to_a
+            new_array_result = @building_repair_result.to_a + @building_inspection_result.to_a
             status_count_result = new_array_result.group_by{|i| i[0]}.map{|k,v| [k, v.map(&:last).sum] } 
      
             @building_result = status_count_result.to_h
-
-            
             #@building_result = Lsspdfasset.select(:u_building, :u_floor, :u_dr_passed_post_repair).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_floor => key[1], :u_delete => false).group(["u_building", "u_floor", "u_dr_passed_post_repair"]).count(:u_dr_passed_post_repair)
             @building_result_len =  @building_result.length
     
