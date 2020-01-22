@@ -202,14 +202,14 @@ module Report
       @final_table_data_total.push($ftotal)
       @final_table_data_total.push($natotal)
       @final_table_data_total.push($rmtotal)
-      @final_table_data_total.push($sdtotal + $fdtotal + $fsdtotal)
+      @final_table_data_total.push($sdtotal + $fdtotal + $fsdtotal + $rmtotal)
       @final_table_data_total.push("100.00%")
 
 
       @final_table_data = []
       @floorInfo.each do |resultInfo|
-        @damperTotal = resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"]
-        @getdamperGrandtotal= $ptotal + $ftotal + $natotal
+        @damperTotal = resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"] + resultInfo["Removed"]
+        @getdamperGrandtotal= $ptotal + $ftotal + $natotal + $rmtotal
 
         if  @getdamperGrandtotal == 0
             @damperPer = 0
