@@ -552,7 +552,7 @@ class ApiController < ApplicationController
       @pdfjob.u_penetration_type = HTMLEntities.new.decode params[:u_penetration_type]
       @pdfjob.u_corrected_url_system = HTMLEntities.new.decode params[:u_corrected_url_system]
       @pdfjob.u_suggested_ul_system = HTMLEntities.new.decode params[:u_suggested_ul_system]
-      @pdfjob.u_facility_id = HTMLEntities.new.decode params[:facility_id]
+ #      @pdfjob.u_facility_id = HTMLEntities.new.decode params[:facility_id]
       @pdfjob.save
       
       return @pdfjob
@@ -622,7 +622,7 @@ class ApiController < ApplicationController
           penetration_type = HTMLEntities.new.decode params[:u_penetration_type]
           corrected_url_system =  HTMLEntities.new.decode params[:u_corrected_url_system]
           suggested_ul_system = HTMLEntities.new.decode params[:u_suggested_ul_system]
-	  facility_id = HTMLEntities.new.decode params[:facility_id]
+	  facility_id = HTMLEntities.new.decode params[:u_facility_id]
 
           @pdfjob.update_attributes(u_group_name: gname, u_facility_name: fname, u_building: building, u_location_desc: location_desc,
                                     u_reason:  reason, u_other_failure_reason:  other_failure_reason, u_di_replace_damper: di_replace_damper,

@@ -70,7 +70,7 @@ module DamperRepairReport
     end
 
     def repair_data
-      columns = ['Asset #', 'Floor', 'Location', 'Damper Type', 'Status',
+      columns = ['Asset #', 'Floor', 'Location', 'Damper Type', 'Current Status',
         ' Deficiency(s)', 'Repair Action', 'Date']
       repair_data = []
       repair_data << columns
