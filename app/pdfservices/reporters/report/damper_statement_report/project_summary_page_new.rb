@@ -1,10 +1,11 @@
-module Report
-  class DamperComprehensiveProjectSummary
-    
-  	#include SummaryDrawable
+module DamperStatementReport
+  class ProjectSummaryPage
+    #include Report::RepairDataPageWritable
+    include Report::InspectionDataPageWritable
 
-    def initialize(owner)
-      @owner = owner
+    def initialize(job, tech)
+      @job = job
+      @tech = tech
     end
 
     def draw(pdf)
@@ -64,17 +65,7 @@ module Report
 
     def project_summary_table_data
       #@serviceInfo = Lsspdfasset.select(:u_building, :u_type, :u_status).where(:u_service_id => @owner.u_service_id, :u_delete => false).where("u_status !=?", "Removed").group(["u_building", "u_type","u_status"]).count(:u_status)
-      #@serviceInfo = Lsspdfasset.select(:u_building, :u_type, :u_status).where(:u_facility_id => @owner.u_facility_id, :u_report_type => ["DAMPERREPAIR" ,"DAMPERINSPECTION"], :u_delete => false).where.not(u_type: "").group(["u_building", "u_type","u_status"]).order("CASE WHEN u_type = 'FD' THEN '1' WHEN u_type = 'SD' THEN '2' ELSE '3' END").count(:u_status)
-
-
-     @damper_repair = Lsspdfasset.select(:u_building, :u_type, :u_dr_passed_post_repair).where(:u_facility_id => @owner.u_facility_id, :u_report_type => "DAMPERREPAIR", :u_delete => false).where.not(u_type: "").group(["u_building", "u_type","u_dr_passed_post_repair"]).order("CASE WHEN u_type = 'FD' THEN '1' WHEN u_type = 'SD' THEN '2' ELSE '3' END").count(:u_dr_passed_post_repair)
-     @damper_inspection = Lsspdfasset.select(:u_building, :u_type, :u_status).where(:u_facility_id => @owner.u_facility_id, :u_report_type => "DAMPERINSPECTION", :u_delete => false).where.not(u_type: "").group(["u_building", "u_type","u_status"]).order("CASE WHEN u_type = 'FD' THEN '1' WHEN u_type = 'SD' THEN '2' ELSE '3' END").count(:u_status)
-
-      new_array = @damper_repair.to_a + @damper_inspection.to_a
-      status_counts = new_array.group_by{|i| i[0]}.map{|k,v| [k, v.map(&:last).sum] } 
-     
-      @serviceInfo = status_counts.to_h
-
+      @serviceInfo = Lsspdfasset.select(:u_building, :u_type, :u_status).where(:u_facility_id => @job.u_facility_id, :u_report_type => ["DAMPERREPAIR" ,"DAMPERINSPECTION"], :u_delete => false).where.not(u_type: "").group(["u_building", "u_type","u_status"]).order("CASE WHEN u_type = 'FD' THEN '1' WHEN u_type = 'SD' THEN '2' ELSE '3' END").count(:u_status)
       @buildingInfo = []
       @serviceInfo.each do |key,value|
         building_json = {}
@@ -212,17 +203,29 @@ module Report
         @project_final_table_data << [resultInfo["building"], @damper_type, resultInfo["Pass"], resultInfo["Fail"], resultInfo["NA"], resultInfo["Removed"], resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"], @project_per]
       end
 
-     
-      if $ptotal == 0 && $ftotal == 0 && $natotal == 0 && $removedtotal == 0
+      # @project_grand_total_data = []
+      # $ptotal = 0
+      # $ftotal = 0
+      # $natotal = 0
+      # @buildingInfo.each do |totalInfo|
+      #   $ptotal += totalInfo["Pass"]
+      #   $ftotal += totalInfo["Fail"]
+      #   $natotal += totalInfo["NA"]
+      # end
+      # @project_grand_total_data.push($ptotal)
+      # @project_grand_total_data.push($ftotal)
+      # @project_grand_total_data.push($natotal)
+      # @project_grand_total_data.push($ptotal + $ftotal + $natotal)
+      # @project_grand_total_data.push('%.2f%' % (($ptotal.to_f * 100) / ($ptotal + $ftotal + $natotal)))
+
+      if $ptotal == 0 && $ftotal == 0 && $natotal == 0
         $project_pass_per  = "00.00%"
         $project_fail_per  = "00.00%"
         $project_na_per = "00.00%"
-        $project_removed_per = "00.00%"
       else
-        $project_pass_per  = '%.2f%' %  (($ptotal.to_f * 100) / ($ptotal + $ftotal + $natotal + $removedtotal))
-        $project_fail_per  = '%.2f%' %  (($ftotal.to_f * 100) / ($ptotal + $ftotal + $natotal + $removedtotal))
-        $project_na_per = '%.2f%' %  (($natotal.to_f * 100) / ($ptotal + $ftotal + $natotal + $removedtotal))  
-        $project_removed_per = '%.2f%' %  (($removedtotal.to_f * 100) / ($ptotal + $ftotal + $natotal + $removedtotal))
+        $project_pass_per  = '%.2f%' %  (($ptotal.to_f * 100) / ($ptotal + $ftotal + $natotal))
+        $project_fail_per  = '%.2f%' %  (($ftotal.to_f * 100) / ($ptotal + $ftotal + $natotal))
+        $project_na_per = '%.2f%' %  (($natotal.to_f * 100) / ($ptotal + $ftotal + $natotal))  
       end  
       
       @project_final_table_data + [['GRAND TOTAL', ''] + @project_grand_total_data]
@@ -234,7 +237,7 @@ module Report
        [[DamperInspectionReporting.column_heading(:pass), $project_pass_per],
        [DamperInspectionReporting.column_heading(:fail), $project_fail_per],
        [DamperInspectionReporting.column_heading(:na), $project_na_per],
-       [DamperInspectionReporting.column_heading(:removed), $project_removed_per]
+       [DamperInspectionReporting.column_heading(:removed), $removedtotal]
        #[DamperInspectionReporting.column_heading(:removed), "00.00%"]
 
        ]
@@ -249,19 +252,12 @@ module Report
     end
 
     def facility_summary_table_data
-     @damper_repair = Lsspdfasset.select(:u_building, :u_dr_passed_post_repair).where(:u_facility_id => @owner.u_facility_id, :u_report_type => "DAMPERREPAIR", :u_delete => false).where.not(u_type: "").group(["u_building", "u_dr_passed_post_repair"]).count(:u_dr_passed_post_repair)
-     @damper_inspection = Lsspdfasset.select(:u_building, :u_status).where(:u_facility_id => @owner.u_facility_id, :u_report_type => "DAMPERINSPECTION", :u_delete => false).where.not(u_type: "").group(["u_building", "u_status"]).count(:u_status)
-
-      new_array = @damper_repair.to_a + @damper_inspection.to_a
-      status_counts = new_array.group_by{|i| i[0]}.map{|k,v| [k, v.map(&:last).sum] } 
-      @facility_serviceInfo = status_counts.to_h
-
+      #@facility_serviceInfo = Lsspdfasset.select(:u_building, :u_status).where(:u_service_id => @owner.u_service_id, :u_delete => false).where("u_status !=?", "Removed").group(["u_building", "u_status"]).count(:u_status)
+      @facility_serviceInfo = Lsspdfasset.select(:u_building, :u_status).where(:u_facility_id => @job.u_facility_id, :u_report_type => ["DAMPERREPAIR" ,"DAMPERINSPECTION"], :u_delete => false).where.not(u_type: "").group(["u_building", "u_status"]).count(:u_status)
       @facility_buildingInfo = []
       
       @facility_serviceInfo.each do |key,value|
-
         facility_building_json = {}
-
         if @facility_buildingInfo.length == 0
           facility_building_json["building"] = key[0]
           if key[1] == "Pass"
@@ -285,7 +281,6 @@ module Report
             facility_building_json["NA"] = 0
             facility_building_json["Removed"] = value
           end
-
           @facility_buildingInfo.push(facility_building_json)
         else
           @boolean = 0
@@ -367,7 +362,24 @@ module Report
         #@facility_building_table_data << [facilityvalue["building"], facilityvalue["Pass"], facilityvalue["Fail"], facilityvalue["NA"], facilityvalue["Removed"], facilityvalue["Pass"] + facilityvalue["Fail"] + facilityvalue["NA"] + facilityvalue["Removed"], @facility_per]
         @facility_building_table_data << [facilityvalue["building"], facilityvalue["Pass"], facilityvalue["Fail"], facilityvalue["NA"], facilityvalue["Removed"], facilityvalue["Pass"] + facilityvalue["Fail"] + facilityvalue["NA"], @facility_per]
       end
+      
+      # @facility_grand_total_data = []
+      # $bptotal = 0
+      # $bftotal = 0
+      # $bnatotal = 0
+      # @facility_buildingInfo.each do |totalInfo|
+      #   $bptotal += totalInfo["Pass"]
+      #   $bftotal += totalInfo["Fail"]
+      #   $bnatotal += totalInfo["NA"]
+      # end
+      # @facility_grand_total_data.push($bptotal)
+      # @facility_grand_total_data.push($bftotal)
+      # @facility_grand_total_data.push($bnatotal)
+
+      # @facility_grand_total_data.push($bptotal + $bftotal + $bnatotal)
+      # @facility_grand_total_data.push('%.2f%' % (($bptotal.to_f * 100) / ($bptotal + $bftotal + $bnatotal)))
+
       @facility_building_table_data + [['GRAND TOTAL'] + @facility_grand_total_data]
     end 
-  end
+      end
 end
