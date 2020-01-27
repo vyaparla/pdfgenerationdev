@@ -29,9 +29,14 @@ class ReportGeneration
   end
 
   def generate_report_facility_wise
-    if @service.upcase == "FIRESTOP"	  
-       FirestopComprehensiveJob.reporter_class.new.comprehensive_report(@owner, @model_name, @address1, @address2, @csz, @facility_type,
-      @tech, @group_name, @facility_name, @facility_id, @with_picture)
+    if @service.upcase == "FIRESTOP"	
+       if @report_type.upcase == "STATEMENT"
+	 FirestopFacilityJob.reporter_class.new.statement_report(@owner, @model_name, @address1, @address2, @csz, @facility_type,
+      @tech, @group_name, @facility_name, @facility_id, @with_picture, @report_type)      
+       else
+	 FirestopFacilityJob.reporter_class.new.comprehensive_report(@owner, @model_name, @address1, @address2, @csz, @facility_type,
+      @tech, @group_name, @facility_name, @facility_id, @with_picture, @report_type)      
+       end	       
     elsif @service.upcase == "DAMPER"
        DamperComprehensive.reporter_class.new.report(@owner, @model_name, @address1, @address2, @csz, @facility_type, @tech, @group_name,
     @facility_name, @facility_id, @with_picture)         

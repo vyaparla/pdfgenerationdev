@@ -7,9 +7,6 @@ class ApiController < ApplicationController
     else
       if params[:status] == "update"
         @pdfjob = Lsspdfasset.find_by(u_asset_id: params[:u_asset_id])
-#	if @pdfjob == nil
-#         @pdfjob = create_assets
-#	end	
           if @pdfjob.update(lssassets_job)
             update_assets
             render json: {message: "Update Success"}
@@ -26,7 +23,7 @@ class ApiController < ApplicationController
 
   def facility_wise_pdf_report_generation
     model, address1, address2, csz, facility_type, facility_id, tech, group, facility, with_pic, pdfjob = comprehensive_pdf_generation_params
-    service, report_type = params[:service], params[:report_type]
+    service, report_type = params[:service], params[:reportType]
     unless pdfjob.blank?
       ReportGeneration.new(pdfjob, model, address1, address2, csz, facility_type, tech, group, facility, facility_id, service, report_type, with_pic).generate_report_facility_wise
       render json: {message: "Success"}
@@ -55,11 +52,12 @@ class ApiController < ApplicationController
 
   def facility_wise_pdf_report_download
     model = params[:service].downcase	  
+    report_type = params[:reportType].downcase
     with_pic = (params[:withPictures] && params[:withPictures] == "false") ? "without_picture" : "with_picture"
     with_picture = params[:withPictures]
     pdfjob = Lsspdfasset.where(u_facility_id: params[:facility_id], :u_delete => false).last
     outputfile = params[:facilityname]+ "_" + params[:service] + "_" + params[:reportType] + "_" + with_pic + "_" + Time.now.strftime("%m-%d-%Y-%r").gsub(/\s+/, "_") + "_" + "detail_report"
-    send_file pdfjob.full_comprehensive_report_path(with_picture, model), :type => 'application/pdf', :disposition =>  "attachment; filename=\"#{outputfile}.pdf\""
+    send_file pdfjob.full_facilitywise_report_path(with_picture, model, report_type), :type => 'application/pdf', :disposition =>  "attachment; filename=\"#{outputfile}.pdf\""
   end
 
 
