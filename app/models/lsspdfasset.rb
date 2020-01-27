@@ -21,10 +21,6 @@ class Lsspdfasset < ActiveRecord::Base
   validates_attachment :pdf_image3, content_type: { content_type: ["image/jpg", "image/jpeg", "image/png", "image/gif"] }
   validates_attachment :pdf_image4, content_type: { content_type: ["image/jpg", "image/jpeg", "image/png", "image/gif"] }
 
-  # # has_many :lsspdfassets
-  # # alias_attribute :records, :lsspdfassets
-  # belongs_to :lsspdfasset, :foreign_key => 'lsspdfasset_id'
-
   has_many :firedoor_deficiencies, :foreign_key => :firedoor_service_sysid
 
 
@@ -33,7 +29,7 @@ class Lsspdfasset < ActiveRecord::Base
   end
 
   def comprehensive_buildings(facility_id)
-	  Lsspdfasset.where(:u_facility_id => facility_id, :u_report_type => ["FIRESTOPSURVEY" ,"FIRESTOPINSTALLATION"],  :u_delete => false).order('updated_at desc').pluck('DISTINCT u_building')
+    Lsspdfasset.where(:u_facility_id => facility_id, :u_report_type => ["FIRESTOPSURVEY" ,"FIRESTOPINSTALLATION"],  :u_delete => false).order('updated_at desc').pluck('DISTINCT u_building')
   end	  
 
   def damper_comprehensive_buildings(facility_id)
@@ -41,13 +37,11 @@ class Lsspdfasset < ActiveRecord::Base
   end 
 
   def building_records(building, service_ID)
-    #Rails.logger.debug("Asset: #{building.inspect}")
     Lsspdfasset.where(:u_building => building, :u_service_id => service_ID, :u_delete => false)
   end
 
   def comprehensive_building_records(building, facility_id, report_type)
-    #Rails.logger.debug("Asset: #{building.inspect}")
-	  Lsspdfasset.where(:u_building => building, :u_facility_id => facility_id, :u_report_type => report_type, :u_delete => false).order('updated_at desc')
+    Lsspdfasset.where(:u_building => building, :u_facility_id => facility_id, :u_report_type => report_type, :u_delete => false).order('updated_at desc')
   end
 
 
@@ -56,10 +50,11 @@ class Lsspdfasset < ActiveRecord::Base
      File.join(pdf_path, report_name)
   end
 
-  def full_comprehensive_report_path(with_picture=true, model)
-     name =  model.downcase  
-     report_name  = (with_picture == "true" || with_picture == true) ? name.to_s + "_report.pdf" : name.to_s + "_report_without_picture.pdf"
-     File.join(comprehensive_pdf_path, report_name)
+  def full_facilitywise_report_path(with_picture=true, model, report_type)
+     name =  model.downcase
+     report_type = report_type.downcase  
+     report_name  = (with_picture == "true" || with_picture == true) ? name.to_s + "_" +  report_type.to_s +  "_report.pdf" : name.to_s + "_report_without_picture.pdf"
+     File.join(facilitywise_pdf_path, report_name)
   end
 
   def summary_report_path
@@ -149,7 +144,7 @@ class Lsspdfasset < ActiveRecord::Base
     File.join(Rails.root, %w(public content pdfjobs pdf_reports), "#{id}")
   end
 
-  def comprehensive_pdf_path
+  def facilitywise_pdf_path
     File.join(Rails.root, %w(public content pdfjobs pdf_reports), "#{u_facility_id}")
   end	  
 

@@ -29,20 +29,22 @@ class ReportGeneration
   end
 
   def generate_report_facility_wise
-    puts "--------------------"
-    puts @service
-    puts @report_type
-
-    if @service.upcase == "FIRESTOP"	  
-       FirestopComprehensiveJob.reporter_class.new.comprehensive_report(@owner, @model_name, @address1, @address2, @csz, @facility_type,
-      @tech, @group_name, @facility_name, @facility_id, @with_picture)
-    elsif @service.upcase == "DAMPER" && @report_type.upcase == "COMPREHENSIVE"
-       DamperComprehensive.reporter_class.new.report(@owner, @model_name, @address1, @address2, @csz, @facility_type, @tech, @group_name,
-       @facility_name, @facility_id, @with_picture) 
-    elsif @service.upcase == "DAMPER" && @report_type.upcase == "STATEMENT"
-       DamperStatementJob.reporter_class.new.report(@owner, @model_name, @address1, @address2, @csz, @facility_type, @tech, @group_name,
-       @facility_name, @facility_id, @with_picture)            
-
+    if @service.upcase == "FIRESTOP"	
+       if @report_type.upcase == "STATEMENT"
+	        FirestopFacilityJob.reporter_class.new.statement_report(@owner, @model_name, @address1, @address2, @csz, @facility_type,
+          @tech, @group_name, @facility_name, @facility_id, @with_picture, @report_type)      
+       else
+	        FirestopFacilityJob.reporter_class.new.comprehensive_report(@owner, @model_name, @address1, @address2, @csz, @facility_type,
+          @tech, @group_name, @facility_name, @facility_id, @with_picture, @report_type)      
+       end	       
+    elsif @service.upcase == "DAMPER"
+      if @report_type.upcase == "STATEMENT"
+         DamperComprehensive.reporter_class.new.report(@owner, @model_name, @address1, @address2, @csz, @facility_type, @tech, @group_name,
+         @facility_name, @facility_id, @with_picture) 
+      else
+         DamperComprehensive.reporter_class.new.report(@owner, @model_name, @address1, @address2, @csz, @facility_type, @tech, @group_name,
+         @facility_name, @facility_id, @with_picture) 
+      end  
     end   
   end	  
 
