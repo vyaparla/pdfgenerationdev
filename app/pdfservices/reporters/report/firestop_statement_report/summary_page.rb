@@ -36,11 +36,13 @@ module FirestopStatementReport
       pdf.fill_color '202020'
       pdf.move_down 12
       pdf.font_size 10
-      @total_issue = Lsspdfasset.where(:u_facility_id => @job.u_facility_id, :u_report_type => ["FIRESTOPSURVEY" ,"FIRESTOPINSTALLATION"], :u_delete => false).collect(&:u_issue_type).count
-      @issue_types = Lsspdfasset.select(:u_issue_type, :u_service_type).where(:u_facility_id => @job.u_facility_id,  :u_report_type => ["FIRESTOPSURVEY" ,"FIRESTOPINSTALLATION"],  :u_delete => false).group(["u_service_type"]).count(:u_service_type)
+      get_ids = @job.uniq_records(@job.u_facility_id)
+      
+      @total_issue = Lsspdfasset.select(:u_issue_type).where(:id => get_ids).collect(&:u_issue_type).count
+      @issue_types = Lsspdfasset.select(:u_issue_type, :u_service_type).where(:id => get_ids).group(["u_service_type"]).count(:u_service_type)
       @issue_fixed_on_site = 0
       @issue_survey_only = 0
-      @issue_types = Lsspdfasset.select(:u_issue_type, :u_service_type).where(:u_facility_id => @job.u_facility_id,  :u_report_type => ["FIRESTOPSURVEY" ,"FIRESTOPINSTALLATION"], :u_delete => false).group(["u_service_type"]).count(:u_service_type)      
+      @issue_types = Lsspdfasset.select(:u_issue_type, :u_service_type).where(:id => get_ids).group(["u_service_type"]).count(:u_service_type)      
       @issue_types.each do |key, value|
         if key == "Fixed On Site"
           @issue_fixed_on_site = value
@@ -87,7 +89,8 @@ module FirestopStatementReport
         pdf.font_size 10
         survey_issue_summary = []
         survey_issue_summary << ["Issues by Category", "Count", "%"]
-        @firestop_survey_summary = Lsspdfasset.select(:u_issue_type).where(:u_facility_id => @job.u_facility_id, :u_report_type => ["FIRESTOPSURVEY" ,"FIRESTOPINSTALLATION"], :u_delete => false).group(["u_issue_type"]).count(:u_issue_type)
+	get_ids = @job.uniq_records(@job.u_facility_id)
+        @firestop_survey_summary = Lsspdfasset.select(:u_issue_type).where(:id => get_ids).group(["u_issue_type"]).count(:u_issue_type)
         @firestop_survey_issue_count = 0
         @firestop_survey_summary.each do |key, value|
           @firestop_survey_issue_count += value        
@@ -113,4 +116,18 @@ module FirestopStatementReport
       FirestopStatementReport::GraphPage.new(@job).write(pdf)
     end  
   end
+
+  def uniq_records(facility_id)
+    get_data = Lsspdfasset.select(:id, :u_tag, :u_report_type).where( :u_facility_id => facility_id, :u_report_type => ["FIRESTOPINSTALLATION", "FIRESTOPSURVEY"], :u_delete => false).group(["u_report_type", "u_tag"]).order('updated_at desc').count(:u_tag)
+    repar_ids = []
+    get_data.each do |key,val|
+        if val > 1
+         repar_ids << Lsspdfasset.select(:id).where(:u_facility_id => facility_id, :u_tag =>key[1], :u_report_type => key[0], :u_delete => false).order('updated_at desc').first
+        else
+         repar_ids << Lsspdfasset.select(:id).where(:u_facility_id => facility_id, :u_tag =>key[1], :u_report_type => key[0], :u_delete => false).order('updated_at desc').first
+        end
+      end
+     ids = repar_ids.collect(&:id)
+  end
+
 end
