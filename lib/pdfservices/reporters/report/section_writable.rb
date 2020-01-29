@@ -34,7 +34,8 @@ module Report
         report_type = ["DAMPERREPAIR", "DAMPERINSPECTION"]
       else
         report_type = ["FIRESTOPSURVEY" ,"FIRESTOPINSTALLATION"]
-      end 
+      end
+
       @statement_records ||= @job.statement_building_records(@building, @job.u_facility_id, report_type)
       #@records = Lsspdfasset.where(:u_building => building, :u_service_id => job.u_service_id)
     end
