@@ -39,11 +39,11 @@ class ReportGeneration
        end	       
     elsif @service.upcase == "DAMPER"
       if @report_type.upcase == "STATEMENT"
-         DamperComprehensive.reporter_class.new.report(@owner, @model_name, @address1, @address2, @csz, @facility_type, @tech, @group_name,
-         @facility_name, @facility_id, @with_picture) 
+         DamperStatementJob.reporter_class.new.statement_report(@owner, @model_name, @address1, @address2, @csz, @facility_type, @tech, @group_name,
+         @facility_name, @facility_id, @with_picture, @report_type) 
       else
-         DamperComprehensive.reporter_class.new.report(@owner, @model_name, @address1, @address2, @csz, @facility_type, @tech, @group_name,
-         @facility_name, @facility_id, @with_picture) 
+         DamperComprehensive.reporter_class.new.comprehensive_report(@owner, @model_name, @address1, @address2, @csz, @facility_type, @tech, @group_name,
+         @facility_name, @facility_id, @with_picture, @report_type) 
       end  
     end   
   end	  

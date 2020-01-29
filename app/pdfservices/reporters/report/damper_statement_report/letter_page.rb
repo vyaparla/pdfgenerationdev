@@ -20,7 +20,7 @@ module DamperStatementReport
        # draw_letter_title(pdf)
        # draw_letter_page_content(pdf)
 
-      Report::Letter.new(@job, @model, @address1, @address2, @csz, @facility_type, :damper_comprehensive_report, @tech).draw(pdf)
+      Report::Letter.new(@job, @model, @address1, @address2, @csz, @facility_type, :damper_statement_report, @tech).draw(pdf)
     end  
 
     private

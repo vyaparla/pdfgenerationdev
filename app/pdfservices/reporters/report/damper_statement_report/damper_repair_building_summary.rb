@@ -1,6 +1,6 @@
 module DamperStatementReport
   class DamperRepairBuildingSummary
-  	include Report::DamperComprehensiveRepairSummaryDrawable
+  	include Report::DamperStatementSummaryDrawable
 
     def initialize(owner, building)
       @owner = owner

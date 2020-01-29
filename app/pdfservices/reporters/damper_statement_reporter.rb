@@ -1,14 +1,12 @@
 class DamperStatementReporter < Reporter
 
-  def report(job, model_name, address1, address2, csz, facility_type, tech, group_name, 
-    facility_name, facility_id, with_picture=true)
-
-     puts "***********************In DamperStatementReporter"
+  def statement_report(job, model_name, address1, address2, csz, facility_type, tech, group_name, 
+    facility_name, facility_id, with_picture=true, report_type)
 
     DamperStatementReport::GraphGenerator.new(job).generate
   
-  	generate(job.full_comprehensive_report_path(with_picture, model_name)) do |pdf|
-  	  Report::CoverPage.new(job, model_name, address1, address2, csz, facility_name, tech ).write(pdf)
+  	generate(job.full_facilitywise_report_path(with_picture, model_name, report_type)) do |pdf|
+  	  Report::CoverPage.new(job, model_name="Damper Statement", address1, address2, csz, facility_name, tech ).write(pdf)
   	  DamperStatementReport::LetterPage.new(job, model_name, address1, address2, csz, facility_type, 
       facility_name, tech).write(pdf)
       DamperStatementReport::ProjectSummaryPage.new(job, tech).write(pdf)

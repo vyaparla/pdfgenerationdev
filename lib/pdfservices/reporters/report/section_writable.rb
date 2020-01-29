@@ -29,6 +29,16 @@ module Report
       #@records = Lsspdfasset.where(:u_building => building, :u_service_id => job.u_service_id)
     end
 
+    def statement_records
+      if (@job.u_report_type == "DAMPERREPAIR" || @job.u_report_type ==  "DAMPERINSPECTION")
+        report_type = ["DAMPERREPAIR", "DAMPERINSPECTION"]
+      else
+        report_type = ["FIRESTOPSURVEY" ,"FIRESTOPINSTALLATION"]
+      end 
+      @statement_records ||= @job.statement_building_records(@building, @job.u_facility_id, report_type)
+      #@records = Lsspdfasset.where(:u_building => building, :u_service_id => job.u_service_id)
+    end
+
     def building_section
       @building_section = @building
     end

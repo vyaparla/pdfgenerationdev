@@ -61,6 +61,8 @@ module Report
         pdf.text("<b><i>Damper Comprehensive Report</i></b>", :inline_format => true)
       elsif @model_name == "Firestop Comprehensive"
         pdf.text("<b><i>Firestop Comprehensive Report</i></b>", :inline_format => true)
+      elsif @model_name == "Damper Statement"
+        pdf.text("<b><i>Damper Statement Report</i></b>", :inline_format => true)  
       end
       pdf.move_down 25
     end

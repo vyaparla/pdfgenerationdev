@@ -9,7 +9,7 @@ module DamperStatementReport
 
     def write(pdf)
       super
-      Report::DamperComprehensiveProjectSummary.new(@job).draw(pdf)
+      Report::DamperStatementProjectSummary.new(@job).draw(pdf)
     end
   end
 end

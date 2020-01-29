@@ -44,6 +44,12 @@ class Lsspdfasset < ActiveRecord::Base
     Lsspdfasset.where(:u_building => building, :u_facility_id => facility_id, :u_report_type => report_type, :u_delete => false).order('updated_at desc')
   end
 
+  def statement_building_records(building, facility_id, report_type)
+    records = find_statement_records(building, facility_id, report_type)
+    Lsspdfasset.where(:id => records).uniq.order('updated_at desc')
+    #Lsspdfasset.where(:u_building => building, :u_facility_id => facility_id, :u_report_type => report_type, :u_delete => false).order('updated_at desc')
+  end
+
 
   def full_report_path(with_picture=true)
      report_name  = (with_picture == "true" || with_picture == true) ? "inspection_report.pdf" :  "inspection_report_without_picture.pdf"	  
@@ -151,5 +157,18 @@ class Lsspdfasset < ActiveRecord::Base
   def graph_path
     File.join(Rails.root, %w(public content pdfgraph graphs), "#{id}")
   end
+
+  def find_statement_records(building, facility_id, report_type)
+    get_all = Lsspdfasset.select(:id, :u_tag).where(:u_building => building, :u_facility_id => facility_id, :u_report_type => report_type, :u_delete => false).where.not(u_type: "").group(["u_building","u_tag"]).order('updated_at desc').count(:u_tag)
+    repar_ids = []
+    get_all.each do |key,val|
+        if val > 1
+         repar_ids << Lsspdfasset.select(:id).where(:u_building => building, :u_facility_id => facility_id, :u_tag =>key[1], :u_report_type => report_type, :u_delete => false).where.not(u_type: "").order('updated_at desc').first
+        else
+         repar_ids << Lsspdfasset.select(:id).where(:u_building => building, :u_facility_id => facility_id, :u_tag =>key[1], :u_report_type => report_type, :u_delete => false).where.not(u_type: "").order('updated_at desc').first
+        end
+      end  
+     ids = repar_ids.collect(&:id)
+  end  
 
 end
