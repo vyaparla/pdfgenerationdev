@@ -148,9 +148,9 @@ class Lsspdfasset < ActiveRecord::Base
     repar_ids = []
     get_data.each do |key,val|
         if val > 1
-         repar_ids << Lsspdfasset.select(:id).where(:u_facility_id => facility_id, :u_tag =>key[1], :u_report_type => key[0], :u_delete => false).order('updated_at desc').first
+         repar_ids << Lsspdfasset.select(:id).where(:u_facility_id => facility_id, :u_tag =>key[1], :u_report_type => ["FIRESTOPINSTALLATION", "FIRESTOPSURVEY"], :u_delete => false).order('updated_at desc').first
         else
-         repar_ids << Lsspdfasset.select(:id).where(:u_facility_id => facility_id, :u_tag =>key[1], :u_report_type => key[0], :u_delete => false).order('updated_at desc').first
+         repar_ids << Lsspdfasset.select(:id).where(:u_facility_id => facility_id, :u_tag =>key[1], :u_report_type => ["FIRESTOPINSTALLATION", "FIRESTOPSURVEY"], :u_delete => false).order('updated_at desc').first
         end
       end
      ids = repar_ids.collect(&:id)
@@ -176,9 +176,9 @@ class Lsspdfasset < ActiveRecord::Base
     repar_ids = []
     get_all.each do |key,val|
         if val > 1
-         repar_ids << Lsspdfasset.select(:id).where(:u_building => building, :u_facility_id => facility_id, :u_tag =>key[1], :u_report_type => key[0], :u_delete => false).order('updated_at desc').first
+         repar_ids << Lsspdfasset.select(:id).where(:u_building => building, :u_facility_id => facility_id, :u_tag =>key[1], :u_report_type => report_type, :u_delete => false).order('updated_at desc').first
         else
-         repar_ids << Lsspdfasset.select(:id).where(:u_building => building, :u_facility_id => facility_id, :u_tag =>key[1], :u_report_type => key[0], :u_delete => false).order('updated_at desc').first
+         repar_ids << Lsspdfasset.select(:id).where(:u_building => building, :u_facility_id => facility_id, :u_tag =>key[1], :u_report_type => report_type, :u_delete => false).order('updated_at desc').first
         end
       end
      ids = repar_ids.collect(&:id)
