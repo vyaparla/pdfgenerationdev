@@ -251,8 +251,12 @@ module Report
     end
 
     def facility_summary_table_data
-     @damper_repair = Lsspdfasset.select(:u_building, :u_dr_passed_post_repair).where(:u_facility_id => @owner.u_facility_id, :u_report_type => "DAMPERREPAIR", :u_delete => false).where.not(u_type: "").group(["u_building", "u_dr_passed_post_repair"]).count(:u_dr_passed_post_repair)
-     @damper_inspection = Lsspdfasset.select(:u_building, :u_status).where(:u_facility_id => @owner.u_facility_id, :u_report_type => "DAMPERINSPECTION", :u_delete => false).where.not(u_type: "").group(["u_building", "u_status"]).count(:u_status)
+
+     repair_records = find_uniq_assets(@owner, "DAMPERREPAIR")
+     inspection_records = find_uniq_assets(@owner, "DAMPERINSPECTION")
+
+     @damper_repair = Lsspdfasset.select(:u_building, :u_dr_passed_post_repair).where(:id => repair_records).where.not(u_type: "").group(["u_building", "u_dr_passed_post_repair"]).count(:u_dr_passed_post_repair)
+     @damper_inspection = Lsspdfasset.select(:u_building, :u_status).where(:id => inspection_records, :u_report_type => "DAMPERINSPECTION", :u_delete => false).where.not(u_type: "").group(["u_building", "u_status"]).count(:u_status)
 
       new_array = @damper_repair.to_a + @damper_inspection.to_a
       status_counts = new_array.group_by{|i| i[0]}.map{|k,v| [k, v.map(&:last).sum] } 
