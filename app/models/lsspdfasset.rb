@@ -156,6 +156,18 @@ class Lsspdfasset < ActiveRecord::Base
      ids = repar_ids.collect(&:id)
   end
 
+  def unique_statement_records(facility_id, report_type)
+    get_all = Lsspdfasset.select(:id, :u_tag, :u_report_type).where(:u_facility_id => facility_id, :u_report_type => report_type, :u_delete => false).group(["u_report_type", "u_tag"]).order('updated_at desc').count(:u_tag)
+    repar_ids = []
+    get_all.each do |key,val|
+        if val > 1
+         repar_ids << Lsspdfasset.select(:id).where(:u_facility_id => facility_id, :u_tag =>key[1], :u_report_type => report_type, :u_delete => false).order('updated_at desc').first
+        else
+         repar_ids << Lsspdfasset.select(:id).where(:u_facility_id => facility_id, :u_tag =>key[1], :u_report_type => report_type, :u_delete => false).order('updated_at desc').first
+        end
+      end
+     ids = repar_ids.collect(&:id)
+  end
 
   private
 
