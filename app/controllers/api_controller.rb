@@ -309,7 +309,7 @@ class ApiController < ApplicationController
                             :sz => 20,
                             :alignment => { :horizontal => :center, :vertical => :center }, :font_name => 'Calibri'
 
-        wb.add_worksheet(name: "Firestop Statement Of Condition Report") do |sheet|
+        wb.add_worksheet(name: "Firestop Statement Of Condition") do |sheet|
         sheet.add_image(:image_src => img_path, :start_at => [0, 0], :width => 120, :height => 70,  :noSelect => true, :noMove => true, :rowOff => 0, :colOff => 0)
         sheet.add_row ["", "Firestop Statement Of Condition Report", "", "", "", "", ""], :style => title_row, :height => 55
         sheet.merge_cells ("B1:E1")
@@ -347,7 +347,7 @@ class ApiController < ApplicationController
                             :sz => 8,
                             :alignment => { :horizontal => :left, :wrap_text => true, :vertical => :top }, :font_name => 'Calibri'
 
-        wb.add_worksheet(name: "Damper Statement Of Condition Report") do |sheet|
+        wb.add_worksheet(name: "Damper Statement Of Condition") do |sheet|
         sheet.add_image(:image_src => img_path, :start_at => [0, 0], :width => 120, :height => 70,  :noSelect => true, :noMove => true,  :rowOff => 0, :colOff => 0)
         sheet.add_row ["", "Damper Statement Of Condition Report", "", damper_inspection_para, "", "", "", "", "", "", "", ""], :style => [title_row,title_row,title_row,title_desc,title_desc, title_desc, title_desc, title_desc, title_desc, title_desc, title_desc, title_desc] , :height => 55
         sheet.merge_cells ("B1:C1")

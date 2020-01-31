@@ -45,7 +45,7 @@ module Report
       #   pdf.move_down 25
       # end
       pdf.move_down 300
-      pdf.font_size 30
+      pdf.font_size 28
       
       if @model_name == "DAMPERINSPECTION"
         pdf.text("<b><i>Damper Inspection Report</i></b>", :inline_format => true)
