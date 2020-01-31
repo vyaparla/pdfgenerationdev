@@ -229,7 +229,7 @@ module FirestopStatementReport
     end
 
     def title
-      'Firestop Statement Report'
+      'Firestop Statement Of Condition Report'
     end
   end
 end

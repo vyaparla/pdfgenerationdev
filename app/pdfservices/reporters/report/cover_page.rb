@@ -62,9 +62,9 @@ module Report
       elsif @model_name == "Firestop Comprehensive"
         pdf.text("<b><i>Firestop Comprehensive Report</i></b>", :inline_format => true)
       elsif @model_name == "Damper Statement"
-        pdf.text("<b><i>Damper Statement Report</i></b>", :inline_format => true)  
+        pdf.text("<b><i>Damper Statement Of Condition Report</i></b>", :inline_format => true)  
       elsif @model_name == "Firestop Statement"
-        pdf.text("<b><i>Firestop Statement Report</i></b>", :inline_format => true)
+        pdf.text("<b><i>Firestop Statement Of Condition Report</i></b>", :inline_format => true)
 	
       end
       pdf.move_down 25

@@ -309,9 +309,9 @@ class ApiController < ApplicationController
                             :sz => 20,
                             :alignment => { :horizontal => :center, :vertical => :center }, :font_name => 'Calibri'
 
-        wb.add_worksheet(name: "Firestop Comprehensive  List") do |sheet|
+        wb.add_worksheet(name: "Firestop Statement Of Condition Report") do |sheet|
         sheet.add_image(:image_src => img_path, :start_at => [0, 0], :width => 120, :height => 70,  :noSelect => true, :noMove => true, :rowOff => 0, :colOff => 0)
-        sheet.add_row ["", "Firestop Statement List", "", "", "", "", ""], :style => title_row, :height => 55
+        sheet.add_row ["", "Firestop Statement Of Condition Report", "", "", "", "", ""], :style => title_row, :height => 55
         sheet.merge_cells ("B1:E1")
         sheet.add_row ["Issue #", "Facility", "Building", "Floor", "Location", "Barrier Type", "Penetration Type", "Issue", "Corrected On Site", "Suggested Corrective Action", "Corrective Action/UL System", "Date", "Technician"] , :style => header_row
         i = 1
@@ -347,9 +347,9 @@ class ApiController < ApplicationController
                             :sz => 8,
                             :alignment => { :horizontal => :left, :wrap_text => true, :vertical => :top }, :font_name => 'Calibri'
 
-        wb.add_worksheet(name: "Damper Statement List") do |sheet|
+        wb.add_worksheet(name: "Damper Statement Of Condition Report") do |sheet|
         sheet.add_image(:image_src => img_path, :start_at => [0, 0], :width => 120, :height => 70,  :noSelect => true, :noMove => true,  :rowOff => 0, :colOff => 0)
-        sheet.add_row ["", "Damper Comprehensive List", "", damper_inspection_para, "", "", "", "", "", "", "", ""], :style => [title_row,title_row,title_row,title_desc,title_desc, title_desc, title_desc, title_desc, title_desc, title_desc, title_desc, title_desc] , :height => 55
+        sheet.add_row ["", "Damper Statement Of Condition Report", "", damper_inspection_para, "", "", "", "", "", "", "", ""], :style => [title_row,title_row,title_row,title_desc,title_desc, title_desc, title_desc, title_desc, title_desc, title_desc, title_desc, title_desc] , :height => 55
         sheet.merge_cells ("B1:C1")
         sheet.merge_cells ("D1:L1")
         sheet.add_row ["Damper #", "Facility", "Building", "Floor", "Damper Location", "Damper Type", "Status", "Deficiencies", "Repair Action Performed", "Subsequent Failure Reason", "Technician", "Date"] , :style => header_row
