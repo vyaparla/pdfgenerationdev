@@ -15,8 +15,9 @@ module DamperStatementReport
   private
 
     def generate_dr_building_graph
-
-      @dr_buildingInfo = Lsspdfasset.select(:u_building).where(u_facility_name: @job.u_facility_name, u_report_type: ["DAMPERREPAIR" ,"DAMPERINSPECTION"], :u_delete => false).where.not(u_type: "").group(["u_building"]).count(:u_type) if !@job.u_facility_name.blank?
+       report_type = ["DAMPERREPAIR" ,"DAMPERINSPECTION"]
+       get_ids = @job.unique_statement_records(@job.u_facility_id, report_type)
+      @dr_buildingInfo = Lsspdfasset.select(:u_building).where(id: get_ids).where.not(u_type: "").group(["u_building"]).count(:u_type) if !@job.u_facility_name.blank?
       @dr_building_graph = []
       @dr_graph_count = 0
       @dr_buildingInfo.each do |key, value|
@@ -30,7 +31,9 @@ module DamperStatementReport
     end
 
     def generate_dr_type_graph
-      @dr_typeRecords = Lsspdfasset.select(:u_type).where(u_facility_name: @job.u_facility_name, u_report_type: ["DAMPERREPAIR" ,"DAMPERINSPECTION"], :u_delete => false).where.not(u_type: "").group(["u_type"]).order("CASE WHEN u_type = 'FD' THEN '1' WHEN u_type = 'SD' THEN '2' ELSE '3' END").count(:u_type)
+       report_type = ["DAMPERREPAIR" ,"DAMPERINSPECTION"]
+       get_ids = @job.unique_statement_records(@job.u_facility_id, report_type)
+      @dr_typeRecords = Lsspdfasset.select(:u_type).where(id: get_ids).where.not(u_type: "").group(["u_type"]).order("CASE WHEN u_type = 'FD' THEN '1' WHEN u_type = 'SD' THEN '2' ELSE '3' END").count(:u_type)
       @dr_type_graph = []      
       @dr_type_graph_count = 0
       @dr_typeRecords.each do |key, value|
@@ -52,7 +55,9 @@ module DamperStatementReport
     end
 
     def generate_dr_result_graph
-      @dr_resultRecords = Lsspdfasset.select(:u_dr_passed_post_repair).where(u_facility_name: @job.u_facility_name, u_report_type: ["DAMPERREPAIR" ,"DAMPERINSPECTION"], :u_delete => false).group(["u_dr_passed_post_repair"]).order("CASE WHEN u_dr_passed_post_repair = 'PASS' THEN '1' WHEN u_dr_passed_post_repair = 'Fail' THEN '2' ELSE '3' END").count(:u_dr_passed_post_repair)
+      report_type = ["DAMPERREPAIR" ,"DAMPERINSPECTION"]
+      get_ids = @job.unique_statement_records(@job.u_facility_id, report_type)
+      @dr_resultRecords = Lsspdfasset.select(:u_dr_passed_post_repair).where(id: get_ids).group(["u_dr_passed_post_repair"]).order("CASE WHEN u_dr_passed_post_repair = 'PASS' THEN '1' WHEN u_dr_passed_post_repair = 'Fail' THEN '2' ELSE '3' END").count(:u_dr_passed_post_repair)
       @dr_result_graph = []
       @dr_result_graph_count = 0
       @dr_resultRecords.each do |key, value|

@@ -10,7 +10,7 @@ module DamperStatementReport
 
     def write(pdf)
       super
-       DamperRepairBuildingSummary.new(@job, @building).draw(pdf)
+       DamperStatementBuildingSummary.new(@job, @building).draw(pdf)
     end
     
   private

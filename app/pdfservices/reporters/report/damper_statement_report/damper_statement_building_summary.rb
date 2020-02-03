@@ -1,5 +1,5 @@
 module DamperStatementReport
-  class DamperRepairBuildingSummary
+  class DamperStatementBuildingSummary
   	include Report::DamperStatementSummaryDrawable
 
     def initialize(owner, building)
