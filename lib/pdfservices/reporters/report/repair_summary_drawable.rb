@@ -183,7 +183,14 @@ module Report
       @floorInfo.each do |resultInfo|
         @damperTotal = resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"]
         @damperGrandtotal = $ptotal + $ftotal + $natotal
-        @damperPer = 0 #'%.2f%' % ((100 * @damperTotal) / (@damperGrandtotal))
+       
+        if  @damperGrandtotal == 0
+            @damperPer = '0.00%'
+        else
+           @damperPer = '%.2f%' % ((100 * @damperTotal) / (@damperGrandtotal))
+        end 
+
+       # @damperPer = 0 #'%.2f%' % ((100 * @damperTotal) / (@damperGrandtotal))
         #@damperPer = '%.2f%' % ((resultInfo["Pass"] * 100) / (resultInfo["FSD"] + resultInfo["FD"] + resultInfo["SD"]))
         @final_table_data << [resultInfo["floor"], resultInfo["FD"], resultInfo["SD"], resultInfo["FSD"], resultInfo["Pass"], resultInfo["Fail"], resultInfo["NA"],  resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"], @damperPer]
       end
