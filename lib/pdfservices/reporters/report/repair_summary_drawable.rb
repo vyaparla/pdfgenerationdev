@@ -1,7 +1,7 @@
 module Report
   module RepairSummaryDrawable
 
-  	def draw(pdf)
+    def draw(pdf)
       draw_title(pdf, title)
       Report::Table.new(summary_table_content).draw(pdf)
       pdf.move_down 30
@@ -34,9 +34,6 @@ module Report
     end
 
     def table_column_headings(heading)
-      # [column_heading(heading)] +
-      # @owner.damper_types.map { |type| Damper.damper_types[type].capitalize } +
-      # %i(pass fail na total_dampers).map { |k| column_heading(k) }
       [column_heading(heading)] +
       ["Fire", "Smoke", "Combination"] +
       %i(pass fail na total_dampers damper_per).map { |k| column_heading(k)}
@@ -51,7 +48,7 @@ module Report
     end
     
     def summary_table_data
-      @buildingInfo = Lsspdfasset.select(:u_building, :u_floor, :u_type).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_type"]).order(:u_floor).count(:u_type)
+      @buildingInfo = Lsspdfasset.select(:u_building, :u_floor, :u_type, :u_other_floor).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_type", "u_other_floor"]).order(:u_floor).count(:u_type)
       @floorInfo = []
 
       @buildingInfo.each do |key,value|
@@ -59,7 +56,8 @@ module Report
         if @floorInfo.length == 0
           
           floor_json["building"] = key[0]
-          floor_json["floor"] = key[1].to_i
+	  floor_data = key[1] == "other" ? key[3] : key[1]
+          floor_json["floor"] = floor_data
 
           if key[2] == "FSD"
             floor_json["FSD"] = value
@@ -98,19 +96,19 @@ module Report
         else
           @boolean = 0
           @floorInfo.each do |info|
-            @damperType = key[2]
-            if info.has_key?(key[2])
-              if info["floor"] == key[1].to_i
-                info[key[2]] = value
+            @damperType = key[1]
+            if info.has_key?(key[1])
+              if info["floor"] == key[1]
+                info[key[1]] = value
                 @boolean = 1
               end
             end
           end
 
           if @boolean == 0
-            #floor_json = {}
             floor_json["building"] = key[0]
-            floor_json["floor"] = key[1].to_i
+            floor_data = key[1] == "other" ? key[3] : key[1]
+            floor_json["floor"] = floor_data
             if key[2] == "FSD"
               floor_json["FSD"] = value
               floor_json["FD"] = 0

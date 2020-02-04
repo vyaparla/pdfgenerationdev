@@ -1,7 +1,7 @@
 module Report
   module DamperStatementSummaryDrawable
 
-  	def draw(pdf)
+    def draw(pdf)
       draw_title(pdf, title)
       Report::Table.new(summary_table_content).draw(pdf)
       pdf.move_down 30
@@ -34,9 +34,6 @@ module Report
     end
 
     def table_column_headings(heading)
-      # [column_heading(heading)] +
-      # @owner.damper_types.map { |type| Damper.damper_types[type].capitalize } +
-      # %i(pass fail na total_dampers).map { |k| column_heading(k) }
       [column_heading(heading)] +
       ["Fire", "Smoke", "Combination"] +
       %i(pass fail na removed total_dampers damper_per).map { |k| column_heading(k)}
@@ -53,17 +50,16 @@ module Report
     def summary_table_data
       report_type = ["DAMPERREPAIR" ,"DAMPERINSPECTION"]	    
       get_ids = @owner.find_statement_records(@building, @owner.u_facility_id, report_type)	    
-      @buildingInfo = Lsspdfasset.select(:u_building, :u_floor, :u_type).where(:id => get_ids).where.not(u_type: "").group(["u_building", "u_floor", "u_type"]).order(:u_floor).count(:u_type)
-
+      @buildingInfo = Lsspdfasset.select(:u_building, :u_floor, :u_type, :u_other_floor).where(:id => get_ids).where.not(u_type: "").group(["u_building", "u_floor", "u_type", "u_other_floor"]).order(:u_floor).count(:u_type)
       @floorInfo = []
 
       @buildingInfo.each do |key,value|
         floor_json = {}
 
         if @floorInfo.length == 0
-         
           floor_json["building"] = key[0]
-          floor_json["floor"] = key[1].to_i
+	  floor_data = key[1] == "other" ? key[3] : key[1]
+          floor_json["floor"] = floor_data
 
           if key[2] == "FSD"
             floor_json["FSD"] = value
@@ -78,10 +74,10 @@ module Report
             floor_json["FD"] = 0
             floor_json["SD"] = value
           end
-
-          @building_repair = Lsspdfasset.select(:u_building, :u_floor, :u_dr_passed_post_repair).where(:id => get_ids, :u_floor => key[1]).where.not(u_type: "").group(["u_building", "u_floor", "u_dr_passed_post_repair"]).count(:u_dr_passed_post_repair)
           
-	  @building_inspection = Lsspdfasset.select(:u_building, :u_floor, :u_status).where(:id => get_ids, :u_floor => key[1]).where.not(u_type: "").group(["u_building", "u_floor", "u_status"]).count(:u_status)
+          @building_repair = Lsspdfasset.select(:u_building, :u_floor, :u_other_floor, :u_dr_passed_post_repair).where(:id => get_ids, :u_floor => key[1]).where.not(u_type: "").group(["u_building", "u_floor", "u_dr_passed_post_repair", "u_other_floor"]).count(:u_dr_passed_post_repair)
+          
+	  @building_inspection = Lsspdfasset.select(:u_building, :u_floor, :u_other_floor, :u_status).where(:id => get_ids, :u_floor => key[1]).where.not(u_type: "").group(["u_building", "u_floor", "u_status", "u_other_floor"]).count(:u_status)
 
           new_array = @building_repair.to_a + @building_inspection.to_a
           status_counts = new_array.group_by{|i| i[0]}.map{|k,v| [k, v.map(&:last).sum] } 
@@ -89,8 +85,8 @@ module Report
           @building_result = status_counts.to_h
 
           @building_result.each do |fstatus, fvalue|
-            if !floor_json.has_key?(fstatus[2])
-                floor_json[fstatus[2]] = fvalue
+            if !floor_json.has_key?(fstatus[3])
+                floor_json[fstatus[3]] = fvalue
             end
           end
 
@@ -109,24 +105,23 @@ module Report
           if !floor_json.has_key?("Removed")
             floor_json["Removed"] = 0
           end       
-          
           @floorInfo.push(floor_json)
         else
           @boolean = 0
           @floorInfo.each do |info|
-            @damperType = key[2]
-            if info.has_key?(key[2])
-              if info["floor"] == key[1].to_i
-                info[key[2]] = value
+            @damperType = key[1]
+            if info.has_key?(key[1])
+              if info["floor"] == key[1]
+                info[key[1]] = value
                 @boolean = 1
               end
             end
           end
 
           if @boolean == 0
-            #floor_json = {}
             floor_json["building"] = key[0]
-            floor_json["floor"] = key[1].to_i
+	    floor_data = key[1] == "other" ? key[3] : key[1]
+            floor_json["floor"] = floor_data
             if key[2] == "FSD"
               floor_json["FSD"] = value
               floor_json["FD"] = 0
@@ -148,7 +143,6 @@ module Report
             status_count_result = new_array_result.group_by{|i| i[0]}.map{|k,v| [k, v.map(&:last).sum] } 
      
             @building_result = status_count_result.to_h
-            #@building_result = Lsspdfasset.select(:u_building, :u_floor, :u_dr_passed_post_repair).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_floor => key[1], :u_delete => false).group(["u_building", "u_floor", "u_dr_passed_post_repair"]).count(:u_dr_passed_post_repair)
             @building_result_len =  @building_result.length
     
             @building_result.each do |fstatus, fvalue|
