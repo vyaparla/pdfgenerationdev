@@ -87,7 +87,7 @@ module DamperRepairReport
 
       pdf.table([
         [
-          {:content => "<font size='12'><b>FIRE DAMPER REPAIR REPORT</b></font>", :colspan => 3, :width => 225, align: :center },
+          {:content => "<font size='12'><b>DAMPER REPAIR REPORT</b></font>", :colspan => 3, :width => 225, align: :center },
           {:content => "Status:", :colspan => 1, :width => 75, align: :left },
           {:content => status_content, :background_color=> cell_color,:colspan => 1, :width => 105, 
             :align => :center, :text_color => "ffffff" },

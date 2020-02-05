@@ -19,17 +19,22 @@ module DamperStatementReport
       pdf.move_down 20
 
       if @with_picture
+        if @record.u_report_type == "DAMPERREPAIR"
 
-        if @record.u_repair_action_performed == "Damper Repaired"
-          draw_open_after_install_image(pdf)
-          draw_closed_after_install_image(pdf)
-          draw_reopened_after_install_image(pdf)
+          if @record.u_repair_action_performed == "Damper Repaired"
+            draw_open_after_install_image(pdf)
+            draw_closed_after_install_image(pdf)
+            draw_reopened_after_install_image(pdf)
+          else
+            draw_open_after_install_image(pdf)
+            draw_closed_after_install_image(pdf)
+            draw_reopened_after_install_image(pdf)
+            draw_new_install_image(pdf)
+          end
         else
-          draw_open_after_install_image(pdf)
-          draw_closed_after_install_image(pdf)
-          draw_reopened_after_install_image(pdf)
-          draw_new_install_image(pdf)
-        end
+            draw_open_after_install_image(pdf)
+            draw_closed_after_install_image(pdf)
+        end  
       end
     end
 
