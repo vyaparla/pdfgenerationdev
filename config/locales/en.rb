@@ -503,7 +503,7 @@ _____________________________
         },
         damper_comprehensive_report: {
           title: 'Damper Comprehensive Report',
-          content: %(LSS Life Safety Services, LLC, in accordance with The National Fire Protection Association’s (NFPA) Code(s) 80, 105, and 101 repaired and inspected fire and smoke dampers located in %{location_name} during the period of %{work_dates}. The project was managed by %{pm_name}, who is an independent technician and employee of LSS Life Safety Services, LLC, and is not affiliated with any supplier, manufacturer, or distributor of fire dampers, smoke dampers, or affiliated damper components.
+          content: %(LSS Life Safety Services, LLC, in accordance with The National Fire Protection Association’s (NFPA) Code(s) 80, 105, and 101 repaired and/or inspected fire and smoke dampers located in %{location_name} during the period of %{work_dates}. The project was managed by %{pm_name}, who is an independent technician and employee of LSS Life Safety Services, LLC, and is not affiliated with any supplier, manufacturer, or distributor of fire dampers, smoke dampers, or affiliated damper components.
 
 The following report and supporting documentation provide the result of the repair and/or inspection for the dampers that were addressed. This report is intended to describe the location, actions performed and subsequent operability of the dampers for the dates in which LSS Life Safety Services’ representatives performed the repair and/or inspection of the dampers, and is not intended to constitute any warranty as to the continued operation of any damper. 
 
@@ -518,7 +518,7 @@ _____________________________
         },
         damper_statement_report: {
           title: 'Damper Statement Of Condition Report',
-          content: %(LSS Life Safety Services, LLC, in accordance with The National Fire Protection Association’s (NFPA) Code(s) 80, 105, and 101 repaired and inspected fire and smoke dampers located in %{location_name} during the period of %{work_dates}. The project was managed by %{pm_name}, who is an independent technician and employee of LSS Life Safety Services, LLC, and is not affiliated with any supplier, manufacturer, or distributor of fire dampers, smoke dampers, or affiliated damper components.
+          content: %(LSS Life Safety Services, LLC, in accordance with The National Fire Protection Association’s (NFPA) Code(s) 80, 105, and 101 repaired and/or inspected fire and smoke dampers located in %{location_name} during the period of %{work_dates}. The project was managed by %{pm_name}, who is an independent technician and employee of LSS Life Safety Services, LLC, and is not affiliated with any supplier, manufacturer, or distributor of fire dampers, smoke dampers, or affiliated damper components.
 
 The following report and supporting documentation provide the result of the repair and/or inspection for the dampers that were addressed. This report is intended to describe the location, actions performed and subsequent operability of the dampers for the dates in which LSS Life Safety Services’ representatives performed the repair and/or inspection of the dampers, and is not intended to constitute any warranty as to the continued operation of any damper. 
 

@@ -1,8 +1,8 @@
 module DamperComprehensiveReport
   class LetterPage
-  	include Report::InspectionDataPageWritable
+  	include Report::ComprehensiveDataPageWritable
 
-    def initialize(job, model, address1, address2, csz, facility_type,facility_name, tech)
+    def initialize(job, model, address1, address2, csz, facility_type,facility_name, tech, report_type)
       @job = job
       @model = model
       # @group_name = group_name
@@ -12,6 +12,7 @@ module DamperComprehensiveReport
       @address1 = address1
       @address2 = address2
       @csz =  csz
+      @report_type = report_type
 
     end
 
