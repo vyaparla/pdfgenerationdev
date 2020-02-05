@@ -56,47 +56,44 @@ module FirestopStatementReport
       record_time = @record.u_inspected_on.nil? ? @record.u_inspected_on : @record.u_inspected_on.localtime.strftime('%I:%M:%S %p')
       pdf.table([
         [
-          {:content => "<font size='12'><b>#{title.upcase}</b></font>", :colspan => 3, :width => 225, align: :center },
-          {:content => "Current Status:", :colspan => 1, :width => 75, align: :left },
-          {:content => status_content, :background_color=> cell_color,:colspan => 1, :width => 105, 
+          {:content => "<font size='8'><b>#{title.upcase}</b></font>", :colspan => 3, :width => 225, align: :center },
+          {:content => "<font size='8'>Current Status:</font>", :colspan => 1, :width => 75, align: :left },
+          {:content => "<font size='8'>#{status_content}</font>", :background_color=> cell_color,:colspan => 1, :width => 105, 
             :align => :center, :text_color => "ffffff" },
-          {:content => "Issue #<br/><b>#{@record.u_tag}</b>", :colspan => 1, :width => 135, 
+          {:content => "<font size='8'>Issue #<br/><b>#{@record.u_tag}</b></font>", :colspan => 1, :width => 135, 
             :rowspan => 2, align: :right }
         ],
         [  
-          { :content => "<font size='12'>Facility:  #{table_params[:facility]}</font>",
+          { :content => "<font size='8'>Facility:  #{table_params[:facility]}</font>",
             :colspan => 3, :width => 225, align: :left },
-          { :content => "<font size='12'>Floor:  #{table_params[:floor]}</font>", 
+          { :content => "<font size='8'>Floor:  #{table_params[:floor]}</font>", 
             :colspan => 2, :width => 180, align: :left }
         ],
         [
-          { :content => "<font size='12'>Building:  #{table_params[:building]}</font>", 
+          { :content => "<font size='8'>Building:  #{table_params[:building]}</font>", 
             :colspan => 3, :width => 225, :align => :left },
-          { :content => "<font size='12'>Issue Location:  #{table_params[:location]}</font>", 
+          { :content => "<font size='8'>Issue Location:  #{table_params[:location]}</font>", 
             :colspan => 3, :width => 315, align: :left }          
         ],
         [
-          { :content => "<font size='12'>Dept/Area:  #{table_params[:dept_area]}</font>", 
+          { :content => "<font size='8'>Dept/Area:  #{table_params[:dept_area]}</font>", 
             :colspan => 3, :width => 225, align: :left },
           { :content => "", :colspan => 3, :width => 315 }          
         ],
         [
-          { :content => "<font size='12'>Date:</font>", 
-            :colspan => 1, :width => 60, align: :right },
+          { :content => "<font size='8'>Most Recent Date:</font>", 
+            :colspan => 1, :width => 80,  align: :right },
 	   #TODO
-	    { :content => "<font size='11'>#{record_date}</font>",  
-         # { :content => "<font size='11'>#{@record.u_inspected_on}</font>", 
-            :colspan => 1, :width => 75, align: :left }, 
-          { :content => "<font size='12'>Time:</font>", 
-            :colspan => 1, :width => 90, align: :right },
-	 #TODO   
-          { :content => "<font size='11'>#{record_time}</font>", 
-	 #   { :content => "<font size='11'>#{@record.u_inspected_on}</font>",
+	    { :content => "<font size='8'>#{record_date}</font>",  
+            :colspan => 1, :width => 65, align: :left }, 
+          { :content => "<font size='8'>Most Recent Time:</font>", 
+            :colspan => 1, :width =>  80,  align: :right },
+	   { :content => "<font size='8'>#{record_time}</font>", 
+            :colspan => 1, :width => 65, align: :left },
+          { :content => "<font size='8'>LSS Technician</font>", 
             :colspan => 1, :width => 75, align: :left },
-          { :content => "<font size='12'>LSS Technician</font>", 
-            :colspan => 1, :width => 105, align: :left },
-          { :content => "<font size='12'>#{table_params[:technician]}</font>", 
-            :colspan => 1, :width => 135, align: :center }             
+          { :content => "<font size='8'>#{table_params[:technician]}</font>", 
+            :colspan => 1, :width => 105, align: :center }             
         ]
       ], :cell_style => { :inline_format => true })
       pdf.move_down 20
@@ -111,32 +108,32 @@ module FirestopStatementReport
 
        pdf.table([
         [
-          {:content => "<font size='12'><b>ISSUE</b></font>",  :colspan => 1, 
+          {:content => "<font size='8'><b>ISSUE</b></font>",  :colspan => 1, 
             :align => :center, :width => 180 },
-          {:content => "<font size='12'><b>BARRIER TYPE</b></font>", :colspan => 1, 
+          {:content => "<font size='8'><b>BARRIER TYPE</b></font>", :colspan => 1, 
             :align => :center, :width => 180},
-          {:content => "<font size='12'><b>PENETRATION TYPE</b></font>", :colspan => 1,
+          {:content => "<font size='8'><b>PENETRATION TYPE</b></font>", :colspan => 1,
            :align => :center, :width => 180}
         ],
         [  
-          {:content => "<font size='10'>#{@record.u_issue_type}</font>", :colspan => 1, 
+          {:content => "<font size='8'>#{@record.u_issue_type}</font>", :colspan => 1, 
             :align => :left, :width => 180 },
-          {:content => "<font size='10'>#{@record.u_barrier_type}</font>", :colspan => 1, 
+          {:content => "<font size='8'>#{@record.u_barrier_type}</font>", :colspan => 1, 
             :align => :left, :width => 180 },
-          {:content => "<font size='10'>#{@record.u_penetration_type}</font>", 
+          {:content => "<font size='8'>#{@record.u_penetration_type}</font>", 
            :colspan => 1, :align => :left, :width => 180 }
         ],
         [
-          {:content => "<font size='12'><b>CORRECTIVE ACTION / UL SYSTEM</b></font>", 
+          {:content => "<font size='8'><b>CORRECTIVE ACTION / UL SYSTEM</b></font>", 
             :colspan => 1, :align => :center, :width => 180  },
-          {:content => "<font size='12'><b>COMMENT</b></font>", 
+          {:content => "<font size='8'><b>COMMENT</b></font>", 
             :colspan => 2, :align => :center, :width => 360 }          
         ],
         [
-          {:content => "<font size='10'>#{corrective_url}</font>",
+          {:content => "<font size='8'>#{corrective_url}</font>",
            :colspan => 1, :align => :left, :overflow => :shrink_to_fit, :min_font_size => 8,
             :width => 180 },
-          {:content => "<font size='10'></font>", :colspan => 2, :align => :left, 
+          {:content => "<font size='8'></font>", :colspan => 2, :align => :left, 
             :overflow => :shrink_to_fit, :min_font_size => 8,
             :height => 20, :width => 360 },
         ]  
