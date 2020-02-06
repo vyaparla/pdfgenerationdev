@@ -93,7 +93,7 @@ module FirestopComprehensiveReport
 
 
     def draw_issues_by_category(pdf)
-      pdf.bounding_box([325, 414], :width => 250, :height => 220) do
+      pdf.bounding_box([325, 414], :width => 250, :height => 420) do
         pdf.fill_color '202020'      
         pdf.font_size 10
         survey_issue_summary = []
@@ -120,7 +120,7 @@ module FirestopComprehensiveReport
           table.column(2).style {|c| c.align = :center }
         end
       end
-      pdf.move_down 50
+      pdf.move_down 10
       FirestopComprehensiveReport::GraphPage.new(@job).write(pdf)
     end  
   end
