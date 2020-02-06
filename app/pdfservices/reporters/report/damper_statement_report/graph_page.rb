@@ -10,7 +10,7 @@ module DamperStatementReport
 
     def write(pdf)
       super
-      Report::RepairGraphs.new(@job).draw(pdf)
+      Report::DamperStatementGraph.new(@job).draw(pdf)
     end
   end
 end

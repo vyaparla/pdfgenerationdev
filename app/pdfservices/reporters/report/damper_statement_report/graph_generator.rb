@@ -10,6 +10,7 @@ module DamperStatementReport
       generate_dr_building_graph
       generate_dr_type_graph
       generate_dr_result_graph
+      generate_na_reason_graph
     end
 
   private
@@ -63,6 +64,26 @@ module DamperStatementReport
       @dr_resultRecords.each do |key, value|
         @dr_result_graph_count += value
       end
+
+    def generate_na_reason_graph
+      report_type = ["DAMPERREPAIR" ,"DAMPERINSPECTION"]
+      get_ids = @job.unique_statement_records(@job.u_facility_id, report_type)
+      @naRecords = Lsspdfasset.select(:u_non_accessible_reasons).where(id: get_ids).where.not(u_non_accessible_reasons: "").where.not(u_type: "").group(["u_non_accessible_reasons"]).count(:u_non_accessible_reasons)
+      #Rails.logger.debug("NA Records Length : #{@naRecords.length.inspect}")
+      if @naRecords.length != 0
+        #Rails.logger.debug("IF Condition NA Records : #{@naRecords.inspect}")
+        @na_graph = []
+        @na_graph_total = 0
+        @naRecords.each do |key, value|
+          @na_graph_total += value
+        end
+   
+        @naRecords.each do |key1, value1|
+          @na_graph << [key1,  ((value1.to_f * 100) / @na_graph_total)]
+        end
+        dr_generate_pie_graph(I18n.t('ui.graphs.na_reasons.title'), @na_graph, @job.dr_graph_na_reasons_path)
+      end
+    end  
 
       @dr_resultRecords.each do |key1, value1|
         if key1 == "Pass"
