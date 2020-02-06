@@ -59,12 +59,6 @@ module FirestopSurveyReport
                    ["Open Issues to Resolve:", @issue_survey_only, "#{((@issue_survey_only.to_f * 100 ) / @total_issue).round(2)}%"]
                  ]
 
-      # Report::Table.new(overview).draw(pdf) do |formatter|
-      #   formatter.cell[1,0] = { :text_color => '000000' }
-      #   formatter.cell[2,0] = { :text_color => '000000' }
-      #   formatter.cell[3,0] = { :text_color => '000000' }
-      # end
-
       pdf.font_size 10
       pdf.table(overview, header: true) do |table|
         table.row_colors = ['ffffff', 'eaeaea']
@@ -79,7 +73,7 @@ module FirestopSurveyReport
     end
 
     def draw_issues_by_category(pdf)
-      pdf.bounding_box([325, 414], :width => 250, :height => 220) do
+      pdf.bounding_box([325, 414], :width => 250, :height => 420) do
         pdf.fill_color '202020'      
         pdf.font_size 10
         survey_issue_summary = []
@@ -106,7 +100,7 @@ module FirestopSurveyReport
           table.column(2).style {|c| c.align = :center }
         end
       end
-      pdf.move_down 50
+      pdf.move_down 10
       FirestopSurveyReport::GraphPage.new(@job).write(pdf)
     end  
   end
