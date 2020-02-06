@@ -10,7 +10,7 @@ module DamperComprehensiveReport
 
     def write(pdf)
       super
-      Report::RepairGraphs.new(@job).draw(pdf)
+      Report::DamperComprehensiveGraph.new(@job).draw(pdf)
     end
   end
 end
