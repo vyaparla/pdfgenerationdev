@@ -48,7 +48,9 @@ module Report
     end
     
     def summary_table_data
-      @buildingInfo = Lsspdfasset.select(:u_building, :u_floor, :u_type, :u_other_floor).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_type", "u_other_floor"]).order(:u_floor).count(:u_type)
+      #@buildingInfo = Lsspdfasset.select(:u_building, :u_floor, :u_type, :u_other_floor).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_type", "u_other_floor"]).order(:u_floor).count(:u_type)
+
+      @buildingInfo = Lsspdfasset.select(:u_building, :u_floor, :u_type).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_type"]).order(:u_floor).count(:u_type)
       @floorInfo = []
 
       @buildingInfo.each do |key,value|
@@ -72,7 +74,8 @@ module Report
             floor_json["FD"] = 0
             floor_json["SD"] = value
           end
-          @building_result = Lsspdfasset.select(:u_building, :u_floor, :u_dr_passed_post_repair, :u_other_floor).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_dr_passed_post_repair", "u_other_floor"]).count(:u_dr_passed_post_repair)
+          #@building_result = Lsspdfasset.select(:u_building, :u_floor, :u_dr_passed_post_repair, :u_other_floor).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_dr_passed_post_repair", "u_other_floor"]).count(:u_dr_passed_post_repair)
+          @building_result = Lsspdfasset.select(:u_building, :u_floor, :u_dr_passed_post_repair).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_dr_passed_post_repair"]).count(:u_dr_passed_post_repair)
 
           @building_result.each do |fstatus, fvalue|
             if !floor_json.has_key?(fstatus[2])
@@ -123,7 +126,9 @@ module Report
               floor_json["SD"] = value
             end
             
-            @building_result = Lsspdfasset.select(:u_building, :u_floor, :u_dr_passed_post_repair, :u_other_floor).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_floor => key[1], :u_delete => false).group(["u_building", "u_floor", "u_dr_passed_post_repair", "u_other_floor"]).count(:u_dr_passed_post_repair)
+            #@building_result = Lsspdfasset.select(:u_building, :u_floor, :u_dr_passed_post_repair, :u_other_floor).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_floor => key[1], :u_delete => false).group(["u_building", "u_floor", "u_dr_passed_post_repair", "u_other_floor"]).count(:u_dr_passed_post_repair)
+            @building_result = Lsspdfasset.select(:u_building, :u_floor, :u_dr_passed_post_repair).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_floor => key[1], :u_delete => false).group(["u_building", "u_floor", "u_dr_passed_post_repair"]).count(:u_dr_passed_post_repair)
+
             @building_result_len =  @building_result.length
     
             @building_result.each do |fstatus, fvalue|
