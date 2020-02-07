@@ -58,8 +58,9 @@ module Report
 
         if @floorInfo.length == 0
           floor_json["building"] = key[0]
-	  floor_data = key[1] == "other" ? key[3] : key[1]
-          floor_json["floor"] = floor_data
+           floor_json["floor"] = key[1].to_i
+	 # floor_data = key[1] == "other" ? key[3] : key[1]
+          #floor_json["floor"] = floor_data
 
           if key[2] == "FSD"
             floor_json["FSD"] = value
@@ -85,8 +86,9 @@ module Report
           @building_result = status_counts.to_h
 
           @building_result.each do |fstatus, fvalue|
-            if !floor_json.has_key?(fstatus[3])
-                floor_json[fstatus[3]] = fvalue
+            if !floor_json.has_key?(fstatus[2])
+                #floor_json[fstatus[3]] = fvalue
+                floor_json[fstatus[2]] = fvalue
             end
           end
 
@@ -120,8 +122,9 @@ module Report
 
           if @boolean == 0
             floor_json["building"] = key[0]
-	    floor_data = key[1] == "other" ? key[3] : key[1]
-            floor_json["floor"] = floor_data
+            floor_json["floor"] = key[1].to_i
+	          # floor_data = key[1] == "other" ? key[3] : key[1]
+           #  floor_json["floor"] = floor_data
             if key[2] == "FSD"
               floor_json["FSD"] = value
               floor_json["FD"] = 0
