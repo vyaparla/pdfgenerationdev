@@ -34,6 +34,9 @@ module Report
     end
 
     def table_column_headings(heading)
+      # [column_heading(heading)] +
+      # @owner.damper_types.map { |type| Damper.damper_types[type].capitalize } +
+      # %i(pass fail na total_dampers).map { |k| column_heading(k) }
       [column_heading(heading)] +
       ["Fire", "Smoke", "Combination"] +
       %i(pass fail na removed total_dampers damper_per).map { |k| column_heading(k)}
@@ -48,18 +51,18 @@ module Report
     end
     
     def summary_table_data
-      report_type = ["DAMPERREPAIR" ,"DAMPERINSPECTION"]      
-      get_ids = @owner.find_statement_records(@building, @owner.u_facility_id, report_type)     
-      @buildingInfo = Lsspdfasset.select(:u_building, :u_floor, :u_type, :u_other_floor).where(:id => get_ids).where.not(u_type: "").group(["u_building", "u_floor", "u_type", "u_other_floor"]).order(:u_floor).count(:u_type)
+      records = find_uniq_assets(@owner.u_facility_id)
+      @buildingInfo = Lsspdfasset.select(:u_building, :u_floor, :u_type).where(:id => records, :u_report_type => ["DAMPERREPAIR" ,"DAMPERINSPECTION"], :u_building => @building, :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_type"]).order(:u_floor).count(:u_type)
+
       @floorInfo = []
 
       @buildingInfo.each do |key,value|
         floor_json = {}
 
         if @floorInfo.length == 0
+         
           floor_json["building"] = key[0]
-    floor_data = key[1] == "other" ? key[3] : key[1]
-          floor_json["floor"] = floor_data
+          floor_json["floor"] = key[1].to_i
 
           if key[2] == "FSD"
             floor_json["FSD"] = value
@@ -74,10 +77,11 @@ module Report
             floor_json["FD"] = 0
             floor_json["SD"] = value
           end
-          
-          @building_repair = Lsspdfasset.select(:u_building, :u_floor, :u_other_floor, :u_dr_passed_post_repair).where(:id => get_ids, :u_floor => key[1]).where.not(u_type: "").group(["u_building", "u_floor", "u_dr_passed_post_repair", "u_other_floor"]).count(:u_dr_passed_post_repair)
-          
-         @building_inspection = Lsspdfasset.select(:u_building, :u_floor, :u_other_floor, :u_status).where(:id => get_ids, :u_floor => key[1]).where.not(u_type: "").group(["u_building", "u_floor", "u_status", "u_other_floor"]).count(:u_status)
+
+          #records = find_uniq_assets(@owner.u_facility_id)
+
+          @building_repair = Lsspdfasset.select(:u_building, :u_floor, :u_dr_passed_post_repair).where(:id => records, :u_building => @building, :u_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_dr_passed_post_repair"]).count(:u_dr_passed_post_repair)
+          @building_inspection = Lsspdfasset.select(:u_building, :u_floor, :u_status).where(:id => records, :u_building => @building, :u_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_status"]).count(:u_status)
 
           new_array = @building_repair.to_a + @building_inspection.to_a
           status_counts = new_array.group_by{|i| i[0]}.map{|k,v| [k, v.map(&:last).sum] } 
@@ -85,8 +89,8 @@ module Report
           @building_result = status_counts.to_h
 
           @building_result.each do |fstatus, fvalue|
-            if !floor_json.has_key?(fstatus[3])
-                floor_json[fstatus[3]] = fvalue
+            if !floor_json.has_key?(fstatus[2])
+                floor_json[fstatus[2]] = fvalue
             end
           end
 
@@ -105,23 +109,24 @@ module Report
           if !floor_json.has_key?("Removed")
             floor_json["Removed"] = 0
           end       
+          
           @floorInfo.push(floor_json)
         else
           @boolean = 0
           @floorInfo.each do |info|
-            @damperType = key[1]
-            if info.has_key?(key[1])
-              if info["floor"] == key[1]
-                info[key[1]] = value
+            @damperType = key[2]
+            if info.has_key?(key[2])
+              if info["floor"] == key[1].to_i
+                info[key[2]] = value
                 @boolean = 1
               end
             end
           end
 
           if @boolean == 0
+            #floor_json = {}
             floor_json["building"] = key[0]
-      floor_data = key[1] == "other" ? key[3] : key[1]
-            floor_json["floor"] = floor_data
+            floor_json["floor"] = key[1].to_i
             if key[2] == "FSD"
               floor_json["FSD"] = value
               floor_json["FD"] = 0
@@ -136,13 +141,16 @@ module Report
               floor_json["SD"] = value
             end
 
-            @building_repair_result = Lsspdfasset.select(:u_building, :u_floor, :u_dr_passed_post_repair).where(:id => get_ids, :u_floor => key[1]).where.not(u_type: "").group(["u_building", "u_floor", "u_dr_passed_post_repair"]).count(:u_dr_passed_post_repair)
-            @building_inspection_result = Lsspdfasset.select(:u_building, :u_floor, :u_status).where(:id => get_ids, :u_floor => key[1]).where.not(u_type: "").group(["u_building", "u_floor", "u_status"]).count(:u_status)
+             records = find_uniq_assets(@owner.u_facility_id)
+
+            @building_repair_result = Lsspdfasset.select(:u_building, :u_floor, :u_dr_passed_post_repair).where(:id => records, :u_report_type => "DAMPERREPAIR", :u_building => @building, :u_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_dr_passed_post_repair"]).count(:u_dr_passed_post_repair)
+            @building_inspection_result = Lsspdfasset.select(:u_building, :u_floor, :u_status).where(:id => records, :u_report_type => "DAMPERINSPECTION", :u_building => @building, :u_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_status"]).count(:u_status)
 
             new_array_result = @building_repair_result.to_a + @building_inspection_result.to_a
             status_count_result = new_array_result.group_by{|i| i[0]}.map{|k,v| [k, v.map(&:last).sum] } 
      
             @building_result = status_count_result.to_h
+            #@building_result = Lsspdfasset.select(:u_building, :u_floor, :u_dr_passed_post_repair).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_floor => key[1], :u_delete => false).group(["u_building", "u_floor", "u_dr_passed_post_repair"]).count(:u_dr_passed_post_repair)
             @building_result_len =  @building_result.length
     
             @building_result.each do |fstatus, fvalue|
@@ -228,12 +236,7 @@ module Report
         $natotal_damperPer = '%.2f%' %  (($natotal.to_f * 100) / ($ptotal + $ftotal + $natotal + $rmtotal))  
         $rmtotal_damperPer = '%.2f%' %  (($rmtotal.to_f * 100) / ($ptotal + $ftotal + $natotal + $rmtotal))
       end  
-
-
-      # $ptotal_damperPer  = '%.2f%' %  (($ptotal.to_f * 100) / ($ptotal + $ftotal + $natotal))
-      # $ftotal_damperPer  = '%.2f%' %  (($ftotal.to_f * 100) / ($ptotal + $ftotal + $natotal))
-      # $natotal_damperPer = '%.2f%' %  (($natotal.to_f * 100) / ($ptotal + $ftotal + $natotal))
-
+   
       @final_table_data + [['GRAND TOTAL'] + @final_table_data_total]
     end
 
@@ -244,6 +247,20 @@ module Report
        [DamperInspectionReporting.column_heading(:fail), $ftotal_damperPer],
        [DamperInspectionReporting.column_heading(:na), $natotal_damperPer],
        [DamperInspectionReporting.column_heading(:removed), $rmtotal_damperPer]]
+    end
+
+    def find_uniq_assets(owner)
+      get_all = Lsspdfasset.select(:id, :u_tag).where(:u_facility_id => owner, :u_report_type => ["DAMPERREPAIR", "DAMPERINSPECTION"], :u_delete => false).where.not(u_type: "").group(["u_building","u_tag"]).order('updated_at desc').count(:u_tag)
+ 
+      repar_ids = []
+      get_all.each do |key,val|
+        if val > 1
+         repar_ids << Lsspdfasset.select(:id).where(:u_facility_id => owner, :u_tag =>key[1], :u_building => key[0], :u_report_type => ["DAMPERREPAIR", "DAMPERINSPECTION"], :u_delete => false).where.not(u_type: "").order('updated_at desc').first
+        else
+         repar_ids << Lsspdfasset.select(:id).where(:u_facility_id => owner, :u_tag =>key[1], :u_building => key[0], :u_report_type => ["DAMPERREPAIR", "DAMPERINSPECTION"], :u_delete => false).where.not(u_type: "").order('updated_at desc').first
+        end
+      end  
+     ids = repar_ids.collect(&:id)
     end
   end
 end
