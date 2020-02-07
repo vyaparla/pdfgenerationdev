@@ -48,8 +48,8 @@ module Report
     end
     
     def summary_table_data
-      report_type = ["DAMPERREPAIR" ,"DAMPERINSPECTION"]	    
-      get_ids = @owner.find_statement_records(@building, @owner.u_facility_id, report_type)	    
+      report_type = ["DAMPERREPAIR" ,"DAMPERINSPECTION"]      
+      get_ids = @owner.find_statement_records(@building, @owner.u_facility_id, report_type)     
       @buildingInfo = Lsspdfasset.select(:u_building, :u_floor, :u_type, :u_other_floor).where(:id => get_ids).where.not(u_type: "").group(["u_building", "u_floor", "u_type", "u_other_floor"]).order(:u_floor).count(:u_type)
       @floorInfo = []
 
@@ -58,7 +58,7 @@ module Report
 
         if @floorInfo.length == 0
           floor_json["building"] = key[0]
-	  floor_data = key[1] == "other" ? key[3] : key[1]
+    floor_data = key[1] == "other" ? key[3] : key[1]
           floor_json["floor"] = floor_data
 
           if key[2] == "FSD"
@@ -77,7 +77,7 @@ module Report
           
           @building_repair = Lsspdfasset.select(:u_building, :u_floor, :u_other_floor, :u_dr_passed_post_repair).where(:id => get_ids, :u_floor => key[1]).where.not(u_type: "").group(["u_building", "u_floor", "u_dr_passed_post_repair", "u_other_floor"]).count(:u_dr_passed_post_repair)
           
-	       @building_inspection = Lsspdfasset.select(:u_building, :u_floor, :u_other_floor, :u_status).where(:id => get_ids, :u_floor => key[1]).where.not(u_type: "").group(["u_building", "u_floor", "u_status", "u_other_floor"]).count(:u_status)
+         @building_inspection = Lsspdfasset.select(:u_building, :u_floor, :u_other_floor, :u_status).where(:id => get_ids, :u_floor => key[1]).where.not(u_type: "").group(["u_building", "u_floor", "u_status", "u_other_floor"]).count(:u_status)
 
           new_array = @building_repair.to_a + @building_inspection.to_a
           status_counts = new_array.group_by{|i| i[0]}.map{|k,v| [k, v.map(&:last).sum] } 
@@ -120,7 +120,7 @@ module Report
 
           if @boolean == 0
             floor_json["building"] = key[0]
-	    floor_data = key[1] == "other" ? key[3] : key[1]
+      floor_data = key[1] == "other" ? key[3] : key[1]
             floor_json["floor"] = floor_data
             if key[2] == "FSD"
               floor_json["FSD"] = value
