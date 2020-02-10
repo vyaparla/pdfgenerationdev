@@ -65,6 +65,7 @@ module DamperStatementReport
         else
           status_content = "<font size='12'><b>Fail</b></font>"
           cell_color = 'ef3038'
+          table_header = "<font size='12'><b>DAMPER REPAIR STATEMENT OF CONDITION REPORT</b></font>"
         end
       else        
         if @record.u_status.upcase == "PASS" 
@@ -78,12 +79,13 @@ module DamperStatementReport
           status_content = "<font size='12'><b>#{status_details}</b></font>"
           #cell_color = '000000'
         end
+        table_header = "<font size='12'><b>DAMPER INSPECTION STATEMENT OF CONDITION REPORT</b></font>"
       end  
 
       
       pdf.table([
         [
-          {:content => "<font size='12'><b>DAMPER STATEMENT OF CONDITION REPORT</b></font>", :colspan => 3, :width => 225, align: :center },
+          {:content => table_header, :colspan => 3, :width => 225, align: :center },
           {:content => "Status:", :colspan => 1, :width => 75, align: :left },
           {:content => status_content, :background_color=> cell_color,:colspan => 1, :width => 105, 
             :align => :center, :text_color => "ffffff" },
@@ -287,9 +289,12 @@ module DamperStatementReport
         pdf.draw_text('Photo Unavailable', style: :bold, size: 10,
           at: [70 - pdf.bounds.absolute_left, 210])#464
       end
-      #pdf.font_size 10
+      if @record.u_report_type == "DAMPERREPAIR"
       #pdf.draw_text("#{DamperRepairReporting.translate('open_after_installation')}", at: [44, 394])#403
-      pdf.draw_text("Open",  at: [100 - pdf.bounds.absolute_left, 140])
+        pdf.draw_text("Open",  at: [100 - pdf.bounds.absolute_left, 140])
+      else
+        pdf.draw_text("Before Inspection",  at: [75 - pdf.bounds.absolute_left, 140])
+      end  
       pdf.move_down 5
       # unless @record.u_image1.blank?
       #   pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_image1}")[:data])), at: [ 44, 521], fit: [105, 105]
@@ -308,7 +313,11 @@ module DamperStatementReport
       #   pdf.draw_text('Photo Unavailable', style: :bold, size: 10, 
       #     at: [395 - pdf.bounds.absolute_left, 210])
       
+      if @record.u_report_type == "DAMPERREPAIR"
         pdf.draw_text("Closed",  at: [400 - pdf.bounds.absolute_left, 140])
+      else
+        pdf.draw_text("After Inspection",  at: [400 - pdf.bounds.absolute_left, 140])
+      end  
       end
       pdf.move_down 5
       # unless @record.u_image2.blank?
