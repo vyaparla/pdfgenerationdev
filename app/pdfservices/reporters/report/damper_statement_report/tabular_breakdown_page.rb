@@ -59,9 +59,9 @@ module DamperStatementReport
         @records.map do |record|
           if record.u_report_type == "DAMPERREPAIR"
             if record.u_dr_passed_post_repair == "Pass"
-              @post_status = "Passed Post Repair"
+              @post_status = "Pass"
             else
-             @post_status = "Failed Post Repair" 
+             @post_status = "Fail" 
             end
             @deficiency = record.u_reason2
             @action = record.u_dr_description
@@ -88,9 +88,9 @@ module DamperStatementReport
         @records.map do |record|
           if record.u_report_type == "DAMPERREPAIR"
             if record.u_dr_passed_post_repair == "Pass"
-              @post_status = "Passed Post Repair"
+              @post_status = "Pass"
             else
-             @post_status = "Failed Post Repair" 
+             @post_status = "Fail" 
             end
             @deficiency = record.u_reason2
             @action = record.u_dr_description
