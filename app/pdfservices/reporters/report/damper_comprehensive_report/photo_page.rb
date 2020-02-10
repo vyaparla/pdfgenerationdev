@@ -323,7 +323,7 @@ module DamperComprehensiveReport
       if @record.u_report_type == "DAMPERREPAIR"
         pdf.draw_text("Open",  at: [100 - pdf.bounds.absolute_left, 140])
       else
-        pdf.draw_text("Before Inspection",  at: [100 - pdf.bounds.absolute_left, 120])
+        pdf.draw_text("Before Inspection",  at: [75 - pdf.bounds.absolute_left, 140])
       end  
       pdf.move_down 5
     end
