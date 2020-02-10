@@ -8,7 +8,7 @@ module Report
       draw_dr_building_graph(pdf)
       draw_dr_type_graph(pdf)
       draw_dr_result_graph(pdf)
-      @naRecords = Lsspdfasset.select(:u_non_accessible_reasons).where(u_facility_id: @owner.u_facility_id, :u_delete => false, :u_report_type => ["DAMPERREPAIR", "DAMPERCOMPREHENSIVE"]).where.not(u_non_accessible_reasons: "").group(["u_non_accessible_reasons"]).count(:u_non_accessible_reasons)
+      @naRecords = Lsspdfasset.select(:u_non_accessible_reasons).where(u_facility_id: @owner.u_facility_id, :u_delete => false, :u_report_type => ["DAMPERREPAIR", "DAMPERINSPECTION"]).where.not(u_non_accessible_reasons: "").group(["u_non_accessible_reasons"]).count(:u_non_accessible_reasons)
       if @naRecords.length != 0
         draw_na_reason_graph(pdf)
       else
