@@ -91,6 +91,7 @@ module DamperComprehensiveReport
           status_content = "<font size='12'><b>Fail</b></font>"
           cell_color = 'ef3038'
         end
+        table_header = "<font size='12'><b>DAMPER REPAIR COMPREHENSIVE REPORT</b></font>"
       else        
         if @record.u_status.upcase == "PASS" 
           status_content = "<font size='12'><b>Pass</b></font>"
@@ -103,12 +104,13 @@ module DamperComprehensiveReport
           status_content = "<font size='12'><b>#{status_details}</b></font>"
           #cell_color = '000000'
         end
+        table_header = "<font size='12'><b>DAMPER INSPECTION COMPREHENSIVE REPORT</b></font>"
       end  
 
       
       pdf.table([
         [
-          {:content => "<font size='12'><b>DAMPER COMPREHENSIVE REPORT</b></font>", :colspan => 3, :width => 225, align: :center },
+          {:content => table_header, :colspan => 3, :width => 225, align: :center },
           {:content => "Status:", :colspan => 1, :width => 75, align: :left },
           {:content => status_content, :background_color=> cell_color,:colspan => 1, :width => 105, 
             :align => :center, :text_color => "ffffff" },

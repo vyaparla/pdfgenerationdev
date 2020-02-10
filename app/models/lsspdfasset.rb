@@ -102,6 +102,10 @@ class Lsspdfasset < ActiveRecord::Base
     File.join(graph_path, 'dr_graph_by_result.png')
   end
 
+  def dr_graph_na_reasons_path
+    File.join(graph_path, 'graph_na_reasons.png')
+  end
+
   def graph_firedoor_door_by_rating_path
     File.join(graph_path, 'firedoor_graph_door_by_rating.png')
   end

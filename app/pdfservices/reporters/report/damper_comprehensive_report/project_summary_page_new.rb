@@ -1,11 +1,12 @@
 module DamperComprehensiveReport
-  class ProjectSummaryPage
+  class ProjectSummaryPageNew
     #include Report::RepairDataPageWritable
-    include Report::InspectionDataPageWritable
+    include Report::ComprehensiveDataPageWritable
 
-    def initialize(job, tech)
+    def initialize(job, tech, report_type)
       @job = job
       @tech = tech
+      @report_type = report_type
     end
 
     def draw(pdf)
