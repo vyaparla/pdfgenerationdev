@@ -520,8 +520,6 @@ The following report and supporting documentation provide the result of the repa
 
 Thank you for contracting Life Safety Services (LSS) for this project and we look forward to the opportunity of working with you in the future on additional projects.
 
-Quality Assurance inspected by %{pm_name}.
-
 
 _____________________________
 %{pm_name})
