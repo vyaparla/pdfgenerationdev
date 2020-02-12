@@ -34,9 +34,6 @@ module Report
     end
 
     def table_column_headings(heading)
-      # [column_heading(heading)] +
-      # @owner.damper_types.map { |type| Damper.damper_types[type].capitalize } +
-      # %i(pass fail na total_dampers).map { |k| column_heading(k) }
       [column_heading(heading)] +
       ["Fire", "Smoke", "Combination"] +
       %i(pass fail na removed total_dampers damper_per).map { |k| column_heading(k)}
@@ -51,8 +48,8 @@ module Report
     end
     
     def summary_table_data
-    #  @buildingInfo = Lsspdfasset.select(:u_building, :u_floor, :u_type, :u_other_floor).where(:u_facility_id => @owner.u_facility_id, :u_report_type => ["DAMPERREPAIR" ,"DAMPERINSPECTION"], :u_building => @building, :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_type", "u_other_floor"]).order(:u_floor).count(:u_type)
-       @buildingInfo = Lsspdfasset.select(:u_building, :u_floor, :u_type).where(:u_facility_id => @owner.u_facility_id, :u_report_type => ["DAMPERREPAIR" ,"DAMPERINSPECTION"], :u_building => @building, :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_type"]).order(:u_floor).count(:u_type)
+      @buildingInfo = Lsspdfasset.select(:u_building, :u_floor, :u_type, :u_other_floor).where(:u_facility_id => @owner.u_facility_id, :u_report_type => ["DAMPERREPAIR" ,"DAMPERINSPECTION"], :u_building => @building, :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_type", "u_other_floor"]).order(:u_floor).count(:u_type)
+     #  @buildingInfo = Lsspdfasset.select(:u_building, :u_floor, :u_type).where(:u_facility_id => @owner.u_facility_id, :u_report_type => ["DAMPERREPAIR" ,"DAMPERINSPECTION"], :u_building => @building, :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_type"]).order(:u_floor).count(:u_type)
 
       @floorInfo = []
 
@@ -62,7 +59,10 @@ module Report
         if @floorInfo.length == 0
          
           floor_json["building"] = key[0]
-          floor_json["floor"] = key[1].to_i
+          floor_data = key[1] == "other" ? key[3] : key[1]
+          floor_json["floor"] = floor_data
+
+       #   floor_json["floor"] = key[1]
 
           if key[2] == "FSD"
             floor_json["FSD"] = value
@@ -124,7 +124,8 @@ module Report
           if @boolean == 0
             #floor_json = {}
             floor_json["building"] = key[0]
-            floor_json["floor"] = key[1].to_i
+            floor_data = key[1] == "other" ? key[3] : key[1]
+            floor_json["floor"] = floor_data
             if key[2] == "FSD"
               floor_json["FSD"] = value
               floor_json["FD"] = 0
