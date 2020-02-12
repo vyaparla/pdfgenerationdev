@@ -68,7 +68,7 @@ module DamperComprehensiveReport
           else
             @post_status = record.u_status
             @deficiency = record.u_reason
-            @action = record.u_di_replace_damper
+            @action = record.u_repair_action_performed
           end  
         floor = record.u_floor == "other" ? record.u_other_floor : record.u_floor
 
@@ -97,7 +97,7 @@ module DamperComprehensiveReport
           else
             @post_status = record.u_status
             @deficiency = record.u_reason
-            @action = record.u_di_replace_damper
+            @action = record.u_repair_action_performed
           end  
           
           floor = record.u_floor == "other" ? record.u_other_floor : record.u_floor 

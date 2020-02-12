@@ -281,19 +281,19 @@ module DamperStatementReport
 
     def draw_open_after_install_image(pdf)
       pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", 
-        at: [60 - pdf.bounds.absolute_left, 275], :width => 123, :height => 123)#530
+        at: [120 - pdf.bounds.absolute_left, 300], :width => 123, :height => 123)#530
       image = @record.pdf_image1.path(:pdf)
       unless image.blank?
-        pdf.image(image, at: [60 - pdf.bounds.absolute_left, 275], :width => 120, :height => 120)
+        pdf.image(image, at: [120 - pdf.bounds.absolute_left, 300], :width => 120, :height => 120)
       else
         pdf.draw_text('Photo Unavailable', style: :bold, size: 10,
-          at: [70 - pdf.bounds.absolute_left, 210])#464
+          at: [130 - pdf.bounds.absolute_left, 240])#464
       end
       if @record.u_report_type == "DAMPERREPAIR"
       #pdf.draw_text("#{DamperRepairReporting.translate('open_after_installation')}", at: [44, 394])#403
-        pdf.draw_text("Open",  at: [100 - pdf.bounds.absolute_left, 140])
+        pdf.draw_text("Open",  at: [160 - pdf.bounds.absolute_left, 140])
       else
-        pdf.draw_text("Before Inspection",  at: [75 - pdf.bounds.absolute_left, 140])
+        pdf.draw_text("Before Inspection",  at: [135 - pdf.bounds.absolute_left, 140])
       end  
       pdf.move_down 5
       # unless @record.u_image1.blank?
@@ -332,12 +332,12 @@ module DamperStatementReport
       #   at: [60 - pdf.bounds.absolute_left, 125], :width => 123, :height => 123)
       image = @record.pdf_image4.path(:pdf) 
       unless image.blank?
-        pdf.image(image, at: [60 - pdf.bounds.absolute_left, 125], :width => 120, :height => 120)
+        pdf.image(image, at: [120 - pdf.bounds.absolute_left, 300], :width => 120, :height => 120)
       # else
       #   pdf.draw_text('Photo Unavailable', style: :bold, size: 10, 
       #     at: [70 - pdf.bounds.absolute_left, 70])
       # Looped inside - no image no lable
-        pdf.draw_text("After Installation",  at: [80 - pdf.bounds.absolute_left, -9])
+        pdf.draw_text("After Installation",  at: [140 - pdf.bounds.absolute_left, -9])
       end
       # unless @record.u_image3.blank?
       #   pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_image3}")[:data])), at:  [ 44, 251], fit: [105, 105]

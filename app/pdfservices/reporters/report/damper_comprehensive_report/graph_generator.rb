@@ -52,8 +52,8 @@ module DamperComprehensiveReport
     end
 
     def generate_dr_result_graph
-     @damper_repair = Lsspdfasset.select(:u_dr_passed_post_repair).where(u_facility_name: @job.u_facility_name, u_report_type: ["DAMPERREPAIR" ,"DAMPERINSPECTION"], :u_delete => false).group(["u_dr_passed_post_repair"]).order("CASE WHEN u_dr_passed_post_repair = 'PASS' THEN '1' WHEN u_dr_passed_post_repair = 'Fail' THEN '2' ELSE '3' END").count(:u_dr_passed_post_repair)
-     @damper_inspection = Lsspdfasset.select(:u_status).where(u_facility_name: @job.u_facility_name, u_report_type: ["DAMPERREPAIR" ,"DAMPERINSPECTION"], :u_delete => false).group(["u_status"]).order("CASE WHEN u_status = 'PASS' THEN '1' WHEN u_status = 'Fail' THEN '2' ELSE '3' END").count(:u_status)
+     @damper_repair = Lsspdfasset.select(:u_dr_passed_post_repair).where(u_facility_name: @job.u_facility_name, u_report_type: ["DAMPERREPAIR" ,"DAMPERINSPECTION"], :u_delete => false).where.not(u_dr_passed_post_repair: "Removed").group(["u_dr_passed_post_repair"]).order("CASE WHEN u_dr_passed_post_repair = 'PASS' THEN '1' WHEN u_dr_passed_post_repair = 'Fail' THEN '2' ELSE '3' END").count(:u_dr_passed_post_repair)
+     @damper_inspection = Lsspdfasset.select(:u_status).where(u_facility_name: @job.u_facility_name, u_report_type: ["DAMPERREPAIR" ,"DAMPERINSPECTION"], :u_delete => false).where.not(u_status: "Removed").group(["u_status"]).order("CASE WHEN u_status = 'PASS' THEN '1' WHEN u_status = 'Fail' THEN '2' ELSE '3' END").count(:u_status)
 
       new_array = @damper_repair.to_a + @damper_inspection.to_a
       status_counts = new_array.group_by{|i| i[0]}.map{|k,v| [k, v.map(&:last).sum] } 
