@@ -280,27 +280,20 @@ module DamperStatementReport
     end
 
     def draw_open_after_install_image(pdf)
-      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", 
-        at: [120 - pdf.bounds.absolute_left, 300], :width => 123, :height => 123)#530
+      # pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", 
+      #   at: [120 - pdf.bounds.absolute_left, 275], :width => 123, :height => 123)#530
       image = @record.pdf_image1.path(:pdf)
       unless image.blank?
-        pdf.image(image, at: [120 - pdf.bounds.absolute_left, 300], :width => 120, :height => 120)
-      else
-        pdf.draw_text('Photo Unavailable', style: :bold, size: 10,
-          at: [130 - pdf.bounds.absolute_left, 240])#464
+        pdf.image(image, at: [120 - pdf.bounds.absolute_left, 275], :width => 120, :height => 120)
+
+        if @record.u_report_type == "DAMPERREPAIR"
+          #pdf.draw_text("#{DamperRepairReporting.translate('open_after_installation')}", at: [44, 394])#403
+          pdf.draw_text("Open",  at: [160 - pdf.bounds.absolute_left, 140])
+        else
+          pdf.draw_text("Before Inspection",  at: [135 - pdf.bounds.absolute_left, 140])
+        end  
       end
-      if @record.u_report_type == "DAMPERREPAIR"
-      #pdf.draw_text("#{DamperRepairReporting.translate('open_after_installation')}", at: [44, 394])#403
-        pdf.draw_text("Open",  at: [160 - pdf.bounds.absolute_left, 140])
-      else
-        pdf.draw_text("Before Inspection",  at: [135 - pdf.bounds.absolute_left, 140])
-      end  
       pdf.move_down 5
-      # unless @record.u_image1.blank?
-      #   pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_image1}")[:data])), at: [ 44, 521], fit: [105, 105]
-      # else
-      #   pdf.draw_text('Photo Unavailable', style: :bold, size: 11, at:  [49, 464])
-      # end
     end
 
     def draw_closed_after_install_image(pdf)
@@ -313,11 +306,11 @@ module DamperStatementReport
       #   pdf.draw_text('Photo Unavailable', style: :bold, size: 10, 
       #     at: [395 - pdf.bounds.absolute_left, 210])
       
-      if @record.u_report_type == "DAMPERREPAIR"
-        pdf.draw_text("Closed",  at: [400 - pdf.bounds.absolute_left, 140])
-      else
-        pdf.draw_text("After Inspection",  at: [400 - pdf.bounds.absolute_left, 140])
-      end  
+        if @record.u_report_type == "DAMPERREPAIR"
+          pdf.draw_text("Closed",  at: [400 - pdf.bounds.absolute_left, 140])
+        else
+          pdf.draw_text("After Inspection",  at: [400 - pdf.bounds.absolute_left, 140])
+        end  
       end
       pdf.move_down 5
       # unless @record.u_image2.blank?

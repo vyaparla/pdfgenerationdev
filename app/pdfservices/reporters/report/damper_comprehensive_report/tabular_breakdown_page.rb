@@ -64,11 +64,9 @@ module DamperComprehensiveReport
              @post_status = "Fail" 
             end
             @deficiency = record.u_reason2
-            @action = record.u_dr_description
           else
             @post_status = record.u_status
             @deficiency = record.u_reason
-            @action = record.u_repair_action_performed
           end  
         floor = record.u_floor == "other" ? record.u_other_floor : record.u_floor
 
@@ -80,7 +78,7 @@ module DamperComprehensiveReport
             :damper_type       => record.u_damper_name,
             :status    => @post_status,
             :deficiency_s        => @deficiency,
-            :repair_action => @action
+            :repair_action => record.u_repair_action_performed
           }
           attributes.map { |column, | data[column] }
         end 
@@ -93,11 +91,9 @@ module DamperComprehensiveReport
              @post_status = "Fail" 
             end
             @deficiency = record.u_reason2
-            @action = record.u_dr_description
           else
             @post_status = record.u_status
             @deficiency = record.u_reason
-            @action = record.u_repair_action_performed
           end  
           
           floor = record.u_floor == "other" ? record.u_other_floor : record.u_floor 
@@ -110,7 +106,7 @@ module DamperComprehensiveReport
             :damper_type       => record.u_damper_name,
             :status    =>  @post_status,
             :deficiency_s        => @deficiency,
-            :repair_action => @action
+            :repair_action => record.u_repair_action_performed
           }
           attributes.map { |column, | data[column] }
         end
