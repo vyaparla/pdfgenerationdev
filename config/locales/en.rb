@@ -389,8 +389,6 @@ The following report and supporting documentation provide the result of the repa
 Thank you for contracting LSS Life Safety Services for this project and we look forward to the opportunity of working with you in the future on additional projects.
 
 
-Quality Assurance inspected by %{qa_inspected_by}.
-
 
 _____________________________
 %{pm_name}),
@@ -435,8 +433,6 @@ The following report and supporting documentation provide the result of the insp
  Thank you for contracting LSS Life Safety Services for this project and we look forward to the opportunity of working with you in the future on additional projects.
 
 
-Quality Assurance inspected by %{pm_name}.
-
 
 _____________________________
 %{pm_name}),
@@ -479,8 +475,6 @@ CORPORATE: 1-888-675-4519)
 The following report and digital pictures provide the result of the inspection of the doors that were inspected.  This report is intended to describe the location and compliance and non-compliance of the doors for the dates in which Life Safety Services’ representatives performed the inspection of the doors, and is not intended to constitute any warranty as to the continued operation of any doors and/or door hardware.
 
 Thank you for contracting Life Safety Services (LSS) for this project and we look forward to the opportunity of working with you in the future on additional projects.
-
-Quality Assurance inspected by %{qa_inspected_by}.
 
 
 _____________________________
