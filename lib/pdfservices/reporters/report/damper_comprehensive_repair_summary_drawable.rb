@@ -114,7 +114,7 @@ module Report
           @floorInfo.each do |info|
             @damperType = key[2]
             if info.has_key?(key[2])
-              if info["floor"] == key[1].to_i
+              if info["floor"] == key[1]
                 info[key[2]] = value
                 @boolean = 1
               end
