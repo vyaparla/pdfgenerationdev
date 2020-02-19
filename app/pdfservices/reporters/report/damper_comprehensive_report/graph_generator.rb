@@ -16,7 +16,6 @@ module DamperComprehensiveReport
   private
 
     def generate_dr_building_graph
-
       @dr_buildingInfo = Lsspdfasset.select(:u_building).where(u_facility_name: @job.u_facility_name, u_report_type: ["DAMPERREPAIR" ,"DAMPERINSPECTION"], :u_delete => false).where.not(u_type: "").group(["u_building"]).count(:u_type) if !@job.u_facility_name.blank?
       @dr_building_graph = []
       @dr_graph_count = 0
@@ -53,7 +52,15 @@ module DamperComprehensiveReport
     end
 
     def generate_dr_result_graph
-      @dr_resultRecords = Lsspdfasset.select(:u_dr_passed_post_repair).where(u_facility_name: @job.u_facility_name, u_report_type: ["DAMPERREPAIR" ,"DAMPERINSPECTION"], :u_delete => false).group(["u_dr_passed_post_repair"]).order("CASE WHEN u_dr_passed_post_repair = 'PASS' THEN '1' WHEN u_dr_passed_post_repair = 'Fail' THEN '2' ELSE '3' END").count(:u_dr_passed_post_repair)
+     @damper_repair = Lsspdfasset.select(:u_dr_passed_post_repair).where(u_facility_name: @job.u_facility_name, u_report_type: ["DAMPERREPAIR" ,"DAMPERINSPECTION"], :u_delete => false).where.not(u_dr_passed_post_repair: "Removed").group(["u_dr_passed_post_repair"]).order("CASE WHEN u_dr_passed_post_repair = 'PASS' THEN '1' WHEN u_dr_passed_post_repair = 'Fail' THEN '2' ELSE '3' END").count(:u_dr_passed_post_repair)
+     @damper_inspection = Lsspdfasset.select(:u_status).where(u_facility_name: @job.u_facility_name, u_report_type: ["DAMPERREPAIR" ,"DAMPERINSPECTION"], :u_delete => false).where.not(u_status: "Removed").group(["u_status"]).order("CASE WHEN u_status = 'PASS' THEN '1' WHEN u_status = 'Fail' THEN '2' ELSE '3' END").count(:u_status)
+
+      new_array = @damper_repair.to_a + @damper_inspection.to_a
+      status_counts = new_array.group_by{|i| i[0]}.map{|k,v| [k, v.map(&:last).sum] } 
+
+     # @dr_resultRecords = Lsspdfasset.select(:u_dr_passed_post_repair).where(u_facility_name: @job.u_facility_name, u_report_type: ["DAMPERREPAIR" ,"DAMPERINSPECTION"], :u_delete => false).group(["u_dr_passed_post_repair"]).order("CASE WHEN u_dr_passed_post_repair = 'PASS' THEN '1' WHEN u_dr_passed_post_repair = 'Fail' THEN '2' ELSE '3' END").count(:u_dr_passed_post_repair)
+      @dr_resultRecords = status_counts.to_h
+
       @dr_result_graph = []
       @dr_result_graph_count = 0
       @dr_resultRecords.each do |key, value|
@@ -67,8 +74,8 @@ module DamperComprehensiveReport
           @dr_status = "Failed"
         else
           @dr_status = "Non Accessible"
-        end        
-        @dr_result_graph << [@dr_status, ((value1.to_f * 100) / @dr_result_graph_count)]
+        end 
+       @dr_result_graph << [@dr_status, ((value1.to_f * 100) / @dr_result_graph_count)]
       end
       dr_generate_pie_graph(I18n.t('ui.graphs.by_result.title'), @dr_result_graph, @job.dr_graph_by_result_path)
     end

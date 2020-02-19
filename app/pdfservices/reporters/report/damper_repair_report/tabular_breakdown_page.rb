@@ -51,9 +51,9 @@ module DamperRepairReport
       end] +
       @records.map do |record|
         if record.u_dr_passed_post_repair == "Pass"
-          @post_status = "Passed Post Repair"
+          @post_status = "Pass"
         else
-          @post_status = "Failed Post Repair" 
+          @post_status = "Fail" 
         end
 
         floor = record.u_floor == "other" ? record.u_other_floor : record.u_floor

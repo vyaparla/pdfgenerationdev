@@ -81,7 +81,7 @@ module DamperInspectionReport
           # else
           #   @di_installedaccess_door = ""
           # end
-	  floor = record.u_floor == "other" ? record.u_other_floor : record.u_floor
+	        floor = record.u_floor == "other" ? record.u_other_floor : record.u_floor
           status = record.u_status == "NA" ? "Non-Accessible" : record.u_status
           data = {            
             :date              => record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')),
@@ -90,7 +90,7 @@ module DamperInspectionReport
             :damper_location   => record.u_location_desc,
             :damper_type       => record.u_damper_name,
             :status    => status
-	  #  :status    => status
+	          #  :status    => status
             #:installed_access_door    => @di_installedaccess_door
 
             #:service_type      => "Inspection",
@@ -123,7 +123,7 @@ module DamperInspectionReport
             :damper_type       => record.u_damper_name,
             :status    => status,
             :deficiency_s        => record.u_reason,
-            :repair_action => record.u_di_replace_damper
+            :repair_action => record.u_repair_action_performed
             #:installed_access_door    => @di_installedaccess_door
 
             #:service_type      => "Inspection",

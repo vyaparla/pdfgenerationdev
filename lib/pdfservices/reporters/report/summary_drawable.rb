@@ -72,7 +72,7 @@ module Report
             floor_json["FD"] = 0
             floor_json["SD"] = value
           end
-          @building_result = Lsspdfasset.select(:u_building, :u_floor, :u_status).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_status"]).count(:u_status)
+          @building_result = Lsspdfasset.select(:u_building, :u_floor, :u_status).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor","u_status"]).count(:u_status)
 
           @building_result.each do |fstatus, fvalue|
             if !floor_json.has_key?(fstatus[2])
@@ -100,10 +100,10 @@ module Report
         else
           @boolean = 0
           @floorInfo.each do |info|
-            @damperType = key[1]
-            if info.has_key?(key[1])
+            @damperType = key[2]
+            if info.has_key?(key[2])
               if info["floor"] == key[1]
-                info[key[1]] = value
+                info[key[2]] = value
                 @boolean = 1
               end
             end

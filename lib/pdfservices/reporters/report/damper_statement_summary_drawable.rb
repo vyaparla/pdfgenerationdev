@@ -18,16 +18,16 @@ module Report
   private
     
     def draw_title(pdf, title)
-      pdf.font_size 25
-      pdf.fill_color 'f39d27'
+      pdf.font_size 30
+      pdf.fill_color 'ED1C24'
       pdf.text("<b>#{title} - #{@building}</b>", :inline_format => true)
       pdf.fill_color '202020'
       pdf.move_down 10
     end
 
     def draw_label(pdf, text)
-      pdf.font_size 15
-      pdf.fill_color 'f39d27'
+      pdf.font_size 20
+      pdf.fill_color 'ED1C24'
       pdf.text("<b>#{text}</b>", :inline_format => true)
       pdf.fill_color '202020'
       pdf.move_down 10
@@ -52,7 +52,7 @@ module Report
     
     def summary_table_data
       records = find_uniq_assets(@owner.u_facility_id)
-      @buildingInfo = Lsspdfasset.select(:u_building, :u_floor, :u_type).where(:id => records, :u_report_type => ["DAMPERREPAIR" ,"DAMPERINSPECTION"], :u_building => @building, :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_type"]).order(:u_floor).count(:u_type)
+      @buildingInfo = Lsspdfasset.select(:u_building, :u_floor, :u_type, :u_other_floor).where(:id => records, :u_report_type => ["DAMPERREPAIR" ,"DAMPERINSPECTION"], :u_building => @building, :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_type", "u_other_floor"]).order(:u_floor).count(:u_type)
 
       @floorInfo = []
 
@@ -62,7 +62,9 @@ module Report
         if @floorInfo.length == 0
          
           floor_json["building"] = key[0]
-          floor_json["floor"] = key[1].to_i
+          floor_data = key[1] == "other" ? key[3] : key[1]
+          floor_json["floor"] = floor_data
+          #floor_json["floor"] = key[1].to_i
 
           if key[2] == "FSD"
             floor_json["FSD"] = value
@@ -116,7 +118,7 @@ module Report
           @floorInfo.each do |info|
             @damperType = key[2]
             if info.has_key?(key[2])
-              if info["floor"] == key[1].to_i
+              if info["floor"] == key[1]
                 info[key[2]] = value
                 @boolean = 1
               end
@@ -126,7 +128,9 @@ module Report
           if @boolean == 0
             #floor_json = {}
             floor_json["building"] = key[0]
-            floor_json["floor"] = key[1].to_i
+	    floor_data = key[1] == "other" ? key[3] : key[1]
+            floor_json["floor"] = floor_data
+            #floor_json["floor"] = key[1].to_i
             if key[2] == "FSD"
               floor_json["FSD"] = value
               floor_json["FD"] = 0

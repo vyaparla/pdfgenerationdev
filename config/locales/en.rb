@@ -389,8 +389,6 @@ The following report and supporting documentation provide the result of the repa
 Thank you for contracting LSS Life Safety Services for this project and we look forward to the opportunity of working with you in the future on additional projects.
 
 
-Quality Assurance inspected by %{qa_inspected_by}.
-
 
 _____________________________
 %{pm_name}),
@@ -435,8 +433,6 @@ The following report and supporting documentation provide the result of the insp
  Thank you for contracting LSS Life Safety Services for this project and we look forward to the opportunity of working with you in the future on additional projects.
 
 
-Quality Assurance inspected by %{pm_name}.
-
 
 _____________________________
 %{pm_name}),
@@ -480,8 +476,6 @@ The following report and digital pictures provide the result of the inspection o
 
 Thank you for contracting Life Safety Services (LSS) for this project and we look forward to the opportunity of working with you in the future on additional projects.
 
-Quality Assurance inspected by %{qa_inspected_by}.
-
 
 _____________________________
 %{qa_inspected_by})
@@ -519,8 +513,6 @@ _____________________________
 The following report and supporting documentation provide the result of the repair and/or inspection for the dampers that were addressed. This report is intended to describe the location, actions performed and subsequent operability of the dampers for the dates in which LSS Life Safety Services’ representatives performed the repair and/or inspection of the dampers, and is not intended to constitute any warranty as to the continued operation of any damper. 
 
 Thank you for contracting Life Safety Services (LSS) for this project and we look forward to the opportunity of working with you in the future on additional projects.
-
-Quality Assurance inspected by %{pm_name}.
 
 
 _____________________________
