@@ -211,14 +211,22 @@ module Report
       @final_table_data_total.push($ftotal)
       @final_table_data_total.push($natotal)
       @final_table_data_total.push($rmtotal)
-      @final_table_data_total.push($sdtotal + $fdtotal + $fsdtotal)
-      @final_table_data_total.push("100.00%")
+      @final_table_data_total.push($ptotal + $ftotal + $natotal)
+      #@final_table_data_total.push($sdtotal + $fdtotal + $fsdtotal)
+      #@final_table_data_total.push("100.00%")
+      if $ptotal == 0 && $ftotal == 0 && $natotal == 0
+        @final_table_data_total.push("00.00%")
+      else
+        @final_table_data_total.push("100.00%")
+      end
+
+
 
 
       @final_table_data = []
       @floorInfo.each do |resultInfo|
-        @damperTotal = resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"] + resultInfo["Removed"]
-        @getdamperGrandtotal= $ptotal + $ftotal + $natotal + $rmtotal
+        @damperTotal = resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"] #+ resultInfo["Removed"]
+        @getdamperGrandtotal= $ptotal + $ftotal + $natotal #+ $rmtotal
 
         if  @getdamperGrandtotal == 0
             @damperPer = 0
@@ -226,19 +234,19 @@ module Report
            @damperPer = '%.2f%' % ((100 * @damperTotal) / (@getdamperGrandtotal))
         end   
         #@damperPer = '%.2f%' % ((resultInfo["Pass"] * 100) / (resultInfo["FSD"] + resultInfo["FD"] + resultInfo["SD"]))
-        @final_table_data << [resultInfo["floor"], resultInfo["FD"], resultInfo["SD"], resultInfo["FSD"], resultInfo["Pass"], resultInfo["Fail"], resultInfo["NA"], resultInfo["Removed"], resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"] + resultInfo["Removed"], @damperPer]
+        @final_table_data << [resultInfo["floor"], resultInfo["FD"], resultInfo["SD"], resultInfo["FSD"], resultInfo["Pass"], resultInfo["Fail"], resultInfo["NA"], resultInfo["Removed"], resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"] , @damperPer]
       end
 
-      if $ptotal == 0 && $ftotal == 0 && $natotal == 0 && $rmtotal == 0
+      if $ptotal == 0 && $ftotal == 0 && $natotal == 0 
         $ptotal_damperPer  = "00.00%"
         $ftotal_damperPer  = "00.00%"
         $natotal_damperPer = "00.00%"
         $rmtotal_damperPer = "00.00%"
       else
-        $ptotal_damperPer  = '%.2f%' %  (($ptotal.to_f * 100) / ($ptotal + $ftotal + $natotal + $rmtotal))
-        $ftotal_damperPer  = '%.2f%' %  (($ftotal.to_f * 100) / ($ptotal + $ftotal + $natotal + $rmtotal))
-        $natotal_damperPer = '%.2f%' %  (($natotal.to_f * 100) / ($ptotal + $ftotal + $natotal + $rmtotal))  
-        $rmtotal_damperPer = '%.2f%' %  (($rmtotal.to_f * 100) / ($ptotal + $ftotal + $natotal + $rmtotal))
+        $ptotal_damperPer  = '%.2f%' %  (($ptotal.to_f * 100) / ($ptotal + $ftotal + $natotal ))
+        $ftotal_damperPer  = '%.2f%' %  (($ftotal.to_f * 100) / ($ptotal + $ftotal + $natotal ))
+        $natotal_damperPer = '%.2f%' %  (($natotal.to_f * 100) / ($ptotal + $ftotal + $natotal ))  
+        $rmtotal_damperPer = '%.2f%' %  (($rmtotal.to_f * 100) / ($ptotal + $ftotal + $natotal ))
       end  
    
       @final_table_data + [['GRAND TOTAL'] + @final_table_data_total]
@@ -249,8 +257,9 @@ module Report
        DamperInspectionReporting.column_heading(:percent_of_dampers)]] + 
        [[DamperInspectionReporting.column_heading(:pass), $ptotal_damperPer],
        [DamperInspectionReporting.column_heading(:fail), $ftotal_damperPer],
-       [DamperInspectionReporting.column_heading(:na), $natotal_damperPer],
-       [DamperInspectionReporting.column_heading(:removed), $rmtotal_damperPer]]
+       [DamperInspectionReporting.column_heading(:na), $natotal_damperPer]
+      # [DamperInspectionReporting.column_heading(:removed), $rmtotal_damperPer]
+      ]
     end
 
     def find_uniq_assets(owner)
