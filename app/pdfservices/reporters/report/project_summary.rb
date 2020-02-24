@@ -235,7 +235,7 @@ module Report
        [[DamperInspectionReporting.column_heading(:pass), $project_pass_per],
        [DamperInspectionReporting.column_heading(:fail), $project_fail_per],
        [DamperInspectionReporting.column_heading(:na), $project_na_per],
-       [DamperInspectionReporting.column_heading(:removed), $removedtotal]
+      # [DamperInspectionReporting.column_heading(:removed), $removedtotal]
        #[DamperInspectionReporting.column_heading(:removed), "00.00%"]
 
        ]

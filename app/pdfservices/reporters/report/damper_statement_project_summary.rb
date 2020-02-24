@@ -215,16 +215,16 @@ module Report
       end
 
      
-      if $ptotal == 0 && $ftotal == 0 && $natotal == 0 && $removedtotal == 0
+      if $ptotal == 0 && $ftotal == 0 && $natotal == 0 
         $project_pass_per  = "00.00%"
         $project_fail_per  = "00.00%"
         $project_na_per = "00.00%"
         $project_removed_per = "00.00%"
       else
-        $project_pass_per  = '%.2f%' %  (($ptotal.to_f * 100) / ($ptotal + $ftotal + $natotal + $removedtotal))
-        $project_fail_per  = '%.2f%' %  (($ftotal.to_f * 100) / ($ptotal + $ftotal + $natotal + $removedtotal))
-        $project_na_per = '%.2f%' %  (($natotal.to_f * 100) / ($ptotal + $ftotal + $natotal + $removedtotal))  
-        $project_removed_per = '%.2f%' %  (($removedtotal.to_f * 100) / ($ptotal + $ftotal + $natotal + $removedtotal))
+        $project_pass_per  = '%.2f%' %  (($ptotal.to_f * 100) / ($ptotal + $ftotal + $natotal ))
+        $project_fail_per  = '%.2f%' %  (($ftotal.to_f * 100) / ($ptotal + $ftotal + $natotal ))
+        $project_na_per = '%.2f%' %  (($natotal.to_f * 100) / ($ptotal + $ftotal + $natotal ))  
+        $project_removed_per = '%.2f%' %  (($removedtotal.to_f * 100) / ($ptotal + $ftotal + $natotal ))
       end  
       
       @project_final_table_data + [['GRAND TOTAL', ''] + @project_grand_total_data]
@@ -235,8 +235,8 @@ module Report
        DamperInspectionReporting.column_heading(:percent_of_dampers)]] + 
        [[DamperInspectionReporting.column_heading(:pass), $project_pass_per],
        [DamperInspectionReporting.column_heading(:fail), $project_fail_per],
-       [DamperInspectionReporting.column_heading(:na), $project_na_per],
-       [DamperInspectionReporting.column_heading(:removed), $project_removed_per]
+       [DamperInspectionReporting.column_heading(:na), $project_na_per]
+     #  [DamperInspectionReporting.column_heading(:removed), $project_removed_per]
        #[DamperInspectionReporting.column_heading(:removed), "00.00%"]
 
        ]
