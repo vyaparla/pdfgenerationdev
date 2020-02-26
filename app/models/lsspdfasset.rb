@@ -46,7 +46,7 @@ class Lsspdfasset < ActiveRecord::Base
 
   def statement_building_records(building, facility_id, report_type)
     records = find_statement_records(building, facility_id, report_type)
-    Lsspdfasset.where(:id => records).uniq.order('updated_at desc')
+    Lsspdfasset.where(:id => records).uniq.order('u_updated_date desc')
   end
 
 

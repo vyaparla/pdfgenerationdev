@@ -376,13 +376,13 @@ module Report
     end 
 
     def find_uniq_assets(owner, report_type)
-      get_all = Lsspdfasset.select(:id, :u_tag).where(:u_facility_id => owner.u_facility_id, :u_report_type => report_type, :u_delete => false).where.not(u_type: "").group(["u_building","u_tag"]).order('updated_at desc').count(:u_tag)
+      get_all = Lsspdfasset.select(:id, :u_tag).where(:u_facility_id => owner.u_facility_id, :u_report_type => report_type, :u_delete => false).where.not(u_type: "").group(["u_building","u_tag"]).order('u_updated_date desc').count(:u_tag)
       repar_ids = []
       get_all.each do |key,val|
         if val > 1
-         repar_ids << Lsspdfasset.select(:id).where(:u_facility_id => owner.u_facility_id, :u_tag =>key, :u_report_type => report_type, :u_delete => false).where.not(u_type: "").order('updated_at desc').first
+         repar_ids << Lsspdfasset.select(:id).where(:u_facility_id => owner.u_facility_id, :u_tag =>key, :u_report_type => report_type, :u_delete => false).where.not(u_type: "").order('u_updated_date desc').first
         else
-         repar_ids << Lsspdfasset.select(:id).where(:u_facility_id => owner.u_facility_id, :u_tag =>key, :u_report_type => report_type, :u_delete => false).where.not(u_type: "").order('updated_at desc').first
+         repar_ids << Lsspdfasset.select(:id).where(:u_facility_id => owner.u_facility_id, :u_tag =>key, :u_report_type => report_type, :u_delete => false).where.not(u_type: "").order('u_updated_date desc').first
         end
       end  
      ids = repar_ids.collect(&:id)
