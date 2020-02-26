@@ -31,8 +31,14 @@ module FirestopStatementReport
       g.maximum_value = 100 
       g.minimum_value = 0
       g.y_axis_increment = 20
-      get_ids = @job.uniq_records(@job.u_facility_id)
-      @firestop_survey_summary = Lsspdfasset.select(:u_issue_type).where(:id => get_ids).group(["u_issue_type"]).count(:u_issue_type)
+      report_type = ["FIRESTOPINSTALLATION", "FIRESTOPSURVEY"]
+      unique_buildings =  @job.comprehensive_buildings(@job.u_facility_id)
+      records = []
+      unique_buildings.each do |b|
+        records << @job.statement_building_records(b, @job.u_facility_id, report_type)
+      end
+      records_ids = records.collect(&:ids).flatten
+      @firestop_survey_summary = Lsspdfasset.select(:u_issue_type).where(:id => records_ids).group(["u_issue_type"]).count(:u_issue_type)
       @firestop_survey_issue_count = 0
       @firestop_survey_summary.each do |key, value|
         @firestop_survey_issue_count += value
