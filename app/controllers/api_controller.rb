@@ -295,9 +295,16 @@ class ApiController < ApplicationController
     end
     elsif params[:servicetype].delete(' ').upcase == "FIRESTOP" && params[:reportType].upcase == 'STATEMENT'
         job = Lsspdfasset.last
-	report_type = ["FIRESTOPSURVEY" ,"FIRESTOPINSTALLATION"]     
-     	get_ids = job.unique_statement_records(params[:facility_id], report_type)   
-        records = Lsspdfasset.where(id: get_ids).order("updated_at desc")
+	report_type = ["FIRESTOPSURVEY" ,"FIRESTOPINSTALLATION"]    
+        unique_buildings =  job.comprehensive_buildings(params[:facility_id])
+        records = []
+        unique_buildings.each do |b|
+          records << job.statement_building_records(b, params[:facility_id],  report_type)
+        end
+        records_ids = records.collect(&:ids).flatten
+	
+     	#get_ids = job.unique_statement_records(params[:facility_id], report_type)   
+        records = Lsspdfasset.where(id: records_ids).order("updated_at desc")
         p = Axlsx::Package.new
         wb = p.workbook
         img_path = File.expand_path(Rails.root+'app/assets/images/lss_logo.png')
