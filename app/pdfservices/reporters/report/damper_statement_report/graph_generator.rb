@@ -141,13 +141,13 @@ module DamperStatementReport
     end
 
     def graph_uniq_statement_records(facility_id, report_type= ["DAMPERREPAIR", "DAMPERINSPECTION"])
-	    get_all = Lsspdfasset.select(:id, :u_tag).where(:u_facility_id => facility_id, :u_report_type => report_type, :u_delete => false).where.not(u_type: "", u_status: "Removed", u_dr_passed_post_repair: "Removed").group("u_tag").order('updated_at desc').count(:u_tag)
+	    get_all = Lsspdfasset.select(:id, :u_tag).where(:u_facility_id => facility_id, :u_report_type => report_type, :u_delete => false).where.not(u_type: "", u_status: "Removed", u_dr_passed_post_repair: "Removed").group("u_tag").order('u_updated_date desc').count(:u_tag)
       repar_ids = []
       get_all.each do |key,val|
         if val > 1
-         repar_ids << Lsspdfasset.select(:id).where(:u_facility_id => facility_id, :u_tag =>key, :u_report_type => ["DAMPERREPAIR", "DAMPERINSPECTION"], :u_delete => false).order('updated_at desc').first
+         repar_ids << Lsspdfasset.select(:id).where(:u_facility_id => facility_id, :u_tag =>key, :u_report_type => ["DAMPERREPAIR", "DAMPERINSPECTION"], :u_delete => false).order('u_updated_date desc').first
         else
-         repar_ids << Lsspdfasset.select(:id).where(:u_facility_id => facility_id, :u_tag =>key, :u_report_type => ["DAMPERREPAIR", "DAMPERINSPECTION"], :u_delete => false).order('updated_at desc').first
+         repar_ids << Lsspdfasset.select(:id).where(:u_facility_id => facility_id, :u_tag =>key, :u_report_type => ["DAMPERREPAIR", "DAMPERINSPECTION"], :u_delete => false).order('u_updated_date desc').first
         end
       end  
      ids = repar_ids.collect(&:id)

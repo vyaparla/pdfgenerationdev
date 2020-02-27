@@ -3,7 +3,11 @@ class DamperStatementReporter < Reporter
   def statement_report(job, model_name, address1, address2, csz, facility_type, tech, group_name, 
     facility_name, facility_id, with_picture=true, report_type)
 
+        DamperStatementReport::UpdateDate.new.generate
+
     DamperStatementReport::GraphGenerator.new(job).generate
+
+
   
   	generate(job.full_facilitywise_report_path(with_picture, model_name, report_type)) do |pdf|
   	  Report::CoverPage.new(job, model_name="Damper Statement", address1, address2, csz, facility_name, tech ).write(pdf)
