@@ -3,7 +3,7 @@ module DamperStatementReport
 
     def generate
       puts "i'm in update date generate"
-      lss = Lsspdfasset.select('id', 'updated_at').order('id DESC').limit 12
+      lss = Lsspdfasset.select('id', 'updated_at').order('id DESC').all
       lss.each do |ld|  
          puts "------#{ld.id}"
          lr = Lsspdfasset.find(ld.id)                                                                                                
