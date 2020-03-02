@@ -49,6 +49,17 @@ class Lsspdfasset < ActiveRecord::Base
     Lsspdfasset.where(:id => records).uniq.order('u_updated_date desc')
   end
 
+  def facility_update(facility_name)
+     facility_id  = self.u_facility_id
+     records = Lsspdfasset.where(:u_facility_id => facility_id)
+     records.update_all(u_facility_name: facility_name)
+  end
+
+  def building_update(old_name, new_name)
+     facility_id  = self.u_facility_id
+     records = Lsspdfasset.where(:u_facility_id => facility_id, :u_building => old_name)
+     records.update_all(u_building: new_name)
+  end
 
   def full_report_path(with_picture=true)
      report_name  = (with_picture == "true" || with_picture == true) ? "inspection_report.pdf" :  "inspection_report_without_picture.pdf"	  
