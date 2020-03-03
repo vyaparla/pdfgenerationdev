@@ -41,7 +41,7 @@ module Report
     def table_column_headings(heading)
       [column_heading(heading)] +
       ["Fire", "Smoke", "Combination"] +
-      %i(pass fail na removed total_dampers damper_per).map { |k| column_heading(k)}
+      %i(pass fail na total_dampers damper_per removed).map { |k| column_heading(k)}
     end
 
     def summary_table_content
@@ -189,7 +189,7 @@ module Report
       @final_table_data_total.push($ptotal)
       @final_table_data_total.push($ftotal)
       @final_table_data_total.push($natotal)
-      @final_table_data_total.push($rtotal)
+      #@final_table_data_total.push($rtotal)
       #@final_table_data_total.push("0")
       #@final_table_data_total.push($sdtotal + $fdtotal + $fsdtotal)
       @final_table_data_total.push($ptotal + $ftotal + $natotal)
@@ -199,7 +199,7 @@ module Report
       else
         @final_table_data_total.push("100.00%")
       end   
-      
+      @final_table_data_total.push($rtotal)
       Rails.logger.debug("Floor Info :#{@floorInfo.inspect}")
 
       @final_table_data = []
@@ -212,7 +212,7 @@ module Report
         else
           @damperPer = '%.2f%' % ((100 * @damperTotal) / (@damperGrandtotal))
         end        
-        @final_table_data << [resultInfo["floor"], resultInfo["FD"], resultInfo["SD"], resultInfo["FSD"], resultInfo["Pass"], resultInfo["Fail"], resultInfo["NA"], resultInfo["Removed"], resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"], @damperPer]
+        @final_table_data << [resultInfo["floor"], resultInfo["FD"], resultInfo["SD"], resultInfo["FSD"], resultInfo["Pass"], resultInfo["Fail"], resultInfo["NA"],  resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"], @damperPer, resultInfo["Removed"]]
       end
     
 
@@ -225,7 +225,8 @@ module Report
         $ftotal_damperPer  = '%.2f%' %  (($ftotal.to_f * 100) / ($ptotal + $ftotal + $natotal))
         $natotal_damperPer = '%.2f%' %  (($natotal.to_f * 100) / ($ptotal + $ftotal + $natotal))
       end
-
+     # @final_table_data_total.push($rtotal)
+      #raise @final_table_data.inspect
       @final_table_data + [['GRAND TOTAL'] + @final_table_data_total]
     end
 
