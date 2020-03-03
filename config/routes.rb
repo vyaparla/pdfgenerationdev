@@ -7,8 +7,8 @@ Rails.application.routes.draw do
   end
   
   match '/api/save_pdf' => 'api#save_pdf', via:[:post]
-  match '/api/facility_update' => 'api#facility_update', via:[:get]
-  match '/api/building_update' => 'api#building_update', via:[:get]
+  match '/api/facility_update' => 'api#facility_update', via:[:post]
+  match '/api/building_update' => 'api#building_update', via:[:post]
   match '/api/pdf_generation' => 'api#pdf_generation', via:[:get]
   match '/api/facility_wise_pdf_report_generation' => 'api#facility_wise_pdf_report_generation', via:[:get]
   match '/api/facility_wise_pdf_report_download' => 'api#facility_wise_pdf_report_download', via:[:get]
