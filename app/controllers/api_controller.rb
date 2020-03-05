@@ -38,7 +38,7 @@ class ApiController < ApplicationController
   end
 
   def building_update
-    if  params[:facility_id].present? && params[:new_building_name].present? && params[:old_building_name].prsent?
+    if  params[:facility_id].present? && params[:new_building_name].present? && params[:old_building_name].present?
       facility_id, old_name, new_name = params[:facility_id], params[:old_building_name], params[:new_building_name]
       begin
         asset = Lsspdfasset.where(:u_facility_id => facility_id).last
