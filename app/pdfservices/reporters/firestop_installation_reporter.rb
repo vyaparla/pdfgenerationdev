@@ -21,6 +21,7 @@ class FirestopInstallationReporter < Reporter
           new(job, b, tech, group_name, facility_name, with_picture, watermark).write(pdf)
       end
       Report::BackPage.new.write(pdf)
+      pdf.stamp_at "watermark", [100, 210]  if watermark
   	end
   end
 end
