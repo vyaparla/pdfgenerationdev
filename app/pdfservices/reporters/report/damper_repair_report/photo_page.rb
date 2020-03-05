@@ -2,41 +2,17 @@ module DamperRepairReport
   class PhotoPage
     include Report::PhotoPageWritable
     
-    def initialize(record, group_name, facility_name, with_picture)
+    def initialize(record, group_name, facility_name, with_picture, watermark)
       @record = record
       @group_name = group_name
       @facility_name = facility_name
       @with_picture = with_picture
+      @watermark = watermark
     end
-
-    # def write(pdf)
-    #   super
-    #   pdf.indent(250) do
-    #     draw_location_description(pdf)
-    #     draw_damper_tag(pdf)
-    #     draw_damper_type(pdf)
-    #     draw_floor(pdf)
-    #     # unless @record.u_access_size.blank?
-    #     #   draw_access_door_installation(pdf)
-    #     # end
-    #     draw_status(pdf)
-    #     draw_repairs(pdf)
-    #   end
-    #   if @record.u_repair_action_performed == "Damper Repaired"
-    #     draw_open_after_install_image(pdf)
-    #     draw_closed_after_install_image(pdf)
-    #     draw_reopened_after_install_image(pdf)
-    #   else
-    #     draw_open_after_install_image(pdf)
-    #     draw_closed_after_install_image(pdf)
-    #     draw_reopened_after_install_image(pdf)
-    #     draw_new_install_image(pdf)
-    #   end
-    # end
 
     def write(pdf)
       super
-
+      pdf.stamp_at "watermark", [100, 210] if @watermark 
       draw_table1(pdf)
       draw_table2(pdf)
       draw_table3(pdf)

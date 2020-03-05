@@ -2,7 +2,7 @@ module DamperRepairReport
   class LetterPage
   	include Report::InspectionDataPageWritable
 
-    def initialize(job, model, address1, address2, csz, facility_type,facility_name, tech)
+    def initialize(job, model, address1, address2, csz, facility_type,facility_name, tech, watermark)
       @job = job
       @model = model
       # @group_name = group_name
@@ -12,13 +12,14 @@ module DamperRepairReport
       @address1 = address1
       @address2 = address2
       @csz =  csz
+      @watermark = watermark
     end
 
     def write(pdf)
       super
       #draw_letter_title(pdf)
      # draw_letter_page_content(pdf)
-
+      pdf.stamp_at "watermark", [100, 210] if @watermark 
       Report::Letter.new(@job, @model, @address1, @address2, @csz, @facility_type, :damper_repair_report, @tech).draw(pdf)
     end  
 

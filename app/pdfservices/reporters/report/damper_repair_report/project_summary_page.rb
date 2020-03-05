@@ -2,13 +2,15 @@ module DamperRepairReport
   class ProjectSummaryPage
     include Report::RepairDataPageWritable
 
-    def initialize(job, tech)
+    def initialize(job, tech, watermark)
       @job = job
       @tech = tech
+      @watermark = watermark
     end
 
     def write(pdf)
-      super      
+      super
+      pdf.stamp_at "watermark", [100, 210] if @watermark       
       draw_facility_title(pdf)
       Report::Table.new(dr_facility_summary_table_content).draw(pdf)
       pdf.move_down 30

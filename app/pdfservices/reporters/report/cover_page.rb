@@ -2,7 +2,7 @@ module Report
   class CoverPage
   	include PageWritable
 
-    def initialize(owner, model_name, address1, address2, csz, facility_name, tech)
+    def initialize(owner, model_name, address1, address2, csz, facility_name, tech, watermark)
       @owner = owner      
       @model_name = model_name
       @address1 = address1
@@ -15,10 +15,13 @@ module Report
       # @group_url = group_url
       # @facility_url = facility_url
       # @nfpa_url = nfpa_url
+      @watermark = watermark
     end
 
     def write(pdf)
       super
+      Report::Watermark.new.write(pdf) if @watermark
+
       pdf.fill_color '202020'
       draw_title(pdf)
       draw_subtitle(pdf)

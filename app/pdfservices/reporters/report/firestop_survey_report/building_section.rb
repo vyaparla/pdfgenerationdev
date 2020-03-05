@@ -4,8 +4,8 @@ module FirestopSurveyReport
 
     def write(pdf)
       return if records.empty?
-      TablePage.new(records, building_section, @tech).write(pdf)
-      records.each { |r| PhotoPage.new(r, @group_name, @facility_name, @with_picture).write(pdf) }
+      TablePage.new(records, building_section, @tech, @watermark).write(pdf)
+      records.each { |r| PhotoPage.new(r, @group_name, @facility_name, @with_picture, @watermark).write(pdf) }
     end
   end
 end

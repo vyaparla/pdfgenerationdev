@@ -2,13 +2,15 @@ module FirestopComprehensiveReport
   class SummaryPage
  	include  Report::DataPageWritable
 
-  	def initialize(job, tech)
+  	def initialize(job, tech, watermark)
       @job = job
       @tech = tech
+      @watermark = watermark
     end
   
     def write(pdf)
       super
+      pdf.stamp_at "watermark", [100, 210] if @watermark 
       draw_project_summary(pdf)
       draw_statistics(pdf)
       draw_overview_of_issues(pdf)

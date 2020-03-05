@@ -2,7 +2,7 @@ module DamperStatementReport
   class LetterPage
   	include Report::ComprehensiveDataPageWritable
 
-    def initialize(job, model, address1, address2, csz, facility_type,facility_name, tech, report_type)
+    def initialize(job, model, address1, address2, csz, facility_type,facility_name, tech, report_type, watermark)
       @job = job
       @model = model
       # @group_name = group_name
@@ -13,10 +13,12 @@ module DamperStatementReport
       @address2 = address2
       @csz =  csz
       @report_type = report_type
+      @watermark = watermark
     end
 
     def write(pdf)
       super
+      pdf.stamp_at "watermark", [100, 210] if @watermark
        # draw_letter_title(pdf)
        # draw_letter_page_content(pdf)
 

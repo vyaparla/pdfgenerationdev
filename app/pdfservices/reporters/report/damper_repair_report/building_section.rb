@@ -4,10 +4,11 @@ module DamperRepairReport
 
     def write(pdf)
       return if records.empty?
-      BuildingSummaryPage.new(@job, @building, @tech).write(pdf)
-      write_breakdown_pages(pdf, building_section, @tech)
+      pdf.stamp_at "watermark", [100, 210] if @watermark 
+      BuildingSummaryPage.new(@job, @building, @tech, @watermark).write(pdf)
+      write_breakdown_pages(pdf, building_section, @tech, @watermark)
       @records = records.where.not(u_type: "")
-      @records.each { |r| PhotoPage.new(r, @group_name, @facility_name, @with_picture).write(pdf)}
+      @records.each { |r| PhotoPage.new(r, @group_name, @facility_name, @with_picture, @watermark).write(pdf)}
     end
 
   private
@@ -20,9 +21,9 @@ module DamperRepairReport
       @failed_records ||= records.where(:u_dr_passed_post_repair => "Fail").where.not(u_type: "")
     end
 
-    def write_breakdown_pages(pdf, building_section, tech)
-      TabularBreakdownPage.new(pass_records, :pass_dampers, building_section, tech).write(pdf)
-      TabularBreakdownPage.new(failed_records, :failed_dampers, building_section, tech).write(pdf)
+    def write_breakdown_pages(pdf, building_section, tech, watermark)
+      TabularBreakdownPage.new(pass_records, :pass_dampers, building_section, tech, watermark).write(pdf)
+      TabularBreakdownPage.new(failed_records, :failed_dampers, building_section, tech, watermark).write(pdf)
     end
   end
 end

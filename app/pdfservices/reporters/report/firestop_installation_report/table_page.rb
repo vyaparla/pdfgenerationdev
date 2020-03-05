@@ -2,15 +2,17 @@ module FirestopInstallationReport
   class TablePage
     include Report::DataPageWritable
 
-    def initialize(job, building, tech)
+    def initialize(job, building, tech, watermark)
       @job = job
       @building = building
       @tech = tech
+      @watermark = watermark
     end
 
     def write(pdf)
       return if records.empty?
       #super
+      pdf.stamp_at "watermark", [100, 210] if @watermark 
       @fixed_on_site = []
       #fixed_on_site_heading = [{:content => 'Fixed On Site = YES', :colspan => 540}]
       #@fixed_on_site << fixed_on_site_heading

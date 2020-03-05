@@ -22,10 +22,10 @@ class ApiController < ApplicationController
   end
 
   def facility_wise_pdf_report_generation
-    model, address1, address2, csz, facility_type, facility_id, tech, group, facility, with_pic, pdfjob = comprehensive_pdf_generation_params
+    model, address1, address2, csz, facility_type, facility_id, tech, group, facility, with_pic, watermark, pdfjob = comprehensive_pdf_generation_params
     service, report_type = params[:service], params[:reportType]
     unless pdfjob.blank?
-      ReportGeneration.new(pdfjob, model, address1, address2, csz, facility_type, tech, group, facility, facility_id, service, report_type, with_pic).generate_report_facility_wise
+      ReportGeneration.new(pdfjob, model, address1, address2, csz, facility_type, tech, group, facility, facility_id, service, report_type, with_pic, watermark).generate_report_facility_wise
       render json: {message: "Success"}
     else
       render json: {message: "Unsuccess"}
@@ -33,9 +33,9 @@ class ApiController < ApplicationController
   end
   
   def pdf_generation
-    model, address1, address2, csz, facility_type, tech, group, facility, with_pic, pdfjob = pdf_generation_params
+    model, address1, address2, csz, facility_type, tech, group, facility, with_pic, watermark, pdfjob = pdf_generation_params
     unless pdfjob.blank?
-      ReportGeneration.new(pdfjob, model, address1, address2, csz, facility_type, tech, group, facility, facility_id=nil, service=nil, report_type=nil, with_pic).generate_full_report
+      ReportGeneration.new(pdfjob, model, address1, address2, csz, facility_type, tech, group, facility, facility_id=nil, service=nil, report_type=nil, with_pic, watermark).generate_full_report
       render json: {message: "Success"}
     else
       render json: {message: "Unsuccess"}
@@ -105,178 +105,206 @@ class ApiController < ApplicationController
 
   def spreadsheets
     @outputfile = params[:servicetype].delete(' ').upcase + "_" +  Time.now.strftime("%m-%d-%Y-%r").gsub(/\s+/, "_") + "_" + "spreadsheet_report"
+    watermaek_img = File.expand_path(Rails.root+'app/assets/images/watermark.png')
+    @watermark = params[:u_watermark] && (params[:u_watermark] == 'no') ? false : true 
     if params[:servicetype].delete(' ').upcase == "DAMPERINSPECTION"
       @records = Lsspdfasset.where(u_service_id: params[:serviceid], :u_delete => false).where.not(u_type: "")
-	p, wb, img_path = initialize_spreadsheet
-	facility_name, tech, date, damper_inspection_para, damper_repair_para = initialize_damper_params
-        wb.styles do |s|
-	header_row, normal_row_odd, normal_row_even, title_row = initialize_spreadsheet_rows(s)
-	title_desc = s.add_style :i => true,
+	    p, wb, img_path = initialize_spreadsheet
+	    facility_name, tech, date, damper_inspection_para, damper_repair_para = initialize_damper_params
+      wb.styles do |s|
+	      header_row, normal_row_odd, normal_row_even, title_row = initialize_spreadsheet_rows(s)
+	      title_desc = s.add_style :i => true,
                             :sz => 8,
                             :alignment => { :horizontal => :left, :wrap_text => true, :vertical => :top }, :font_name => 'Calibri'
 
         wb.add_worksheet(name: "Damper Inspection List") do |sheet|
-        sheet.add_image(:image_src => img_path, :start_at => [0, 0], :width => 120, :height => 70,  :noSelect => true, :noMove => true,  :rowOff => 0, :colOff => 0)
-        sheet.add_row ["", "Damper Inspection List", "", damper_inspection_para, "", "", "", "", "", "", "", ""], :style => [title_row,title_row,title_row,title_desc,title_desc, title_desc, title_desc, title_desc, title_desc, title_desc, title_desc, title_desc] , :height => 55
-        sheet.merge_cells ("B1:C1")
-        sheet.merge_cells ("D1:L1")
-        sheet.add_row ["Damper #", "Facility", "Building", "Floor", "Damper Location", "Damper Type", "Status", "Deficiencies", "Repair Action Performed", "Subsequent Failure Reason", "Technician", "Date"] , :style => header_row
-        i = 1
-        @records.each do |record|
-	  floor = (record.u_floor == "other" ? record.u_other_floor : record.u_floor)
-          sheet.add_row  [record.u_tag, record.u_facility_name, record.u_building, floor, record.u_location_desc, record.u_type, 
+          sheet.add_image(:image_src => img_path, :start_at => [0, 0], :width => 120, :height => 70,  :noSelect => true, :noMove => true,  :rowOff => 0, :colOff => 0)
+          sheet.add_row ["", "Damper Inspection List", "", damper_inspection_para, "", "", "", "", "", "", "", ""], :style => [title_row,title_row,title_row,title_desc,title_desc, title_desc, title_desc, title_desc, title_desc, title_desc, title_desc, title_desc] , :height => 55
+          sheet.merge_cells ("B1:C1")
+          sheet.merge_cells ("D1:L1")
+          sheet.add_row ["Damper #", "Facility", "Building", "Floor", "Damper Location", "Damper Type", "Status", "Deficiencies", "Repair Action Performed", "Subsequent Failure Reason", "Technician", "Date"] , :style => header_row
+          i = 1
+           ############    WATERMARK   ##################################################
+          #img = File.expand_path(Rails.root+'app/assets/images/transaparent1.png')
+          if @watermark
+            sheet.add_image(:image_src => watermaek_img, :noSelect => true, :noMove => true, :rowOff => 0, :colOff => 0) do |image|
+              image.width = 450
+              image.height = 450
+              image.start_at 1, 2
+            end
+          end  
+          ##############################################################################
+          @records.each do |record|
+	          floor = (record.u_floor == "other" ? record.u_other_floor : record.u_floor)
+            sheet.add_row  [record.u_tag, record.u_facility_name, record.u_building, floor, record.u_location_desc, record.u_type, 
 	          record.u_status == "NA" ?  "Non-Accessible": record.u_status,		     
-                  if record.u_status == "Fail"
-                    record.u_reason
-                  else
-                    record.u_non_accessible_reasons
-                  end,
-		  record.u_repair_action_performed,
-		  record.u_reason2,
-		  record.u_inspector,
-                  record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY'))
-	  ] , :style => (i.even? ? normal_row_even : normal_row_odd)
-           i += 1
-
+            if record.u_status == "Fail"
+              record.u_reason
+            else
+              record.u_non_accessible_reasons
+            end,
+		        record.u_repair_action_performed,
+		        record.u_reason2,
+		        record.u_inspector,
+            record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY'))
+	          ] , :style => (i.even? ? normal_row_even : normal_row_odd)
+            i += 1
+          end
+	        sheet.column_widths nil, nil, nil, 20, 50, nil, nil, 40, nil, nil, nil, nil
         end
-	sheet.column_widths nil, nil, nil, 20, 50, nil, nil, 40, nil, nil, nil, nil
-      end
-    end 	
+      end 	
     elsif params[:servicetype].delete(' ').upcase == "DAMPERREPAIR"
       @records = Lsspdfasset.where(u_service_id: params[:serviceid], :u_delete => false).where.not(u_type: "")
-       p, wb, img_path = initialize_spreadsheet
-       facility_name, tech, date, damper_inspection_para, damper_repair_para = initialize_damper_params
-        wb.styles do |s|
+      p, wb, img_path = initialize_spreadsheet
+      facility_name, tech, date, damper_inspection_para, damper_repair_para = initialize_damper_params
+      wb.styles do |s|
         header_row, normal_row_odd, normal_row_even, title_row = initialize_spreadsheet_rows(s)
         title_desc = s.add_style :i => true,
                             :sz => 8,
                             :alignment => { :horizontal => :left, :wrap_text => true, :vertical => :top }, :font_name => 'Calibri'
 
         wb.add_worksheet(name: "Damper Repair List") do |sheet|
-        sheet.add_image(:image_src => img_path, :start_at => [0, 0], :width => 120, :height => 70,  :noSelect => true, :noMove => true,  :rowOff => 0, :colOff => 0)
-        sheet.add_row ["", "Damper Repair List", "",  damper_repair_para, "", "", "", "", "", "", "", ""], :style => [title_row,title_row,title_row,title_desc,title_desc, title_desc, title_desc, title_desc, title_desc, title_desc, title_desc, title_desc] , :height => 55
-        sheet.merge_cells ("B1:C1")
-        sheet.merge_cells ("D1:L1")
-        sheet.add_row ["Damper #", "Facility", "Building", "Floor", "Damper Location", "Damper Type", "Status",  "Repair Action Performed", "Subsequent Failure Reason", "Technician", "Date"] , :style => header_row
-        i = 1
-        @records.each do |record|
-		floor = (record.u_floor == "other" ? record.u_other_floor : record.u_floor)
-          sheet.add_row  [record.u_tag, record.u_facility_name, record.u_building, floor, record.u_location_desc, record.u_type, record.u_dr_passed_post_repair,
+          sheet.add_image(:image_src => img_path, :start_at => [0, 0], :width => 120, :height => 70,  :noSelect => true, :noMove => true,  :rowOff => 0, :colOff => 0)
+          sheet.add_row ["", "Damper Repair List", "",  damper_repair_para, "", "", "", "", "", "", "", ""], :style => [title_row,title_row,title_row,title_desc,title_desc, title_desc, title_desc, title_desc, title_desc, title_desc, title_desc, title_desc] , :height => 55
+          sheet.merge_cells ("B1:C1")
+          sheet.merge_cells ("D1:L1")
+          sheet.add_row ["Damper #", "Facility", "Building", "Floor", "Damper Location", "Damper Type", "Status",  "Repair Action Performed", "Subsequent Failure Reason", "Technician", "Date"] , :style => header_row
+          i = 1
+          @records.each do |record|
+		        floor = (record.u_floor == "other" ? record.u_other_floor : record.u_floor)
+            sheet.add_row  [record.u_tag, record.u_facility_name, record.u_building, floor, record.u_location_desc, record.u_type, record.u_dr_passed_post_repair,
                   record.u_repair_action_performed,
                   record.u_reason2,
                   record.u_inspector,
                   record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY'))
-          ] , :style => (i.even? ? normal_row_even : normal_row_odd)
-           i += 1
+            ] , :style => (i.even? ? normal_row_even : normal_row_odd)
+            i += 1
+          end
+	        sheet.column_widths nil, nil, nil, 20, 50, nil, nil, 40, nil, nil, nil, nil
         end
-	sheet.column_widths nil, nil, nil, 20, 50, nil, nil, 40, nil, nil, nil, nil
-      end
-    end	
-    elsif params[:servicetype].delete(' ').upcase == "FIREDOORINSPECTION"
-      @records = Lsspdfasset.where(u_service_id: params[:serviceid], :u_delete => false)
-      csv_data = CSV.generate do |csv|                 
-        csv << ["Door No.", "Facility", "Building", "Floor", "Door Location", "Fire Rating", "Door Deficiencies", "Date", "Technician"]
-        @records.each do |record|
-          @firedoor_deficiency_codes = FiredoorDeficiency.where(:firedoor_service_sysid => record.u_service_id, :firedoor_asset_sysid => record.u_asset_id).collect { |w| w.firedoor_deficiencies_code }.join(", ")
-          csv << [record.u_tag, record.u_facility_name, record.u_building, record.u_floor, record.u_location_desc, record.u_fire_rating, @firedoor_deficiency_codes, record.u_inspected_on.localtime.strftime('%m/%d/%Y'), record.u_inspector]
+      end	
+      elsif params[:servicetype].delete(' ').upcase == "FIREDOORINSPECTION"
+        @records = Lsspdfasset.where(u_service_id: params[:serviceid], :u_delete => false)
+        csv_data = CSV.generate do |csv|                 
+          csv << ["Door No.", "Facility", "Building", "Floor", "Door Location", "Fire Rating", "Door Deficiencies", "Date", "Technician"]
+          @records.each do |record|
+            @firedoor_deficiency_codes = FiredoorDeficiency.where(:firedoor_service_sysid => record.u_service_id, :firedoor_asset_sysid => record.u_asset_id).collect { |w| w.firedoor_deficiencies_code }.join(", ")
+            csv << [record.u_tag, record.u_facility_name, record.u_building, record.u_floor, record.u_location_desc, record.u_fire_rating, @firedoor_deficiency_codes, record.u_inspected_on.localtime.strftime('%m/%d/%Y'), record.u_inspector]
+          end
         end
-      end
-    elsif params[:servicetype].delete(' ').upcase == "FIRESTOPSURVEY"
-      @records = Lsspdfasset.where(u_service_id: params[:serviceid], :u_delete => false)
-      p = Axlsx::Package.new
+      elsif params[:servicetype].delete(' ').upcase == "FIRESTOPSURVEY"
+        @records = Lsspdfasset.where(u_service_id: params[:serviceid], :u_delete => false)
+        p = Axlsx::Package.new
         wb = p.workbook
         img_path = File.expand_path(Rails.root+'app/assets/images/lss_logo.png')
         wb.styles do |s|
-        header_row = s.add_style :sz => 11, :b => true, :font_name => 'Calibri'
-        normal_row_odd = s.add_style :sz => 11, :font_name => 'Calibri', :bg_color =>  'EEEEEE', :border => { :style => :thin, :color => "CCCCCC" }
-        normal_row_even = s.add_style :sz => 11, :font_name => 'Calibri', :bg_color => 'FFFFFF', :border => { :style => :thin, :color => "CCCCCC" }
-        title_row = s.add_style :b => true,
+          header_row = s.add_style :sz => 11, :b => true, :font_name => 'Calibri'
+          normal_row_odd = s.add_style :sz => 11, :font_name => 'Calibri', :bg_color =>  'EEEEEE', :border => { :style => :thin, :color => "CCCCCC" }
+          normal_row_even = s.add_style :sz => 11, :font_name => 'Calibri', :bg_color => 'FFFFFF', :border => { :style => :thin, :color => "CCCCCC" }
+          title_row = s.add_style :b => true,
                             :sz => 20,
                             :alignment => { :horizontal => :center, :vertical => :center }, :font_name => 'Calibri'
 
-	wb.add_worksheet(name: "Firestop Survey List") do |sheet|
-        sheet.add_image(:image_src => img_path, :start_at => [0, 0], :width => 120, :height => 70,  :noSelect => true, :noMove => true,  :rowOff => 0, :colOff => 0)
-        sheet.add_row ["", "Firestop Survey List", "", "", ""], :style => title_row, :height => 55
-        sheet.merge_cells ("B1:E1")
-        sheet.add_row ["Issue #", "Facility", "Building", "Floor", "Location", "Barrier Type", "Penetration Type", "Issue", "Corrected On Site", "Suggested Corrective Action", "Corrective Action/UL System", "Date", "Technician"] , :style => header_row
-        i = 1
-        @records.each do |record|
-          floor =  ( record.u_floor == "other" ? record.u_other_floor : record.u_floor)
-
-           sheet.add_row  [record.u_tag, record.u_facility_name, record.u_building, floor, record.u_location_desc, record.u_barrier_type, 
+          wb.add_worksheet(name: "Firestop Survey List") do |sheet|
+            sheet.add_image(:image_src => img_path, :start_at => [0, 0], :width => 120, :height => 70,  :noSelect => true, :noMove => true,  :rowOff => 0, :colOff => 0)
+            sheet.add_row ["", "Firestop Survey List", "", "", ""], :style => title_row, :height => 55
+            sheet.merge_cells ("B1:E1")
+            sheet.add_row ["Issue #", "Facility", "Building", "Floor", "Location", "Barrier Type", "Penetration Type", "Issue", "Corrected On Site", "Suggested Corrective Action", "Corrective Action/UL System", "Date", "Technician"] , :style => header_row
+            i = 1
+            @records.each do |record|
+              floor =  ( record.u_floor == "other" ? record.u_other_floor : record.u_floor)
+              sheet.add_row  [record.u_tag, record.u_facility_name, record.u_building, floor, record.u_location_desc, record.u_barrier_type, 
                   record.u_penetration_type, record.u_issue_type,
-                  if record.u_service_type == "Fixed On Site"
-                    'YES'
-                  else
-                    'NO'
-                  end,
-                  record.u_suggested_ul_system, record.u_corrected_url_system, record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')), record.u_inspector
-                ], :style => (i.even? ? normal_row_even : normal_row_odd)
-	   i += 1
+                if record.u_service_type == "Fixed On Site"
+                  'YES'
+                else
+                  'NO'
+                end,
+                record.u_suggested_ul_system, record.u_corrected_url_system, record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')), record.u_inspector
+              ], :style => (i.even? ? normal_row_even : normal_row_odd)
+	            i += 1
+            end
+          end
         end
-      end
-      end
-    elsif params[:servicetype].delete(' ').upcase == "FIRESTOP" && params[:reportType].upcase == 'COMPREHENSIVE'
+      elsif params[:servicetype].delete(' ').upcase == "FIRESTOP" && params[:reportType].upcase == 'COMPREHENSIVE'
         records = Lsspdfasset.where(u_facility_id: params[:facility_id], u_report_type: ["FIRESTOPSURVEY" ,"FIRESTOPINSTALLATION"], :u_delete => false).order("updated_at desc")
         p = Axlsx::Package.new
         wb = p.workbook
         img_path = File.expand_path(Rails.root+'app/assets/images/lss_logo.png')
         wb.styles do |s|
-        header_row = s.add_style :sz => 11, :b => true, :font_name => 'Calibri'
-        normal_row_odd = s.add_style :sz => 11, :font_name => 'Calibri', :bg_color => 'EEEEEE', :border => { :style => :thin, :color => "CCCCCC" }
-        normal_row_even = s.add_style :sz => 11, :font_name => 'Calibri', :bg_color => 'FFFFFF', :border => { :style => :thin, :color => "CCCCCC" }
-        title_row = s.add_style :b => true,
+          header_row = s.add_style :sz => 11, :b => true, :font_name => 'Calibri'
+          normal_row_odd = s.add_style :sz => 11, :font_name => 'Calibri', :bg_color => 'EEEEEE', :border => { :style => :thin, :color => "CCCCCC" }
+          normal_row_even = s.add_style :sz => 11, :font_name => 'Calibri', :bg_color => 'FFFFFF', :border => { :style => :thin, :color => "CCCCCC" }
+          title_row = s.add_style :b => true,
                             :sz => 20,
                             :alignment => { :horizontal => :center, :vertical => :center }, :font_name => 'Calibri'
 
-        wb.add_worksheet(name: "Firestop Comprehensive  List") do |sheet|
-        sheet.add_image(:image_src => img_path, :start_at => [0, 0], :width => 120, :height => 70,  :noSelect => true, :noMove => true, :rowOff => 0, :colOff => 0)
-        sheet.add_row ["", "Firestop Comprehensive List", "", "", "", "", ""], :style => title_row, :height => 55
-        sheet.merge_cells ("B1:E1")
-        sheet.add_row ["Issue #", "Facility", "Building", "Floor", "Location", "Barrier Type", "Penetration Type", "Issue", "Corrected On Site", "Suggested Corrective Action", "Corrective Action/UL System", "Date", "Technician"] , :style => header_row
-        i = 1
-        records.each do |record|
-	  inspected_date = record.u_inspected_on.nil? ? record.u_inspected_on : record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY'))	
-          floor =  (record.u_floor == "other" ? record.u_other_floor : record.u_floor)
-          sheet.add_row [record.u_tag, record.u_facility_name, record.u_building, floor, record.u_location_desc, record.u_barrier_type,
+          wb.add_worksheet(name: "Firestop Comprehensive  List") do |sheet|
+            sheet.add_image(:image_src => img_path, :start_at => [0, 0], :width => 120, :height => 70,  :noSelect => true, :noMove => true, :rowOff => 0, :colOff => 0)
+            sheet.add_row ["", "Firestop Comprehensive List", "", "", "", "", ""], :style => title_row, :height => 55
+            sheet.merge_cells ("B1:E1")
+            sheet.add_row ["Issue #", "Facility", "Building", "Floor", "Location", "Barrier Type", "Penetration Type", "Issue", "Corrected On Site", "Suggested Corrective Action", "Corrective Action/UL System", "Date", "Technician"] , :style => header_row
+            i = 1
+            ############    WATERMARK   ##################################################
+            #img = File.expand_path(Rails.root+'app/assets/images/transaparent1.png')
+            if @watermark
+              sheet.add_image(:image_src => watermaek_img, :noSelect => true, :noMove => true, :rowOff => 0, :colOff => 0) do |image|
+                image.width = 450
+                image.height = 450
+                image.start_at 1, 2
+              end
+            end  
+          ##############################################################################
+            records.each do |record|
+	            inspected_date = record.u_inspected_on.nil? ? record.u_inspected_on : record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY'))	
+              floor =  (record.u_floor == "other" ? record.u_other_floor : record.u_floor)
+              sheet.add_row [record.u_tag, record.u_facility_name, record.u_building, floor, record.u_location_desc, record.u_barrier_type,
                  record.u_penetration_type, record.u_issue_type,
-                  if record.u_service_type == "Fixed On Site"
-                    'YES'
-                  else
-                    'NO'
-                  end,
-                  record.u_suggested_ul_system, record.u_corrected_url_system, inspected_date,
-		  record.u_inspector
-                ] , :style => (i.even? ? normal_row_even : normal_row_odd)
-           i += 1
-
+                if record.u_service_type == "Fixed On Site"
+                  'YES'
+                else
+                 'NO'
+                end,
+                record.u_suggested_ul_system, record.u_corrected_url_system, inspected_date,
+		            record.u_inspector
+              ] , :style => (i.even? ? normal_row_even : normal_row_odd)
+              i += 1
+            end
           end
-       end
-
-     end
-     elsif params[:servicetype].delete(' ').upcase == "DAMPER" && params[:reportType].upcase == 'COMPREHENSIVE'
-	     @records  = Lsspdfasset.where(u_facility_id: params[:facility_id], u_report_type: ["DAMPERREPAIR" ,"DAMPERINSPECTION"], :u_delete => false).order("updated_at desc")
+        end
+      elsif params[:servicetype].delete(' ').upcase == "DAMPER" && params[:reportType].upcase == 'COMPREHENSIVE'
+        @records  = Lsspdfasset.where(u_facility_id: params[:facility_id], u_report_type: ["DAMPERREPAIR" ,"DAMPERINSPECTION"], :u_delete => false).order("updated_at desc")
         p, wb, img_path = initialize_spreadsheet
         facility_name, tech, date, damper_inspection_para, damper_repair_para = initialize_damper_params
         wb.styles do |s|
-        header_row, normal_row_odd, normal_row_even, title_row = initialize_spreadsheet_rows(s)
-        title_desc = s.add_style :i => true,
+          header_row, normal_row_odd, normal_row_even, title_row = initialize_spreadsheet_rows(s)
+          title_desc = s.add_style :i => true,
                             :sz => 8,
                             :alignment => { :horizontal => :left, :wrap_text => true, :vertical => :top }, :font_name => 'Calibri'
 
-        wb.add_worksheet(name: "Damper Comprehensive List") do |sheet|
-        sheet.add_image(:image_src => img_path, :start_at => [0, 0], :width => 120, :height => 70,  :noSelect => true, :noMove => true,  :rowOff => 0, :colOff => 0)
-        sheet.add_row ["", "Damper Comprehensive List", "", damper_inspection_para, "", "", "", "", "", "", "", ""], :style => [title_row,title_row,title_row,title_desc,title_desc, title_desc, title_desc, title_desc, title_desc, title_desc, title_desc, title_desc] , :height => 55
-        sheet.merge_cells ("B1:C1")
-        sheet.merge_cells ("D1:L1")
-        sheet.add_row ["Damper #", "Facility", "Building", "Floor", "Damper Location", "Damper Type", "Status", "Deficiencies", "Repair Action Performed", "Subsequent Failure Reason", "Technician", "Date"] , :style => header_row
-        i = 1
-        @records.each do |record|
-	  status = record.u_report_type == "DAMPERREPAIR" ? record.u_dr_passed_post_repair : (record.u_status == "NA" ?  "Non-Accessible": record.u_status) 	
-	  inspected_date = record.u_inspected_on.nil? ? record.u_inspected_on : record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY'))	
-          floor = (record.u_floor == "other" ? record.u_other_floor : record.u_floor)
-          sheet.add_row  [record.u_tag, record.u_facility_name, record.u_building, floor, record.u_location_desc, record.u_type,
-                  status,
+          wb.add_worksheet(name: "Damper Comprehensive List") do |sheet|
+          sheet.add_image(:image_src => img_path, :start_at => [0, 0], :width => 120, :height => 70,  :noSelect => true, :noMove => true,  :rowOff => 0, :colOff => 0)
+          sheet.add_row ["", "Damper Comprehensive List", "", damper_inspection_para, "", "", "", "", "", "", "", ""], :style => [title_row,title_row,title_row,title_desc,title_desc, title_desc, title_desc, title_desc, title_desc, title_desc, title_desc, title_desc] , :height => 55
+          sheet.merge_cells ("B1:C1")
+          sheet.merge_cells ("D1:L1")
+          sheet.add_row ["Damper #", "Facility", "Building", "Floor", "Damper Location", "Damper Type", "Status", "Deficiencies", "Repair Action Performed", "Subsequent Failure Reason", "Technician", "Date"] , :style => header_row
+          i = 1
+          ############    WATERMARK   ##################################################
+          #if params[:u_watermark] == "yes"
+          if @watermark
+            #img = File.expand_path(Rails.root+'app/assets/images/transaparent1.png')
+            sheet.add_image(:image_src => watermaek_img) do |image|
+              image.width = 450
+              image.height = 450
+              image.start_at 1, 2
+            end
+          end  
+          ##############################################################################
+          @records.each do |record|
+	          status = record.u_report_type == "DAMPERREPAIR" ? record.u_dr_passed_post_repair : (record.u_status == "NA" ?  "Non-Accessible": record.u_status) 	
+	          inspected_date = record.u_inspected_on.nil? ? record.u_inspected_on : record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY'))	
+            floor = (record.u_floor == "other" ? record.u_other_floor : record.u_floor)
+            sheet.add_row  [record.u_tag, record.u_facility_name, record.u_building, floor, record.u_location_desc, record.u_type,status,
                   if record.u_status == "Fail"
                     record.u_reason
                   else
@@ -286,46 +314,54 @@ class ApiController < ApplicationController
                   record.u_reason2,
                   record.u_inspector,
                   inspected_date
-          ] , :style => (i.even? ? normal_row_even : normal_row_odd)
-           i += 1
-
+            ] , :style => (i.even? ? normal_row_even : normal_row_odd)
+            i += 1
+          end
+          sheet.column_widths nil, nil, nil, 20, 50, nil, nil, 40, nil, nil, nil, nil
         end
-        sheet.column_widths nil, nil, nil, 20, 50, nil, nil, 40, nil, nil, nil, nil
       end
-    end
-    elsif params[:servicetype].delete(' ').upcase == "FIRESTOP" && params[:reportType].upcase == 'STATEMENT'
+      elsif params[:servicetype].delete(' ').upcase == "FIRESTOP" && params[:reportType].upcase == 'STATEMENT'
         job = Lsspdfasset.last
-	report_type = ["FIRESTOPSURVEY" ,"FIRESTOPINSTALLATION"]    
+	      report_type = ["FIRESTOPSURVEY" ,"FIRESTOPINSTALLATION"]    
         unique_buildings =  job.comprehensive_buildings(params[:facility_id])
         records = []
         unique_buildings.each do |b|
           records << job.statement_building_records(b, params[:facility_id],  report_type)
         end
-        records_ids = records.collect(&:ids).flatten
-	
-     	#get_ids = job.unique_statement_records(params[:facility_id], report_type)   
+        records_ids = records.collect(&:ids).flatten	
+     	  #get_ids = job.unique_statement_records(params[:facility_id], report_type)   
         records = Lsspdfasset.where(id: records_ids).order("updated_at desc")
         p = Axlsx::Package.new
         wb = p.workbook
         img_path = File.expand_path(Rails.root+'app/assets/images/lss_logo.png')
         wb.styles do |s|
-        header_row = s.add_style :sz => 11, :b => true, :font_name => 'Calibri'
-        normal_row_odd = s.add_style :sz => 11, :font_name => 'Calibri', :bg_color => 'EEEEEE', :border => { :style => :thin, :color => "CCCCCC" }
-        normal_row_even = s.add_style :sz => 11, :font_name => 'Calibri', :bg_color => 'FFFFFF', :border => { :style => :thin, :color => "CCCCCC" }
-        title_row = s.add_style :b => true,
+          header_row = s.add_style :sz => 11, :b => true, :font_name => 'Calibri'
+          normal_row_odd = s.add_style :sz => 11, :font_name => 'Calibri', :bg_color => 'EEEEEE', :border => { :style => :thin, :color => "CCCCCC" }
+          normal_row_even = s.add_style :sz => 11, :font_name => 'Calibri', :bg_color => 'FFFFFF', :border => { :style => :thin, :color => "CCCCCC" }
+          title_row = s.add_style :b => true,
                             :sz => 20,
                             :alignment => { :horizontal => :center, :vertical => :center }, :font_name => 'Calibri'
 
-        wb.add_worksheet(name: "Firestop Statement Of Condition") do |sheet|
-        sheet.add_image(:image_src => img_path, :start_at => [0, 0], :width => 120, :height => 70,  :noSelect => true, :noMove => true, :rowOff => 0, :colOff => 0)
-        sheet.add_row ["", "Firestop Statement Of Condition Report", "", "", "", "", ""], :style => title_row, :height => 55
-        sheet.merge_cells ("B1:E1")
-        sheet.add_row ["Issue #", "Facility", "Building", "Floor", "Location", "Barrier Type", "Penetration Type", "Issue", "Corrected On Site", "Suggested Corrective Action", "Corrective Action/UL System", "Date", "Technician"] , :style => header_row
-        i = 1
-        records.each do |record|
-          inspected_date = record.u_inspected_on.nil? ? record.u_inspected_on : record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY'))
-          floor =  (record.u_floor == "other" ? record.u_other_floor : record.u_floor)
-          sheet.add_row [record.u_tag, record.u_facility_name, record.u_building, floor, record.u_location_desc, record.u_barrier_type,
+          wb.add_worksheet(name: "Firestop Statement Of Condition") do |sheet|
+          sheet.add_image(:image_src => img_path, :start_at => [0, 0], :width => 120, :height => 70,  :noSelect => true, :noMove => true, :rowOff => 0, :colOff => 0)
+          sheet.add_row ["", "Firestop Statement Of Condition Report", "", "", "", "", ""], :style => title_row, :height => 55
+          sheet.merge_cells ("B1:E1")
+          sheet.add_row ["Issue #", "Facility", "Building", "Floor", "Location", "Barrier Type", "Penetration Type", "Issue", "Corrected On Site", "Suggested Corrective Action", "Corrective Action/UL System", "Date", "Technician"] , :style => header_row
+          i = 1
+          ############    WATERMARK   ##################################################
+          #img = File.expand_path(Rails.root+'app/assets/images/transaparent1.png')
+          if @watermark
+            sheet.add_image(:image_src => watermaek_img, :noSelect => true, :noMove => true, :rowOff => 0, :colOff => 0) do |image|
+              image.width = 450
+              image.height = 450
+              image.start_at 1, 2
+            end  
+          end
+          ##############################################################################
+          records.each do |record|
+            inspected_date = record.u_inspected_on.nil? ? record.u_inspected_on : record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY'))
+            floor =  (record.u_floor == "other" ? record.u_other_floor : record.u_floor)
+            sheet.add_row [record.u_tag, record.u_facility_name, record.u_building, floor, record.u_location_desc, record.u_barrier_type,
                  record.u_penetration_type, record.u_issue_type,
                   if record.u_service_type == "Fixed On Site"
                     'YES'
@@ -334,39 +370,47 @@ class ApiController < ApplicationController
                   end,
                   record.u_suggested_ul_system, record.u_corrected_url_system, inspected_date,
                   record.u_inspector
-                ] , :style => (i.even? ? normal_row_even : normal_row_odd)
-           i += 1
-
+            ] , :style => (i.even? ? normal_row_even : normal_row_odd)
+            i += 1
           end
-       end
-
-     end
+        end
+      end
       elsif params[:servicetype].delete(' ').upcase == "DAMPER" && params[:reportType].upcase == 'STATEMENT'
-	report_type = ["DAMPERREPAIR" ,"DAMPERINSPECTION"]
-	job = Lsspdfasset.last
+	      report_type = ["DAMPERREPAIR" ,"DAMPERINSPECTION"]
+	      job = Lsspdfasset.last
         get_ids = job.unique_statement_records(params[:facility_id], report_type)
         @records = Lsspdfasset.where(id: get_ids).order("updated_at desc")
         p, wb, img_path = initialize_spreadsheet
         facility_name, tech, date, damper_inspection_para, damper_repair_para = initialize_damper_params
-	para = damper_statement_para
+	      para = damper_statement_para
         wb.styles do |s|
-        header_row, normal_row_odd, normal_row_even, title_row = initialize_spreadsheet_rows(s)
-        title_desc = s.add_style :i => true,
+          header_row, normal_row_odd, normal_row_even, title_row = initialize_spreadsheet_rows(s)
+          title_desc = s.add_style :i => true,
                             :sz => 8,
                             :alignment => { :horizontal => :left, :wrap_text => true, :vertical => :top }, :font_name => 'Calibri'
 
-        wb.add_worksheet(name: "Damper Statement Of Condition") do |sheet|
-        sheet.add_image(:image_src => img_path, :start_at => [0, 0], :width => 120, :height => 70,  :noSelect => true, :noMove => true,  :rowOff => 0, :colOff => 0)
-        sheet.add_row ["", "Damper Statement Of Condition Report", "", para, "", "", "", "", "", "", "", ""], :style => [title_row,title_row,title_row,title_desc,title_desc, title_desc, title_desc, title_desc, title_desc, title_desc, title_desc, title_desc] , :height => 55
-        sheet.merge_cells ("B1:C1")
-        sheet.merge_cells ("D1:L1")
-        sheet.add_row ["Damper #", "Facility", "Building", "Floor", "Damper Location", "Damper Type", "Status", "Deficiencies", "Repair Action Performed", "Subsequent Failure Reason", "Technician", "Date"] , :style => header_row
-        i = 1
-        @records.each do |record|
-          status = record.u_report_type == "DAMPERREPAIR" ? record.u_dr_passed_post_repair : (record.u_status == "NA" ?  "Non-Accessible": record.u_status)
-          inspected_date = record.u_inspected_on.nil? ? record.u_inspected_on : record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY'))
-          floor = (record.u_floor == "other" ? record.u_other_floor : record.u_floor)
-          sheet.add_row  [record.u_tag, record.u_facility_name, record.u_building, floor, record.u_location_desc, record.u_type,
+          wb.add_worksheet(name: "Damper Statement Of Condition") do |sheet|
+            sheet.add_image(:image_src => img_path, :start_at => [0, 0], :width => 120, :height => 70,  :noSelect => true, :noMove => true,  :rowOff => 0, :colOff => 0)
+            sheet.add_row ["", "Damper Statement Of Condition Report", "", para, "", "", "", "", "", "", "", ""], :style => [title_row,title_row,title_row,title_desc,title_desc, title_desc, title_desc, title_desc, title_desc, title_desc, title_desc, title_desc] , :height => 55
+            sheet.merge_cells ("B1:C1")
+            sheet.merge_cells ("D1:L1")
+            sheet.add_row ["Damper #", "Facility", "Building", "Floor", "Damper Location", "Damper Type", "Status", "Deficiencies", "Repair Action Performed", "Subsequent Failure Reason", "Technician", "Date"] , :style => header_row
+            i = 1
+            ############    WATERMARK   ##################################################
+            #img = File.expand_path(Rails.root+'app/assets/images/transaparent1.png')
+            if @watermark
+              sheet.add_image(:image_src => watermaek_img, :noSelect => true, :noMove => true, :rowOff => 0, :colOff => 0) do |image|
+                image.width = 450
+                image.height = 450
+                image.start_at 1, 2
+              end
+            end  
+          ##############################################################################
+            @records.each do |record|
+              status = record.u_report_type == "DAMPERREPAIR" ? record.u_dr_passed_post_repair : (record.u_status == "NA" ?  "Non-Accessible": record.u_status)
+              inspected_date = record.u_inspected_on.nil? ? record.u_inspected_on : record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY'))
+              floor = (record.u_floor == "other" ? record.u_other_floor : record.u_floor)
+              sheet.add_row  [record.u_tag, record.u_facility_name, record.u_building, floor, record.u_location_desc, record.u_type,
                   status,
                   if record.u_status == "Fail"
                     record.u_reason
@@ -377,37 +421,44 @@ class ApiController < ApplicationController
                   record.u_reason2,
                   record.u_inspector,
                   inspected_date
-          ] , :style => (i.even? ? normal_row_even : normal_row_odd)
-           i += 1
-
+              ] , :style => (i.even? ? normal_row_even : normal_row_odd)
+              i += 1
+            end
+            sheet.column_widths nil, nil, nil, 20, 50, nil, nil, 40, nil, nil, nil, nil
+          end
         end
-        sheet.column_widths nil, nil, nil, 20, 50, nil, nil, 40, nil, nil, nil, nil
-      end
-    end
-
-	      
       elsif params[:servicetype].delete(' ').upcase == "FIRESTOPINSTALLATION"
         @records = Lsspdfasset.where(u_service_id: params[:serviceid], :u_delete => false)
         p = Axlsx::Package.new
         wb = p.workbook
-	img_path = File.expand_path(Rails.root+'app/assets/images/lss_logo.png')
-	wb.styles do |s|
-	header_row = s.add_style :sz => 11, :b => true, :font_name => 'Calibri'
-        normal_row_odd = s.add_style :sz => 11, :font_name => 'Calibri', :bg_color => 'EEEEEE', :border => { :style => :thin, :color => "CCCCCC" }
-        normal_row_even = s.add_style :sz => 11, :font_name => 'Calibri', :bg_color => 'FFFFFF', :border => { :style => :thin, :color => "CCCCCC" }
-        title_row = s.add_style :b => true,
+	      img_path = File.expand_path(Rails.root+'app/assets/images/lss_logo.png')
+	      wb.styles do |s|
+	        header_row = s.add_style :sz => 11, :b => true, :font_name => 'Calibri'
+          normal_row_odd = s.add_style :sz => 11, :font_name => 'Calibri', :bg_color => 'EEEEEE', :border => { :style => :thin, :color => "CCCCCC" }
+          normal_row_even = s.add_style :sz => 11, :font_name => 'Calibri', :bg_color => 'FFFFFF', :border => { :style => :thin, :color => "CCCCCC" }
+          title_row = s.add_style :b => true,
                             :sz => 20,
                             :alignment => { :horizontal => :center, :vertical => :center }, :font_name => 'Calibri'
 	
-        wb.add_worksheet(name: "Firestop Installation List") do |sheet|
-	sheet.add_image(:image_src => img_path, :start_at => [0, 0], :width => 120, :height => 70,  :noSelect => true, :noMove => true, :rowOff => 0, :colOff => 0)
-	sheet.add_row ["", "Firestop Installation List", "", "", ""], :style => title_row, :height => 55
-	sheet.merge_cells ("B1:E1")	
-        sheet.add_row ["Issue #", "Facility", "Building", "Floor", "Location", "Barrier Type", "Penetration Type", "Issue", "Corrected On Site", "Suggested Corrective Action", "Corrective Action/UL System", "Date", "Technician"] , :style => header_row
-        i = 1
-	@records.each do |record|
-          floor =  (record.u_floor == "other" ? record.u_other_floor : record.u_floor)
-          sheet.add_row [record.u_tag, record.u_facility_name, record.u_building, floor, record.u_location_desc, record.u_barrier_type,
+          wb.add_worksheet(name: "Firestop Installation List") do |sheet|
+	          sheet.add_image(:image_src => img_path, :start_at => [0, 0], :width => 120, :height => 70,  :noSelect => true, :noMove => true, :rowOff => 0, :colOff => 0)
+	          sheet.add_row ["", "Firestop Installation List", "", "", ""], :style => title_row, :height => 55
+	          sheet.merge_cells ("B1:E1")	
+            sheet.add_row ["Issue #", "Facility", "Building", "Floor", "Location", "Barrier Type", "Penetration Type", "Issue", "Corrected On Site", "Suggested Corrective Action", "Corrective Action/UL System", "Date", "Technician"] , :style => header_row
+            i = 1
+            ############    WATERMARK   ##################################################
+            #img = File.expand_path(Rails.root+'app/assets/images/transaparent1.png')
+            if @watermark
+              sheet.add_image(:image_src => watermaek_img, :noSelect => true, :noMove => true, :rowOff => 0, :colOff => 0) do |image|
+                image.width = 450
+                image.height = 450
+                image.start_at 1, 2
+              end  
+            end
+          ##############################################################################
+	          @records.each do |record|
+              floor =  (record.u_floor == "other" ? record.u_other_floor : record.u_floor)
+              sheet.add_row [record.u_tag, record.u_facility_name, record.u_building, floor, record.u_location_desc, record.u_barrier_type,
                  record.u_penetration_type, record.u_issue_type,
                   if record.u_service_type == "Fixed On Site"
                     'YES'
@@ -415,21 +466,19 @@ class ApiController < ApplicationController
                     'NO'
                   end,
                   record.u_suggested_ul_system, record.u_corrected_url_system, record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')), record.u_inspector
-                ] , :style => (i.even? ? normal_row_even : normal_row_odd)
-           i += 1
-
+              ] , :style => (i.even? ? normal_row_even : normal_row_odd)
+              i += 1
+            end
           end
-       end
- 
-     end
-    else
-      @records = Lsspdfasset.where(u_facility_sys_id: params[:facilityid], :u_report_type => "DAMPERINSPECTION", :u_delete => false) + 
+        end
+      else
+        @records = Lsspdfasset.where(u_facility_sys_id: params[:facilityid], :u_report_type => "DAMPERINSPECTION", :u_delete => false) + 
                  Lsspdfasset.where(u_facility_sys_id: params[:facilityid], :u_report_type => "DAMPERREPAIR", :u_delete => false)
-      csv_data = CSV.generate do |csv|
-        csv << ["Date", "Asset #", "Facility", "Building", "Floor", "Damper Location", "Damper Type",  "Service Type", "Technician", "Result", "Issues", "Action Taken", "Current Status"]
-        @records.each do |record|
-          result_and_current_result = record.comperhensive_result(record)
-          csv << [record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')), record.u_tag, record.u_facility_name, record.u_building, record.u_floor, 
+        csv_data = CSV.generate do |csv|
+          csv << ["Date", "Asset #", "Facility", "Building", "Floor", "Damper Location", "Damper Type",  "Service Type", "Technician", "Result", "Issues", "Action Taken", "Current Status"]
+          @records.each do |record|
+            result_and_current_result = record.comperhensive_result(record)
+            csv << [record.u_inspected_on.localtime.strftime(I18n.t('time.formats.mdY')), record.u_tag, record.u_facility_name, record.u_building, record.u_floor, 
                   record.u_location_desc, record.u_type, record.u_report_type, record.u_inspector, result_and_current_result,
                   if record.u_report_type == "DAMPERINSPECTION"
                     if result_and_current_result == "FAIL"
@@ -458,18 +507,17 @@ class ApiController < ApplicationController
                     end
                   end, 
                   result_and_current_result
-                ]
+            ]
+          end
         end
       end
+    if params[:servicetype].delete(' ').upcase == "FIRESTOPINSTALLATION" || params[:servicetype].delete(' ').upcase == "FIRESTOPSURVEY" || params[:servicetype].delete(' ').upcase == "DAMPERINSPECTION" || params[:servicetype].delete(' ').upcase == "DAMPERREPAIR" || params[:servicetype].delete(' ').upcase == "FIRESTOP" || params[:servicetype].delete(' ').upcase == "DAMPER"
+      send_data p.to_stream.read, type: "application/xlsx", filename: "#{@outputfile}.xlsx"
+    else
+      send_data csv_data,
+      :type => 'text/csv; charset=iso-8859-1; header=present',
+      :disposition => "attachment; filename=#{@outputfile}.csv"   
     end
-   if params[:servicetype].delete(' ').upcase == "FIRESTOPINSTALLATION" || params[:servicetype].delete(' ').upcase == "FIRESTOPSURVEY" || params[:servicetype].delete(' ').upcase == "DAMPERINSPECTION" || params[:servicetype].delete(' ').upcase == "DAMPERREPAIR" || params[:servicetype].delete(' ').upcase == "FIRESTOP" || params[:servicetype].delete(' ').upcase == "DAMPER"
-
-     send_data p.to_stream.read, type: "application/xlsx", filename: "#{@outputfile}.xlsx"
-   else
-     send_data csv_data,
-    :type => 'text/csv; charset=iso-8859-1; header=present',
-    :disposition => "attachment; filename=#{@outputfile}.csv"   
-   end
   end
 
   def project_completion_save_pdf
@@ -805,8 +853,9 @@ class ApiController < ApplicationController
     group    = HTMLEntities.new.decode params[:groupname]
     facility = HTMLEntities.new.decode params[:facilityname]
     with_pic = params[:withPictures] && (params[:withPictures] == 'no') ? false : true
+    watermark = params[:u_watermark] && (params[:u_watermark] == 'no') ? false : true
     pdfjob = Lsspdfasset.where(u_service_id: params[:serviceID], :u_delete => false).last
-    return model, address1, address2, csz, facility_type, tech, group, facility, with_pic, pdfjob    
+    return model, address1, address2, csz, facility_type, tech, group, facility, with_pic, watermark, pdfjob    
   end	  
 
   def comprehensive_pdf_generation_params
@@ -820,12 +869,13 @@ class ApiController < ApplicationController
     facility = HTMLEntities.new.decode params[:facilityname]
     facility_id = HTMLEntities.new.decode params[:facility_id]
     with_pic = params[:withPictures] && (params[:withPictures] == 'no') ? false : true
+    watermark = params[:u_watermark] && (params[:u_watermark] == 'no') ? false : true
     
     if model == "DAMPER"
       job = Lsspdfasset.where(u_facility_id: params[:facility_id], u_report_type: ["DAMPERREPAIR" ,"DAMPERINSPECTION"], :u_delete => false).last
     else
       job = Lsspdfasset.where(u_facility_id: params[:facility_id], u_report_type: ["FIRESTOPSURVEY" ,"FIRESTOPINSTALLATION"], :u_delete => false).last
     end 
-    return model, address1, address2, csz, facility_type, facility_id, tech, group, facility, with_pic, job
+    return model, address1, address2, csz, facility_type, facility_id, tech, group, facility, with_pic, watermark, job
    end
 end

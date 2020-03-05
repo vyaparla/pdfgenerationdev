@@ -4,6 +4,7 @@ module DamperStatementReport
 
     def write(pdf)
       return if statement_records.empty?
+      pdf.stamp_at "watermark", [100, 210] if @watermark 
       BuildingSummaryPage.new(@job, @building, @tech).write(pdf)
       write_breakdown_pages(pdf, building_section, @tech)
       @records = statement_records.where.not(u_type: "", u_status: "Removed")

@@ -2,11 +2,12 @@ module FirestopInstallationReport
   class PhotoPage
     include Report::PhotoPageWritable
 
-    def initialize(record, group_name, facility_name, with_picture)
+    def initialize(record, group_name, facility_name, with_picture, watermark)
       @record = record
       @group_name = group_name
       @facility_name = facility_name
       @with_picture = with_picture
+      @watermark = watermark
     end
     
     # def write(pdf)
@@ -56,7 +57,7 @@ module FirestopInstallationReport
       #     draw_suggested_corrective_action(pdf)
       #   end
       # end
-
+      pdf.stamp_at "watermark", [100, 210] if @watermark 
       draw_table1(pdf) 
       draw_table2(pdf) 
       pdf.move_down 20
@@ -265,6 +266,7 @@ def table_params
     #   #pdf.text("<b>Penetration Number :</b> #{@record.u_tag}", inline_format: true)
     # end
     def draw_before_image(pdf)
+      pdf.stamp_at "watermark", [100, 210] if @watermark 
       pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", 
         at: [60 - pdf.bounds.absolute_left, 275], :width => 230, :height => 230)#536
       image =  @record.pdf_image1.path(:pdf)      
@@ -277,6 +279,7 @@ def table_params
     end
 
     def draw_after_image(pdf)
+      pdf.stamp_at "watermark", [100, 210] if @watermark 
       pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png",
         at: [340 - pdf.bounds.absolute_left, 275], :width => 230, :height => 230)#536
       image =  @record.pdf_image2.path(:pdf)      

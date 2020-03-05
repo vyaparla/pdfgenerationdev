@@ -2,11 +2,12 @@ module FirestopComprehensiveReport
   class PhotoPage
   	include Report::PhotoPageWritable
 
-    def initialize(record, group_name, facility_name, with_picture)
+    def initialize(record, group_name, facility_name, with_picture, watermark)
       @record = record
       @group_name = group_name
       @facility_name = record.u_facility_name
       @with_picture = with_picture
+      @watermark = watermark
     end
 
     # def write(pdf)
@@ -62,7 +63,7 @@ module FirestopComprehensiveReport
       #   draw_before_image(pdf)
       #   draw_after_image(pdf)
       # end
-
+      pdf.stamp_at "watermark", [100, 210] if @watermark 
       draw_table1(pdf) 
       draw_table2(pdf) 
       pdf.move_down 20

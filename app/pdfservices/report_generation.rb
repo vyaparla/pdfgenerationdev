@@ -4,7 +4,7 @@ class ReportGeneration
   require 'damper_inspection_job'
 
 
-  def initialize(owner, model_name, address1, address2, csz, facility_type, tech, group_name, facility_name, facility_id=nil, service=nil, report_type=nil, with_picture)
+  def initialize(owner, model_name, address1, address2, csz, facility_type, tech, group_name, facility_name, facility_id=nil, service=nil, report_type=nil, with_picture, watermark)
     @owner = owner    
     @model_name = model_name
     @address1 = address1
@@ -18,6 +18,7 @@ class ReportGeneration
     @with_picture = with_picture
     @service = service
     @report_type = report_type
+    @watermark = watermark
   end
 
   def generate_full_report
@@ -25,25 +26,25 @@ class ReportGeneration
   end
 
   def generate_summary_report
-    reporter.summary_report(@owner, @model_name, @address1, @address2, @csz, @tech, @group_name, @facility_name)
+    reporter.summary_report(@owner, @model_name, @address1, @address2, @csz, @tech, @group_name, @facility_name, @watermark)
   end
 
   def generate_report_facility_wise
     if @service.upcase == "FIRESTOP"	
        if @report_type.upcase == "STATEMENT"
 	        FirestopFacilityJob.reporter_class.new.statement_report(@owner, @model_name, @address1, @address2, @csz, @facility_type,
-          @tech, @group_name, @facility_name, @facility_id, @with_picture, @report_type)      
+          @tech, @group_name, @facility_name, @facility_id, @with_picture, @report_type, @watermark)      
        else
 	        FirestopFacilityJob.reporter_class.new.comprehensive_report(@owner, @model_name, @address1, @address2, @csz, @facility_type,
-          @tech, @group_name, @facility_name, @facility_id, @with_picture, @report_type)      
+          @tech, @group_name, @facility_name, @facility_id, @with_picture, @report_type, @watermark)      
        end	       
     elsif @service.upcase == "DAMPER"
       if @report_type.upcase == "STATEMENT"
          DamperStatementJob.reporter_class.new.statement_report(@owner, @model_name, @address1, @address2, @csz, @facility_type, @tech, @group_name,
-         @facility_name, @facility_id, @with_picture, @report_type) 
+         @facility_name, @facility_id, @with_picture, @report_type, @watermark) 
       else
          DamperComprehensive.reporter_class.new.comprehensive_report(@owner, @model_name, @address1, @address2, @csz, @facility_type, @tech, @group_name,
-         @facility_name, @facility_id, @with_picture, @report_type) 
+         @facility_name, @facility_id, @with_picture, @report_type, @watermark) 
       end  
     end   
   end	  
@@ -53,7 +54,7 @@ class ReportGeneration
   def create_full_report
     #reporter.report(@owner)
     reporter.report(@owner, @model_name, @address1, @address2, @csz, @facility_type, 
-      @tech, @group_name, @facility_name, @with_picture)
+      @tech, @group_name, @facility_name, @with_picture, @watermark)
   end
 
   def reporter

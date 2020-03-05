@@ -2,41 +2,17 @@ module DamperComprehensiveReport
   class PhotoPage
     include Report::PhotoPageWritable
     
-    def initialize(record, group_name, facility_name, with_picture)
+    def initialize(record, group_name, facility_name, with_picture, watermark)
       @record = record
       @group_name = group_name
       @facility_name = facility_name
       @with_picture = with_picture
+      @watermark = watermark
     end
-
-    # def write(pdf)
-    #   super
-    #   pdf.indent(250) do
-    #     draw_location_description(pdf)
-    #     draw_damper_tag(pdf)
-    #     draw_damper_type(pdf)
-    #     draw_floor(pdf)
-    #     # unless @record.u_access_size.blank?
-    #     #   draw_access_door_installation(pdf)
-    #     # end
-    #     draw_status(pdf)
-    #     draw_repairs(pdf)
-    #   end
-    #   if @record.u_repair_action_performed == "Damper Repaired"
-    #     draw_open_after_install_image(pdf)
-    #     draw_closed_after_install_image(pdf)
-    #     draw_reopened_after_install_image(pdf)
-    #   else
-    #     draw_open_after_install_image(pdf)
-    #     draw_closed_after_install_image(pdf)
-    #     draw_reopened_after_install_image(pdf)
-    #     draw_new_install_image(pdf)
-    #   end
-    # end
 
     def write(pdf)
       super
-
+      pdf.stamp_at "watermark", [100, 210] if @watermark 
       draw_table1(pdf)
       draw_table2(pdf)
       draw_table3(pdf)
@@ -311,6 +287,7 @@ module DamperComprehensiveReport
     end
 
     def draw_open_after_install_image(pdf)
+      pdf.stamp_at "watermark", [100, 210] if @watermark 
       pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", 
         at: [60 - pdf.bounds.absolute_left, 275], :width => 123, :height => 123)#530
       image = @record.pdf_image1.path(:pdf)
@@ -329,6 +306,7 @@ module DamperComprehensiveReport
     end
 
     def draw_closed_after_install_image(pdf)
+      pdf.stamp_at "watermark", [100, 210] if @watermark 
       image = @record.pdf_image2.path(:pdf)      
       unless image.blank?
         pdf.image(image, at: [380 - pdf.bounds.absolute_left, 275], :width => 120, :height => 120)
@@ -342,6 +320,7 @@ module DamperComprehensiveReport
     end
 
     def draw_new_install_image(pdf)
+      pdf.stamp_at "watermark", [100, 210] if @watermark 
       # pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", 
       #   at: [60 - pdf.bounds.absolute_left, 125], :width => 123, :height => 123)
       image = @record.pdf_image4.path(:pdf) 
@@ -361,6 +340,7 @@ module DamperComprehensiveReport
     end
 
     def draw_reopened_after_install_image(pdf)
+      pdf.stamp_at "watermark", [100, 210] if @watermark 
       #pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", 
       #  at: [380 - pdf.bounds.absolute_left, 125], :width => 123, :height => 123)
       image = @record.pdf_image3.path(:pdf)

@@ -2,10 +2,11 @@ module FirestopComprehensiveReport
   class TablePage
     include Report::DataPageWritable
 
-    def initialize(records, building_section, tech)
+    def initialize(records, building_section, tech, watermark)
       @records = records
       @building_section = building_section
       @tech = tech
+      @watermark = watermark
 
       @fixed_on_site = []
       #fixed_on_site_heading = [{:content => 'Fixed On Site = YES', :colspan => 540}]
@@ -85,6 +86,7 @@ module FirestopComprehensiveReport
       if !@fixed_on_site.blank?
         if @fixed_on_site.count <= 9 && (@fixed_on_site.count >= 8 || @fixed_on_site.count == 9)
           super
+          pdf.stamp_at "watermark", [100, 210] if @watermark 
           draw_fixed_on_site(pdf, @fixed_on_site)
 
           if !@survey_only.blank?

@@ -2,16 +2,18 @@ module DamperComprehensiveReport
   class TabularBreakdownPage
   	include Report::RepairDataPageWritable
 
- def initialize(records, damper_type, building_section, tech)
+ def initialize(records, damper_type, building_section, tech, watermark)
       @records = records
       @damper_type = damper_type
       @building_section = building_section
       @tech = tech
+      @watermark = watermark
     end
 
     def write(pdf)
       return if @records.empty?
       super
+      pdf.stamp_at "watermark", [100, 210] if @watermark 
       pdf.font_size 10
       pdf.text("<b>#{title}</b>", :inline_format => true)
       attributes = summary_table_attributes
