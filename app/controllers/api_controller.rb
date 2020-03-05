@@ -21,6 +21,38 @@ class ApiController < ApplicationController
     end
   end
 
+  def facility_update
+    if  params[:facility_id].present? && params[:new_facility_name].present?	  
+      facility_id, facility_name = params[:facility_id], params[:new_facility_name]
+      begin
+        asset = Lsspdfasset.where(:u_facility_id => facility_id).last
+        asset.facility_update(facility_name)
+        render json: {message: "Update Success"}
+      rescue => e
+        puts "ERROR: #{e}"
+        render json: {message: "Unable to Update the record!"}
+      end
+    else
+      render json: {message: "Invalid input parameters!"}
+    end  	    
+  end
+
+  def building_update
+    if  params[:facility_id].present? && params[:new_building_name].present? && params[:old_building_name].prsent?
+      facility_id, old_name, new_name = params[:facility_id], params[:old_building_name], params[:new_building_name]
+      begin
+        asset = Lsspdfasset.where(:u_facility_id => facility_id).last
+        asset.building_update(old_name, new_name)
+        render json: {message: "Update Success"}
+      rescue => e
+        puts "ERROR: #{e}"
+        render json: {message: "Unable to Update the record!"}
+      end
+    else
+      render json: {message: "Invalid input parameters!"}
+    end   
+  end
+
   def facility_wise_pdf_report_generation
     model, address1, address2, csz, facility_type, facility_id, tech, group, facility, with_pic, watermark, pdfjob = comprehensive_pdf_generation_params
     service, report_type = params[:service], params[:reportType]

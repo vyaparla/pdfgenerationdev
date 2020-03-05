@@ -39,7 +39,7 @@ module Report
       # %i(pass fail na total_dampers).map { |k| column_heading(k) }
       [column_heading(heading)] +
       ["Fire", "Smoke", "Combination"] +
-      %i(pass fail na removed total_dampers damper_per).map { |k| column_heading(k)}
+      %i(pass fail na total_dampers damper_per removed).map { |k| column_heading(k)}
     end
 
     def column_heading(key)
@@ -218,7 +218,7 @@ module Report
       @final_table_data_total.push($ptotal)
       @final_table_data_total.push($ftotal)
       @final_table_data_total.push($natotal)
-      @final_table_data_total.push($rmtotal)
+      #@final_table_data_total.push($rmtotal)
       @final_table_data_total.push($ptotal + $ftotal + $natotal)
       #@final_table_data_total.push($sdtotal + $fdtotal + $fsdtotal)
       #@final_table_data_total.push("100.00%")
@@ -229,7 +229,7 @@ module Report
       end
 
 
-
+      @final_table_data_total.push($rmtotal)
 
       @final_table_data = []
       @floorInfo.each do |resultInfo|
@@ -242,7 +242,7 @@ module Report
            @damperPer = '%.2f%' % ((100 * @damperTotal) / (@getdamperGrandtotal))
         end   
         #@damperPer = '%.2f%' % ((resultInfo["Pass"] * 100) / (resultInfo["FSD"] + resultInfo["FD"] + resultInfo["SD"]))
-        @final_table_data << [resultInfo["floor"], resultInfo["FD"], resultInfo["SD"], resultInfo["FSD"], resultInfo["Pass"], resultInfo["Fail"], resultInfo["NA"], resultInfo["Removed"], resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"] , @damperPer]
+        @final_table_data << [resultInfo["floor"], resultInfo["FD"], resultInfo["SD"], resultInfo["FSD"], resultInfo["Pass"], resultInfo["Fail"], resultInfo["NA"], resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"] , @damperPer, resultInfo["Removed"]]
       end
 
       if $ptotal == 0 && $ftotal == 0 && $natotal == 0 
