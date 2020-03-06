@@ -17,6 +17,7 @@ module FirestopSurveyReport
         #Report::Graph.new('ISSUES', issues_path, [111, top]).draw(pdf)
         #Report::Graph.new('ISSUES', issues_path, [160, top]).draw(pdf)
         Report::Graph.new('ISSUES', issues_path, [0, top]).draw(pdf)
+        pdf.stamp_at "watermark", [100, 210] if @watermark 
       end
     end
 

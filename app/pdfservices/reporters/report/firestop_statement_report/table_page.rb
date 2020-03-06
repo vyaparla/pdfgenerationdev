@@ -32,11 +32,10 @@ module FirestopStatementReport
     end
 
     def write(pdf)
+      pdf.stamp_at "watermark", [100, 210] if @watermark 
       if !@fixed_on_site.blank?
         if @fixed_on_site.count <= 9 && (@fixed_on_site.count >= 8 || @fixed_on_site.count == 9)
           super
-          pdf.stamp_at "watermark", [100, 210] if @watermark 
-          pdf.stamp_at "watermark", [100, 210] if @watermark 
           draw_fixed_on_site(pdf, @fixed_on_site)
 
           if !@survey_only.blank?
