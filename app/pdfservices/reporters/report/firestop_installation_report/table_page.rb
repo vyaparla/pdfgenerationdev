@@ -12,7 +12,6 @@ module FirestopInstallationReport
     def write(pdf)
       return if records.empty?
       #super
-      pdf.stamp_at "watermark", [100, 210] if @watermark 
       @fixed_on_site = []
       #fixed_on_site_heading = [{:content => 'Fixed On Site = YES', :colspan => 540}]
       #@fixed_on_site << fixed_on_site_heading
@@ -69,6 +68,7 @@ module FirestopInstallationReport
       if !@fixed_on_site.blank?
         if @fixed_on_site.count <= 9 && (@fixed_on_site.count >= 8 || @fixed_on_site.count == 9)
           super
+          pdf.stamp_at "watermark", [100, 210] if @watermark 
           draw_fixed_on_site(pdf, @fixed_on_site)
 
           if !@survey_only.blank?

@@ -13,6 +13,7 @@ module FirestopStatementReport
       if File.exists?(issues_path)
         Report::Graph.new('ISSUES', issues_path, [0, top]).draw(pdf)
       end
+      pdf.stamp_at "watermark", [100, 210] if @watermark 
     end
 
   private
