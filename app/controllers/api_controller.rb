@@ -243,6 +243,16 @@ class ApiController < ApplicationController
             sheet.merge_cells ("B1:E1")
             sheet.add_row ["Issue #", "Facility", "Building", "Floor", "Location", "Barrier Type", "Penetration Type", "Issue", "Corrected On Site", "Suggested Corrective Action", "Corrective Action/UL System", "Date", "Technician"] , :style => header_row
             i = 1
+            ############    WATERMARK   ##################################################
+            if @watermark
+              sheet.add_image(:image_src => watermaek_img, :noSelect => true, :noMove => true, :rowOff => 0, :colOff => 0) do |image|
+                image.width = 450
+                image.height = 450
+                image.start_at 1, 2
+              end
+            end  
+          ##############################################################################
+
             @records.each do |record|
               floor =  ( record.u_floor == "other" ? record.u_other_floor : record.u_floor)
               sheet.add_row  [record.u_tag, record.u_facility_name, record.u_building, floor, record.u_location_desc, record.u_barrier_type, 
