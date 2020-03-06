@@ -110,7 +110,7 @@ module FirestopInstallationReport
         end
       end
       pdf.move_down 10
-      FirestopInstallationReport::GraphPage.new(@job).write(pdf)
+      FirestopInstallationReport::GraphPage.new(@job, @watermark).write(pdf)
     end
   
     def date_key

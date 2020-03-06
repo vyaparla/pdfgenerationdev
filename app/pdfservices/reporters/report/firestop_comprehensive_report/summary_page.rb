@@ -123,7 +123,7 @@ module FirestopComprehensiveReport
         end
       end
       pdf.move_down 10
-      FirestopComprehensiveReport::GraphPage.new(@job).write(pdf)
+      FirestopComprehensiveReport::GraphPage.new(@job, @watermark).write(pdf)
     end  
   end
 end

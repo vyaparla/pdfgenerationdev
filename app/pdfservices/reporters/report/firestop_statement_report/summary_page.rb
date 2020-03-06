@@ -130,7 +130,7 @@ module FirestopStatementReport
         end
       end
       pdf.move_down 10
-      FirestopStatementReport::GraphPage.new(@job).write(pdf)
+      FirestopStatementReport::GraphPage.new(@job, @watermark).write(pdf)
     end  
   end
 
