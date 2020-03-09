@@ -18,11 +18,13 @@ module Report
       top = pdf.cursor
       # pdf.indent(300) { Report::Table.new(type_table_content).draw(pdf) }
       pdf.move_cursor_to top
+     # pdf.bounding_box([400, 310], :width => 230, :height => 420) do   
       Report::Table.new(project_statistics_data).draw(pdf) do |formatter|
         formatter.cell[1,0] = { :text_color => '137d08' }
         formatter.cell[2,0] = { :text_color => 'c1171d' }
         formatter.cell[3,0] = { :text_color => 'f39d27' }
       end
+     #end 
       pdf.move_down 20
     end
    
@@ -50,6 +52,7 @@ module Report
       pdf.font_size 20
       pdf.fill_color 'ED1C24'
       pdf.text("<b>#{text}</b>", :inline_format => true)
+      #pdf.draw_text("#{text}", :style => :bold, :inline_format => true), at: [420 , 320])
       pdf.fill_color '202020'
       pdf.move_down 10
     end
@@ -75,7 +78,7 @@ module Report
       new_array = @damper_repair.to_a + @damper_inspection.to_a
       status_counts = new_array.group_by{|i| i[0]}.map{|k,v| [k, v.map(&:last).sum] } 
      
-      @serviceInfo = status_counts.to_h
+      @serviceInfo = (status_counts.sort).to_h
 
       @buildingInfo = []
       @serviceInfo.each do |key,value|
@@ -215,16 +218,16 @@ module Report
       end
 
      
-      if $ptotal == 0 && $ftotal == 0 && $natotal == 0 && $removedtotal == 0
+      if $ptotal == 0 && $ftotal == 0 && $natotal == 0 
         $project_pass_per  = "00.00%"
         $project_fail_per  = "00.00%"
         $project_na_per = "00.00%"
         $project_removed_per = "00.00%"
       else
-        $project_pass_per  = '%.2f%' %  (($ptotal.to_f * 100) / ($ptotal + $ftotal + $natotal + $removedtotal))
-        $project_fail_per  = '%.2f%' %  (($ftotal.to_f * 100) / ($ptotal + $ftotal + $natotal + $removedtotal))
-        $project_na_per = '%.2f%' %  (($natotal.to_f * 100) / ($ptotal + $ftotal + $natotal + $removedtotal))  
-        $project_removed_per = '%.2f%' %  (($removedtotal.to_f * 100) / ($ptotal + $ftotal + $natotal + $removedtotal))
+        $project_pass_per  = '%.2f%' %  (($ptotal.to_f * 100) / ($ptotal + $ftotal + $natotal ))
+        $project_fail_per  = '%.2f%' %  (($ftotal.to_f * 100) / ($ptotal + $ftotal + $natotal ))
+        $project_na_per = '%.2f%' %  (($natotal.to_f * 100) / ($ptotal + $ftotal + $natotal ))  
+        $project_removed_per = '%.2f%' %  (($removedtotal.to_f * 100) / ($ptotal + $ftotal + $natotal ))
       end  
       
       @project_final_table_data + [['GRAND TOTAL', ''] + @project_grand_total_data]
@@ -235,8 +238,8 @@ module Report
        DamperInspectionReporting.column_heading(:percent_of_dampers)]] + 
        [[DamperInspectionReporting.column_heading(:pass), $project_pass_per],
        [DamperInspectionReporting.column_heading(:fail), $project_fail_per],
-       [DamperInspectionReporting.column_heading(:na), $project_na_per],
-       [DamperInspectionReporting.column_heading(:removed), $project_removed_per]
+       [DamperInspectionReporting.column_heading(:na), $project_na_per]
+     #  [DamperInspectionReporting.column_heading(:removed), $project_removed_per]
        #[DamperInspectionReporting.column_heading(:removed), "00.00%"]
 
        ]
@@ -376,13 +379,13 @@ module Report
     end 
 
     def find_uniq_assets(owner, report_type)
-      get_all = Lsspdfasset.select(:id, :u_tag).where(:u_facility_id => owner.u_facility_id, :u_report_type => report_type, :u_delete => false).where.not(u_type: "").group(["u_building","u_tag"]).order('updated_at desc').count(:u_tag)
+      get_all = Lsspdfasset.select(:id, :u_tag).where(:u_facility_id => owner.u_facility_id, :u_report_type => report_type, :u_delete => false).where.not(u_type: "").group(["u_building","u_tag"]).order('u_updated_date desc').count(:u_tag)
       repar_ids = []
       get_all.each do |key,val|
         if val > 1
-         repar_ids << Lsspdfasset.select(:id).where(:u_facility_id => owner.u_facility_id, :u_tag =>key, :u_report_type => report_type, :u_delete => false).where.not(u_type: "").order('updated_at desc').first
+         repar_ids << Lsspdfasset.select(:id).where(:u_facility_id => owner.u_facility_id, :u_tag =>key, :u_report_type => report_type, :u_delete => false).where.not(u_type: "").order('u_updated_date desc').first
         else
-         repar_ids << Lsspdfasset.select(:id).where(:u_facility_id => owner.u_facility_id, :u_tag =>key, :u_report_type => report_type, :u_delete => false).where.not(u_type: "").order('updated_at desc').first
+         repar_ids << Lsspdfasset.select(:id).where(:u_facility_id => owner.u_facility_id, :u_tag =>key, :u_report_type => report_type, :u_delete => false).where.not(u_type: "").order('u_updated_date desc').first
         end
       end  
      ids = repar_ids.collect(&:id)

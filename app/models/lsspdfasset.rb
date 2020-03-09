@@ -46,9 +46,20 @@ class Lsspdfasset < ActiveRecord::Base
 
   def statement_building_records(building, facility_id, report_type)
     records = find_statement_records(building, facility_id, report_type)
-    Lsspdfasset.where(:id => records).uniq.order('updated_at desc')
+    Lsspdfasset.where(:id => records).uniq.order('u_updated_date desc')
   end
 
+  def facility_update(facility_name)
+     facility_id  = self.u_facility_id
+     records = Lsspdfasset.where(:u_facility_id => facility_id)
+     records.update_all(u_facility_name: facility_name)
+  end
+
+  def building_update(old_name, new_name)
+     facility_id  = self.u_facility_id
+     records = Lsspdfasset.where(:u_facility_id => facility_id, :u_building => old_name)
+     records.update_all(u_building: new_name)
+  end
 
   def full_report_path(with_picture=true)
      report_name  = (with_picture == "true" || with_picture == true) ? "inspection_report.pdf" :  "inspection_report_without_picture.pdf"	  
@@ -148,39 +159,39 @@ class Lsspdfasset < ActiveRecord::Base
   end
 
    def uniq_records(facility_id)
-    get_data = Lsspdfasset.select(:id, :u_tag, :u_report_type).where( :u_facility_id => facility_id, :u_report_type => ["FIRESTOPINSTALLATION", "FIRESTOPSURVEY"], :u_delete => false).group(["u_report_type", "u_tag"]).order('updated_at desc').count(:u_tag)
+    get_data = Lsspdfasset.select(:id, :u_tag, :u_report_type).where( :u_facility_id => facility_id, :u_report_type => ["FIRESTOPINSTALLATION", "FIRESTOPSURVEY"], :u_delete => false).group(["u_report_type", "u_tag"]).order('u_updated_date desc').count(:u_tag)
     repar_ids = []
     get_data.each do |key,val|
         if val > 1
-         repar_ids << Lsspdfasset.select(:id).where(:u_facility_id => facility_id, :u_tag =>key[1], :u_report_type => ["FIRESTOPINSTALLATION", "FIRESTOPSURVEY"], :u_delete => false).order('updated_at desc').first
+         repar_ids << Lsspdfasset.select(:id).where(:u_facility_id => facility_id, :u_tag =>key[1], :u_report_type => ["FIRESTOPINSTALLATION", "FIRESTOPSURVEY"], :u_delete => false).order('u_updated_date desc').first
         else
-         repar_ids << Lsspdfasset.select(:id).where(:u_facility_id => facility_id, :u_tag =>key[1], :u_report_type => ["FIRESTOPINSTALLATION", "FIRESTOPSURVEY"], :u_delete => false).order('updated_at desc').first
+         repar_ids << Lsspdfasset.select(:id).where(:u_facility_id => facility_id, :u_tag =>key[1], :u_report_type => ["FIRESTOPINSTALLATION", "FIRESTOPSURVEY"], :u_delete => false).order('u_updated_date desc').first
         end
       end
      ids = repar_ids.collect(&:id)
   end
 
   def unique_statement_records(facility_id, report_type)
-    get_all = Lsspdfasset.select(:id, :u_tag, :u_report_type).where(:u_facility_id => facility_id, :u_report_type => report_type, :u_delete => false).group(["u_report_type", "u_tag"]).order('updated_at desc').count(:u_tag)
+    get_all = Lsspdfasset.select(:id, :u_tag, :u_report_type).where(:u_facility_id => facility_id, :u_report_type => report_type, :u_delete => false).group(["u_report_type", "u_tag"]).order('u_updated_date desc').count(:u_tag)
     repar_ids = []
     get_all.each do |key,val|
         if val > 1
-         repar_ids << Lsspdfasset.select(:id).where(:u_facility_id => facility_id, :u_tag =>key[1], :u_report_type => report_type, :u_delete => false).order('updated_at desc').first
+         repar_ids << Lsspdfasset.select(:id).where(:u_facility_id => facility_id, :u_tag =>key[1], :u_report_type => report_type, :u_delete => false).order('u_updated_date desc').first
         else
-         repar_ids << Lsspdfasset.select(:id).where(:u_facility_id => facility_id, :u_tag =>key[1], :u_report_type => report_type, :u_delete => false).order('updated_at desc').first
+         repar_ids << Lsspdfasset.select(:id).where(:u_facility_id => facility_id, :u_tag =>key[1], :u_report_type => report_type, :u_delete => false).order('u_updated_date desc').first
         end
       end
      ids = repar_ids.collect(&:id)
   end
 
   def find_statement_records(building, facility_id, report_type)
-    get_all = Lsspdfasset.select(:id, :u_tag, :u_report_type).where(:u_building => building, :u_facility_id => facility_id, :u_report_type => report_type, :u_delete => false).group(["u_report_type", "u_tag"]).order('updated_at desc').count(:u_tag)
+    get_all = Lsspdfasset.select(:id, :u_tag, :u_report_type).where(:u_building => building, :u_facility_id => facility_id, :u_report_type => report_type, :u_delete => false).group(["u_report_type", "u_tag"]).order('u_updated_date desc').count(:u_tag)
     repar_ids = []
     get_all.each do |key,val|
         if val > 1
-         repar_ids << Lsspdfasset.select(:id).where(:u_building => building, :u_facility_id => facility_id, :u_tag =>key[1], :u_report_type => report_type, :u_delete => false).order('updated_at desc').first
+         repar_ids << Lsspdfasset.select(:id).where(:u_building => building, :u_facility_id => facility_id, :u_tag =>key[1], :u_report_type => report_type, :u_delete => false).order('u_updated_date desc').first
         else
-         repar_ids << Lsspdfasset.select(:id).where(:u_building => building, :u_facility_id => facility_id, :u_tag =>key[1], :u_report_type => report_type, :u_delete => false).order('updated_at desc').first
+         repar_ids << Lsspdfasset.select(:id).where(:u_building => building, :u_facility_id => facility_id, :u_tag =>key[1], :u_report_type => report_type, :u_delete => false).order('u_updated_date desc').first
         end
       end
      ids = repar_ids.collect(&:id)

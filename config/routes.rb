@@ -7,19 +7,17 @@ Rails.application.routes.draw do
   end
   
   match '/api/save_pdf' => 'api#save_pdf', via:[:post]
+  match '/api/facility_update' => 'api#facility_update', via:[:post]
+  match '/api/building_update' => 'api#building_update', via:[:post]
   match '/api/pdf_generation' => 'api#pdf_generation', via:[:get]
   match '/api/facility_wise_pdf_report_generation' => 'api#facility_wise_pdf_report_generation', via:[:get]
   match '/api/facility_wise_pdf_report_download' => 'api#facility_wise_pdf_report_download', via:[:get]
   match '/api/download_full_pdf_report' => 'api#download_full_pdf_report', via:[:get]
   match '/api/summary_report' => 'api#summary_report', via:[:get]
   match '/api/save_firedoor_deficiency' => 'api#save_firedoor_deficiency', via:[:post]
-  #match '/api/update_pdf' => 'api#update_pdf', via:[:put]
   match  '/api/spreadsheets' => 'api#spreadsheets', via:[:get]
   match  '/api/project_completion_save_pdf' => 'api#project_completion_save_pdf', via:[:post]
   match  '/api/download_project_completion_pdf_report' => 'api#download_project_completion_pdf_report', via:[:get]
-
-  # match '/api/facility_wise_pdf_report_generation' => 'api#facility_wise_pdf_report_generation', via:[:get]
-  # match  '/api/facility_wise_pdf_report_download' => 'api#facility_wise_pdf_report_download', via:[:get]
 
   resources :pdfjobs do
     collection do

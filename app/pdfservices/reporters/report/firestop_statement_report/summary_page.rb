@@ -33,16 +33,23 @@ module FirestopStatementReport
     end
 
     def draw_overview_of_issues(pdf)      
+
       pdf.fill_color '202020'
       pdf.move_down 12
       pdf.font_size 10
-      get_ids = @job.uniq_records(@job.u_facility_id)
+      report_type = ["FIRESTOPINSTALLATION", "FIRESTOPSURVEY"]
+      unique_buildings =  @job.comprehensive_buildings(@job.u_facility_id)
+      records = []
+      unique_buildings.each do |b|
+        records << @job.statement_building_records(b, @job.u_facility_id, report_type)  
+      end 	
+      records_ids = records.collect(&:ids).flatten
       
-      @total_issue = Lsspdfasset.select(:u_issue_type).where(:id => get_ids).collect(&:u_issue_type).count
-      @issue_types = Lsspdfasset.select(:u_issue_type, :u_service_type).where(:id => get_ids).group(["u_service_type"]).count(:u_service_type)
+      @total_issue = Lsspdfasset.select(:u_issue_type).where(:id => records_ids).collect(&:u_issue_type).count
+      @issue_types = Lsspdfasset.select(:u_issue_type, :u_service_type).where(:id => records_ids).group(["u_service_type"]).count(:u_service_type)
       @issue_fixed_on_site = 0
       @issue_survey_only = 0
-      @issue_types = Lsspdfasset.select(:u_issue_type, :u_service_type).where(:id => get_ids).group(["u_service_type"]).count(:u_service_type)      
+      @issue_types = Lsspdfasset.select(:u_issue_type, :u_service_type).where(:id => records_ids).group(["u_service_type"]).count(:u_service_type)      
       @issue_types.each do |key, value|
         if key == "Fixed On Site"
           @issue_fixed_on_site = value
@@ -90,8 +97,15 @@ module FirestopStatementReport
         pdf.font_size 10
         survey_issue_summary = []
         survey_issue_summary << ["Issues by Category", "Count", "%"]
-	get_ids = @job.uniq_records(@job.u_facility_id)
-        @firestop_survey_summary = Lsspdfasset.select(:u_issue_type).where(:id => get_ids).group(["u_issue_type"]).count(:u_issue_type)
+	report_type = ["FIRESTOPINSTALLATION", "FIRESTOPSURVEY"]
+        unique_buildings =  @job.comprehensive_buildings(@job.u_facility_id)
+        records = []
+        unique_buildings.each do |b|
+          records << @job.statement_building_records(b, @job.u_facility_id, report_type)
+        end
+        records_ids = records.collect(&:ids).flatten
+
+	@firestop_survey_summary = Lsspdfasset.select(:u_issue_type).where(:id => records_ids).group(["u_issue_type"]).count(:u_issue_type)
         @firestop_survey_issue_count = 0
         @firestop_survey_summary.each do |key, value|
           @firestop_survey_issue_count += value        

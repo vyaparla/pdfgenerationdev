@@ -2,6 +2,9 @@ class DamperStatementReporter < Reporter
 
   def statement_report(job, model_name, address1, address2, csz, facility_type, tech, group_name, 
     facility_name, facility_id, with_picture=true, report_type)
+  
+    # enable this if need to updated the u_updated_date from code
+    #DamperStatementReport::UpdateDate.new.generate
 
     DamperStatementReport::GraphGenerator.new(job).generate
   

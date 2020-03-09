@@ -21,6 +21,38 @@ class ApiController < ApplicationController
     end
   end
 
+  def facility_update
+    if  params[:facility_id].present? && params[:new_facility_name].present?	  
+      facility_id, facility_name = params[:facility_id], params[:new_facility_name]
+      begin
+        asset = Lsspdfasset.where(:u_facility_id => facility_id).last
+        asset.facility_update(facility_name)
+        render json: {message: "Update Success"}
+      rescue => e
+        puts "ERROR: #{e}"
+        render json: {message: "Unable to Update the record!"}
+      end
+    else
+      render json: {message: "Invalid input parameters!"}
+    end  	    
+  end
+
+  def building_update
+    if  params[:facility_id].present? && params[:new_building_name].present? && params[:old_building_name].present?
+      facility_id, old_name, new_name = params[:facility_id], params[:old_building_name], params[:new_building_name]
+      begin
+        asset = Lsspdfasset.where(:u_facility_id => facility_id).last
+        asset.building_update(old_name, new_name)
+        render json: {message: "Update Success"}
+      rescue => e
+        puts "ERROR: #{e}"
+        render json: {message: "Unable to Update the record!"}
+      end
+    else
+      render json: {message: "Invalid input parameters!"}
+    end   
+  end
+
   def facility_wise_pdf_report_generation
     model, address1, address2, csz, facility_type, facility_id, tech, group, facility, with_pic, pdfjob = comprehensive_pdf_generation_params
     service, report_type = params[:service], params[:reportType]
@@ -295,9 +327,16 @@ class ApiController < ApplicationController
     end
     elsif params[:servicetype].delete(' ').upcase == "FIRESTOP" && params[:reportType].upcase == 'STATEMENT'
         job = Lsspdfasset.last
-	report_type = ["FIRESTOPSURVEY" ,"FIRESTOPINSTALLATION"]     
-     	get_ids = job.unique_statement_records(params[:facility_id], report_type)   
-        records = Lsspdfasset.where(id: get_ids).order("updated_at desc")
+	report_type = ["FIRESTOPSURVEY" ,"FIRESTOPINSTALLATION"]    
+        unique_buildings =  job.comprehensive_buildings(params[:facility_id])
+        records = []
+        unique_buildings.each do |b|
+          records << job.statement_building_records(b, params[:facility_id],  report_type)
+        end
+        records_ids = records.collect(&:ids).flatten
+	
+     	#get_ids = job.unique_statement_records(params[:facility_id], report_type)   
+        records = Lsspdfasset.where(id: records_ids).order("updated_at desc")
         p = Axlsx::Package.new
         wb = p.workbook
         img_path = File.expand_path(Rails.root+'app/assets/images/lss_logo.png')
@@ -601,6 +640,8 @@ class ApiController < ApplicationController
       @pdfjob.u_facility_name = HTMLEntities.new.decode params[:u_facility_name]
       @pdfjob.u_building = HTMLEntities.new.decode params[:u_building]
       @pdfjob.u_location_desc = HTMLEntities.new.decode params[:u_location_desc]
+      @pdfjob.u_updated_date = HTMLEntities.new.decode params[:u_updated_date]
+
       
       #Damper Inspection Fields
       @pdfjob.u_reason = HTMLEntities.new.decode params[:u_reason]
@@ -675,7 +716,7 @@ class ApiController < ApplicationController
             @pdfjob.update_attribute(:pdf_image4, @pdf_image4)
           end
 
-	            gname = HTMLEntities.new.decode params[:u_group_name]
+	        gname = HTMLEntities.new.decode params[:u_group_name]
           fname = HTMLEntities.new.decode params[:u_facility_name]
           building = HTMLEntities.new.decode params[:u_building]
           location_desc = HTMLEntities.new.decode params[:u_location_desc]
@@ -705,7 +746,8 @@ class ApiController < ApplicationController
           penetration_type = HTMLEntities.new.decode params[:u_penetration_type]
           corrected_url_system =  HTMLEntities.new.decode params[:u_corrected_url_system]
           suggested_ul_system = HTMLEntities.new.decode params[:u_suggested_ul_system]
-	  facility_id = HTMLEntities.new.decode params[:u_facility_id]
+	        facility_id = HTMLEntities.new.decode params[:u_facility_id]
+          updated_date = HTMLEntities.new.decode params[:u_updated_date]
 
           @pdfjob.update_attributes(u_group_name: gname, u_facility_name: fname, u_building: building, u_location_desc: location_desc,
                                     u_reason:  reason, u_other_failure_reason:  other_failure_reason, u_di_replace_damper: di_replace_damper,
@@ -718,7 +760,7 @@ class ApiController < ApplicationController
                                     u_dr_actuator_voltage: dr_actuator_voltage, u_door_category: door_category, u_fire_rating:  fire_rating,
                                     u_door_type: door_type, u_issue_type: issue_type, u_barrier_type: barrier_type, u_penetration_type: penetration_type,
                                     u_corrected_url_system:  corrected_url_system, u_suggested_ul_system: suggested_ul_system, u_reason2: reason2,
-				    u_department_str_firestopinstall: department_str_firestopinstall, u_facility_id: facility_id )
+				    u_department_str_firestopinstall: department_str_firestopinstall, u_facility_id: facility_id, u_updated_date: updated_date)
 
 
   end 
@@ -733,7 +775,7 @@ class ApiController < ApplicationController
       :u_dr_passed_post_repair, :u_dr_description, :u_dr_damper_model, :u_dr_installed_damper_type, :u_dr_installed_damper_height,
       :u_dr_installed_damper_width, :u_dr_installed_actuator_model, :u_dr_installed_actuator_type, :u_dr_actuator_voltage, :u_di_replace_damper, 
       :u_di_installed_access_door, :u_other_failure_reason, :u_other_nonaccessible_reason, :u_facility_sys_id, :u_other_floor, 
-      :u_di_repaired_onsite, :u_di_passed_post_repair, :u_department_str_firestopinstall, :u_reason2, :u_facility_id)
+      :u_di_repaired_onsite, :u_di_passed_post_repair, :u_department_str_firestopinstall, :u_reason2, :u_facility_id, :u_updated_date)
   end
 
 

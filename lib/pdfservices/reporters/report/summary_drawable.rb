@@ -41,7 +41,7 @@ module Report
     def table_column_headings(heading)
       [column_heading(heading)] +
       ["Fire", "Smoke", "Combination"] +
-      %i(pass fail na removed total_dampers damper_per).map { |k| column_heading(k)}
+      %i(pass fail na total_dampers damper_per removed).map { |k| column_heading(k)}
     end
 
     def summary_table_content
@@ -72,7 +72,11 @@ module Report
             floor_json["FD"] = 0
             floor_json["SD"] = value
           end
-          @building_result = Lsspdfasset.select(:u_building, :u_floor, :u_status).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor","u_status"]).count(:u_status)
+	  if  key[1] == "other"
+	     @building_result = Lsspdfasset.select(:u_building, :u_other_floor, :u_status).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_other_floor => key[3], :u_delete => false).where.not(u_type: "").group(["u_building", "u_other_floor","u_status"]).count(:u_status)
+          else
+            @building_result = Lsspdfasset.select(:u_building, :u_floor, :u_status).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor","u_status"]).count(:u_status)
+           end
 
           @building_result.each do |fstatus, fvalue|
             if !floor_json.has_key?(fstatus[2])
@@ -126,8 +130,11 @@ module Report
               floor_json["FD"] = 0
               floor_json["SD"] = value
             end
-            
-            @building_result = Lsspdfasset.select(:u_building, :u_floor, :u_status).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_floor => key[1], :u_delete => false).group(["u_building", "u_floor", "u_status"]).count(:u_status)
+            if  key[1] == "other"
+	      @building_result = Lsspdfasset.select(:u_building, :u_other_floor, :u_status).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_other_floor => key[3], :u_delete => false).group(["u_building", "u_other_floor", "u_status"]).count(:u_status)
+          else
+	     @building_result = Lsspdfasset.select(:u_building, :u_floor, :u_status).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_floor => key[1], :u_delete => false).group(["u_building", "u_floor", "u_status"]).count(:u_status)
+           end
             @building_result_len =  @building_result.length
     
             @building_result.each do |fstatus, fvalue|
@@ -182,7 +189,7 @@ module Report
       @final_table_data_total.push($ptotal)
       @final_table_data_total.push($ftotal)
       @final_table_data_total.push($natotal)
-      @final_table_data_total.push($rtotal)
+      #@final_table_data_total.push($rtotal)
       #@final_table_data_total.push("0")
       #@final_table_data_total.push($sdtotal + $fdtotal + $fsdtotal)
       @final_table_data_total.push($ptotal + $ftotal + $natotal)
@@ -192,7 +199,7 @@ module Report
       else
         @final_table_data_total.push("100.00%")
       end   
-      
+      @final_table_data_total.push($rtotal)
       Rails.logger.debug("Floor Info :#{@floorInfo.inspect}")
 
       @final_table_data = []
@@ -205,7 +212,7 @@ module Report
         else
           @damperPer = '%.2f%' % ((100 * @damperTotal) / (@damperGrandtotal))
         end        
-        @final_table_data << [resultInfo["floor"], resultInfo["FD"], resultInfo["SD"], resultInfo["FSD"], resultInfo["Pass"], resultInfo["Fail"], resultInfo["NA"], resultInfo["Removed"], resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"], @damperPer]
+        @final_table_data << [resultInfo["floor"], resultInfo["FD"], resultInfo["SD"], resultInfo["FSD"], resultInfo["Pass"], resultInfo["Fail"], resultInfo["NA"],  resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"], @damperPer, resultInfo["Removed"]]
       end
     
 
@@ -218,7 +225,8 @@ module Report
         $ftotal_damperPer  = '%.2f%' %  (($ftotal.to_f * 100) / ($ptotal + $ftotal + $natotal))
         $natotal_damperPer = '%.2f%' %  (($natotal.to_f * 100) / ($ptotal + $ftotal + $natotal))
       end
-
+     # @final_table_data_total.push($rtotal)
+      #raise @final_table_data.inspect
       @final_table_data + [['GRAND TOTAL'] + @final_table_data_total]
     end
 
@@ -228,8 +236,8 @@ module Report
        DamperInspectionReporting.column_heading(:percent_of_dampers)]] + 
        [[DamperInspectionReporting.column_heading(:pass), $ptotal_damperPer],
        [DamperInspectionReporting.column_heading(:fail), $ftotal_damperPer],
-       [DamperInspectionReporting.column_heading(:na), $natotal_damperPer],
-       [DamperInspectionReporting.column_heading(:removed), $rtotal]
+       [DamperInspectionReporting.column_heading(:na), $natotal_damperPer]
+      # [DamperInspectionReporting.column_heading(:removed), $rtotal]
       ]
     end
 

@@ -63,7 +63,8 @@ module Report
 
     def project_summary_table_data
       #@serviceInfo = Lsspdfasset.select(:u_building, :u_type, :u_status).where(:u_service_id => @owner.u_service_id, :u_delete => false).where("u_status !=?", "Removed").group(["u_building", "u_type","u_status"]).count(:u_status)
-      @serviceInfo = Lsspdfasset.select(:u_building, :u_type, :u_status).where(:u_service_id => @owner.u_service_id, :u_delete => false).where.not(u_type: "").group(["u_building", "u_type","u_status"]).order("CASE WHEN u_type = 'FD' THEN '1' WHEN u_type = 'SD' THEN '2' ELSE '3' END").count(:u_status)
+      @service_data = Lsspdfasset.select(:u_building, :u_type, :u_status).where(:u_service_id => @owner.u_service_id, :u_delete => false).where.not(u_type: "").group(["u_building", "u_type","u_status"]).order("CASE WHEN u_type = 'FD' THEN '1' WHEN u_type = 'SD' THEN '2' ELSE '3' END").count(:u_status)
+      @serviceInfo = @service_data.sort_by { |k, v| k[0] }
       @buildingInfo = []
       @serviceInfo.each do |key,value|
         building_json = {}
@@ -235,7 +236,7 @@ module Report
        [[DamperInspectionReporting.column_heading(:pass), $project_pass_per],
        [DamperInspectionReporting.column_heading(:fail), $project_fail_per],
        [DamperInspectionReporting.column_heading(:na), $project_na_per],
-       [DamperInspectionReporting.column_heading(:removed), $removedtotal]
+      # [DamperInspectionReporting.column_heading(:removed), $removedtotal]
        #[DamperInspectionReporting.column_heading(:removed), "00.00%"]
 
        ]

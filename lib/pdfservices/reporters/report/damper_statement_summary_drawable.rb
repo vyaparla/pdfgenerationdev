@@ -39,7 +39,7 @@ module Report
       # %i(pass fail na total_dampers).map { |k| column_heading(k) }
       [column_heading(heading)] +
       ["Fire", "Smoke", "Combination"] +
-      %i(pass fail na removed total_dampers damper_per).map { |k| column_heading(k)}
+      %i(pass fail na total_dampers damper_per removed).map { |k| column_heading(k)}
     end
 
     def column_heading(key)
@@ -81,9 +81,13 @@ module Report
           end
 
           #records = find_uniq_assets(@owner.u_facility_id)
-
-          @building_repair = Lsspdfasset.select(:u_building, :u_floor, :u_dr_passed_post_repair).where(:id => records, :u_building => @building, :u_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_dr_passed_post_repair"]).count(:u_dr_passed_post_repair)
+          if  key[1] == "other"
+	      @building_repair = Lsspdfasset.select(:u_building, :u_other_floor, :u_dr_passed_post_repair).where(:id => records, :u_building => @building, :u_other_floor => key[3], :u_delete => false).where.not(u_type: "").group(["u_building", "u_other_floor", "u_dr_passed_post_repair"]).count(:u_dr_passed_post_repair)
+          @building_inspection = Lsspdfasset.select(:u_building, :u_other_floor, :u_status).where(:id => records, :u_building => @building, :u_other_floor => key[3], :u_delete => false).where.not(u_type: "").group(["u_building", "u_other_floor", "u_status"]).count(:u_status)
+           else
+               @building_repair = Lsspdfasset.select(:u_building, :u_floor, :u_dr_passed_post_repair).where(:id => records, :u_building => @building, :u_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_dr_passed_post_repair"]).count(:u_dr_passed_post_repair)
           @building_inspection = Lsspdfasset.select(:u_building, :u_floor, :u_status).where(:id => records, :u_building => @building, :u_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_status"]).count(:u_status)
+           end
 
           new_array = @building_repair.to_a + @building_inspection.to_a
           status_counts = new_array.group_by{|i| i[0]}.map{|k,v| [k, v.map(&:last).sum] } 
@@ -146,9 +150,13 @@ module Report
             end
 
              records = find_uniq_assets(@owner.u_facility_id)
-
-            @building_repair_result = Lsspdfasset.select(:u_building, :u_floor, :u_dr_passed_post_repair).where(:id => records, :u_report_type => "DAMPERREPAIR", :u_building => @building, :u_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_dr_passed_post_repair"]).count(:u_dr_passed_post_repair)
+            if  key[1] == "other"
+	      @building_repair_result = Lsspdfasset.select(:u_building, :u_other_floor, :u_dr_passed_post_repair).where(:id => records, :u_report_type => "DAMPERREPAIR", :u_building => @building, :u_other_floor => key[3], :u_delete => false).where.not(u_type: "").group(["u_building", "u_other_floor", "u_dr_passed_post_repair"]).count(:u_dr_passed_post_repair)
+            @building_inspection_result = Lsspdfasset.select(:u_building, :u_other_floor, :u_status).where(:id => records, :u_report_type => "DAMPERINSPECTION", :u_building => @building, :u_other_floor => key[3], :u_delete => false).where.not(u_type: "").group(["u_building", "u_other_floor", "u_status"]).count(:u_status)
+           else
+	      @building_repair_result = Lsspdfasset.select(:u_building, :u_floor, :u_dr_passed_post_repair).where(:id => records, :u_report_type => "DAMPERREPAIR", :u_building => @building, :u_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_dr_passed_post_repair"]).count(:u_dr_passed_post_repair)
             @building_inspection_result = Lsspdfasset.select(:u_building, :u_floor, :u_status).where(:id => records, :u_report_type => "DAMPERINSPECTION", :u_building => @building, :u_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_status"]).count(:u_status)
+           end
 
             new_array_result = @building_repair_result.to_a + @building_inspection_result.to_a
             status_count_result = new_array_result.group_by{|i| i[0]}.map{|k,v| [k, v.map(&:last).sum] } 
@@ -210,15 +218,23 @@ module Report
       @final_table_data_total.push($ptotal)
       @final_table_data_total.push($ftotal)
       @final_table_data_total.push($natotal)
-      @final_table_data_total.push($rmtotal)
-      @final_table_data_total.push($sdtotal + $fdtotal + $fsdtotal)
-      @final_table_data_total.push("100.00%")
+      #@final_table_data_total.push($rmtotal)
+      @final_table_data_total.push($ptotal + $ftotal + $natotal)
+      #@final_table_data_total.push($sdtotal + $fdtotal + $fsdtotal)
+      #@final_table_data_total.push("100.00%")
+      if $ptotal == 0 && $ftotal == 0 && $natotal == 0
+        @final_table_data_total.push("00.00%")
+      else
+        @final_table_data_total.push("100.00%")
+      end
 
+
+      @final_table_data_total.push($rmtotal)
 
       @final_table_data = []
       @floorInfo.each do |resultInfo|
-        @damperTotal = resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"] + resultInfo["Removed"]
-        @getdamperGrandtotal= $ptotal + $ftotal + $natotal + $rmtotal
+        @damperTotal = resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"] #+ resultInfo["Removed"]
+        @getdamperGrandtotal= $ptotal + $ftotal + $natotal #+ $rmtotal
 
         if  @getdamperGrandtotal == 0
             @damperPer = 0
@@ -226,19 +242,19 @@ module Report
            @damperPer = '%.2f%' % ((100 * @damperTotal) / (@getdamperGrandtotal))
         end   
         #@damperPer = '%.2f%' % ((resultInfo["Pass"] * 100) / (resultInfo["FSD"] + resultInfo["FD"] + resultInfo["SD"]))
-        @final_table_data << [resultInfo["floor"], resultInfo["FD"], resultInfo["SD"], resultInfo["FSD"], resultInfo["Pass"], resultInfo["Fail"], resultInfo["NA"], resultInfo["Removed"], resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"] + resultInfo["Removed"], @damperPer]
+        @final_table_data << [resultInfo["floor"], resultInfo["FD"], resultInfo["SD"], resultInfo["FSD"], resultInfo["Pass"], resultInfo["Fail"], resultInfo["NA"], resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"] , @damperPer, resultInfo["Removed"]]
       end
 
-      if $ptotal == 0 && $ftotal == 0 && $natotal == 0 && $rmtotal == 0
+      if $ptotal == 0 && $ftotal == 0 && $natotal == 0 
         $ptotal_damperPer  = "00.00%"
         $ftotal_damperPer  = "00.00%"
         $natotal_damperPer = "00.00%"
         $rmtotal_damperPer = "00.00%"
       else
-        $ptotal_damperPer  = '%.2f%' %  (($ptotal.to_f * 100) / ($ptotal + $ftotal + $natotal + $rmtotal))
-        $ftotal_damperPer  = '%.2f%' %  (($ftotal.to_f * 100) / ($ptotal + $ftotal + $natotal + $rmtotal))
-        $natotal_damperPer = '%.2f%' %  (($natotal.to_f * 100) / ($ptotal + $ftotal + $natotal + $rmtotal))  
-        $rmtotal_damperPer = '%.2f%' %  (($rmtotal.to_f * 100) / ($ptotal + $ftotal + $natotal + $rmtotal))
+        $ptotal_damperPer  = '%.2f%' %  (($ptotal.to_f * 100) / ($ptotal + $ftotal + $natotal ))
+        $ftotal_damperPer  = '%.2f%' %  (($ftotal.to_f * 100) / ($ptotal + $ftotal + $natotal ))
+        $natotal_damperPer = '%.2f%' %  (($natotal.to_f * 100) / ($ptotal + $ftotal + $natotal ))  
+        $rmtotal_damperPer = '%.2f%' %  (($rmtotal.to_f * 100) / ($ptotal + $ftotal + $natotal ))
       end  
    
       @final_table_data + [['GRAND TOTAL'] + @final_table_data_total]
@@ -249,19 +265,20 @@ module Report
        DamperInspectionReporting.column_heading(:percent_of_dampers)]] + 
        [[DamperInspectionReporting.column_heading(:pass), $ptotal_damperPer],
        [DamperInspectionReporting.column_heading(:fail), $ftotal_damperPer],
-       [DamperInspectionReporting.column_heading(:na), $natotal_damperPer],
-       [DamperInspectionReporting.column_heading(:removed), $rmtotal_damperPer]]
+       [DamperInspectionReporting.column_heading(:na), $natotal_damperPer]
+      # [DamperInspectionReporting.column_heading(:removed), $rmtotal_damperPer]
+      ]
     end
 
     def find_uniq_assets(owner)
-      get_all = Lsspdfasset.select(:id, :u_tag).where(:u_facility_id => owner, :u_report_type => ["DAMPERREPAIR", "DAMPERINSPECTION"], :u_delete => false).where.not(u_type: "").group(["u_building","u_tag"]).order('updated_at desc').count(:u_tag)
+      get_all = Lsspdfasset.select(:id, :u_tag).where(:u_facility_id => owner, :u_report_type => ["DAMPERREPAIR", "DAMPERINSPECTION"], :u_delete => false).where.not(u_type: "").group(["u_building","u_tag"]).order('u_updated_date desc').count(:u_tag)
  
       repar_ids = []
       get_all.each do |key,val|
         if val > 1
-         repar_ids << Lsspdfasset.select(:id).where(:u_facility_id => owner, :u_tag =>key[1], :u_building => key[0], :u_report_type => ["DAMPERREPAIR", "DAMPERINSPECTION"], :u_delete => false).where.not(u_type: "").order('updated_at desc').first
+         repar_ids << Lsspdfasset.select(:id).where(:u_facility_id => owner, :u_tag =>key[1], :u_building => key[0], :u_report_type => ["DAMPERREPAIR", "DAMPERINSPECTION"], :u_delete => false).where.not(u_type: "").order('u_updated_date desc').first
         else
-         repar_ids << Lsspdfasset.select(:id).where(:u_facility_id => owner, :u_tag =>key[1], :u_building => key[0], :u_report_type => ["DAMPERREPAIR", "DAMPERINSPECTION"], :u_delete => false).where.not(u_type: "").order('updated_at desc').first
+         repar_ids << Lsspdfasset.select(:id).where(:u_facility_id => owner, :u_tag =>key[1], :u_building => key[0], :u_report_type => ["DAMPERREPAIR", "DAMPERINSPECTION"], :u_delete => false).where.not(u_type: "").order('u_updated_date desc').first
         end
       end  
      ids = repar_ids.collect(&:id)
