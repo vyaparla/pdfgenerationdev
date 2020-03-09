@@ -12,7 +12,7 @@ module DamperStatementReport
 
     def write(pdf)
       super
-
+      pdf.stamp_at "watermark", [100, 210] if @watermark 
       draw_table1(pdf)
       draw_table2(pdf)
       draw_table3(pdf)

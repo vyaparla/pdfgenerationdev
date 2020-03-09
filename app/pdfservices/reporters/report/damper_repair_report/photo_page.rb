@@ -184,7 +184,6 @@ module DamperRepairReport
     def draw_damper_tag(pdf)
       pdf.font_size 15
       pdf.text("<b>Asset # : </b> #{@record.u_tag}",inline_format: true)
-      #pdf.text("<b>Tag : </b> #{@record.u_tag}",inline_format: true)
     end
 
     def draw_damper_type(pdf)
@@ -195,8 +194,6 @@ module DamperRepairReport
       else
         pdf.text("<b>Asset Type  : </b> Combination", inline_format: true)
       end 
-      #pdf.text("<b>Asset Type : </b> #{@record.u_type}", inline_format: true)
-      #pdf.text("<b>Damper Type : </b> #{@record.u_type}", inline_format: true)
     end
 
     def draw_floor(pdf)
@@ -218,13 +215,7 @@ module DamperRepairReport
       pdf.fill_color '202020'
     end
 
-    # def draw_access_door_installation(pdf)
-    #   pdf.text("<b>Installed Access Door : </b> #{@record.u_access_size}", inline_format: true)
-    #   # pdf.indent(10) do
-    #   #   pdf.text("• #{@record.u_access_size}")
-    #   # end
-    # end
-    
+   
     def draw_repairs(pdf)
       pdf.move_down 10
       pdf.text("<b>Repair Performed : </b> #{@record.u_repair_action_performed}", inline_format: true)
@@ -253,75 +244,38 @@ module DamperRepairReport
     end
 
     def draw_open_after_install_image(pdf)
-      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", 
-        at: [60 - pdf.bounds.absolute_left, 275], :width => 123, :height => 123)#530
+      pdf.stamp_at "watermark", [100, 210] if @watermark 
       image = @record.pdf_image1.path(:pdf)
       unless image.blank?
-        pdf.image(image, at: [60 - pdf.bounds.absolute_left, 275], :width => 120, :height => 120)
-      else
-        pdf.draw_text('Photo Unavailable', style: :bold, size: 10,
-          at: [70 - pdf.bounds.absolute_left, 210])#464
+        pdf.image(image, at: [105 - pdf.bounds.absolute_left, 275], :width => 120, :height => 120)
       end
-      #pdf.font_size 10
-      #pdf.draw_text("#{DamperRepairReporting.translate('open_after_installation')}", at: [44, 394])#403
-      pdf.draw_text("Open",  at: [100 - pdf.bounds.absolute_left, 140])
+      pdf.draw_text("Open",  at: [145 - pdf.bounds.absolute_left, 140])
       pdf.move_down 5
-      # unless @record.u_image1.blank?
-      #   pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_image1}")[:data])), at: [ 44, 521], fit: [105, 105]
-      # else
-      #   pdf.draw_text('Photo Unavailable', style: :bold, size: 11, at:  [49, 464])
-      # end
     end
 
     def draw_closed_after_install_image(pdf)
-      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", 
-        at: [380 - pdf.bounds.absolute_left, 275], :width => 123, :height => 123)
+      pdf.stamp_at "watermark", [100, 210] if @watermark 
       image = @record.pdf_image2.path(:pdf)      
       unless image.blank?
         pdf.image(image, at: [380 - pdf.bounds.absolute_left, 275], :width => 120, :height => 120)
-      else
-        pdf.draw_text('Photo Unavailable', style: :bold, size: 10, 
-          at: [395 - pdf.bounds.absolute_left, 210])
       end
       pdf.draw_text("Closed",  at: [400 - pdf.bounds.absolute_left, 140])
       pdf.move_down 5
-      # unless @record.u_image2.blank?
-      #   pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_image2}")[:data])), at:  [ 44, 386], fit: [105, 105]
-      # else
-      #   pdf.draw_text('Photo Unavailable', style: :bold, size:  11, at: [49, 329])
-      # end
     end
 
     def draw_new_install_image(pdf)
-      # pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", 
-      #   at: [60 - pdf.bounds.absolute_left, 125], :width => 123, :height => 123)
       image = @record.pdf_image4.path(:pdf) 
       unless image.blank?
-        pdf.image(image, at: [60 - pdf.bounds.absolute_left, 125], :width => 120, :height => 120)
-      # else
-      #   pdf.draw_text('Photo Unavailable', style: :bold, size: 10, 
-      #     at: [70 - pdf.bounds.absolute_left, 70])
-      # Looped inside - no image no lable
+        pdf.image(image, at: [105 - pdf.bounds.absolute_left, 125], :width => 120, :height => 120)
         pdf.draw_text("After Installation",  at: [80 - pdf.bounds.absolute_left, -9])
       end
-      # unless @record.u_image3.blank?
-      #   pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_image3}")[:data])), at:  [ 44, 251], fit: [105, 105]
-      # else
-      #   pdf.draw_text('Photo Unavailable', style: :bold, size: 11, at:    [49, 194])
-      # end
     end
 
     def draw_reopened_after_install_image(pdf)
-      #pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", 
-      #  at: [380 - pdf.bounds.absolute_left, 125], :width => 123, :height => 123)
       image = @record.pdf_image3.path(:pdf)
       unless image.blank?
         pdf.image(image, at: [380 - pdf.bounds.absolute_left, 125], 
           :width => 120, :height => 120)
-      # else
-      #   pdf.draw_text('Photo Unavailable', style: :bold, size: 10, 
-      #     at: [395 - pdf.bounds.absolute_left, 60])
-      # Looped inside - no image no lable
        pdf.draw_text("Operational",  at: [400 - pdf.bounds.absolute_left, -9])
       end
     end
