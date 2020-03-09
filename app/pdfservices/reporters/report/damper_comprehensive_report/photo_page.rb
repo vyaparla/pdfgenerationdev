@@ -218,7 +218,6 @@ module DamperComprehensiveReport
     def draw_damper_tag(pdf)
       pdf.font_size 15
       pdf.text("<b>Asset # : </b> #{@record.u_tag}",inline_format: true)
-      #pdf.text("<b>Tag : </b> #{@record.u_tag}",inline_format: true)
     end
 
     def draw_damper_type(pdf)
@@ -229,8 +228,6 @@ module DamperComprehensiveReport
       else
         pdf.text("<b>Asset Type  : </b> Combination", inline_format: true)
       end 
-      #pdf.text("<b>Asset Type : </b> #{@record.u_type}", inline_format: true)
-      #pdf.text("<b>Damper Type : </b> #{@record.u_type}", inline_format: true)
     end
 
     def draw_floor(pdf)
@@ -247,17 +244,9 @@ module DamperComprehensiveReport
       else
         pdf.fill_color 'f39d27'
       end
-      #pdf.text("<b>Status : </b> #{@record.u_dr_passed_post_repair}", inline_format: true)
       pdf.text("<b>Post Repair Status : </b> #{@post_status}", inline_format: true)
       pdf.fill_color '202020'
     end
-
-    # def draw_access_door_installation(pdf)
-    #   pdf.text("<b>Installed Access Door : </b> #{@record.u_access_size}", inline_format: true)
-    #   # pdf.indent(10) do
-    #   #   pdf.text("• #{@record.u_access_size}")
-    #   # end
-    # end
     
     def draw_repairs(pdf)
       pdf.move_down 10
@@ -288,19 +277,14 @@ module DamperComprehensiveReport
 
     def draw_open_after_install_image(pdf)
       pdf.stamp_at "watermark", [100, 210] if @watermark 
-      pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", 
-        at: [60 - pdf.bounds.absolute_left, 275], :width => 123, :height => 123)#530
       image = @record.pdf_image1.path(:pdf)
       unless image.blank?
         pdf.image(image, at: [60 - pdf.bounds.absolute_left, 275], :width => 120, :height => 120)
-      else
-        pdf.draw_text('Photo Unavailable', style: :bold, size: 10,
-          at: [70 - pdf.bounds.absolute_left, 210])#464
       end
       if @record.u_report_type == "DAMPERREPAIR"
-        pdf.draw_text("Open",  at: [100 - pdf.bounds.absolute_left, 140])
+        pdf.draw_text("Open",  at: [145 - pdf.bounds.absolute_left, 140])
       else
-        pdf.draw_text("Before Inspection",  at: [75 - pdf.bounds.absolute_left, 140])
+        pdf.draw_text("Before Inspection",  at: [120 - pdf.bounds.absolute_left, 140])
       end  
       pdf.move_down 5
     end
@@ -321,22 +305,11 @@ module DamperComprehensiveReport
 
     def draw_new_install_image(pdf)
       pdf.stamp_at "watermark", [100, 210] if @watermark 
-      # pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", 
-      #   at: [60 - pdf.bounds.absolute_left, 125], :width => 123, :height => 123)
       image = @record.pdf_image4.path(:pdf) 
       unless image.blank?
-        pdf.image(image, at: [60 - pdf.bounds.absolute_left, 125], :width => 120, :height => 120)
-      # else
-      #   pdf.draw_text('Photo Unavailable', style: :bold, size: 10, 
-      #     at: [70 - pdf.bounds.absolute_left, 70])
-      # Looped inside - no image no lable
-        pdf.draw_text("After Installation",  at: [80 - pdf.bounds.absolute_left, -9])
+        pdf.image(image, at: [105 - pdf.bounds.absolute_left, 125], :width => 120, :height => 120)
+        pdf.draw_text("After Installation",  at: [125 - pdf.bounds.absolute_left, -9])
       end
-      # unless @record.u_image3.blank?
-      #   pdf.image StringIO.new(Base64.decode64(splitBase64("data:image/jpeg;base64,#{@record.u_image3}")[:data])), at:  [ 44, 251], fit: [105, 105]
-      # else
-      #   pdf.draw_text('Photo Unavailable', style: :bold, size: 11, at:    [49, 194])
-      # end
     end
 
     def draw_reopened_after_install_image(pdf)
