@@ -279,7 +279,7 @@ module DamperInspectionReport
     end
 
     def draw_closed_image(pdf)
-      pdf.stamp_at "watermark", [100, 210] if @watermark 
+      #pdf.stamp_at "watermark", [100, 210] if @watermark 
       unless @record.u_status == "NA"	    
        pdf.move_down 20
 	 #   pdf.image "#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", :at => [50,450], :width => 450    
@@ -293,6 +293,7 @@ module DamperInspectionReport
         end
         pdf.move_down 5
         pdf.draw_text("After Inspection",  at: [350 - pdf.bounds.absolute_left, 25])
+        pdf.stamp_at "watermark", [100, 210] if @watermark 
      end
     end
 
