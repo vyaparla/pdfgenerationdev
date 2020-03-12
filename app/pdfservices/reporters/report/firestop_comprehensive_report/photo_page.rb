@@ -321,6 +321,7 @@ module FirestopComprehensiveReport
         at: [60 - pdf.bounds.absolute_left, 275], :width => 230, :height => 230)#536
       image =  @record.pdf_image1.path(:pdf)      
       unless image.blank?
+        pdf.stamp_at "watermark", [100, 210] if @watermark 
         pdf.image(image, at: [60 - pdf.bounds.absolute_left, 280], :width => 220, :height => 220)#521
       else
         pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at: [90 - pdf.bounds.absolute_left, 189])#404
@@ -333,6 +334,7 @@ module FirestopComprehensiveReport
         at: [340 - pdf.bounds.absolute_left, 275], :width => 230, :height => 230)#536
       image =  @record.pdf_image2.path(:pdf)      
       unless image.blank?
+        pdf.stamp_at "watermark", [100, 210] if @watermark 
         pdf.image(image, at: [340 - pdf.bounds.absolute_left, 280], :width => 220, :height => 220)#521
       else
         pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at: [90 - pdf.bounds.absolute_left, 189])#404

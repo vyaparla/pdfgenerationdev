@@ -14,11 +14,12 @@ module Report
         pdf.create_stamp("watermark") do
         pdf.rotate(30, :origin => [-5, -5]) do
         pdf.font_size 80
-        pdf.fill_color "d3d3d3"
+        #pdf.fill_color "d3d3d3"
+        pdf.fill_color "DCDCDC"
         pdf.font("Helvetica") do
           pdf.draw_text "In Progress", :at => [-15, -3]
         end
-        pdf.fill_color "000000"
+        #pdf.fill_color "000000"
         end
       end
       pdf.stamp_at "watermark", [100, 210] 

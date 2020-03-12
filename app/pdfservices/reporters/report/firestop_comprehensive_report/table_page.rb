@@ -87,6 +87,7 @@ module FirestopComprehensiveReport
       if !@fixed_on_site.blank?
         if @fixed_on_site.count <= 9 && (@fixed_on_site.count >= 8 || @fixed_on_site.count == 9)
           super
+          pdf.stamp_at "watermark", [100, 210] if @watermark 
           draw_fixed_on_site(pdf, @fixed_on_site)
 
           if !@survey_only.blank?
@@ -94,6 +95,7 @@ module FirestopComprehensiveReport
             count = 0
             @survey_only_set.count.times do
               super
+              pdf.stamp_at "watermark", [100, 210] if @watermark 
               draw_survey_only(pdf, @survey_only_set[count])
               count = count +1
             end
@@ -107,6 +109,7 @@ module FirestopComprehensiveReport
           count = 0
           @fixed_on_site_set.count.times do
             super
+            pdf.stamp_at "watermark", [100, 210] if @watermark 
             draw_fixed_on_site(pdf, @fixed_on_site_set[count])
             count = count + 1
           end
@@ -115,6 +118,7 @@ module FirestopComprehensiveReport
         if @fixed_on_site.count <= 8
           @get_no_of_survey_data = 9 - @fixed_on_site.count
           super
+          pdf.stamp_at "watermark", [100, 210] if @watermark 
           draw_fixed_on_site(pdf, @fixed_on_site)
         end
       end
@@ -122,6 +126,7 @@ module FirestopComprehensiveReport
       if !@get_no_of_survey_data.blank? && !@survey_only.blank?
         if (@get_no_of_survey_data == 0 || @get_no_of_survey_data < 4)
           super
+          pdf.stamp_at "watermark", [100, 210] if @watermark 
           draw_survey_only(pdf, @survey_only.first(9))
           @new_survey_only = @survey_only.drop(9)
         else
@@ -131,6 +136,7 @@ module FirestopComprehensiveReport
           @new_first_and_drop_survey_records = @first_and_drop_survey_records <= 9 ? 9 : @first_and_drop_survey_records
           if @new_first_and_drop_survey_records <= 8
             super
+            pdf.stamp_at "watermark", [100, 210] if @watermark 
           end
           draw_survey_only(pdf, @survey_only.first(@first_and_drop_survey_records))
           @new_survey_only = @survey_only.drop(@first_and_drop_survey_records)
@@ -143,6 +149,7 @@ module FirestopComprehensiveReport
         count = 0
         @survey_only_set.count.times do
           super
+          pdf.stamp_at "watermark", [100, 210] if @watermark 
           draw_survey_only(pdf, @survey_only_set[count])
           count = count + 1
         end
@@ -154,6 +161,7 @@ module FirestopComprehensiveReport
         count = 0
         @survey_only_set.count.times do
           super
+          pdf.stamp_at "watermark", [100, 210] if @watermark 
           draw_survey_only(pdf, @survey_only_set[count])
           count = count + 1
         end

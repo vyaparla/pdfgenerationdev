@@ -11,8 +11,6 @@ module DamperStatementReport
 
     def write(pdf)
       super
-      
-       pdf.stamp_at "watermark", [100, 210] if @watermark
       Report::DamperStatementGraph.new(@job).draw(pdf)
       pdf.stamp_at "watermark", [100, 210] if @watermark
     end
