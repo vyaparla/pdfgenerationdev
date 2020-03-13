@@ -9,60 +9,9 @@ module FirestopComprehensiveReport
       @with_picture = with_picture
       @watermark = watermark
     end
-
-    # def write(pdf)
-    #   super
-    #   pdf.indent(250) do
-    #     draw_location_description(pdf)
-    #     draw_penetration_number(pdf)
-    #     draw_floor(pdf)
-    #     pdf.move_down 10
-    #     #pdf.text("<b>Tag #: #{@record.u_tag}</b>", inline_format: true)
-    #     draw_issue(pdf)
-    #     #pdf.text("<b>Issue : #{@record.u_issue_type}</b>", inline_format: true)
-    #     pdf.font_size 15
-    #     pdf.move_down 10
-    #     if @record.u_service_type == "Fixed On Site"
-    #       pdf.text("<b>Corrected with UL system : </b> #{@record.u_corrected_url_system}", inline_format: true)        
-    #       pdf.text("<b>Suggested UL System : </b> #{@record.u_suggested_ul_system}</b>", inline_format: true)
-    #     end
-    #     pdf.move_down 5
-    #     pdf.text("<b>Barrier type : </b>  #{@record.u_barrier_type}", inline_format: true)
-    #   end
-    #   pdf.fill_color '202020'
-    #   #pdf.font_size 15
-
-    #   if @record.u_service_type != "Fixed On Site"
-    #   	draw_before_image(pdf)
-    #   else
-    #   	draw_before_image(pdf)
-    #   	draw_after_image(pdf)
-    #   end
-    # end
     
     def write(pdf)
       super      
-      # pdf.indent(250) do
-      #   draw_date(pdf)
-      #   draw_assets(pdf)
-      #   draw_floor(pdf)
-      #   draw_location_description(pdf)
-      #   draw_issue(pdf)
-      #   draw_barrier_type(pdf)
-      #   draw_penetration_type(pdf)
-      #   if @record.u_service_type == "Fixed On Site"
-      #     draw_corrective_action(pdf)
-      #   else
-      #     draw_suggested_corrective_action(pdf)
-      #   end
-      # end
-            
-      # if @record.u_service_type != "Fixed On Site"
-      #   draw_before_image(pdf) 
-      # else
-      #   draw_before_image(pdf)
-      #   draw_after_image(pdf)
-      # end
       pdf.stamp_at "watermark", [100, 210] if @watermark 
       draw_table1(pdf) 
       draw_table2(pdf) 
@@ -83,16 +32,6 @@ module FirestopComprehensiveReport
     def table_params
       contracted_by = @group_name.blank? ? @facility_name : @group_name
       floor = @record.u_floor == "other" ? @record.u_other_floor : @record.u_floor
-      # technician = if @record.u_inspector.blank? 
-      #   ' '*100
-      # else
-      #   if @record.u_inspector.length < 100
-      #     blank_space = 100 - @record.u_inspector.length
-      #     "#{@record.u_inspector}#{' '*blank_space}"
-      #   else  
-      #     @record.u_inspector
-      #   end  
-      # end
           
       { contracted_by: contracted_by ,
         facility: @facility_name,
@@ -327,6 +266,7 @@ module FirestopComprehensiveReport
         pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at: [90 - pdf.bounds.absolute_left, 189])#404
       end
       pdf.draw_text("Issue",  at: [60 - pdf.bounds.absolute_left, 15])
+      pdf.stamp_at "watermark", [100, 210] if @watermark 
     end
 
     def draw_after_image(pdf)
@@ -340,6 +280,7 @@ module FirestopComprehensiveReport
         pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at: [90 - pdf.bounds.absolute_left, 189])#404
       end
       pdf.draw_text("Corrected Issue",  at: [330 - pdf.bounds.absolute_left, 15])
+      pdf.stamp_at "watermark", [100, 210] if @watermark 
     end
 
     def title

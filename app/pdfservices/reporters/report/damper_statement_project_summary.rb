@@ -13,7 +13,16 @@ module Report
       Report::Table.new(facility_summary_table_content).draw(pdf)
       pdf.move_down 20
       draw_title(pdf)
-      Report::Table.new(project_summary_table_content).draw(pdf)
+      Report::Table.new(project_summary_table_content).draw(pdf) do |formatter|
+        formatter.column(0).style { |c| c.width = 50 } # Date
+        formatter.column(1).style { |c| c.width = 50 } # Asset#
+        formatter.column(2).style { |c| c.width = 40 } # Floor
+        formatter.column(3).style { |c| c.width = 160 } # Location
+        formatter.column(4).style { |c| c.width = 60 } # Issue
+        formatter.column(5).style { |c| c.width = 60 } # Barrier Type
+        formatter.column(6).style { |c| c.width = 60 } # Penetration Type
+        formatter.column(7).style { |c| c.width = 60 } 
+      end  
       #pdf.move_down 20
       draw_label(pdf, 'Statistics')
       top = pdf.cursor
