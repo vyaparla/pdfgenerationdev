@@ -279,7 +279,7 @@ module DamperComprehensiveReport
       pdf.stamp_at "watermark", [100, 210] if @watermark 
       image = @record.pdf_image1.path(:pdf)
       unless image.blank?
-        pdf.image(image, at: [60 - pdf.bounds.absolute_left, 275], :width => 120, :height => 120)
+        pdf.image(image, at: [105 - pdf.bounds.absolute_left, 275], :width => 120, :height => 120)
       end
       if @record.u_report_type == "DAMPERREPAIR"
         pdf.draw_text("Open",  at: [145 - pdf.bounds.absolute_left, 140])

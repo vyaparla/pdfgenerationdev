@@ -15,7 +15,7 @@ class DamperStatementReporter < Reporter
       DamperStatementReport::ProjectSummaryPage.new(job, tech, report_type, watermark).write(pdf)
       DamperStatementReport::GraphPage.new(job, tech, report_type, watermark).write(pdf)
   	  job.damper_comprehensive_buildings(facility_id).each do |b|
-        #DamperStatementReport::BuildingSection.new(job, b, tech, group_name, facility_name, with_picture, watermark).write(pdf)
+        DamperStatementReport::BuildingSection.new(job, b, tech, group_name, facility_name, with_picture, watermark).write(pdf)
         
 
         #DamperRepairReport::TablePage.new(job, b, tech, group_name, facility_name, with_picture).write(pdf)
