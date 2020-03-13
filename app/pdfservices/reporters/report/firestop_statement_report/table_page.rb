@@ -48,6 +48,7 @@ module FirestopStatementReport
               count = count +1
             end
           end
+          pdf.stamp_at "watermark", [100, 210] if @watermark 
         end
         if @fixed_on_site.count > 9
           #super
@@ -61,7 +62,7 @@ module FirestopStatementReport
             draw_fixed_on_site(pdf, @fixed_on_site_set[count])
             count = count + 1
           end
-
+          pdf.stamp_at "watermark", [100, 210] if @watermark 
         end
         if @fixed_on_site.count <= 8
           @get_no_of_survey_data = 9 - @fixed_on_site.count
@@ -69,6 +70,7 @@ module FirestopStatementReport
           pdf.stamp_at "watermark", [100, 210] if @watermark 
           draw_fixed_on_site(pdf, @fixed_on_site)
         end
+        pdf.stamp_at "watermark", [100, 210] if @watermark  
       end
 
       if !@get_no_of_survey_data.blank? && !@survey_only.blank?
@@ -89,6 +91,7 @@ module FirestopStatementReport
           draw_survey_only(pdf, @survey_only.first(@first_and_drop_survey_records))
           @new_survey_only = @survey_only.drop(@first_and_drop_survey_records)
         end
+         pdf.stamp_at "watermark", [100, 210] if @watermark 
       end
 
       if !@new_survey_only.blank?
@@ -101,6 +104,7 @@ module FirestopStatementReport
           draw_survey_only(pdf, @survey_only_set[count])
           count = count + 1
         end
+         pdf.stamp_at "watermark", [100, 210] if @watermark 
       end
 
       if @fixed_on_site.blank? && !@survey_only.blank?
@@ -113,6 +117,7 @@ module FirestopStatementReport
           draw_survey_only(pdf, @survey_only_set[count])
           count = count + 1
         end
+         pdf.stamp_at "watermark", [100, 210] if @watermark 
       end
     end
 

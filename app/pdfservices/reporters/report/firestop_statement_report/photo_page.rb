@@ -214,6 +214,7 @@ module FirestopStatementReport
         pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at: [90 - pdf.bounds.absolute_left, 189])#404
       end
       pdf.draw_text("Issue",  at: [60 - pdf.bounds.absolute_left, 15])
+      pdf.stamp_at "watermark", [100, 210] if @watermark 
     end
 
     def draw_after_image(pdf)
@@ -227,6 +228,7 @@ module FirestopStatementReport
         pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at: [90 - pdf.bounds.absolute_left, 189])#404
       end
       pdf.draw_text("Corrected Issue",  at: [330 - pdf.bounds.absolute_left, 15])
+      pdf.stamp_at "watermark", [100, 210] if @watermark 
     end
 
     def title
