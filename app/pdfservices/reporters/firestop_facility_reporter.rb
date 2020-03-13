@@ -9,6 +9,7 @@ class FirestopFacilityReporter < Reporter
          FirestopComprehensiveReport::BuildingSection.new(job, b, tech, group_name, facility_id, with_picture, watermark).write(pdf)
        end
        Report::BackPage.new.write(pdf)
+        pdf.stamp_at "watermark", [100, 210]  if watermark
      end
   end
 
