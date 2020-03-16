@@ -283,7 +283,7 @@ module DamperStatementReport
     def draw_open_after_install_image(pdf)
       image = @record.pdf_image1.path(:pdf)
       unless image.blank?
-        with_watermark(@watermark)
+        pdf.stamp_at "watermark", [100, 210] if @watermark 
         pdf.image(image, at: [105 - pdf.bounds.absolute_left, 275], :width => 120, :height => 120)
         if @record.u_report_type == "DAMPERREPAIR"
           pdf.draw_text("Open",  at: [145 - pdf.bounds.absolute_left, 140])
@@ -298,7 +298,7 @@ module DamperStatementReport
     def draw_closed_after_install_image(pdf)
       image = @record.pdf_image2.path(:pdf)      
       unless image.blank?
-        with_watermark(@watermark)
+        pdf.stamp_at "watermark", [100, 210] if @watermark 
         pdf.image(image, at: [380 - pdf.bounds.absolute_left, 275], :width => 120, :height => 120)
         if @record.u_report_type == "DAMPERREPAIR"
           pdf.draw_text("Closed",  at: [400 - pdf.bounds.absolute_left, 140])
@@ -313,7 +313,7 @@ module DamperStatementReport
     def draw_new_install_image(pdf)
       image = @record.pdf_image4.path(:pdf) 
       unless image.blank?
-        with_watermark(@watermark)
+        pdf.stamp_at "watermark", [100, 210] if @watermark 
         pdf.image(image, at: [105 - pdf.bounds.absolute_left, 125], :width => 120, :height => 120)
         pdf.draw_text("After Installation",  at: [125 - pdf.bounds.absolute_left, -9])
       end
@@ -323,7 +323,7 @@ module DamperStatementReport
     def draw_reopened_after_install_image(pdf)
       image = @record.pdf_image3.path(:pdf)
       unless image.blank?
-        with_watermark(@watermark)
+        pdf.stamp_at "watermark", [100, 210] if @watermark 
         pdf.image(image, at: [380 - pdf.bounds.absolute_left, 125], 
           :width => 120, :height => 120)
        pdf.draw_text("Operational",  at: [400 - pdf.bounds.absolute_left, -9])
