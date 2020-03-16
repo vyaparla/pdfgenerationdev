@@ -285,7 +285,8 @@ module DamperComprehensiveReport
         pdf.draw_text("Open",  at: [145 - pdf.bounds.absolute_left, 140])
       else
         pdf.draw_text("Before Inspection",  at: [120 - pdf.bounds.absolute_left, 140])
-      end  
+      end 
+      pdf.stamp_at "watermark", [100, 210] if @watermark  
       pdf.move_down 5
     end
 
@@ -300,6 +301,7 @@ module DamperComprehensiveReport
           pdf.draw_text("After Inspection",  at: [400 - pdf.bounds.absolute_left, 140])
         end 
       end
+      pdf.stamp_at "watermark", [100, 210] if @watermark 
       pdf.move_down 5
     end
 
@@ -310,6 +312,7 @@ module DamperComprehensiveReport
         pdf.image(image, at: [105 - pdf.bounds.absolute_left, 125], :width => 120, :height => 120)
         pdf.draw_text("After Installation",  at: [125 - pdf.bounds.absolute_left, -9])
       end
+      pdf.stamp_at "watermark", [100, 210] if @watermark 
     end
 
     def draw_reopened_after_install_image(pdf)
@@ -326,6 +329,7 @@ module DamperComprehensiveReport
       # Looped inside - no image no lable
        pdf.draw_text("Operational",  at: [400 - pdf.bounds.absolute_left, -9])
       end
+      pdf.stamp_at "watermark", [100, 210] if @watermark 
     end
 
     # def splitBase64(uri)
