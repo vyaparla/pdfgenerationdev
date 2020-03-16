@@ -30,14 +30,17 @@ module DamperStatementReport
     end
 
     def generate_dr_type_graph
-      get_ids = graph_uniq_statement_records(@job.u_facility_id)
+      report_type = ["DAMPERREPAIR" ,"DAMPERINSPECTION"]
+      get_ids = @job.unique_statement_records(@job.u_facility_id, report_type)	    
+      #get_ids = graph_uniq_statement_records(@job.u_facility_id)
       @dr_typeRecords = Lsspdfasset.select(:u_type).where(id: get_ids).where.not(u_type: "", u_status: "Removed").group(["u_type"]).order("CASE WHEN u_type = 'FD' THEN '1' WHEN u_type = 'SD' THEN '2' ELSE '3' END").count(:u_type)
+
+#      @dr_typeRecords = Lsspdfasset.select(:u_type).where(id: get_ids).where.not(u_type: "", u_status: "Removed").group(["u_type"]).order("CASE WHEN u_type = 'FD' THEN '1' WHEN u_type = 'SD' THEN '2' ELSE '3' END").count(:u_type)
       @dr_type_graph = []      
       @dr_type_graph_count = 0
       @dr_typeRecords.each do |key, value|
         @dr_type_graph_count += value
       end
-
       @dr_typeRecords.each do |key1, value1|
         if key1 == "FD"
           @dr_gtype = "Fire"
@@ -52,10 +55,10 @@ module DamperStatementReport
     end
 
     def generate_dr_result_graph
-      repair_ids = graph_uniq_statement_records(@job.u_facility_id, report_type= ["DAMPERREPAIR"])
-      @damper_repair = Lsspdfasset.select(:u_dr_passed_post_repair).where(id: repair_ids).where.not(u_dr_passed_post_repair: "Removed",u_status: "Removed").group(["u_dr_passed_post_repair"]).order("CASE WHEN u_dr_passed_post_repair = 'PASS' THEN '1' WHEN u_dr_passed_post_repair = 'Fail' THEN '2' ELSE '3' END").count(:u_dr_passed_post_repair)
-      inspection_ids = graph_uniq_statement_records(@job.u_facility_id, report_type= ["DAMPERINSPECTION"])
-      @damper_inspection = Lsspdfasset.select(:u_status).where(id: inspection_ids).where.not(u_status: "Removed",u_dr_passed_post_repair: "Removed").group(["u_status"]).order("CASE WHEN u_status = 'PASS' THEN '1' WHEN u_status = 'Fail' THEN '2' ELSE '3' END").count(:u_status)
+	    repair_ids = @job.unique_statement_records(@job.u_facility_id, report_type= ["DAMPERREPAIR"])
+      @damper_repair = Lsspdfasset.select(:u_building, :u_type, :u_dr_passed_post_repair).where(id: repair_ids).where.not(u_type: "").group(["u_building", "u_type","u_dr_passed_post_repair"]).order("CASE WHEN u_dr_passed_post_repair = 'PASS' THEN '1' WHEN u_dr_passed_post_repair = 'Fail' THEN '2' ELSE '3' END").count(:u_dr_passed_post_repair)
+      inspection_ids = @job.unique_statement_records(@job.u_facility_id, report_type= ["DAMPERINSPECTION"])
+      @damper_inspection = Lsspdfasset.select(:u_building, :u_type, :u_status).where(id: inspection_ids).where.not(u_type: "").group(["u_building", "u_type","u_status"]).order("CASE WHEN u_status = 'PASS' THEN '1' WHEN u_status = 'Fail' THEN '2' ELSE '3' END").count(:u_status)
 
       new_array = @damper_repair.to_a + @damper_inspection.to_a
       status_counts = new_array.group_by{|i| i[0]}.map{|k,v| [k, v.map(&:last).sum] } 
@@ -72,7 +75,7 @@ module DamperStatementReport
           @dr_status = "Passed"
         elsif key1 == "Fail"
           @dr_status = "Failed"
-        elsif key1 == ""
+        elsif key1 == "NA"
           @dr_status = "Non Accessible" 
         end        
         @dr_result_graph << [@dr_status, ((value1.to_f * 100) / @dr_result_graph_count)]
@@ -81,8 +84,10 @@ module DamperStatementReport
     end
 
     def generate_na_reason_graph
-
-      get_ids = graph_uniq_statement_records(@job.u_facility_id)
+      report_type = ["DAMPERREPAIR" ,"DAMPERINSPECTION"]
+      get_ids = @job.unique_statement_records(@job.u_facility_id, report_type)
+ 
+     # get_ids = graph_uniq_statement_records(@job.u_facility_id)
       @naRecords = Lsspdfasset.select(:u_non_accessible_reasons).where(id: get_ids).where.not(u_non_accessible_reasons: "").where.not(u_type: "", u_status: "Removed", u_dr_passed_post_repair: "Removed").group(["u_non_accessible_reasons"]).count(:u_non_accessible_reasons)
       if @naRecords.length != 0
         @na_graph = []
