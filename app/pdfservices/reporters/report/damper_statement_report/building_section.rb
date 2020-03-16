@@ -5,10 +5,10 @@ module DamperStatementReport
     def write(pdf)
       return if statement_records.empty?
       pdf.stamp_at "watermark", [100, 210] if @watermark 
-      BuildingSummaryPage.new(@job, @building, @tech).write(pdf)
+      BuildingSummaryPage.new(@job, @building, @tech, @watermark).write(pdf)
       write_breakdown_pages(pdf, building_section, @tech)
       @records = statement_records.where.not(u_type: "", u_status: "Removed")
-      @records.each { |r| PhotoPage.new(r, @group_name, @facility_name, @with_picture).write(pdf)}
+      @records.each { |r| PhotoPage.new(r, @group_name, @facility_name, @with_picture, @watermark).write(pdf)}
       #comprehensive_records.each { |r| PhotoPage.new(r, @group_name, @facility_name, @with_picture).write(pdf)}
     end
 
