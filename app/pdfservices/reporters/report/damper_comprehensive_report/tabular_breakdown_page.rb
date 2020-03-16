@@ -18,6 +18,7 @@ module DamperComprehensiveReport
       pdf.text("<b>#{title}</b>", :inline_format => true)
       attributes = summary_table_attributes
       draw_summary_table(pdf, summary_table_data(attributes), attributes)
+      pdf.stamp_at "watermark", [100, 210] if @watermark 
     end
 
   private
