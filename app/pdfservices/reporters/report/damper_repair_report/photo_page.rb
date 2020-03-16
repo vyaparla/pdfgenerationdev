@@ -251,6 +251,7 @@ module DamperRepairReport
       end
       pdf.draw_text("Open",  at: [145 - pdf.bounds.absolute_left, 140])
       pdf.move_down 5
+      pdf.stamp_at "watermark", [100, 210] if @watermark 
     end
 
     def draw_closed_after_install_image(pdf)
@@ -261,23 +262,29 @@ module DamperRepairReport
       end
       pdf.draw_text("Closed",  at: [400 - pdf.bounds.absolute_left, 140])
       pdf.move_down 5
+      pdf.stamp_at "watermark", [100, 210] if @watermark 
     end
 
     def draw_new_install_image(pdf)
+      pdf.stamp_at "watermark", [100, 210] if @watermark 
       image = @record.pdf_image4.path(:pdf) 
       unless image.blank?
         pdf.image(image, at: [105 - pdf.bounds.absolute_left, 125], :width => 120, :height => 120)
         pdf.draw_text("After Installation",  at: [80 - pdf.bounds.absolute_left, -9])
       end
+      pdf.stamp_at "watermark", [100, 210] if @watermark 
+
     end
 
     def draw_reopened_after_install_image(pdf)
+      pdf.stamp_at "watermark", [100, 210] if @watermark 
       image = @record.pdf_image3.path(:pdf)
       unless image.blank?
         pdf.image(image, at: [380 - pdf.bounds.absolute_left, 125], 
           :width => 120, :height => 120)
        pdf.draw_text("Operational",  at: [400 - pdf.bounds.absolute_left, -9])
       end
+      pdf.stamp_at "watermark", [100, 210] if @watermark 
     end
 
     # def splitBase64(uri)
