@@ -6,7 +6,7 @@ module DamperStatementReport
       return if statement_records.empty?
       pdf.stamp_at "watermark", [100, 210] if @watermark 
       BuildingSummaryPage.new(@job, @building, @tech, @watermark).write(pdf)
-      write_breakdown_pages(pdf, building_section, @tech)
+      write_breakdown_pages(pdf, building_section, @tech, @watermark)
       @records = statement_records.where.not(u_type: "", u_status: "Removed")
       @records.each { |r| PhotoPage.new(r, @group_name, @facility_name, @with_picture, @watermark).write(pdf)}
       #comprehensive_records.each { |r| PhotoPage.new(r, @group_name, @facility_name, @with_picture).write(pdf)}
@@ -30,11 +30,11 @@ module DamperStatementReport
       @remove_records ||= statement_records.where(:u_status => "Removed").where.not(u_type: "")
     end
 
-    def write_breakdown_pages(pdf, building_section, tech)
-      TabularBreakdownPage.new(pass_records, :pass_dampers, building_section, tech).write(pdf)
-      TabularBreakdownPage.new(failed_records, :failed_dampers, building_section, tech).write(pdf)
-      TabularBreakdownPage.new(na_records, :na_dampers, building_section, tech).write(pdf)
-      TabularBreakdownPage.new(remove_records, :removed_dampers, building_section, tech).write(pdf)
+    def write_breakdown_pages(pdf, building_section, tech, watermark)
+      TabularBreakdownPage.new(pass_records, :pass_dampers, building_section, tech, watermark).write(pdf)
+      TabularBreakdownPage.new(failed_records, :failed_dampers, building_section, tech, watermark).write(pdf)
+      TabularBreakdownPage.new(na_records, :na_dampers, building_section, tech, watermark).write(pdf)
+      TabularBreakdownPage.new(remove_records, :removed_dampers, building_section, tech, watermark).write(pdf)
     end
   end
 end

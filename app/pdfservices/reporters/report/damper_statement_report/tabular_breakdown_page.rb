@@ -2,11 +2,12 @@ module DamperStatementReport
   class TabularBreakdownPage
   	include Report::RepairDataPageWritable
 
- def initialize(records, damper_type, building_section, tech)
+ def initialize(records, damper_type, building_section, tech, watermark)
       @records = records
       @damper_type = damper_type
       @building_section = building_section
       @tech = tech
+      @watermark = watermark
     end
 
     def write(pdf)
