@@ -202,6 +202,16 @@ class ApiController < ApplicationController
           sheet.merge_cells ("D1:L1")
           sheet.add_row ["Damper #", "Facility", "Building", "Floor", "Damper Location", "Damper Type", "Status",  "Repair Action Performed", "Subsequent Failure Reason", "Technician", "Date"] , :style => header_row
           i = 1
+          ############    WATERMARK   ##################################################
+            #img = File.expand_path(Rails.root+'app/assets/images/transaparent1.png')
+            if @watermark
+              sheet.add_image(:image_src => watermaek_img, :noSelect => true, :noMove => true, :rowOff => 0, :colOff => 0) do |image|
+                image.width = 450
+                image.height = 450
+                image.start_at 1, 2
+              end
+            end  
+          ##############################################################################
           @records.each do |record|
 		        floor = (record.u_floor == "other" ? record.u_other_floor : record.u_floor)
             sheet.add_row  [record.u_tag, record.u_facility_name, record.u_building, floor, record.u_location_desc, record.u_type, record.u_dr_passed_post_repair,
