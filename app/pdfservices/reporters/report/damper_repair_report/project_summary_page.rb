@@ -16,7 +16,7 @@ module DamperRepairReport
       pdf.move_down 30
       draw_title(pdf)
       project_summary_table(pdf)
-      Report::Table.new(dr_project_summary_table_content).draw(pdf)
+      #Report::Table.new(dr_project_summary_table_content).draw(pdf)
       #pdf.move_down 30
       draw_label(pdf, 'Statistics')
       top = pdf.cursor
