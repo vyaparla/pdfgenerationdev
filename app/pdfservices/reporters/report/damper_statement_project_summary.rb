@@ -13,13 +13,14 @@ module Report
       Report::Table.new(facility_summary_table_content).draw(pdf)
       pdf.move_down 20
       draw_title(pdf)
-      Report::Table.new(project_summary_table_content).draw(pdf) 
+      project_summary_table(pdf)
+      #Report::Table.new(project_summary_table_content).draw(pdf) 
       #pdf.move_down 20
       draw_label(pdf, 'Statistics')
       top = pdf.cursor
       # pdf.indent(300) { Report::Table.new(type_table_content).draw(pdf) }
       pdf.move_cursor_to top
-      pdf.bounding_box([400, 310], :width => 230, :height => 420) do   
+      pdf.bounding_box([420, 310], :width => 230, :height => 420) do   
         Report::Table.new(project_statistics_data).draw(pdf) do |formatter|
           formatter.cell[1,0] = { :text_color => '137d08' }
           formatter.cell[2,0] = { :text_color => 'c1171d' }
@@ -32,6 +33,21 @@ module Report
   private
 
     def building ; end
+
+    def project_summary_table(pdf)
+      pdf.font_size 8
+      pdf.table(project_summary_table_content, header: true) do |table|
+        table.row(0).style background_color: '444444', text_color: 'ffffff'
+        table.rows(0).style {|r| r.border_color = '888888'}
+        #table.row_colors = ['ffffff', 'eaeaea']
+        table.rows(0...table.row_length).style border_width: 0.5
+        table.row(0).style border_color:     '888888',
+                         background_color: '444444',
+                         text_color:       'ffffff'
+        table.rows(1...table.row_length).style border_color: 'cccccc'
+        table.column(0).style {|c| c.width = 100 }
+      end
+    end 
 
     def draw_facility_title(pdf)
       pdf.font_size 30
@@ -53,7 +69,7 @@ module Report
       pdf.font_size 20
       pdf.fill_color 'ED1C24'
       #pdf.text("<b>#{text}</b>", :inline_format => true)
-      pdf.draw_text("#{text}", :style => :bold, :inline_format => true, at: [420 , 320])
+      pdf.draw_text("#{text}", :style => :bold, :inline_format => true, at: [430 , 320])
       pdf.fill_color '202020'
       pdf.move_down 10
     end
