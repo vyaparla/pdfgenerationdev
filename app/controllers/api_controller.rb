@@ -616,10 +616,11 @@ class ApiController < ApplicationController
       request_body_map = {
         "sys_id" => "#{@project_completion.m_service_sysid}",
         "project_completion_timestamp" => "#{@project_completion.m_date.strftime("%m-%d-%Y-%I-%M-%p")}",
-        "pdf_url" => "ec2-54-196-89-5.compute-1.amazonaws.com/api/download_project_completion_pdf_report?service_sysid=#{@project_completion.id}",
+        "pdf_url" => "ec2-34-229-178-3.compute-1.amazonaws.com/api/download_project_completion_pdf_report?service_sysid=#{@project_completion.id}",
        # "pdf_url" => "ec2-54-165-215-71.compute-1.amazonaws.com/api/download_project_completion_pdf_report?service_sysid=#{@project_completion.id}",
       }.to_json
       
+      34.229.178.3
       begin
         response = RestClient.post("#{url}", "#{request_body_map}",
                               {:content_type => 'application/json',
