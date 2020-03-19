@@ -268,28 +268,22 @@ module DamperInspectionReport
       image =  @record.pdf_image1.path(:pdf)
       unless image.blank?
         pdf.image(image, at: [50 - pdf.bounds.absolute_left, 255], :width => 220, :height => 220)#521
-      else
-        pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at: [90 - pdf.bounds.absolute_left, 189])#404
+        pdf.draw_text("Before Inspection",  at: [100 - pdf.bounds.absolute_left, 25])
       end
       pdf.move_down 5
-      pdf.draw_text("Before Inspection",  at: [100 - pdf.bounds.absolute_left, 25])
+      
     end
 
     def draw_closed_image(pdf)
       pdf.stamp_at "watermark", [100, 210] if @watermark 
       unless @record.u_status == "NA"	    
        pdf.move_down 20
-	 #   pdf.image "#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png", :at => [50,450], :width => 450    
-      #pdf.image("#{Rails.root}/lib/pdf_generation/report_assets/picture_ds.png",
-      #  at: [290 - pdf.bounds.absolute_left, 215], :width => 230, :height => 230)#536
-       image =  @record.pdf_image2.path(:pdf)
+        image =  @record.pdf_image2.path(:pdf)
         unless image.blank?
           pdf.image(image, at: [280 - pdf.bounds.absolute_left, 255], :width => 220, :height => 220)#521
-        else
-          pdf.draw_text('Photo Unavailable', style: :bold, size:  12, at: [90 - pdf.bounds.absolute_left, 189])#404
+          pdf.draw_text("After Inspection",  at: [350 - pdf.bounds.absolute_left, 25])
         end
         pdf.move_down 5
-        pdf.draw_text("After Inspection",  at: [350 - pdf.bounds.absolute_left, 25])
         pdf.stamp_at "watermark", [100, 210] if @watermark 
      end
     end
