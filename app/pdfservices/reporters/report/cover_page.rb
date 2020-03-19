@@ -31,22 +31,6 @@ module Report
   private
 
     def draw_title(pdf)
-      # pdf.indent 40 do
-      #   pdf.move_down 300
-      #   pdf.font_size 30
-      #   if @model_name == "DAMPERINSPECTION"
-      #     pdf.text("<b><i>Damper Inspection Report</i></b>", :inline_format => true)
-      #   elsif @model_name == "DAMPERREPAIR"
-      #     pdf.text("<b><i>Damper Repair Report</i></b>", :inline_format => true)
-      #   elsif @model_name == "FIREDOORINSPECTION"
-      #     pdf.text("<b><i>Fire Door Inspection Report</i></b>", :inline_format => true)
-      #   elsif @model_name == "FIRESTOPINSTALLATION"
-      #     pdf.text("<b><i>Firestop Installation Report</i></b>", :inline_format => true)
-      #   elsif @model_name == "FIRESTOPSURVEY"
-      #     pdf.text("<b><i>Firestop Survey Report</i></b>", :inline_format => true) 
-      #   end
-      #   pdf.move_down 25
-      # end
       pdf.move_down 300
       pdf.font_size 28
       
@@ -74,18 +58,6 @@ module Report
     end
 
     def draw_subtitle(pdf)
-      # pdf.indent 40 do
-      #   pdf.font_size 25
-      #   pdf.fill_color 'c6171e'
-      #   #pdf.text("<b><i>#{@owner.u_job_id}</i></b>", :inline_format => true)
-      #   pdf.text("<b><i>#{@owner.u_facility_name}</i></b>", :inline_format => true)
-      #   pdf.move_down 20
-      #   unless @address.blank?
-      #     pdf.text("<b><i>#{@address[0]}, #{@address[1]}, #{@address[2]}</i></b>", :inline_format => true)
-      #     pdf.text("<b><i>#{@address[3]}, #{@address[4]}</i></b>", :inline_format => true)
-      #     pdf.text("<b><i>United States</i></b>", :inline_format => true)
-      #   end
-      # end
       pdf.font_size 25
       #pdf.fill_color 'c6171e'
       pdf.fill_color 'ED1C24'
