@@ -620,7 +620,6 @@ class ApiController < ApplicationController
        # "pdf_url" => "ec2-54-165-215-71.compute-1.amazonaws.com/api/download_project_completion_pdf_report?service_sysid=#{@project_completion.id}",
       }.to_json
       
-      34.229.178.3
       begin
         response = RestClient.post("#{url}", "#{request_body_map}",
                               {:content_type => 'application/json',
