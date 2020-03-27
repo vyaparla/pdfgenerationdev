@@ -75,7 +75,7 @@ module DamperStatementReport
           @dr_status = "Passed"
         elsif key1 == "Fail"
           @dr_status = "Failed"
-        else
+        elsif key1 == "NA"
           @dr_status = "Non Accessible" 
         end        
         @dr_result_graph << [@dr_status, ((value1.to_f * 100) / @dr_result_graph_count)]
