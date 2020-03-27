@@ -9,7 +9,7 @@ module DamperStatementReport
     def generate
       generate_dr_building_graph
       generate_dr_type_graph
-      generate_dr_result_graph
+      #generate_dr_result_graph
       generate_na_reason_graph
     end
 
@@ -64,8 +64,6 @@ module DamperStatementReport
       status_counts = new_array.group_by{|i| i[0]}.map{|k,v| [k, v.map(&:last).sum] } 
 
       @dr_resultRecords = status_counts.to_h
-      
-      puts "---#{@dr_typeRecords}"
 
       @dr_result_graph = []
       @dr_result_graph_count = 0
@@ -74,7 +72,6 @@ module DamperStatementReport
       end 
 
       @dr_resultRecords.each do |key1, value1|
-        puts "----#{key1}---#{value1}"
         if key1 == "Pass"
           @dr_status = "Passed"
         elsif key1 == "Fail"
