@@ -75,7 +75,7 @@ module DamperStatementReport
         @dr_result_graph_count += value
       end 
 
-      puts "***#{@dr_resultRecords}***#{@dr_result_graph_count}*********"
+      puts "******#{@dr_resultRecords}***#{@dr_result_graph_count}*********"
 
       @dr_resultRecords.each do |key1, value1|
         if key1 == "Pass"
