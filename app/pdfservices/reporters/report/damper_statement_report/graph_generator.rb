@@ -55,11 +55,16 @@ module DamperStatementReport
     end
 
     def generate_dr_result_graph
-	    repair_ids = @job.unique_statement_records(@job.u_facility_id, report_type= ["DAMPERREPAIR"])
-      @damper_repair = Lsspdfasset.select(:u_dr_passed_post_repair).where(id: repair_ids).where.not(u_type: "", u_dr_passed_post_repair: "Removed").group("u_dr_passed_post_repair").order("CASE WHEN u_dr_passed_post_repair = 'PASS' THEN '1' WHEN u_dr_passed_post_repair = 'Fail' THEN '2' ELSE '3' END").count(:u_dr_passed_post_repair)
-      inspection_ids = @job.unique_statement_records(@job.u_facility_id, report_type= ["DAMPERINSPECTION"])
-      @damper_inspection = Lsspdfasset.select(:u_status).where(id: inspection_ids).where.not(u_type: "", u_status: "Removed").group("u_status").order("CASE WHEN u_status = 'PASS' THEN '1' WHEN u_status = 'Fail' THEN '2' ELSE '3' END").count(:u_status)
-     
+
+      report_type = ["DAMPERREPAIR" ,"DAMPERINSPECTION"]
+
+
+	    repair_ids = @job.unique_statement_records(@job.u_facility_id, report_type)
+      @damper_repair = Lsspdfasset.select(:u_dr_passed_post_repair).where(id: repair_ids, u_report_type: "DAMPERREPAIR").where.not(u_type: "", u_dr_passed_post_repair: "Removed").group("u_dr_passed_post_repair").order("CASE WHEN u_dr_passed_post_repair = 'PASS' THEN '1' WHEN u_dr_passed_post_repair = 'Fail' THEN '2' ELSE '3' END").count(:u_dr_passed_post_repair)
+      inspection_ids = @job.unique_statement_records(@job.u_facility_id, report_type)
+      @damper_inspection = Lsspdfasset.select(:u_status).where(id: inspection_ids, u_report_type: "DAMPERINSPECTION").where.not(u_type: "", u_status: "Removed").group("u_status").order("CASE WHEN u_status = 'PASS' THEN '1' WHEN u_status = 'Fail' THEN '2' ELSE '3' END").count(:u_status)
+
+
       new_array = @damper_repair.to_a + @damper_inspection.to_a
       status_counts = new_array.group_by{|i| i[0]}.map{|k,v| [k, v.map(&:last).sum] } 
       @dr_resultRecords = status_counts.to_h
