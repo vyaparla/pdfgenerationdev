@@ -9,7 +9,7 @@ module DamperStatementReport
     def generate
       generate_dr_building_graph
       generate_dr_type_graph
-      #generate_dr_result_graph
+      generate_dr_result_graph
       generate_na_reason_graph
     end
 
