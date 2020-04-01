@@ -82,7 +82,7 @@ module FirestopInstallationReport
 
     def draw_issues_by_category(pdf)
       pdf.move_down 12 
-      pdf.bounding_box([285, 414], :width => 250, :height => 420) do
+      pdf.bounding_box([325, 414], :width => 230, :height => 420) do
         pdf.fill_color '202020'      
         pdf.font_size 10
         survey_issue_summary = []
@@ -105,8 +105,8 @@ module FirestopInstallationReport
             r.border_color = 'cccccc'
           end
           table.row(0).style background_color: '444444', text_color: 'ffffff'
-          table.column(1).style {|c| c.align = :center }
-          table.column(2).style {|c| c.align = :center }
+          table.column(1).style {|c| c.width = 40 }
+          table.column(2).style {|c| c.width = 40 }
         end
       end
       pdf.move_down 10
