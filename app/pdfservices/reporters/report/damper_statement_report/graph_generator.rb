@@ -55,10 +55,7 @@ module DamperStatementReport
     end
 
     def generate_dr_result_graph
-
       report_type = ["DAMPERREPAIR" ,"DAMPERINSPECTION"]
-
-
 	    repair_ids = @job.unique_statement_records(@job.u_facility_id, report_type)
       @damper_repair = Lsspdfasset.select(:u_dr_passed_post_repair).where(id: repair_ids, u_report_type: "DAMPERREPAIR").where.not(u_type: "", u_dr_passed_post_repair: "Removed").group("u_dr_passed_post_repair").order("CASE WHEN u_dr_passed_post_repair = 'PASS' THEN '1' WHEN u_dr_passed_post_repair = 'Fail' THEN '2' ELSE '3' END").count(:u_dr_passed_post_repair)
       inspection_ids = @job.unique_statement_records(@job.u_facility_id, report_type)
