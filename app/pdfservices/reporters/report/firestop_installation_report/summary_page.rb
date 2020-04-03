@@ -105,8 +105,8 @@ module FirestopInstallationReport
             r.border_color = 'cccccc'
           end
           table.row(0).style background_color: '444444', text_color: 'ffffff'
-          table.column(1).style {|c| c.align = :center }
-          table.column(2).style {|c| c.align = :center }
+          table.column(1).style {|c| c.width = 40 }
+          table.column(2).style {|c| c.width = 50 }
         end
       end
       pdf.move_down 10

@@ -87,7 +87,7 @@ module FirestopSurveyReport
         end
       
         @firestop_survey_summary.each do |key, value|
-          survey_issue_summary << [key, value, "#{((value.to_f * 100 ) / @firestop_survey_issue_count).round(3)}%"]
+          survey_issue_summary << [key, value, "#{((value.to_f * 100 ) / @firestop_survey_issue_count).round(2)}%"]
         end
       
         pdf.font_size 10
@@ -98,8 +98,8 @@ module FirestopSurveyReport
             r.border_color = 'cccccc'
           end
           table.row(0).style background_color: '444444', text_color: 'ffffff'
-          table.column(1).style {|c| c.align = :center }
-          table.column(2).style {|c| c.align = :center }
+          table.column(1).style {|c| c.width = 40 }
+          table.column(2).style {|c| c.width = 50 }
         end
       end
       pdf.move_down 10
