@@ -132,7 +132,7 @@ module Report
           if @boolean == 0
             #floor_json = {}
             floor_json["building"] = key[0]
-	    floor_data = key[1] == "other" ? key[3] : key[1]
+	          floor_data = key[1] == "other" ? key[3] : key[1]
             floor_json["floor"] = floor_data
             #floor_json["floor"] = key[1].to_i
             if key[2] == "FSD"
@@ -151,11 +151,11 @@ module Report
 
              records = find_uniq_assets(@owner.u_facility_id)
             if  key[1] == "other"
-	      @building_repair_result = Lsspdfasset.select(:u_building, :u_other_floor, :u_dr_passed_post_repair).where(:id => records, :u_report_type => "DAMPERREPAIR", :u_building => @building, :u_other_floor => key[3], :u_delete => false).where.not(u_type: "").group(["u_building", "u_other_floor", "u_dr_passed_post_repair"]).count(:u_dr_passed_post_repair)
-            @building_inspection_result = Lsspdfasset.select(:u_building, :u_other_floor, :u_status).where(:id => records, :u_report_type => "DAMPERINSPECTION", :u_building => @building, :u_other_floor => key[3], :u_delete => false).where.not(u_type: "").group(["u_building", "u_other_floor", "u_status"]).count(:u_status)
-           else
-	      @building_repair_result = Lsspdfasset.select(:u_building, :u_floor, :u_dr_passed_post_repair).where(:id => records, :u_report_type => "DAMPERREPAIR", :u_building => @building, :u_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_dr_passed_post_repair"]).count(:u_dr_passed_post_repair)
-            @building_inspection_result = Lsspdfasset.select(:u_building, :u_floor, :u_status).where(:id => records, :u_report_type => "DAMPERINSPECTION", :u_building => @building, :u_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_status"]).count(:u_status)
+	            @building_repair_result = Lsspdfasset.select(:u_building, :u_other_floor, :u_dr_passed_post_repair).where(:id => records, :u_report_type => "DAMPERREPAIR", :u_building => @building, :u_other_floor => key[3], :u_delete => false).where.not(u_type: "").group(["u_building", "u_other_floor", "u_dr_passed_post_repair"]).count(:u_dr_passed_post_repair)
+              @building_inspection_result = Lsspdfasset.select(:u_building, :u_other_floor, :u_status).where(:id => records, :u_report_type => "DAMPERINSPECTION", :u_building => @building, :u_other_floor => key[3], :u_delete => false).where.not(u_type: "").group(["u_building", "u_other_floor", "u_status"]).count(:u_status)
+            else
+	            @building_repair_result = Lsspdfasset.select(:u_building, :u_floor, :u_dr_passed_post_repair).where(:id => records, :u_report_type => "DAMPERREPAIR", :u_building => @building, :u_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_dr_passed_post_repair"]).count(:u_dr_passed_post_repair)
+              @building_inspection_result = Lsspdfasset.select(:u_building, :u_floor, :u_status).where(:id => records, :u_report_type => "DAMPERINSPECTION", :u_building => @building, :u_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_status"]).count(:u_status)
            end
 
             new_array_result = @building_repair_result.to_a + @building_inspection_result.to_a
