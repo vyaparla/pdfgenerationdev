@@ -86,7 +86,7 @@ module Report
      # inspection_records = find_uniq_assets(@owner, "DAMPERINSPECTION")
 
       report_type = ["DAMPERREPAIR" ,"DAMPERINSPECTION"]
-      repair_ids = @job.unique_statement_records(@job.u_facility_id, report_type)
+      repair_ids = @owner.unique_statement_records(@owner.u_facility_id, report_type)
 
      @damper_repair = Lsspdfasset.select(:u_building, :u_type, :u_dr_passed_post_repair).where(id: repair_ids, u_report_type: "DAMPERREPAIR").group(["u_building", "u_type","u_dr_passed_post_repair"]).order("CASE WHEN u_type = 'FD' THEN '1' WHEN u_type = 'SD' THEN '2' ELSE '3' END").count(:u_dr_passed_post_repair)
      @damper_inspection = Lsspdfasset.select(:u_building, :u_type, :u_status).where(id: repair_ids, u_report_type: "DAMPERINSPECTION").group(["u_building", "u_type","u_status"]).order("CASE WHEN u_type = 'FD' THEN '1' WHEN u_type = 'SD' THEN '2' ELSE '3' END").count(:u_status)
@@ -275,7 +275,7 @@ module Report
      # inspection_records = find_uniq_assets(@owner, "DAMPERINSPECTION")
 
       report_type = ["DAMPERREPAIR" ,"DAMPERINSPECTION"]
-      repair_ids = @job.unique_statement_records(@job.u_facility_id, report_type)
+      repair_ids = @owner.unique_statement_records(@owner.u_facility_id, report_type)
       @damper_repair = Lsspdfasset.select(:u_building, :u_dr_passed_post_repair).where(:id => repair_ids, :u_report_type => "DAMPERREPAIR", :u_delete => false).where.not(u_type: "").group(["u_building", "u_dr_passed_post_repair"]).count(:u_dr_passed_post_repair)
       @damper_inspection = Lsspdfasset.select(:u_building, :u_status).where(:id => repair_ids, :u_report_type => "DAMPERINSPECTION", :u_delete => false).where.not(u_type: "").group(["u_building", "u_status"]).count(:u_status)
 
