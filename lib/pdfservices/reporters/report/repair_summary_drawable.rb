@@ -262,7 +262,7 @@ module Report
                  end
 	       floor_json
             else
-	       if key[2] == "FSD"
+         if key[2] == "FSD"
             floor_json["FSD"] = value
             floor_json["FD"] = 0
             floor_json["SD"] = 0
