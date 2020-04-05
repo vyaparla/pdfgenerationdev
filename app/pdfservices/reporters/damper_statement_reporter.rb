@@ -4,7 +4,7 @@ class DamperStatementReporter < Reporter
     facility_name, facility_id, with_picture=true, report_type, watermark)
   
     # enable this if need to updated the u_updated_date from code
-    DamperStatementReport::UpdateDate.new.generate
+    #DamperStatementReport::UpdateDate.new.generate
 
     DamperStatementReport::GraphGenerator.new(job).generate
 
