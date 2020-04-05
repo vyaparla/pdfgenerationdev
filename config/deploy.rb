@@ -9,7 +9,8 @@ set :repo_url, 'git@github.com:vyaparla/pdfgenerationdev.git' # Edit this to mat
 #set :branch, :vsoft_qa # This branch is used for vsoft qa 
 set :branch, :production_lss # This branch is used for production
 
-set :deploy_to, '/home/deploy/pdfgenerationdev'
+#set :deploy_to, '/home/deploy/pdfgenerationdev'
+set :deploy_to, '/home/deploy/pdfgenerationprod'
 set :pty, true
 set :linked_files, %w{config/database.yml config/application.yml}
 set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/content}
