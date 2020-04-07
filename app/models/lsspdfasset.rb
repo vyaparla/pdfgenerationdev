@@ -143,7 +143,7 @@ class Lsspdfasset < ActiveRecord::Base
     start_date = collect_start_dates.min
     start_date = start_date.localtime.strftime(I18n.t('date.formats.long'))
 
-    collect_end_dates = comprehensive_records.collect {|date| date.u_job_start_date if date.u_report_type == "DAMPER"}
+    collect_end_dates = comprehensive_records.collect {|date| date.u_job_start_date if date.u_report_type == "DAMPERREPAIR"}
     end_dates =  collect_end_dates - [nil]
 
      unless end_dates.blank?
