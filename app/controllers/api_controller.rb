@@ -431,7 +431,7 @@ class ApiController < ApplicationController
 	      report_type = ["DAMPERREPAIR" ,"DAMPERINSPECTION"]
 	      job = Lsspdfasset.last
         get_ids = job.unique_statement_records(params[:facility_id], report_type)
-        @records = Lsspdfasset.where(id: get_ids).order("updated_at desc")
+        @records = Lsspdfasset.where(id: get_ids).order("u_updated_date desc")
         p, wb, img_path = initialize_spreadsheet
         facility_name, tech, date, damper_inspection_para, damper_repair_para = initialize_damper_params
 	      para = damper_statement_para
