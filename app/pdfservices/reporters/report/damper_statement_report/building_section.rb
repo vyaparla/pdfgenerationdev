@@ -15,19 +15,19 @@ module DamperStatementReport
   private
 
     def pass_records
-      @pass_records ||= statement_records.where(["u_status=? OR u_dr_passed_post_repair = ?", "Pass", "Pass"]).where.not(u_type: "") 
+      @pass_records ||= statement_records.where(["u_status=? OR u_dr_passed_post_repair = ?", "Pass", "Pass"]).where.not(u_type: "").order('updated_at desc')
     end
 
     def failed_records
-      @failed_records ||= statement_records.where(["u_status=? OR u_dr_passed_post_repair = ?", "Fail", "Fail"]).where.not(u_type: "")   
+      @failed_records ||= statement_records.where(["u_status=? OR u_dr_passed_post_repair = ?", "Fail", "Fail"]).where.not(u_type: "").order('updated_at desc')   
     end
 
     def na_records
-      @na_records ||= statement_records.where(:u_status => "NA").where.not(u_type: "")
+      @na_records ||= statement_records.where(:u_status => "NA").where.not(u_type: "").order('updated_at desc')
     end
     
     def remove_records
-      @remove_records ||= statement_records.where(:u_status => "Removed").where.not(u_type: "")
+      @remove_records ||= statement_records.where(:u_status => "Removed").where.not(u_type: "").order('updated_at desc')
     end
 
     def write_breakdown_pages(pdf, building_section, tech, watermark)

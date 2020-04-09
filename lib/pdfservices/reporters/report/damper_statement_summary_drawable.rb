@@ -82,12 +82,12 @@ module Report
 
           #records = find_uniq_assets(@owner.u_facility_id)
           if  key[1] == "other"
-	      @building_repair = Lsspdfasset.select(:u_building, :u_other_floor, :u_dr_passed_post_repair).where(:id => records, :u_building => @building, :u_other_floor => key[3], :u_delete => false).where.not(u_type: "").group(["u_building", "u_other_floor", "u_dr_passed_post_repair"]).count(:u_dr_passed_post_repair)
-          @building_inspection = Lsspdfasset.select(:u_building, :u_other_floor, :u_status).where(:id => records, :u_building => @building, :u_other_floor => key[3], :u_delete => false).where.not(u_type: "").group(["u_building", "u_other_floor", "u_status"]).count(:u_status)
-           else
-               @building_repair = Lsspdfasset.select(:u_building, :u_floor, :u_dr_passed_post_repair).where(:id => records, :u_building => @building, :u_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_dr_passed_post_repair"]).count(:u_dr_passed_post_repair)
-          @building_inspection = Lsspdfasset.select(:u_building, :u_floor, :u_status).where(:id => records, :u_building => @building, :u_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_status"]).count(:u_status)
-           end
+	          @building_repair = Lsspdfasset.select(:u_building, :u_other_floor, :u_dr_passed_post_repair).where(:id => records, :u_building => @building, :u_other_floor => key[3], :u_delete => false).where.not(u_type: "").group(["u_building", "u_other_floor", "u_dr_passed_post_repair"]).count(:u_dr_passed_post_repair)
+            @building_inspection = Lsspdfasset.select(:u_building, :u_other_floor, :u_status).where(:id => records, :u_building => @building, :u_other_floor => key[3], :u_delete => false).where.not(u_type: "").group(["u_building", "u_other_floor", "u_status"]).count(:u_status)
+          else
+            @building_repair = Lsspdfasset.select(:u_building, :u_floor, :u_dr_passed_post_repair).where(:id => records, :u_building => @building, :u_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_dr_passed_post_repair"]).count(:u_dr_passed_post_repair)
+            @building_inspection = Lsspdfasset.select(:u_building, :u_floor, :u_status).where(:id => records, :u_building => @building, :u_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_status"]).count(:u_status)
+          end
 
           new_array = @building_repair.to_a + @building_inspection.to_a
           status_counts = new_array.group_by{|i| i[0]}.map{|k,v| [k, v.map(&:last).sum] } 
