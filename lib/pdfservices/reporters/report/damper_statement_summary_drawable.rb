@@ -92,7 +92,7 @@ module Report
           new_array = @building_repair.to_a + @building_inspection.to_a
           status_counts = new_array.group_by{|i| i[0]}.map{|k,v| [k, v.map(&:last).sum] } 
      
-          @building_result = status_counts.to_h
+          @building_result = (status_counts.sort).to_h
 
           @building_result.each do |fstatus, fvalue|
             if !floor_json.has_key?(fstatus[2])
@@ -161,7 +161,7 @@ module Report
             new_array_result = @building_repair_result.to_a + @building_inspection_result.to_a
             status_count_result = new_array_result.group_by{|i| i[0]}.map{|k,v| [k, v.map(&:last).sum] } 
      
-            @building_result = status_count_result.to_h
+            @building_result = (status_count_result.sort).to_h
             #@building_result = Lsspdfasset.select(:u_building, :u_floor, :u_dr_passed_post_repair).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_floor => key[1], :u_delete => false).group(["u_building", "u_floor", "u_dr_passed_post_repair"]).count(:u_dr_passed_post_repair)
             @building_result_len =  @building_result.length
     
