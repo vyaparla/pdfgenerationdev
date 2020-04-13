@@ -25,7 +25,7 @@ class Lsspdfasset < ActiveRecord::Base
 
 
   def buildings(serviceID)
-    Lsspdfasset.where(:u_service_id => serviceID, :u_delete => false).pluck('DISTINCT u_building').order('u_building ASC')
+    Lsspdfasset.where(:u_service_id => serviceID, :u_delete => false).order('u_building ASC').pluck('DISTINCT u_building')
   end
 
   def comprehensive_buildings(facility_id)
