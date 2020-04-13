@@ -267,8 +267,8 @@ module Report
         @damperGrandtotal = $ptotal + $ftotal + $natotal
 
         @damperPer = @damperGrandtotal == 0 ? @damperPer = '0.00%' : '%.2f%' % ((100 * @damperTotal) / (@damperGrandtotal))
-
-        @final_table_data << [resultInfo["floor"], resultInfo["FD"], resultInfo["SD"], resultInfo["FSD"], resultInfo["Pass"], resultInfo["Fail"], resultInfo["NA"],  resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"], @damperPer]
+        
+        @final_table_data << [resultInfo["floor"], resultInfo["FD"], resultInfo["SD"], resultInfo["FSD"], resultInfo["Pass"], resultInfo["Fail"], resultInfo["NA"],  resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"], @damperPer, resultInfo["Removed"]]
       end
 
       $ptotal_damperPer  = '%.2f%' %  (($ptotal.to_f * 100) / ($ptotal + $ftotal + $natotal))
@@ -303,13 +303,12 @@ module Report
 
       def for_type_calculate_non_integer_floor_values(building_floors, building_other_floors, floor_data, floor_json, key, value, buildingInfo)
         if building_floors & building_other_floors == []
-	     #  floor_details = 	Lsspdfasset.select(:u_building, :u_floor, :u_type, :u_other_floor).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_floor => floor_data, :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_type", "u_other_floor"]).order(:u_floor).count(:u_type)
-             #floor_details.each do |fstatus, fvalue|
-             #    if !floor_json.has_key?(fstatus[2])
-             #      floor_json[fstatus[2]] = fvalue
-             #    end
-             #  end
-	   floor_json  = update_utype(floor_json, floor_data)
+              if  key[1] == "other"
+                  building_result = Lsspdfasset.select(:u_building, :u_other_floor, :u_type).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_other_floor => key[3], :u_delete => false).where.not(u_type: "").group(["u_building", "u_other_floor", "u_type"]).count(:u_status)
+            else
+              building_result = Lsspdfasset.select(:u_building, :u_floor, :u_type).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_type"]).count(:u_type)
+            end
+           building_result
          else
 		 
             common_floors = building_floors & building_other_floors
@@ -321,42 +320,30 @@ module Report
             temp_hash = create_temp_hash_for_calculating_total_assets_in_the_building(temp_hash, building_other_floor_result, type)
                temp_result << temp_hash
                @building_result = Hash[temp_result.group_by{|obj| obj["u_type"] || obj[:u_type]}.map{|k,v| [k,v.size]}]
-
-               @building_result.each do |fstatus, fvalue|
-                 if !floor_json.has_key?(fstatus)
-                   floor_json[fstatus] = fvalue
-                 end
-               end
-               initialize_type_empty_columns(floor_json)
-               floor_json
+               building_result = @building_result   
             else
-              floor_json = update_utype(floor_json, floor_data)
+	        if  key[1] == "other"
+                  building_result = Lsspdfasset.select(:u_building, :u_other_floor, :u_type).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_other_floor => key[3], :u_delete => false).where.not(u_type: "").group(["u_building", "u_other_floor", "u_status"]).count(:u_type)
+            else
+              building_result = Lsspdfasset.select(:u_building, :u_floor, :u_type).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_type"]).count(:u_type)
+            end
+            building_result
             end
          end
-	puts "type=================final"
-	puts floor_json
-	floor_json
-     end
+         building_result.each do |ftype, fvalue|
+           if ftype.class == String
+             if !floor_json.has_key?(ftype)
+               floor_json[ftype] = fvalue
+             end
+            else
+          if !floor_json.has_key?(ftype)
+           floor_json[ftype[2]] = fvalue
+         end
+         end
+       end
+       initialize_type_empty_columns(floor_json)
+       floor_json
 
-     def update_utype(floor_json, floor_data)
-         floor_details =  Lsspdfasset.select(:u_building, :u_floor, :u_type, :u_other_floor).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_floor => floor_data, :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_type", "u_other_floor"]).order(:u_floor).count(:u_type)
-             floor_details.each do |fstatus, fvalue|
-                 if !floor_json.has_key?(fstatus[2])
-                   floor_json[fstatus[2]] = fvalue
-                 end
-               end
-
-        #buildingInfo.each do |row, val|
-#          if row[2] == "FSD"
-#            floor_json["FSD"] = val
-#          elsif row[2] == "FD"
-#            floor_json["FD"] = val
-#          else
-#            floor_json["SD"] = val
-#           end
-        # end
-	initialize_type_empty_columns(floor_json)
-        floor_json
      end
 
      def initialize_type_empty_columns(floor_json)
@@ -389,6 +376,10 @@ module Report
            floor_json["NA"] = 0
         end
 
+	if !floor_json.has_key?("Removed")
+           floor_json["Removed"] = 0
+        end
+
       end
 
      def calculate_total_of_each_section(final_table_data_total, floorInfo)
@@ -399,7 +390,6 @@ module Report
        $ftotal = 0
        $natotal = 0
        $rtotal = 0
-
       floorInfo.each do |totalInfo|
         $fsdtotal += totalInfo["FSD"]
         $fdtotal += totalInfo["FD"]
@@ -407,6 +397,7 @@ module Report
         $ptotal += totalInfo["Pass"]
         $ftotal += totalInfo["Fail"]
         $natotal += totalInfo["NA"]
+	$rtotal += totalInfo["Removed"]
       end
 
       final_table_data_total.push($fdtotal)
@@ -415,8 +406,9 @@ module Report
       final_table_data_total.push($ptotal)
       final_table_data_total.push($ftotal)
       final_table_data_total.push($natotal)
-      final_table_data_total.push($sdtotal + $fdtotal + $fsdtotal)
+      final_table_data_total.push($ptotal + $ftotal + $natotal)
       final_table_data_total.push("100.00%")
+      final_table_data_total.push($rtotal)
       final_table_data_total
     end
 
