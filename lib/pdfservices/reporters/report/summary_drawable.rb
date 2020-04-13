@@ -235,7 +235,7 @@ module Report
       @buildingInfo = Lsspdfasset.select(:u_building, :u_floor, :u_type, :u_other_floor).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_type", "u_other_floor"]).order(:u_floor).count(:u_type)
       building_floors = Lsspdfasset.select(:u_building, :u_floor, :u_type, :u_other_floor).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_delete => false).where.not(u_type: "").pluck(:u_floor)
       building_other_floors = Lsspdfasset.select(:u_building, :u_floor, :u_type, :u_other_floor).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_delete => false).where.not(u_type: "").pluck(:u_other_floor)
-
+     
       @floorInfo = []
       @buildingInfo.each do |key,value|
         floor_json = {}
@@ -258,7 +258,6 @@ module Report
           end
         end
       end
-
       @final_table_data_total = []
       @final_table_data_total = calculate_total_of_each_section(@final_table_data_total, @floorInfo)
 
@@ -303,16 +302,22 @@ module Report
     end
 
       def for_type_calculate_non_integer_floor_values(building_floors, building_other_floors, floor_data, floor_json, key, value, buildingInfo)
-
-      if building_floors & building_other_floors == []
-         floor_json = update_utype(buildingInfo, floor_json)
+        if building_floors & building_other_floors == []
+	     #  floor_details = 	Lsspdfasset.select(:u_building, :u_floor, :u_type, :u_other_floor).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_floor => floor_data, :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_type", "u_other_floor"]).order(:u_floor).count(:u_type)
+             #floor_details.each do |fstatus, fvalue|
+             #    if !floor_json.has_key?(fstatus[2])
+             #      floor_json[fstatus[2]] = fvalue
+             #    end
+             #  end
+	   floor_json  = update_utype(floor_json, floor_data)
          else
+		 
             common_floors = building_floors & building_other_floors
             if common_floors.include?(floor_data)
-
             building_other_floor_result = Lsspdfasset.select(:u_building, :u_other_floor, :u_type).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_other_floor => floor_data, :u_delete => false).where.not(u_type: "")
             building_floor_result = Lsspdfasset.select(:u_building, :u_floor, :u_type).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_floor => floor_data, :u_delete => false).where.not(u_type: "")
-            temp_result, temp_hash, type =  building_floor_result.as_json, {}, "u_type"
+            
+	    temp_result, temp_hash, type =  building_floor_result.as_json, {}, "u_type"
             temp_hash = create_temp_hash_for_calculating_total_assets_in_the_building(temp_hash, building_other_floor_result, type)
                temp_result << temp_hash
                @building_result = Hash[temp_result.group_by{|obj| obj["u_type"] || obj[:u_type]}.map{|k,v| [k,v.size]}]
@@ -322,39 +327,39 @@ module Report
                    floor_json[fstatus] = fvalue
                  end
                end
-               initialize_empty_columns(floor_json)
+               initialize_type_empty_columns(floor_json)
                floor_json
             else
-              floor_json = update_utype(buildingInfo, floor_json)
+              floor_json = update_utype(floor_json, floor_data)
             end
          end
+	puts "type=================final"
+	puts floor_json
+	floor_json
      end
 
-     def update_utype(buildingInfo, floor_json)
-        buildingInfo.each do |row, val|
-          if row[2] == "FSD"
-            floor_json["FSD"] = val
-          elsif row[2] == "FD"
-            floor_json["FD"] = val
-          else
-            floor_json["SD"] = val
-           end
-         end
+     def update_utype(floor_json, floor_data)
+         floor_details =  Lsspdfasset.select(:u_building, :u_floor, :u_type, :u_other_floor).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_floor => floor_data, :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_type", "u_other_floor"]).order(:u_floor).count(:u_type)
+             floor_details.each do |fstatus, fvalue|
+                 if !floor_json.has_key?(fstatus[2])
+                   floor_json[fstatus[2]] = fvalue
+                 end
+               end
+
+        #buildingInfo.each do |row, val|
+#          if row[2] == "FSD"
+#            floor_json["FSD"] = val
+#          elsif row[2] == "FD"
+#            floor_json["FD"] = val
+#          else
+#            floor_json["SD"] = val
+#           end
+        # end
+	initialize_type_empty_columns(floor_json)
         floor_json
      end
 
-     def initialize_empty_columns(floor_json)
-        if !floor_json.has_key?("Pass")
-           floor_json["Pass"] = 0
-        end
-
-        if !floor_json.has_key?("Fail")
-           floor_json["Fail"] = 0
-        end
-
-        if !floor_json.has_key?("NA")
-           floor_json["NA"] = 0
-        end
+     def initialize_type_empty_columns(floor_json)
 
         if !floor_json.has_key?("FSD")
            floor_json["FSD"] = 0
@@ -370,6 +375,21 @@ module Report
 
         floor_json
      end
+
+      def initialize_status_empty_columns(floor_json)
+        if !floor_json.has_key?("Pass")
+           floor_json["Pass"] = 0
+        end
+
+        if !floor_json.has_key?("Fail")
+           floor_json["Fail"] = 0
+        end
+
+        if !floor_json.has_key?("NA")
+           floor_json["NA"] = 0
+        end
+
+      end
 
      def calculate_total_of_each_section(final_table_data_total, floorInfo)
        $fsdtotal = 0
@@ -409,13 +429,14 @@ module Report
        elsif type == "u_status"
          temp_hash[:u_status] = building_other_floor_result.first.u_status
        end
+       temp_hash
     end
 
     def initialize_floor_json(floorInfo,floor_json, key, value, building_floors, building_other_floors, buildingInfo)
      floor_json["building"] = key[0]
      floor_data = key[1] == "other" ? key[3] : key[1]
      floor_json["floor"] = floor_data
-     for_type_calculate_non_integer_floor_values(building_floors, building_other_floors, floor_data, floor_json, key, value, buildingInfo)
+     floor_json = for_type_calculate_non_integer_floor_values(building_floors, building_other_floors, floor_data, floor_json, key, value, buildingInfo)
      building_result = calculate_non_integer_floor_values(building_floors, building_other_floors, floor_data, key)
      building_result.each do |fstatus, fvalue|
        if fstatus.class == String
@@ -428,7 +449,8 @@ module Report
          end
        end
      end
-     initialize_empty_columns(floor_json)
+     initialize_status_empty_columns(floor_json)
+     initialize_type_empty_columns(floor_json)
      floorInfo.push(floor_json)
      floorInfo
     end
