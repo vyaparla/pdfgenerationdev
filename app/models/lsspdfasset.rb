@@ -25,7 +25,7 @@ class Lsspdfasset < ActiveRecord::Base
 
 
   def buildings(serviceID)
-    Lsspdfasset.where(:u_service_id => serviceID, :u_delete => false).pluck('DISTINCT u_building')
+    Lsspdfasset.where(:u_service_id => serviceID, :u_delete => false).pluck('DISTINCT u_building').order('u_building ASC')
   end
 
   def comprehensive_buildings(facility_id)
@@ -37,7 +37,7 @@ class Lsspdfasset < ActiveRecord::Base
   end 
 
   def building_records(building, service_ID)
-    Lsspdfasset.where(:u_building => building, :u_service_id => service_ID, :u_delete => false).order('u_building ASC')
+    Lsspdfasset.where(:u_building => building, :u_service_id => service_ID, :u_delete => false)
   end
 
   def comprehensive_building_records(building, facility_id, report_type)
