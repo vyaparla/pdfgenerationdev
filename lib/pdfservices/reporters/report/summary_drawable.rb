@@ -295,7 +295,12 @@ module Report
                temp_result << temp_hash
                building_result = Hash[temp_result.group_by{|obj| obj["u_status"] || obj[:u_status]}.map{|k,v| [k,v.size]}]
             else
-                building_result = Lsspdfasset.select(:u_building, :u_floor, :u_status).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_status"]).count(:u_status)
+	      if  key[1] == "other"
+              building_result = Lsspdfasset.select(:u_building, :u_other_floor, :u_status).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_other_floor => key[3], :u_delete => false).where.not(u_type: "").group(["u_building", "u_other_floor", "u_status"]).count(:u_status)
+            else
+              building_result = Lsspdfasset.select(:u_building, :u_floor, :u_status).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_status"]).count(:u_status)
+            end
+	    
             end
          end
          building_result

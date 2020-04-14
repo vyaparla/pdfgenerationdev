@@ -120,8 +120,14 @@ module Report
                temp_result << temp_hash
                building_result = Hash[temp_result.group_by{|obj| obj["u_dr_passed_post_repair"] || obj[:u_dr_passed_post_repair]}.map{|k,v| [k,v.size]}]
             else
-                building_result = Lsspdfasset.select(:u_building, :u_floor, :u_dr_passed_post_repair).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_dr_passed_post_repair"]).count(:u_dr_passed_post_repair)
+
+            if  key[1] == "other"
+              building_result = Lsspdfasset.select(:u_building, :u_other_floor, :u_dr_passed_post_repair).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_other_floor => key[3], :u_delete => false).where.not(u_type: "").group(["u_building", "u_other_floor", "u_dr_passed_post_repair"]).count(:u_dr_passed_post_repair)
+            else
+              building_result = Lsspdfasset.select(:u_building, :u_floor, :u_dr_passed_post_repair).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_dr_passed_post_repair"]).count(:u_dr_passed_post_repair)
             end
+
+           end
          end   
          building_result
     end	   
