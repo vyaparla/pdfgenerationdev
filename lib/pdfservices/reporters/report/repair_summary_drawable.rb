@@ -83,7 +83,7 @@ module Report
         @damperTotal = resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"]
         @damperGrandtotal = $ptotal + $ftotal + $natotal
        
-	@damperPer = @damperGrandtotal == 0 ? @damperPer = '0.00%' : '%.2f%' % ((100 * @damperTotal) / (@damperGrandtotal))
+	@damperPer = @damperGrandtotal == 0 ? @damperPer = '0.00%' : '%.2f%' % ((100 * @damperTotal.to_f) / (@damperGrandtotal))
 
         @final_table_data << [resultInfo["floor"], resultInfo["FD"], resultInfo["SD"], resultInfo["FSD"], resultInfo["Pass"], resultInfo["Fail"], resultInfo["NA"],  resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"], @damperPer]
       end
