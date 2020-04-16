@@ -87,11 +87,6 @@ module Report
      
           @building_result = (status_counts.sort).to_h
 
-          puts "------------111111111 FIRST building_result"
-          puts @building_result
-
-
-
           @building_result.each do |fstatus, fvalue|
             if !floor_json.has_key?(fstatus[2])
                 floor_json[fstatus[2]] = fvalue
