@@ -239,7 +239,7 @@ module Report
         if  @getdamperGrandtotal == 0
             @damperPer = 0
         else
-           @damperPer = '%.2f%' % ((100 * @damperTotal) / (@getdamperGrandtotal))
+           @damperPer = '%.2f%' % ((100 * @damperTotal.to_f) / (@getdamperGrandtotal))
         end   
         #@damperPer = '%.2f%' % ((resultInfo["Pass"] * 100) / (resultInfo["FSD"] + resultInfo["FD"] + resultInfo["SD"]))
         @final_table_data << [resultInfo["floor"], resultInfo["FD"], resultInfo["SD"], resultInfo["FSD"], resultInfo["Pass"], resultInfo["Fail"], resultInfo["NA"], resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"] , @damperPer, resultInfo["Removed"]]
