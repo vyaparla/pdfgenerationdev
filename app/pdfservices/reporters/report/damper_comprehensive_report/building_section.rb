@@ -15,19 +15,19 @@ module DamperComprehensiveReport
   private
 
     def pass_records
-      @pass_records ||= comprehensive_records.where(["u_status=? OR u_dr_passed_post_repair = ?", "Pass", "Pass"]).where.not(u_type: "").order('updated_at desc')
+      @pass_records ||= comprehensive_records.where(["u_status=? OR u_dr_passed_post_repair = ?", "Pass", "Pass"]).where.not(u_type: "").order("u_updated_date desc")
     end
 
     def failed_records
-      @failed_records ||= comprehensive_records.where(["u_status=? OR u_dr_passed_post_repair = ?", "Fail", "Fail"]).where.not(u_type: "").order('updated_at desc')
+      @failed_records ||= comprehensive_records.where(["u_status=? OR u_dr_passed_post_repair = ?", "Fail", "Fail"]).where.not(u_type: "").order("u_updated_date desc")
     end
 
     def na_records
-      @na_records ||= comprehensive_records.where(:u_status => "NA").where.not(u_type: "").order('updated_at desc')
+      @na_records ||= comprehensive_records.where(:u_status => "NA").where.not(u_type: "").order("u_updated_date desc")
     end
     
     def remove_records
-      @remove_records ||= comprehensive_records.where(:u_status => "Removed").where.not(u_type: "").order('updated_at desc')
+      @remove_records ||= comprehensive_records.where(:u_status => "Removed").where.not(u_type: "").order("u_updated_date desc")
     end
 
     def write_breakdown_pages(pdf, building_section, tech, watermark)
