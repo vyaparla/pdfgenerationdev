@@ -4,12 +4,56 @@ module DamperRepairReport
 
     def initialize(job, tech, watermark)
       @job = job
+      @owner = job
       @tech = tech
       @watermark = watermark
     end
 
     def write(pdf)
       super
+      pdf.stamp_at "watermark", [100, 210] if @watermark 
+      #Report::ProjectSummary.new(@job).draw(pdf)
+
+      summary_count = (facility_summary_table_content + project_summary_table_content + project_statistics_data).count
+        puts summary_count
+        if summary_count > 20 
+          count_without_statistics = (facility_summary_table_content + project_summary_table_content).count
+          if count_without_statistics <= 16 
+            #put all 3 tables together
+            summary_page_content_draw(pdf)
+          else
+            f_count = facility_summary_table_content.count
+            remainings = 20 - f_count
+            get_from_project_count =  project_summary_table_content.first(remainings)
+            project_summary_for_new_page = project_summary_table_content.drop(remainings)
+
+            Report::Table.new(facility_summary_table_content).draw(pdf)
+            pdf.move_down 20
+            draw_title(pdf)
+            Report::Table.new(get_from_project_count).draw(pdf) 
+            super
+            pdf.stamp_at "watermark", [100, 210]  if @watermark
+            new_project_summary_table_content = [project_summary_table_headings] + project_summary_for_new_page
+            Report::Table.new(new_project_summary_table_content).draw(pdf) 
+            pdf.move_down 20
+            draw_label(pdf, 'Statistics')
+            top = pdf.cursor
+            pdf.move_cursor_to top
+            Report::Table.new(project_statistics_data).draw(pdf) do |formatter|
+              formatter.cell[1,0] = { :text_color => '137d08' }
+              formatter.cell[2,0] = { :text_color => 'c1171d' }
+              formatter.cell[3,0] = { :text_color => 'f39d27' }
+            end
+            pdf.move_down 20
+            #facility and summary table in first page Statistics in new page  2
+          end  
+        else
+         summary_page_content_draw(pdf)  
+        end 
+    end
+
+
+    def summary_page_content_draw(pdf)
       pdf.stamp_at "watermark", [100, 210] if @watermark       
       draw_facility_title(pdf)
       Report::Table.new(dr_facility_summary_table_content).draw(pdf)
