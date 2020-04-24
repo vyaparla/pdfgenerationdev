@@ -60,7 +60,7 @@ module DamperComprehensiveReport
       draw_title(pdf)
       #project_summary_table(pdf)
       Report::Table.new(project_summary_table_content).draw(pdf) 
-      #pdf.move_down 20
+      pdf.move_down 20
       draw_label(pdf, 'Statistics')
       top = pdf.cursor
       # pdf.indent(300) { Report::Table.new(type_table_content).draw(pdf) }

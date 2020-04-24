@@ -14,20 +14,20 @@ module DamperRepairReport
       pdf.stamp_at "watermark", [100, 210] if @watermark 
       #Report::ProjectSummary.new(@job).draw(pdf)
 
-      summary_count = (facility_summary_table_content + project_summary_table_content + project_statistics_data).count
+      summary_count = (dr_facility_summary_table_content + dr_project_summary_table_content + dr_project_statistics_data).count
         puts summary_count
         if summary_count > 20 
-          count_without_statistics = (facility_summary_table_content + project_summary_table_content).count
+          count_without_statistics = (dr_facility_summary_table_content + dr_project_summary_table_content).count
           if count_without_statistics <= 16 
             #put all 3 tables together
             summary_page_content_draw(pdf)
           else
-            f_count = facility_summary_table_content.count
+            f_count = dr_facility_summary_table_content.count
             remainings = 20 - f_count
-            get_from_project_count =  project_summary_table_content.first(remainings)
-            project_summary_for_new_page = project_summary_table_content.drop(remainings)
+            get_from_project_count =  dr_project_summary_table_content.first(remainings)
+            project_summary_for_new_page = dr_project_summary_table_content.drop(remainings)
 
-            Report::Table.new(facility_summary_table_content).draw(pdf)
+            Report::Table.new(dr_facility_summary_table_content).draw(pdf)
             pdf.move_down 20
             draw_title(pdf)
             Report::Table.new(get_from_project_count).draw(pdf) 
@@ -39,7 +39,7 @@ module DamperRepairReport
             draw_label(pdf, 'Statistics')
             top = pdf.cursor
             pdf.move_cursor_to top
-            Report::Table.new(project_statistics_data).draw(pdf) do |formatter|
+            Report::Table.new(dr_project_statistics_data).draw(pdf) do |formatter|
               formatter.cell[1,0] = { :text_color => '137d08' }
               formatter.cell[2,0] = { :text_color => 'c1171d' }
               formatter.cell[3,0] = { :text_color => 'f39d27' }
@@ -57,20 +57,20 @@ module DamperRepairReport
       pdf.stamp_at "watermark", [100, 210] if @watermark       
       draw_facility_title(pdf)
       Report::Table.new(dr_facility_summary_table_content).draw(pdf)
-      pdf.move_down 30
+      pdf.move_down 20
       draw_title(pdf)
-      project_summary_table(pdf)
-      #Report::Table.new(dr_project_summary_table_content).draw(pdf)
-      #pdf.move_down 30
+      #project_summary_table(pdf)
+      Report::Table.new(dr_project_summary_table_content).draw(pdf)
+      pdf.move_down 20
       draw_label(pdf, 'Statistics')
       top = pdf.cursor
       pdf.move_cursor_to top
-      pdf.bounding_box([400, 310], :width => 230, :height => 420) do   
+ 
         Report::Table.new(dr_project_statistics_data).draw(pdf) do |formatter|
           formatter.cell[1,0] = { :text_color => '137d08' }
           formatter.cell[2,0] = { :text_color => 'c1171d' }
           #formatter.cell[3,0] = { :text_color => 'f39d27' }
-        end
+
       end  
       pdf.move_down 25
     end
@@ -96,8 +96,8 @@ module DamperRepairReport
     def draw_label(pdf, text)
       pdf.font_size 20
       pdf.fill_color 'ED1C24'
-      #pdf.text("<b>#{text}</b>", :inline_format => true)
-      pdf.draw_text("#{text}", :style => :bold, :inline_format => true, at: [420 , 320])
+      pdf.text("<b>#{text}</b>", :inline_format => true)
+      #pdf.draw_text("#{text}", :style => :bold, :inline_format => true, at: [420 , 320])
       pdf.fill_color '202020'
       pdf.move_down 10
     end

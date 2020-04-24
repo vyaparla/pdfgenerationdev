@@ -57,19 +57,19 @@ module DamperInspectionReport
       Report::Table.new(facility_summary_table_content).draw(pdf)
       pdf.move_down 20
       draw_title(pdf)
-      project_summary_table(pdf)
-      #Report::Table.new(project_summary_table_content).draw(pdf)
-      #pdf.move_down 20
+      #project_summary_table(pdf)
+      Report::Table.new(project_summary_table_content).draw(pdf)
+      pdf.move_down 20
       draw_label(pdf, 'Statistics')
       top = pdf.cursor
       # pdf.indent(300) { Report::Table.new(type_table_content).draw(pdf) }
       pdf.move_cursor_to top
-      pdf.bounding_box([400, 310], :width => 230, :height => 420) do   
+      #pdf.bounding_box([400, 310], :width => 230, :height => 420) do   
         Report::Table.new(project_statistics_data).draw(pdf) do |formatter|
           formatter.cell[1,0] = { :text_color => '137d08' }
           formatter.cell[2,0] = { :text_color => 'c1171d' }
           formatter.cell[3,0] = { :text_color => 'f39d27' }
-        end
+        #end
       end  
       pdf.move_down 20
     end
@@ -112,8 +112,8 @@ module DamperInspectionReport
     def draw_label(pdf, text)
       pdf.font_size 20
       pdf.fill_color 'ED1C24'
-      #pdf.text("<b>#{text}</b>", :inline_format => true)
-      pdf.draw_text("#{text}", :style => :bold, :inline_format => true, at: [420 , 320])
+      pdf.text("<b>#{text}</b>", :inline_format => true)
+      #pdf.draw_text("#{text}", :style => :bold, :inline_format => true, at: [420 , 320])
       pdf.fill_color '202020'
       pdf.move_down 10
     end
