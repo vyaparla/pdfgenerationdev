@@ -76,8 +76,6 @@ module DamperStatementReport
    
   private
 
-    def building ; end
-
     def project_summary_table(pdf)
       pdf.font_size 8
       pdf.table(project_summary_table_content, header: true) do |table|

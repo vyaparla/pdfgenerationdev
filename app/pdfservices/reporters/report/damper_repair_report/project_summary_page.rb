@@ -212,7 +212,7 @@ module DamperRepairReport
     def dr_project_summary_table_data
       @dr_project_summary = Lsspdfasset.select(:u_building, :u_type, :u_dr_passed_post_repair).where(:u_service_id => @job.u_service_id, :u_delete => false).where.not(u_type: "").group(["u_building", "u_type", "u_dr_passed_post_repair"]).order("CASE WHEN u_type = 'FD' THEN '1' WHEN u_type = 'SD' THEN '2' ELSE '3' END").count(:u_dr_passed_post_repair)
 
-      @dr_project_summaryInfo = @dr_project_summary.sort_by { |k, v| k[0] }
+      @dr_project_summaryInfo = @dr_project_summary.sort_by { |k, v| k[0].capitalize }
       
       @dr_buildingInfo = []
 
