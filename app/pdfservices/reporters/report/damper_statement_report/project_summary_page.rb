@@ -32,9 +32,11 @@ module DamperStatementReport
             Report::Table.new(get_from_project_count).draw(pdf) 
             super
             pdf.stamp_at "watermark", [100, 210]  if @watermark
-            new_project_summary_table_content = [project_summary_table_headings] + project_summary_for_new_page
-            Report::Table.new(new_project_summary_table_content).draw(pdf) 
-            pdf.move_down 20
+            if project_summary_for_new_page.count >= 1
+              new_project_summary_table_content = [project_summary_table_headings] + project_summary_for_new_page
+              Report::Table.new(new_project_summary_table_content).draw(pdf) 
+              pdf.move_down 20
+            end  
             draw_label(pdf, 'Statistics')
             top = pdf.cursor
             pdf.move_cursor_to top
