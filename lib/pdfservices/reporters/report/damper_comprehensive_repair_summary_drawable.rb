@@ -153,8 +153,6 @@ module Report
      
             @building_result = (status_count_result.sort).to_h
 
-            puts "**********BUILDING RESULT************"
-            puts @building_result
             #@building_result = Lsspdfasset.select(:u_building, :u_floor, :u_dr_passed_post_repair).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_floor => key[1], :u_delete => false).group(["u_building", "u_floor", "u_dr_passed_post_repair"]).count(:u_dr_passed_post_repair)
             @building_result_len =  @building_result.length
     
