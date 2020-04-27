@@ -44,7 +44,7 @@ module DamperRepairReport
             Report::Table.new(dr_project_statistics_data).draw(pdf) do |formatter|
               formatter.cell[1,0] = { :text_color => '137d08' }
               formatter.cell[2,0] = { :text_color => 'c1171d' }
-              formatter.cell[3,0] = { :text_color => 'f39d27' }
+              #formatter.cell[3,0] = { :text_color => 'f39d27' }
             end
             pdf.move_down 20
             #facility and summary table in first page Statistics in new page  2
