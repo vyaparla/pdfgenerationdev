@@ -138,7 +138,7 @@ class Lsspdfasset < ActiveRecord::Base
 
   def comprehensive_dates
     facility_id = self.u_facility_id
-    comprehensive_records = Lsspdfasset.select(:id, :u_report_type, :u_job_start_date).where(:u_facility_id => facility_id, :u_report_type => ["DAMPERREPAIR" ,"DAMPERINSPECTION"], :u_delete => false).order('updated_at desc')
+    comprehensive_records = Lsspdfasset.select(:id, :u_report_type, :u_job_start_date).where(:u_facility_id => facility_id, :u_report_type => ["DAMPERREPAIR" ,"DAMPERINSPECTION"], :u_delete => false).order('u_updated_date desc')
     collect_start_dates = comprehensive_records.collect(&:u_job_start_date)
     start_date = collect_start_dates.min
     start_date = start_date.localtime.strftime(I18n.t('date.formats.long'))
@@ -164,7 +164,7 @@ class Lsspdfasset < ActiveRecord::Base
     report_type = ["DAMPERREPAIR" ,"DAMPERINSPECTION"]
     repair_ids = unique_statement_records(facility_id, report_type)
 
-    statement_records = Lsspdfasset.select(:id, :u_report_type, :u_job_start_date).where(id: repair_ids).order('updated_at desc')
+    statement_records = Lsspdfasset.select(:id, :u_report_type, :u_job_start_date).where(id: repair_ids).order('u_updated_date desc')
     collect_start_dates = statement_records.collect(&:u_job_start_date)
     start_date = collect_start_dates.min
     start_date = start_date.localtime.strftime(I18n.t('date.formats.long'))
