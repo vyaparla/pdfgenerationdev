@@ -41,7 +41,7 @@ class Lsspdfasset < ActiveRecord::Base
   end
 
   def comprehensive_building_records(building, facility_id, report_type)
-    Lsspdfasset.where(:u_building => building, :u_facility_id => facility_id, :u_report_type => report_type, :u_delete => false).order('updated_at desc')
+    Lsspdfasset.where(:u_building => building, :u_facility_id => facility_id, :u_report_type => report_type, :u_delete => false).order('u_updated_date desc')
   end
 
   def statement_building_records(building, facility_id, report_type)
