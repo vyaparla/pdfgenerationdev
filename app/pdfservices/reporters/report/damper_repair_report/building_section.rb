@@ -14,11 +14,11 @@ module DamperRepairReport
   private
 
     def pass_records
-      @pass_records ||= records.where(:u_dr_passed_post_repair => "Pass").where.not(u_type: "").order('updated_at desc')
+      @pass_records ||= records.where(:u_dr_passed_post_repair => "Pass").where.not(u_type: "").order('u_updated_date desc')
     end
 
     def failed_records
-      @failed_records ||= records.where(:u_dr_passed_post_repair => "Fail").where.not(u_type: "").order('updated_at desc')
+      @failed_records ||= records.where(:u_dr_passed_post_repair => "Fail").where.not(u_type: "").order('u_updated_date desc')
     end
 
     def write_breakdown_pages(pdf, building_section, tech, watermark)
