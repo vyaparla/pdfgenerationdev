@@ -27,7 +27,7 @@ module DamperComprehensiveReport
             remainings = 20 - f_count
             get_from_project_count =  project_summary_table_content.first(remainings)
             project_summary_for_new_page = project_summary_table_content.drop(remainings)
-
+            draw_facility_title(pdf)
             Report::Table.new(facility_summary_table_content).draw(pdf)
             pdf.move_down 20
             draw_title(pdf)
