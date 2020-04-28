@@ -234,11 +234,18 @@ module Report
      def summary_table_data
       @buildingInfo_data = Lsspdfasset.select(:u_building, :u_floor, :u_type, :u_other_floor).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_type", "u_other_floor"]).count(:u_type)
       building_floors_data = Lsspdfasset.select(:u_building, :u_floor, :u_type, :u_other_floor).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_delete => false).where.not(u_type: "").pluck(:u_floor)
-      building_other_floors_data = Lsspdfasset.select(:u_building, :u_floor, :u_type, :u_other_floor).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_delete => false).where.not(u_type: "").pluck(:u_other_floor)
+      building_other_floors = Lsspdfasset.select(:u_building, :u_floor, :u_type, :u_other_floor).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_delete => false).where.not(u_type: "").order('u_other_floor ASC').pluck(:u_other_floor)
 
-      @buildingInfo = buildingInfo_data.sort_by { |k, v| k[0].to_i }
+      @buildingInfo = @buildingInfo_data.sort_by { |k, v| k[0].to_i }
       building_floors = building_floors_data.sort_by { |k, v| k[0].to_i }
-      building_other_floors = building_other_floors_data.sort_by { |k, v| k[0] }
+       
+ 
+
+     # building_other_floors = building_other_floors_data.sort_by { |k, v| k[0] }
+
+      Rails.logger.info("---B--#{@buildingInfo.inspect}")
+      Rails.logger.info("--BF---#{building_floors.inspect}")
+      Rails.logger.info("--BOF---#{building_other_floors.inspect}")
 
       @floorInfo = []
       @buildingInfo.each do |key,value|
