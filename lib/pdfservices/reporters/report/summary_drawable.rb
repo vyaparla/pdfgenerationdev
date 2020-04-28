@@ -236,6 +236,12 @@ module Report
       building_floors = Lsspdfasset.select(:u_building, :u_floor, :u_type, :u_other_floor).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_delete => false).where.not(u_type: "").pluck(:u_floor)
       building_other_floors = Lsspdfasset.select(:u_building, :u_floor, :u_type, :u_other_floor).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_delete => false).where.not(u_type: "").pluck(:u_other_floor)
      
+      puts "*****************************"
+      @buildingInfo = @buildingInfo.sort_by { |k, v| k[1] }
+      puts @buildingInfo.inspect
+      puts building_floors.inspect
+      puts building_other_floors.inspect
+      
       @floorInfo = []
       @buildingInfo.each do |key,value|
         floor_json = {}
