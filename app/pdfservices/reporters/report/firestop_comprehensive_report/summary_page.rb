@@ -1,4 +1,5 @@
 module FirestopComprehensiveReport 
+  class SummaryPage
  	include  Report::DataPageWritable
 
   	def initialize(job, tech, watermark)
