@@ -236,8 +236,8 @@ module Report
       building_floors_data = Lsspdfasset.select(:u_building, :u_floor, :u_type, :u_other_floor).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_delete => false).where.not(u_type: "").pluck(:u_floor)
       building_other_floors = Lsspdfasset.select(:u_building, :u_floor, :u_type, :u_other_floor).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_delete => false).where.not(u_type: "").order('u_other_floor ASC').pluck(:u_other_floor)
 
-      @buildingInfo = @buildingInfo_data.sort_by { |k, v| k[0].to_i }
-      building_floors = building_floors_data.sort_by { |k, v| k[0].to_i }
+      @buildingInfo = @buildingInfo_data.sort_by { |k, v| k[1].to_i }
+      building_floors = building_floors_data.sort_by { |k, v| k[1].to_i }
        
  
 
