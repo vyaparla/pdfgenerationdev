@@ -33,7 +33,7 @@ class Lsspdfasset < ActiveRecord::Base
   end	  
 
   def damper_comprehensive_buildings(facility_id)
-    Lsspdfasset.where(:u_facility_id => facility_id, :u_report_type => ["DAMPERREPAIR" ,"DAMPERINSPECTION"],  :u_delete => false).order('u_updated_date desc').pluck('DISTINCT u_building')
+    Lsspdfasset.where(:u_facility_id => facility_id, :u_report_type => ["DAMPERREPAIR" ,"DAMPERINSPECTION"],  :u_delete => false).order('u_building asc').pluck('DISTINCT u_building')
   end 
 
   def building_records(building, service_ID)
