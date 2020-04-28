@@ -232,11 +232,14 @@ module Report
 #
     # new code
      def summary_table_data
-      @buildingInfo = Lsspdfasset.select(:u_building, :u_floor, :u_type, :u_other_floor).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_type", "u_other_floor"]).order('u_floor ASC').count(:u_type)
-      building_floors = Lsspdfasset.select(:u_building, :u_floor, :u_type, :u_other_floor).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_delete => false).where.not(u_type: "").order('u_floor ASC').pluck(:u_floor)
-      building_other_floors = Lsspdfasset.select(:u_building, :u_floor, :u_type, :u_other_floor).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_delete => false).where.not(u_type: "").order('u_floor ASC').pluck(:u_other_floor)
+      @buildingInfo_data = Lsspdfasset.select(:u_building, :u_floor, :u_type, :u_other_floor).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_type", "u_other_floor"]).count(:u_type)
+      building_floors_data = Lsspdfasset.select(:u_building, :u_floor, :u_type, :u_other_floor).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_delete => false).where.not(u_type: "").pluck(:u_floor)
+      building_other_floors_data = Lsspdfasset.select(:u_building, :u_floor, :u_type, :u_other_floor).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_delete => false).where.not(u_type: "").pluck(:u_other_floor)
 
-      
+      @buildingInfo = buildingInfo_data.sort_by { |k, v| k[0].to_i }
+      building_floors = building_floors_data.sort_by { |k, v| k[0].to_i }
+      building_other_floors = buildingInfo_data.sort_by { |k, v| k[0] }
+
       @floorInfo = []
       @buildingInfo.each do |key,value|
         floor_json = {}
