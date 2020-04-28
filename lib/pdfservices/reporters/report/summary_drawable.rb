@@ -238,7 +238,7 @@ module Report
 
       @buildingInfo = buildingInfo_data.sort_by { |k, v| k[0].to_i }
       building_floors = building_floors_data.sort_by { |k, v| k[0].to_i }
-      building_other_floors = buildingInfo_data.sort_by { |k, v| k[0] }
+      building_other_floors = building_other_floors_data.sort_by { |k, v| k[0] }
 
       @floorInfo = []
       @buildingInfo.each do |key,value|
