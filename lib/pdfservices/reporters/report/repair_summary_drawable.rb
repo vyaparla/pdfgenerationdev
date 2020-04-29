@@ -48,10 +48,29 @@ module Report
     end
     
     def summary_table_data
-      @buildingInfo = Lsspdfasset.select(:u_building, :u_floor, :u_type, :u_other_floor).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_type", "u_other_floor"]).order(:u_floor).count(:u_type)
-      building_floors = Lsspdfasset.select(:u_building, :u_floor, :u_type, :u_other_floor).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_delete => false).where.not(u_type: "").pluck(:u_floor)
-      building_other_floors = Lsspdfasset.select(:u_building, :u_floor, :u_type, :u_other_floor).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_delete => false).where.not(u_type: "").pluck(:u_other_floor)
+      @buildingInfo_data = Lsspdfasset.select(:u_building, :u_floor, :u_type, :u_other_floor).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_type", "u_other_floor"]).count(:u_type)
+      building_floors_data = Lsspdfasset.select(:u_building, :u_floor, :u_type, :u_other_floor).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_delete => false).where.not(u_type: "").pluck(:u_floor)
+      building_other_floors = Lsspdfasset.select(:u_building, :u_floor, :u_type, :u_other_floor).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_delete => false).where.not(u_type: "").order('u_other_floor ASC').pluck(:u_other_floor)
       
+      building_info = []
+      other_floor = []
+      integer_floor = []
+      @buildingInfo_data.each do |building|
+        if building[0][1].to_i == 0
+          other_floor << building
+        else
+          integer_floor << building              
+        end 
+      end
+ 
+      integer_floor_sort = integer_floor.sort_by { |k, v| k[1].to_i }
+      other_floor_sort = other_floor.sort_by { |k, v| k[1] }
+      building_info =  integer_floor_sort + other_floor_sort
+
+      @buildingInfo = building_info       
+      building_floors = building_floors_data.sort_by { |k, v| k[1].to_i }
+
+
       @floorInfo = []
       @buildingInfo.each do |key,value|
         floor_json = {}
