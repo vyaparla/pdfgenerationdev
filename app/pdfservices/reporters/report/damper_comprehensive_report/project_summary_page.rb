@@ -140,7 +140,7 @@ module DamperComprehensiveReport
       status_counts = new_array.group_by{|i| i[0]}.map{|k,v| [k, v.map(&:last).sum] } 
      
       @serviceInfo_data = status_counts.to_h
-      @serviceInfo = @serviceInfo.sort_by { |k, v| k[0].capitalize }
+      @serviceInfo = @serviceInfo_data.sort_by { |k, v| k[0].capitalize }
 
       @buildingInfo = []
       @serviceInfo.each do |key,value|
