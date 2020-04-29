@@ -140,7 +140,8 @@ module DamperStatementReport
       new_array = @damper_repair.to_a + @damper_inspection.to_a
       status_counts = new_array.group_by{|i| i[0]}.map{|k,v| [k, v.map(&:last).sum] } 
      
-      @serviceInfo = (status_counts.sort).to_h
+      @serviceInfo_data = status_counts.to_h
+      @serviceInfo = @serviceInfo_data.sort_by { |k, v| k[0].capitalize }
 
       @buildingInfo = []
       @serviceInfo.each do |key,value|
@@ -328,7 +329,9 @@ module DamperStatementReport
 
       new_array = @damper_repair.to_a + @damper_inspection.to_a
       status_counts = new_array.group_by{|i| i[0]}.map{|k,v| [k, v.map(&:last).sum] } 
-      @facility_serviceInfo = (status_counts.sort).to_h
+      @facility_serviceInfo_data = status_counts.to_h
+
+      @facility_serviceInfo = @facility_serviceInfo_data.sort_by { |k, v| k[0].capitalize }
 
       @facility_buildingInfo = []
       
