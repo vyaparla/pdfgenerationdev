@@ -7,7 +7,7 @@ module DamperInspectionReport
       pdf.stamp_at "watermark", [100, 210] if @watermark 
       BuildingSummaryPage.new(@job, @building, @tech, @watermark).write(pdf)
       write_breakdown_pages(pdf, building_section, @tech, @watermark)
-      @records = records.where.not(u_type: "")
+      @records = records.where.not(u_type: "").order('u_updated_date desc')
       @records.each { |r| PhotoPage.new(r, @group_name, @facility_name, @with_picture, @watermark).write(pdf)}
     end
 
