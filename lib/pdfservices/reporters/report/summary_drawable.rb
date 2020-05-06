@@ -256,9 +256,6 @@ module Report
       @buildingInfo = building_info       
       building_floors = building_floors_data.sort_by { |k, v| k[1].to_i }
    
-      Rails.logger.info("---B--#{@buildingInfo.inspect}")
-      Rails.logger.info("--BF---#{building_floors.inspect}")
-      Rails.logger.info("--BOF---#{building_other_floors.inspect}")
 
       @floorInfo = []
       @buildingInfo.each do |key,value|
@@ -294,11 +291,17 @@ module Report
         
         @final_table_data << [resultInfo["floor"], resultInfo["FD"], resultInfo["SD"], resultInfo["FSD"], resultInfo["Pass"], resultInfo["Fail"], resultInfo["NA"],  resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"], @damperPer, resultInfo["Removed"]]
       end
+      
+      if $ptotal == 0 && $ftotal == 0 && $natotal == 0
+        $ptotal_damperPer  = "00.00%"
+        $ftotal_damperPer  = "00.00%"
+        $natotal_damperPer = "00.00%"
+      else
 
-      $ptotal_damperPer  = '%.2f%' %  (($ptotal.to_f * 100) / ($ptotal + $ftotal + $natotal))
-      $ftotal_damperPer  = '%.2f%' %  (($ftotal.to_f * 100) / ($ptotal + $ftotal + $natotal))
-      $natotal_damperPer = '%.2f%' %  (($natotal.to_f * 100) / ($ptotal + $ftotal + $natotal))
-
+        $ptotal_damperPer  = '%.2f%' %  (($ptotal.to_f * 100) / ($ptotal + $ftotal + $natotal))
+        $ftotal_damperPer  = '%.2f%' %  (($ftotal.to_f * 100) / ($ptotal + $ftotal + $natotal))
+        $natotal_damperPer = '%.2f%' %  (($natotal.to_f * 100) / ($ptotal + $ftotal + $natotal))
+      end
       @final_table_data + [['GRAND TOTAL'] + @final_table_data_total]
     end
     

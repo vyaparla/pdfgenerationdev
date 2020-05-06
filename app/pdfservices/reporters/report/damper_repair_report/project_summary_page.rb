@@ -23,7 +23,7 @@ module DamperRepairReport
             summary_page_content_draw(pdf)
           else
             f_count = dr_facility_summary_table_content.count
-            remainings = 20 - f_count
+	    remainings = (20 - f_count).abs
             get_from_project_count =  dr_project_summary_table_content.first(remainings)
             project_summary_for_new_page = dr_project_summary_table_content.drop(remainings)
             draw_facility_title(pdf)
