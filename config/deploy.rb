@@ -5,8 +5,8 @@
 
 set :application, "pdfgenerationdev"
 set :repo_url, 'git@github.com:vyaparla/pdfgenerationdev.git' # Edit this to match your repository
-set :branch, :development # This branch is used for production and uat
-#set :branch, :vsoft_qa # This branch is used for vsoft qa 
+#set :branch, :development # This branch is used for production and uat
+set :branch, :vsoft_qa # This branch is used for vsoft qa 
 set :deploy_to, '/home/deploy/pdfgenerationdev'
 set :pty, true
 set :linked_files, %w{config/database.yml config/application.yml}
@@ -22,8 +22,8 @@ set :puma_state, "#{shared_path}/tmp/pids/puma.state"
 set :puma_pid,   "#{shared_path}/tmp/pids/puma.pid"
 set :puma_bind, "unix://#{shared_path}/tmp/sockets/puma.sock"    #accept array for multi-bind
 set :puma_conf, "#{shared_path}/puma.rb"
-set :puma_access_log, "#{shared_path}/log/puma_error.log"
-set :puma_error_log, "#{shared_path}/log/puma_access.log"
+set :puma_access_log, "#{shared_path}/log/puma_access.log"
+set :puma_error_log, "#{shared_path}/log/puma_error.log"
 set :puma_role, :app
 set :puma_env, fetch(:rack_env, fetch(:rails_env, 'production'))
 set :puma_threads, [4, 8]
@@ -63,11 +63,11 @@ namespace :deploy do
   desc "Make sure local git is in sync with remote."
   task :check_revision do
     on roles(:app) do
-      unless `git rev-parse HEAD` == `git rev-parse origin/development` # For production and UAT
-        puts "WARNING: HEAD is not the same as origin/development" # For production and UAT
+     # unless `git rev-parse HEAD` == `git rev-parse origin/development` # For production and UAT
+     #   puts "WARNING: HEAD is not the same as origin/development" # For production and UAT
      # Enable UAT Server
- #     unless `git rev-parse HEAD` == `git rev-parse origin/vsoft_qa`
- #       puts "WARNING: HEAD is not the same as origin/vsoft_qa" 
+      unless `git rev-parse HEAD` == `git rev-parse origin/vsoft_qa`
+        puts "WARNING: HEAD is not the same as origin/vsoft_qa" 
         puts "Run `git push` to sync changes."
         exit
       end

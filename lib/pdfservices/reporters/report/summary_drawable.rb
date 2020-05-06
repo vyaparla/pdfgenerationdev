@@ -48,194 +48,31 @@ module Report
       [summary_table_headings] + summary_table_data
     end
 
-#    def summary_table_data
-#      @buildingInfo = Lsspdfasset.select(:u_building, :u_floor, :u_type, :u_other_floor).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_delete => false ).where.not(u_type: "").group(["u_building", "u_floor", "u_type", "u_other_floor"]).order(:u_floor).count(:u_type)
-#      @floorInfo = []
-#      @buildingInfo.each do |key,value|
-#        floor_json = {}
-#        if @floorInfo.length == 0
-#          
-#          floor_json["building"] = key[0]
-#	        floor_data = key[1] == "other" ? key[3] : key[1]
-#	        floor_json["floor"] = floor_data
-#
-#          if key[2] == "FSD"
-#            floor_json["FSD"] = value
-#            floor_json["FD"] = 0
-#            floor_json["SD"] = 0
-#          elsif key[2] == "FD"
-#            floor_json["FSD"] = 0
-#            floor_json["FD"] = value
-#            floor_json["SD"] = 0
-#          else
-#            floor_json["FSD"] = 0
-#            floor_json["FD"] = 0
-#            floor_json["SD"] = value
-#          end
-#	  if  key[1] == "other"
-#	     @building_result = Lsspdfasset.select(:u_building, :u_other_floor, :u_status).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_other_floor => key[3], :u_delete => false).where.not(u_type: "").group(["u_building", "u_other_floor","u_status"]).count(:u_status)
-#          else
-#            @building_result = Lsspdfasset.select(:u_building, :u_floor, :u_status).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor","u_status"]).count(:u_status)
-#           end
-#
-#          @building_result.each do |fstatus, fvalue|
-#            if !floor_json.has_key?(fstatus[2])
-#              floor_json[fstatus[2]] = fvalue
-#            end
-#          end
-#
-#          if !floor_json.has_key?("Pass")
-#            floor_json["Pass"] = 0
-#          end
-#
-#          if !floor_json.has_key?("Fail")
-#            floor_json["Fail"] = 0
-#          end
-#
-#          if !floor_json.has_key?("NA")
-#            floor_json["NA"] = 0
-#          end
-#
-#          if !floor_json.has_key?("Removed")
-#            floor_json["Removed"] = 0
-#          end
-#          
-#          @floorInfo.push(floor_json)
-#        else
-#          @boolean = 0
-#          @floorInfo.each do |info|
-#            @damperType = key[2]
-#            if info.has_key?(key[2])
-#              if info["floor"] == key[1]
-#                info[key[2]] = value
-#                @boolean = 1
-#              end
-#            end
-#          end
-#
-#          if @boolean == 0
-#            floor_json["building"] = key[0]
-#	    floor_data = key[1] == "other" ? key[3] : key[1]
-#            floor_json["floor"] = floor_data
-#            if key[2] == "FSD"
-#              floor_json["FSD"] = value
-#              floor_json["FD"] = 0
-#              floor_json["SD"] = 0
-#            elsif key[2] == "FD"
-#              floor_json["FSD"] = 0
-#              floor_json["FD"] = value
-#              floor_json["SD"] = 0
-#            else
-#              floor_json["FSD"] = 0
-#              floor_json["FD"] = 0
-#              floor_json["SD"] = value
-#            end
-#            if  key[1] == "other"
-#	      @building_result = Lsspdfasset.select(:u_building, :u_other_floor, :u_status).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_other_floor => key[3], :u_delete => false).group(["u_building", "u_other_floor", "u_status"]).count(:u_status)
-#          else
-#	     @building_result = Lsspdfasset.select(:u_building, :u_floor, :u_status).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_floor => key[1], :u_delete => false).group(["u_building", "u_floor", "u_status"]).count(:u_status)
-#           end
-#            @building_result_len =  @building_result.length
-#    
-#            @building_result.each do |fstatus, fvalue|
-#             if !floor_json.has_key?(fstatus[2])
-#               floor_json[fstatus[2]] = fvalue
-#              end
-#            end
-#
-#            if !floor_json.has_key?("Pass")
-#              floor_json["Pass"] = 0
-#            end
-#
-#            if !floor_json.has_key?("Fail")
-#              floor_json["Fail"] = 0
-#            end
-#
-#            if !floor_json.has_key?("NA")
-#              floor_json["NA"] = 0
-#            end
-#
-#            if !floor_json.has_key?("Removed")
-#              floor_json["Removed"] = 0
-#            end
-#
-#            @floorInfo.push(floor_json)
-#          end
-#        end
-#      end
-#      
-#      @final_table_data_total = []
-#      $fsdtotal = 0
-#      $fdtotal = 0
-#      $sdtotal = 0
-#      $ptotal = 0
-#      $ftotal = 0
-#      $natotal = 0
-#      $rtotal = 0
-#
-#      @floorInfo.each do |totalInfo|
-#        $fsdtotal += totalInfo["FSD"]        
-#        $fdtotal += totalInfo["FD"]
-#        $sdtotal += totalInfo["SD"]
-#        $ptotal += totalInfo["Pass"]
-#        $ftotal += totalInfo["Fail"]
-#        $natotal += totalInfo["NA"]
-#        $rtotal += totalInfo["Removed"]
-#      end
-#      
-#      @final_table_data_total.push($fdtotal)
-#      @final_table_data_total.push($sdtotal)      
-#      @final_table_data_total.push($fsdtotal)
-#      @final_table_data_total.push($ptotal)
-#      @final_table_data_total.push($ftotal)
-#      @final_table_data_total.push($natotal)
-#      #@final_table_data_total.push($rtotal)
-#      #@final_table_data_total.push("0")
-#      #@final_table_data_total.push($sdtotal + $fdtotal + $fsdtotal)
-#      @final_table_data_total.push($ptotal + $ftotal + $natotal)
-#
-#      if $ptotal == 0 && $ftotal == 0 && $natotal == 0
-#        @final_table_data_total.push("00.00%")
-#      else
-#        @final_table_data_total.push("100.00%")
-#      end   
-#      @final_table_data_total.push($rtotal)
-#      Rails.logger.debug("Floor Info :#{@floorInfo.inspect}")
-#
-#      @final_table_data = []
-#      @floorInfo.each do |resultInfo|
-#        @damperTotal = resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"]
-#        @damperGrandtotal = $ptotal + $ftotal + $natotal
-#
-#        if @damperTotal == 0 && @damperGrandtotal == 0
-#          @damperPer = "00.00%"
-#        else
-#          @damperPer = '%.2f%' % ((100 * @damperTotal) / (@damperGrandtotal))
-#        end        
-#        @final_table_data << [resultInfo["floor"], resultInfo["FD"], resultInfo["SD"], resultInfo["FSD"], resultInfo["Pass"], resultInfo["Fail"], resultInfo["NA"],  resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"], @damperPer, resultInfo["Removed"]]
-#      end
-#    
-#
-#      if $ptotal == 0 && $ftotal == 0 && $natotal == 0
-#        $ptotal_damperPer  = "00.00%"
-#        $ftotal_damperPer  = "00.00%"
-#        $natotal_damperPer = "00.00%"
-#      else
-#        $ptotal_damperPer  = '%.2f%' %  (($ptotal.to_f * 100) / ($ptotal + $ftotal + $natotal))
-#        $ftotal_damperPer  = '%.2f%' %  (($ftotal.to_f * 100) / ($ptotal + $ftotal + $natotal))
-#        $natotal_damperPer = '%.2f%' %  (($natotal.to_f * 100) / ($ptotal + $ftotal + $natotal))
-#      end
-#     # @final_table_data_total.push($rtotal)
-#      #raise @final_table_data.inspect
-#      @final_table_data + [['GRAND TOTAL'] + @final_table_data_total]
-#    end
-#
-    # new code
-     def summary_table_data
-      @buildingInfo = Lsspdfasset.select(:u_building, :u_floor, :u_type, :u_other_floor).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_type", "u_other_floor"]).order(:u_floor).count(:u_type)
-      building_floors = Lsspdfasset.select(:u_building, :u_floor, :u_type, :u_other_floor).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_delete => false).where.not(u_type: "").pluck(:u_floor)
-      building_other_floors = Lsspdfasset.select(:u_building, :u_floor, :u_type, :u_other_floor).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_delete => false).where.not(u_type: "").pluck(:u_other_floor)
-     
+    def summary_table_data
+      @buildingInfo_data = Lsspdfasset.select(:u_building, :u_floor, :u_type, :u_other_floor).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_type", "u_other_floor"]).count(:u_type)
+      building_floors_data = Lsspdfasset.select(:u_building, :u_floor, :u_type, :u_other_floor).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_delete => false).where.not(u_type: "").pluck(:u_floor)
+      building_other_floors = Lsspdfasset.select(:u_building, :u_floor, :u_type, :u_other_floor).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_delete => false).where.not(u_type: "").order('u_other_floor ASC').pluck(:u_other_floor)
+
+
+      building_info = []
+      other_floor = []
+      integer_floor = []
+      @buildingInfo_data.each do |building|
+        if building[0][1].to_i == 0
+          other_floor << building
+        else
+          integer_floor << building              
+        end 
+      end
+ 
+      integer_floor_sort = integer_floor.sort_by { |k, v| k[1].to_i }
+      other_floor_sort = other_floor.sort_by { |k, v| k[1] }
+      building_info =  integer_floor_sort + other_floor_sort
+
+      @buildingInfo = building_info       
+      building_floors = building_floors_data.sort_by { |k, v| k[1].to_i }
+   
+
       @floorInfo = []
       @buildingInfo.each do |key,value|
         floor_json = {}
@@ -270,11 +107,17 @@ module Report
         
         @final_table_data << [resultInfo["floor"], resultInfo["FD"], resultInfo["SD"], resultInfo["FSD"], resultInfo["Pass"], resultInfo["Fail"], resultInfo["NA"],  resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"], @damperPer, resultInfo["Removed"]]
       end
+      
+      if $ptotal == 0 && $ftotal == 0 && $natotal == 0
+        $ptotal_damperPer  = "00.00%"
+        $ftotal_damperPer  = "00.00%"
+        $natotal_damperPer = "00.00%"
+      else
 
-      $ptotal_damperPer  = '%.2f%' %  (($ptotal.to_f * 100) / ($ptotal + $ftotal + $natotal))
-      $ftotal_damperPer  = '%.2f%' %  (($ftotal.to_f * 100) / ($ptotal + $ftotal + $natotal))
-      $natotal_damperPer = '%.2f%' %  (($natotal.to_f * 100) / ($ptotal + $ftotal + $natotal))
-
+        $ptotal_damperPer  = '%.2f%' %  (($ptotal.to_f * 100) / ($ptotal + $ftotal + $natotal))
+        $ftotal_damperPer  = '%.2f%' %  (($ftotal.to_f * 100) / ($ptotal + $ftotal + $natotal))
+        $natotal_damperPer = '%.2f%' %  (($natotal.to_f * 100) / ($ptotal + $ftotal + $natotal))
+      end
       @final_table_data + [['GRAND TOTAL'] + @final_table_data_total]
     end
     
@@ -452,14 +295,12 @@ module Report
      floorInfo
     end
    
-    # end new code
     def result_table_content
       [[DamperInspectionReporting.column_heading(:test_result),
        DamperInspectionReporting.column_heading(:percent_of_dampers)]] + 
        [[DamperInspectionReporting.column_heading(:pass), $ptotal_damperPer],
        [DamperInspectionReporting.column_heading(:fail), $ftotal_damperPer],
        [DamperInspectionReporting.column_heading(:na), $natotal_damperPer]
-      # [DamperInspectionReporting.column_heading(:removed), $rtotal]
       ]
     end
 
