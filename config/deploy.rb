@@ -63,8 +63,8 @@ namespace :deploy do
   desc "Make sure local git is in sync with remote."
   task :check_revision do
     on roles(:app) do
- #     unless `git rev-parse HEAD` == `git rev-parse origin/development` # For production and UAT
- #       puts "WARNING: HEAD is not the same as origin/development" # For production and UAT
+     # unless `git rev-parse HEAD` == `git rev-parse origin/development` # For production and UAT
+     #   puts "WARNING: HEAD is not the same as origin/development" # For production and UAT
      # Enable UAT Server
       unless `git rev-parse HEAD` == `git rev-parse origin/vsoft_qa`
         puts "WARNING: HEAD is not the same as origin/vsoft_qa" 
