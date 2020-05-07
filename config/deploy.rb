@@ -6,7 +6,8 @@
 set :application, "pdfgenerationdev"
 set :repo_url, 'git@github.com:vyaparla/pdfgenerationdev.git' # Edit this to match your repository
 #set :branch, :development # This branch is used for production and uat
-set :branch, :vsoft_qa # This branch is used for vsoft qa 
+#set :branch, :vsoft_qa # This branch is used for vsoft qa 
+set :branch, :new_vsoft_qa_may_06
 set :deploy_to, '/home/deploy/pdfgenerationdev'
 set :pty, true
 set :linked_files, %w{config/database.yml config/application.yml}
@@ -66,8 +67,8 @@ namespace :deploy do
      # unless `git rev-parse HEAD` == `git rev-parse origin/development` # For production and UAT
      #   puts "WARNING: HEAD is not the same as origin/development" # For production and UAT
      # Enable UAT Server
-      unless `git rev-parse HEAD` == `git rev-parse origin/vsoft_qa`
-        puts "WARNING: HEAD is not the same as origin/vsoft_qa" 
+      unless `git rev-parse HEAD` == `git rev-parse origin/new_vsoft_qa_may_06`
+        puts "WARNING: HEAD is not the same as origin/new_vsoft_qa_may_06" 
         puts "Run `git push` to sync changes."
         exit
       end
