@@ -16,7 +16,8 @@ module DamperStatementReport
   private
 
     def generate_dr_building_graph
-      get_ids = graph_uniq_statement_records(@job.u_facility_id)
+      report_type = ["DAMPERREPAIR" ,"DAMPERINSPECTION"]	    
+      get_ids = @job.unique_statement_records(@job.u_facility_id, report_type) #graph_uniq_statement_records(@job.u_facility_id)
       @dr_buildingInfo = Lsspdfasset.select(:u_building).where(id: get_ids).where.not(u_type: "", u_status: "Removed").group(["u_building"]).count(:u_type) if !@job.u_facility_name.blank?
       @dr_building_graph = []
       @dr_graph_count = 0

@@ -206,15 +206,15 @@ class Lsspdfasset < ActiveRecord::Base
   end
 
    def uniq_records(facility_id)
-    get_data = Lsspdfasset.select(:id, :u_tag, :u_report_type).where( :u_facility_id => facility_id, :u_report_type => ["FIRESTOPINSTALLATION", "FIRESTOPSURVEY"], :u_delete => false).group(["u_report_type", "u_tag"]).order('u_updated_date desc').count(:u_tag)
+    get_data = Lsspdfasset.select(:id, :u_tag, :u_building, :u_report_type).where( :u_facility_id => facility_id, :u_report_type => ["FIRESTOPINSTALLATION", "FIRESTOPSURVEY"], :u_delete => false).group(["u_building", "u_tag"]).order('u_updated_date desc').count(:u_tag)
     #get_data = Lsspdfasset.select(:id, :u_tag, :u_building, :u_report_type).where(:u_facility_id => facility_id, :u_report_type => report_type, :u_delete => false).group(["u_building", "u_tag"]).order('u_updated_date desc').count(:u_tag)
 
     repar_ids = []
     get_data.each do |key,val|
         if val > 1
-         repar_ids << Lsspdfasset.select(:id).where(:u_facility_id => facility_id, :u_tag =>key[1], :u_report_type => ["FIRESTOPINSTALLATION", "FIRESTOPSURVEY"], :u_delete => false).order('u_updated_date desc').first
+         repar_ids << Lsspdfasset.select(:id).where(:u_building => key[0], :u_facility_id => facility_id, :u_tag =>key[1], :u_report_type => ["FIRESTOPINSTALLATION", "FIRESTOPSURVEY"], :u_delete => false).order('u_updated_date desc').first
         else
-         repar_ids << Lsspdfasset.select(:id).where(:u_facility_id => facility_id, :u_tag =>key[1], :u_report_type => ["FIRESTOPINSTALLATION", "FIRESTOPSURVEY"], :u_delete => false).order('u_updated_date desc').first
+         repar_ids << Lsspdfasset.select(:id).where(:u_building => key[0], :u_facility_id => facility_id, :u_tag =>key[1], :u_report_type => ["FIRESTOPINSTALLATION", "FIRESTOPSURVEY"], :u_delete => false).order('u_updated_date desc').first
         end
       end
      ids = repar_ids.collect(&:id)
