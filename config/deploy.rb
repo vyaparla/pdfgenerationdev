@@ -99,9 +99,24 @@ namespace :deploy do
   after  :finishing,    :compile_assets
   after  :finishing,    :cleanup
   after  :finishing,    :restart
+
+
+  desc "Invoke rake task"
+  task :invoke do
+    execute "cd #{deploy_to}/current"
+    execute "bundle exec rake #{ENV['task']} RAILS_ENV=#{console_env}"
+  end
+
 end
 
 
+#namespace :rake do
+#  desc "Invoke rake task"
+#  task :invoke do
+#    run "cd #{deploy_to}/current"
+#    run "bundle exec rake #{ENV['task']} RAILS_ENV=#{console_env}"
+#  end
+#end
 
   # desc 'Restart application'
   # task :restart do
