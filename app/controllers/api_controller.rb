@@ -252,14 +252,14 @@ class ApiController < ApplicationController
              puts "Running Queries"
   #puts test_sql.gsub(/\n\s*/, ' ')
             row_first = find_asset
-  if row_first.present?
-  puts row_first.id
-  puts row_first.u_tag
-  puts row_first.u_asset_id
-  puts row_first.u_facility_name
-  end
-  puts "After Execution"
-
+            if row_first.present?
+            puts row_first.id
+            puts row_first.u_tag
+            puts row_first.u_asset_id
+           puts row_first.u_facility_name
+           end
+           puts "After Execution"
+           end
 	#End      
         @records = Lsspdfasset.where(u_service_id: params[:serviceid], :u_delete => false).order("u_updated_date desc")
         p = Axlsx::Package.new
