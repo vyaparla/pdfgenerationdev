@@ -57,27 +57,55 @@ module Report
       building_info = []
       other_floor = []
       integer_floor = []
+      total_floors = ( building_floors_data + building_other_floors ).uniq
+      temp_floors = total_floors - (building_floors_data & building_other_floors) 
+      missing_floors = temp_floors.reject{|k| k == "" || k == "other" || k.to_i != 0}
+
+
       @buildingInfo_data.each do |building|
-        if building[0][1].to_i == 0
+	if (building[0][1].to_i == 0) 
           other_floor << building
         else
           integer_floor << building              
         end 
       end
- 
-      integer_floor_sort = integer_floor.sort_by { |k, v| k[1].to_i }
-      other_floor_sort = other_floor.sort_by { |k, v| k[1] }
-      building_info =  integer_floor_sort + other_floor_sort
+     
+      mid_floors = []
+      puts "before calc missing_floors " 
+      puts missing_floors
+      puts "before calc mid floors " 
+      puts mid_floors
+      puts "before calc other floor " 
+      other_count = 0
+      temp_floors = other_floor.select{|k| missing_floors.include?(k[0][3])}
+      temp_floors.each do |other|
+	   new_other_floors, new_floor_first,  new_floor_tot = [], [], [], []
+           new_floor_first << other[0][0]
+	   new_floor_first <<  other[0][3]
+	   new_floor_first <<  other[0][2]
+	   new_floor_first <<  ""
+	   
+	   new_floor_second =  other[1]
+	   new_floor_tot << new_floor_first
+	   new_floor_tot <<  new_floor_second
+	   mid_floors << new_floor_tot
+	   other_floor.delete(other)
+      end	      
+      
+      other_floor = other_floor + mid_floors
 
-      @buildingInfo = building_info       
+      integer_floor_sort = integer_floor.sort_by { |k, v| k[1].to_i }
+      other_floor_sort = other_floor.sort_by { |k, v| k[1].capitalize }
+      building_info =  integer_floor_sort + other_floor_sort
+      @buildingInfo = building_info 
       building_floors = building_floors_data.sort_by { |k, v| k[1].to_i }
-   
+#      raise building_floors.inspect 
 
       @floorInfo = []
       @buildingInfo.each do |key,value|
         floor_json = {}
         if @floorInfo.length == 0
-          initialize_floor_json(@floorInfo,floor_json, key, value, building_floors, building_other_floors, @buildingInfo)
+          initialize_floor_json(@floorInfo,floor_json, key, value, building_floors, building_other_floors, @buildingInfo, missing_floors)
         else
           @boolean = 0
           @floorInfo.each do |info|
@@ -91,7 +119,7 @@ module Report
           end
 
           if @boolean == 0
-            initialize_floor_json(@floorInfo,floor_json, key, value, building_floors, building_other_floors, @buildingInfo)
+            initialize_floor_json(@floorInfo,floor_json, key, value, building_floors, building_other_floors, @buildingInfo, missing_floors)
           end
         end
       end
@@ -121,11 +149,13 @@ module Report
       @final_table_data + [['GRAND TOTAL'] + @final_table_data_total]
     end
     
-     def calculate_non_integer_floor_values(building_floors, building_other_floors, floor_data, key)
+     def calculate_non_integer_floor_values(building_floors, building_other_floors, floor_data, key,buildingInfo, missing_floors)
       if building_floors & building_other_floors == []
           if  key[1] == "other"
-              building_result = Lsspdfasset.select(:u_building, :u_other_floor, :u_status).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_other_floor => key[3], :u_delete => false).where.not(u_type: "").group(["u_building", "u_other_floor", "u_status"]).count(:u_status)
-            else
+                building_result = Lsspdfasset.select(:u_building, :u_other_floor, :u_status).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_other_floor => key[3], :u_delete => false).where.not(u_type: "").group(["u_building", "u_other_floor", "u_status"]).count(:u_status)
+           elsif missing_floors.include?(key[1])
+                        building_result = Lsspdfasset.select(:u_building, :u_other_floor, :u_status).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_other_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_other_floor", "u_status"]).count(:u_statu)  
+	  else
               building_result = Lsspdfasset.select(:u_building, :u_floor, :u_status).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_status"]).count(:u_status)
             end
           else
@@ -138,9 +168,11 @@ module Report
                temp_result << temp_hash
                building_result = Hash[temp_result.group_by{|obj| obj["u_status"] || obj[:u_status]}.map{|k,v| [k,v.size]}]
             else
-	      if  key[1] == "other"
+	       if  key[1] == "other"
               building_result = Lsspdfasset.select(:u_building, :u_other_floor, :u_status).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_other_floor => key[3], :u_delete => false).where.not(u_type: "").group(["u_building", "u_other_floor", "u_status"]).count(:u_status)
-            else
+             elsif missing_floors.include?(key[1])
+                        building_result = Lsspdfasset.select(:u_building, :u_other_floor, :u_status).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_other_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_other_floor", "u_status"]).count(:u_status)
+	       else
               building_result = Lsspdfasset.select(:u_building, :u_floor, :u_status).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_status"]).count(:u_status)
             end
 	    
@@ -149,11 +181,14 @@ module Report
          building_result
     end
 
-      def for_type_calculate_non_integer_floor_values(building_floors, building_other_floors, floor_data, floor_json, key, value, buildingInfo)
+      def for_type_calculate_non_integer_floor_values(building_floors, building_other_floors, floor_data, floor_json, key, value, buildingInfo, missing_floors)
         if building_floors & building_other_floors == []
-              if  key[1] == "other"
+	    	
+		if   key[1] == "other"
                   building_result = Lsspdfasset.select(:u_building, :u_other_floor, :u_type).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_other_floor => key[3], :u_delete => false).where.not(u_type: "").group(["u_building", "u_other_floor", "u_type"]).count(:u_type)
-            else
+		elsif missing_floors.include?(key[1]) 
+		  	building_result = Lsspdfasset.select(:u_building, :u_other_floor, :u_type).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_other_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_other_floor", "u_type"]).count(:u_type)
+                else
               building_result = Lsspdfasset.select(:u_building, :u_floor, :u_type).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_type"]).count(:u_type)
             end
            building_result
@@ -172,9 +207,13 @@ module Report
             else
 	        if  key[1] == "other"
                   building_result = Lsspdfasset.select(:u_building, :u_other_floor, :u_type).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_other_floor => key[3], :u_delete => false).where.not(u_type: "").group(["u_building", "u_other_floor", "u_type"]).count(:u_type)
-            else
+                elsif missing_floors.include?(key[1])
+                        building_result = Lsspdfasset.select(:u_building, :u_other_floor, :u_type).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_other_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_other_floor", "u_type"]).count(:u_type)
+
+	       	else
               building_result = Lsspdfasset.select(:u_building, :u_floor, :u_type).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_floor => key[1], :u_delete => false).where.not(u_type: "").group(["u_building", "u_floor", "u_type"]).count(:u_type)
             end
+	    
             building_result
             end
          end
@@ -272,12 +311,12 @@ module Report
        temp_hash
     end
 
-    def initialize_floor_json(floorInfo,floor_json, key, value, building_floors, building_other_floors, buildingInfo)
+    def initialize_floor_json(floorInfo,floor_json, key, value, building_floors, building_other_floors, buildingInfo, missing_floors)
      floor_json["building"] = key[0]
      floor_data = key[1] == "other" ? key[3] : key[1]
      floor_json["floor"] = floor_data
-     floor_json = for_type_calculate_non_integer_floor_values(building_floors, building_other_floors, floor_data, floor_json, key, value, buildingInfo)
-     building_result = calculate_non_integer_floor_values(building_floors, building_other_floors, floor_data, key)
+     floor_json = for_type_calculate_non_integer_floor_values(building_floors, building_other_floors, floor_data, floor_json, key, value, buildingInfo, missing_floors)
+     building_result = calculate_non_integer_floor_values(building_floors, building_other_floors, floor_data, key, buildingInfo, missing_floors)
      building_result.each do |fstatus, fvalue|
        if fstatus.class == String
          if !floor_json.has_key?(fstatus)
