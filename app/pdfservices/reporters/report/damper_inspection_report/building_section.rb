@@ -29,11 +29,37 @@ module DamperInspectionReport
       @remove_records ||= records.where(:u_status => "Removed").where.not(u_type: "").order('u_updated_date desc')
     end
 
+ #   def write_breakdown_pages(pdf, building_section, tech, watermark)
+ #     TabularBreakdownPage.new(pass_records, :pass_dampers, building_section, tech, watermark).write(pdf)
+ #      TabularBreakdownPage.new(failed_records, :failed_dampers, building_section, tech, watermark).write(pdf)
+ #     TabularBreakdownPage.new(na_records, :na_dampers, building_section, tech, watermark).write(pdf)
+ #     TabularBreakdownPage.new(remove_records, :removed_dampers, building_section, tech, watermark).write(pdf)
+ #   end
+  
     def write_breakdown_pages(pdf, building_section, tech, watermark)
-      TabularBreakdownPage.new(pass_records, :pass_dampers, building_section, tech, watermark).write(pdf)
-      TabularBreakdownPage.new(failed_records, :failed_dampers, building_section, tech, watermark).write(pdf)
-      TabularBreakdownPage.new(na_records, :na_dampers, building_section, tech, watermark).write(pdf)
-      TabularBreakdownPage.new(remove_records, :removed_dampers, building_section, tech, watermark).write(pdf)
+      asset_status_wise_breakdown(pdf, building_section, tech, watermark, pass_records, :pass_dampers)
+      asset_status_wise_breakdown(pdf, building_section, tech, watermark, failed_records, :failed_dampers)
+      asset_status_wise_breakdown(pdf, building_section, tech, watermark, na_records, :na_dampers,)
+      asset_status_wise_breakdown(pdf, building_section, tech, watermark, remove_records, :removed_dampers)
     end
+
+    def asset_status_wise_breakdown(pdf, building_section, tech, watermark, s_records, dampers)
+      records_count = s_records.count
+      if records_count <= 28
+        TabularBreakdownPage.new(s_records, dampers, building_section, tech, watermark).write(pdf)
+      else
+        records_to_be_displayed =  s_records.limit(28)
+        remaining =  s_records - records_to_be_displayed
+        TabularBreakdownPage.new(records_to_be_displayed, dampers, building_section, tech, watermark).write(pdf)
+	while remaining.count > 28
+	  records_to_be_displayed  = remaining[0..27]
+          remaining =  remaining - records_to_be_displayed
+          TabularBreakdownPage.new(records_to_be_displayed, dampers, building_section, tech, watermark).write(pdf)
+        end
+        TabularBreakdownPage.new(remaining, dampers, building_section, tech, watermark).write(pdf)
+      end
+
+    end	    
+
   end
 end
