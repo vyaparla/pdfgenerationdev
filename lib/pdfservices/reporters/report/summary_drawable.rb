@@ -320,7 +320,7 @@ module Report
 	  building_result
       end
       	
-      def other_floor_type_calculation(missing_floors, key)	  #     raise key.inspect      
+      def other_floor_type_calculation(missing_floors, key)      
          # For Damper Type Calculation
 	 if  key[1] == "other"
             building_result = Lsspdfasset.select(:u_building, :u_other_floor, :u_type).where(:u_service_id => @owner.u_service_id, :u_building => @building, :u_other_floor => key[3], :u_delete => false).where.not(u_type: "").group(["u_building", "u_other_floor", "u_type"]).count(:u_type)
