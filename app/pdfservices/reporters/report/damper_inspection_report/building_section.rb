@@ -45,14 +45,14 @@ module DamperInspectionReport
 
     def asset_status_wise_breakdown(pdf, building_section, tech, watermark, s_records, dampers)
       records_count = s_records.count
-      if records_count <= 28
+      if records_count <= 25
         TabularBreakdownPage.new(s_records, dampers, building_section, tech, watermark).write(pdf)
       else
-        records_to_be_displayed =  s_records.limit(28)
+        records_to_be_displayed =  s_records.limit(25)
         remaining =  s_records - records_to_be_displayed
         TabularBreakdownPage.new(records_to_be_displayed, dampers, building_section, tech, watermark).write(pdf)
-	while remaining.count > 28
-	  records_to_be_displayed  = remaining[0..27]
+	while remaining.count > 25
+	  records_to_be_displayed  = remaining[0..24]
           remaining =  remaining - records_to_be_displayed
           TabularBreakdownPage.new(records_to_be_displayed, dampers, building_section, tech, watermark).write(pdf)
         end
