@@ -29,13 +29,6 @@ module DamperInspectionReport
       @remove_records ||= records.where(:u_status => "Removed").where.not(u_type: "").order('u_updated_date desc')
     end
 
- #   def write_breakdown_pages(pdf, building_section, tech, watermark)
- #     TabularBreakdownPage.new(pass_records, :pass_dampers, building_section, tech, watermark).write(pdf)
- #      TabularBreakdownPage.new(failed_records, :failed_dampers, building_section, tech, watermark).write(pdf)
- #     TabularBreakdownPage.new(na_records, :na_dampers, building_section, tech, watermark).write(pdf)
- #     TabularBreakdownPage.new(remove_records, :removed_dampers, building_section, tech, watermark).write(pdf)
- #   end
-  
     def write_breakdown_pages(pdf, building_section, tech, watermark)
       asset_status_wise_breakdown(pdf, building_section, tech, watermark, pass_records, :pass_dampers)
       asset_status_wise_breakdown(pdf, building_section, tech, watermark, failed_records, :failed_dampers)
