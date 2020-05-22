@@ -11,6 +11,8 @@ set :branch, :production_lss # This branch is used for production
 
 #set :deploy_to, '/home/deploy/pdfgenerationdev'
 set :deploy_to, '/home/deploy/pdfgenerationprod'
+#set :branch, :new_vsoft_qa_may_06 # new vsoft qa
+#set :deploy_to, '/home/deploy/pdfgenerationdev'
 set :pty, true
 set :linked_files, %w{config/database.yml config/application.yml}
 set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/content}
@@ -25,8 +27,8 @@ set :puma_state, "#{shared_path}/tmp/pids/puma.state"
 set :puma_pid,   "#{shared_path}/tmp/pids/puma.pid"
 set :puma_bind, "unix://#{shared_path}/tmp/sockets/puma.sock"    #accept array for multi-bind
 set :puma_conf, "#{shared_path}/puma.rb"
-set :puma_access_log, "#{shared_path}/log/puma_error.log"
-set :puma_error_log, "#{shared_path}/log/puma_access.log"
+set :puma_access_log, "#{shared_path}/log/puma_access.log"
+set :puma_error_log, "#{shared_path}/log/puma_error.log"
 set :puma_role, :app
 set :puma_env, fetch(:rack_env, fetch(:rails_env, 'production'))
 set :puma_threads, [4, 8]
@@ -75,6 +77,8 @@ namespace :deploy do
 	# Enable Production Server
       unless `git rev-parse HEAD` == `git rev-parse origin/production_lss`
         puts "WARNING: HEAD is not the same as origin/production_lss"
+     # unless `git rev-parse HEAD` == `git rev-parse origin/new_vsoft_qa_may_06`
+     #   puts "WARNING: HEAD is not the same as origin/new_vsoft_qa_may_06" 
         puts "Run `git push` to sync changes."
         exit
       end
@@ -105,9 +109,24 @@ namespace :deploy do
   after  :finishing,    :compile_assets
   after  :finishing,    :cleanup
   after  :finishing,    :restart
+
+
+  desc "Invoke rake task"
+  task :invoke do
+    execute "cd #{deploy_to}/current"
+    execute "bundle exec rake #{ENV['task']} RAILS_ENV=#{console_env}"
+  end
+
 end
 
 
+#namespace :rake do
+#  desc "Invoke rake task"
+#  task :invoke do
+#    run "cd #{deploy_to}/current"
+#    run "bundle exec rake #{ENV['task']} RAILS_ENV=#{console_env}"
+#  end
+#end
 
   # desc 'Restart application'
   # task :restart do

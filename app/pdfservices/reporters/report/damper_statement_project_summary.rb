@@ -8,17 +8,13 @@ module Report
     end
 
     def draw(pdf)
-      #pdf.stamp_at "watermark", [100, 210] 
       draw_facility_title(pdf)
       Report::Table.new(facility_summary_table_content).draw(pdf)
       pdf.move_down 20
       draw_title(pdf)
       project_summary_table(pdf)
-      #Report::Table.new(project_summary_table_content).draw(pdf) 
-      #pdf.move_down 20
       draw_label(pdf, 'Statistics')
       top = pdf.cursor
-      # pdf.indent(300) { Report::Table.new(type_table_content).draw(pdf) }
       pdf.move_cursor_to top
       pdf.bounding_box([400, 310], :width => 230, :height => 420) do   
         Report::Table.new(project_statistics_data).draw(pdf) do |formatter|
@@ -75,7 +71,7 @@ module Report
     end
 
     def project_summary_table_headings
-      ["Building", "Type", "Pass", "Fail", "Non-Accessible", "Removed", "Total", "% of Total"]
+      ["Building", "Type", "Pass", "Fail", "Non-Accessible", "Total", "% of Total", "Removed"]
     end
 
     def project_summary_table_content
@@ -86,11 +82,14 @@ module Report
       #@serviceInfo = Lsspdfasset.select(:u_building, :u_type, :u_status).where(:u_service_id => @owner.u_service_id, :u_delete => false).where("u_status !=?", "Removed").group(["u_building", "u_type","u_status"]).count(:u_status)
       #@serviceInfo = Lsspdfasset.select(:u_building, :u_type, :u_status).where(:u_facility_id => @owner.u_facility_id, :u_report_type => ["DAMPERREPAIR" ,"DAMPERINSPECTION"], :u_delete => false).where.not(u_type: "").group(["u_building", "u_type","u_status"]).order("CASE WHEN u_type = 'FD' THEN '1' WHEN u_type = 'SD' THEN '2' ELSE '3' END").count(:u_status)
 
-     repair_records = find_uniq_assets(@owner, "DAMPERREPAIR")
-     inspection_records = find_uniq_assets(@owner, "DAMPERINSPECTION")
+     # repair_records = find_uniq_assets(@owner, "DAMPERREPAIR")
+     # inspection_records = find_uniq_assets(@owner, "DAMPERINSPECTION")
 
-     @damper_repair = Lsspdfasset.select(:u_building, :u_type, :u_dr_passed_post_repair).where("id IN (?)", repair_records).group(["u_building", "u_type","u_dr_passed_post_repair"]).order("CASE WHEN u_type = 'FD' THEN '1' WHEN u_type = 'SD' THEN '2' ELSE '3' END").count(:u_dr_passed_post_repair)
-     @damper_inspection = Lsspdfasset.select(:u_building, :u_type, :u_status).where("id IN (?)", inspection_records).group(["u_building", "u_type","u_status"]).order("CASE WHEN u_type = 'FD' THEN '1' WHEN u_type = 'SD' THEN '2' ELSE '3' END").count(:u_status)
+      report_type = ["DAMPERREPAIR" ,"DAMPERINSPECTION"]
+      repair_ids = @owner.unique_statement_records(@owner.u_facility_id, report_type)
+
+     @damper_repair = Lsspdfasset.select(:u_building, :u_type, :u_dr_passed_post_repair).where(id: repair_ids, u_report_type: "DAMPERREPAIR").group(["u_building", "u_type","u_dr_passed_post_repair"]).order("CASE WHEN u_type = 'FD' THEN '1' WHEN u_type = 'SD' THEN '2' ELSE '3' END").count(:u_dr_passed_post_repair)
+     @damper_inspection = Lsspdfasset.select(:u_building, :u_type, :u_status).where(id: repair_ids, u_report_type: "DAMPERINSPECTION").group(["u_building", "u_type","u_status"]).order("CASE WHEN u_type = 'FD' THEN '1' WHEN u_type = 'SD' THEN '2' ELSE '3' END").count(:u_status)
 
       new_array = @damper_repair.to_a + @damper_inspection.to_a
       status_counts = new_array.group_by{|i| i[0]}.map{|k,v| [k, v.map(&:last).sum] } 
@@ -197,7 +196,7 @@ module Report
       @project_grand_total_data.push($ptotal)
       @project_grand_total_data.push($ftotal)
       @project_grand_total_data.push($natotal)
-      @project_grand_total_data.push($removedtotal)
+      #@project_grand_total_data.push($removedtotal)
       #@project_grand_total_data.push("0")
 
       #@project_grand_total_data.push($ptotal + $ftotal + $natotal + $removedtotal)
@@ -210,6 +209,7 @@ module Report
       else
         @project_grand_total_data.push("100.00%")
       end
+      @project_grand_total_data.push($removedtotal)
 
       @project_final_table_data = []
       @buildingInfo.each do |resultInfo|
@@ -231,7 +231,7 @@ module Report
         end  
         #@project_per = '%.2f%' % ((100 * @project_total.to_f) / (@project_grand_total))
         #@project_final_table_data << [resultInfo["building"], @damper_type, resultInfo["Pass"], resultInfo["Fail"], resultInfo["NA"], resultInfo["Removed"], resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"] + resultInfo["Removed"], @project_per]
-        @project_final_table_data << [resultInfo["building"], @damper_type, resultInfo["Pass"], resultInfo["Fail"], resultInfo["NA"], resultInfo["Removed"], resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"], @project_per]
+        @project_final_table_data << [resultInfo["building"], @damper_type, resultInfo["Pass"], resultInfo["Fail"], resultInfo["NA"], resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"], @project_per, resultInfo["Removed"]]
       end
 
      
@@ -263,7 +263,7 @@ module Report
     end
 
     def facility_summary_table_headings
-      ["Building", "Pass", "Fail", "Non-Accessible", "Removed", "Total", "% of Total"]
+      ["Building", "Pass", "Fail", "Non-Accessible","Total", "% of Total", "Removed"]
     end
 
     def facility_summary_table_content
@@ -272,14 +272,17 @@ module Report
 
     def facility_summary_table_data
 
-     repair_records = find_uniq_assets(@owner, "DAMPERREPAIR")
-     inspection_records = find_uniq_assets(@owner, "DAMPERINSPECTION")
-     @damper_repair = Lsspdfasset.select(:u_building, :u_dr_passed_post_repair).where(:id => repair_records).where.not(u_type: "").group(["u_building", "u_dr_passed_post_repair"]).count(:u_dr_passed_post_repair)
-     @damper_inspection = Lsspdfasset.select(:u_building, :u_status).where(:id => inspection_records, :u_report_type => "DAMPERINSPECTION", :u_delete => false).where.not(u_type: "").group(["u_building", "u_status"]).count(:u_status)
+     # repair_records = find_uniq_assets(@owner, "DAMPERREPAIR")
+     # inspection_records = find_uniq_assets(@owner, "DAMPERINSPECTION")
+
+      report_type = ["DAMPERREPAIR" ,"DAMPERINSPECTION"]
+      repair_ids = @owner.unique_statement_records(@owner.u_facility_id, report_type)
+      @damper_repair = Lsspdfasset.select(:u_building, :u_dr_passed_post_repair).where(:id => repair_ids, :u_report_type => "DAMPERREPAIR", :u_delete => false).where.not(u_type: "").group(["u_building", "u_dr_passed_post_repair"]).count(:u_dr_passed_post_repair)
+      @damper_inspection = Lsspdfasset.select(:u_building, :u_status).where(:id => repair_ids, :u_report_type => "DAMPERINSPECTION", :u_delete => false).where.not(u_type: "").group(["u_building", "u_status"]).count(:u_status)
 
       new_array = @damper_repair.to_a + @damper_inspection.to_a
       status_counts = new_array.group_by{|i| i[0]}.map{|k,v| [k, v.map(&:last).sum] } 
-      @facility_serviceInfo = status_counts.to_h
+      @facility_serviceInfo = (status_counts.sort).to_h
 
       @facility_buildingInfo = []
       
@@ -364,7 +367,7 @@ module Report
       @facility_grand_total_data.push($bptotal)
       @facility_grand_total_data.push($bftotal)
       @facility_grand_total_data.push($bnatotal)
-      @facility_grand_total_data.push($bremovetotal)
+      #@facility_grand_total_data.push($bremovetotal)
       #@facility_grand_total_data.push("0")
 
       #@facility_grand_total_data.push($bptotal + $bftotal + $bnatotal + $bremovetotal)
@@ -375,6 +378,7 @@ module Report
       else
         @facility_grand_total_data.push("100.00%")
       end
+      @facility_grand_total_data.push($bremovetotal)
 
       @facility_building_table_data = []
       @facility_buildingInfo.each do |facilityvalue|
@@ -390,7 +394,7 @@ module Report
 
         #@facility_per = '%.2f%' % ((100 * @facility_total.to_f) / (@facility_grand_total))
         #@facility_building_table_data << [facilityvalue["building"], facilityvalue["Pass"], facilityvalue["Fail"], facilityvalue["NA"], facilityvalue["Removed"], facilityvalue["Pass"] + facilityvalue["Fail"] + facilityvalue["NA"] + facilityvalue["Removed"], @facility_per]
-        @facility_building_table_data << [facilityvalue["building"], facilityvalue["Pass"], facilityvalue["Fail"], facilityvalue["NA"], facilityvalue["Removed"], facilityvalue["Pass"] + facilityvalue["Fail"] + facilityvalue["NA"], @facility_per]
+        @facility_building_table_data << [facilityvalue["building"], facilityvalue["Pass"], facilityvalue["Fail"], facilityvalue["NA"], facilityvalue["Pass"] + facilityvalue["Fail"] + facilityvalue["NA"], @facility_per, facilityvalue["Removed"]]
       end
       @facility_building_table_data + [['GRAND TOTAL'] + @facility_grand_total_data]
     end 

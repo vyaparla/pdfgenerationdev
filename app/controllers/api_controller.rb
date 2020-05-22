@@ -140,7 +140,7 @@ class ApiController < ApplicationController
     watermaek_img = File.expand_path(Rails.root+'app/assets/images/watermark.png')
     @watermark = params[:u_watermark] && (params[:u_watermark] == 'no') ? false : true 
     if params[:servicetype].delete(' ').upcase == "DAMPERINSPECTION"
-      @records = Lsspdfasset.where(u_service_id: params[:serviceid], :u_delete => false).where.not(u_type: "")
+      @records = Lsspdfasset.where(u_service_id: params[:serviceid], :u_delete => false).where.not(u_type: "").order("u_updated_date desc")
 	    p, wb, img_path = initialize_spreadsheet
 	    facility_name, tech, date, damper_inspection_para, damper_repair_para = initialize_damper_params
       wb.styles do |s|
@@ -186,7 +186,7 @@ class ApiController < ApplicationController
         end
       end 	
     elsif params[:servicetype].delete(' ').upcase == "DAMPERREPAIR"
-      @records = Lsspdfasset.where(u_service_id: params[:serviceid], :u_delete => false).where.not(u_type: "")
+      @records = Lsspdfasset.where(u_service_id: params[:serviceid], :u_delete => false).where.not(u_type: "").order("u_updated_date desc")
       p, wb, img_path = initialize_spreadsheet
       facility_name, tech, date, damper_inspection_para, damper_repair_para = initialize_damper_params
       wb.styles do |s|
@@ -226,7 +226,7 @@ class ApiController < ApplicationController
         end
       end	
       elsif params[:servicetype].delete(' ').upcase == "FIREDOORINSPECTION"
-        @records = Lsspdfasset.where(u_service_id: params[:serviceid], :u_delete => false)
+        @records = Lsspdfasset.where(u_service_id: params[:serviceid], :u_delete => false).order("u_updated_date desc")
         csv_data = CSV.generate do |csv|                 
           csv << ["Door No.", "Facility", "Building", "Floor", "Door Location", "Fire Rating", "Door Deficiencies", "Date", "Technician"]
           @records.each do |record|
@@ -235,7 +235,27 @@ class ApiController < ApplicationController
           end
         end
       elsif params[:servicetype].delete(' ').upcase == "FIRESTOPSURVEY"
-        @records = Lsspdfasset.where(u_service_id: params[:serviceid], :u_delete => false)
+
+	#To Be Removed
+	    #path = Rails.root.to_s + "/testdata.csv"
+
+	    #puts path
+  	    #CSV.foreach(path) do |row|
+
+            #find_asset =  Lsspdfasset.where(:u_asset_id => row[0]).first
+            #find_asset.update(:u_updated_date => row[1]) if find_asset.present?
+            # puts "Running Queries"
+            #row_first = find_asset
+            #if row_first.present?
+            #puts row_first.id
+            #puts row_first.u_tag
+            #puts row_first.u_asset_id
+           #puts row_first.u_facility_name
+           #end
+           #puts "After Execution"
+           #end
+	#End      
+        @records = Lsspdfasset.where(u_service_id: params[:serviceid], :u_delete => false).order("u_updated_date desc")
         p = Axlsx::Package.new
         wb = p.workbook
         img_path = File.expand_path(Rails.root+'app/assets/images/lss_logo.png')
@@ -279,7 +299,7 @@ class ApiController < ApplicationController
           end
         end
       elsif params[:servicetype].delete(' ').upcase == "FIRESTOP" && params[:reportType].upcase == 'COMPREHENSIVE'
-        records = Lsspdfasset.where(u_facility_id: params[:facility_id], u_report_type: ["FIRESTOPSURVEY" ,"FIRESTOPINSTALLATION"], :u_delete => false).order("updated_at desc")
+        records = Lsspdfasset.where(u_facility_id: params[:facility_id], u_report_type: ["FIRESTOPSURVEY" ,"FIRESTOPINSTALLATION"], :u_delete => false).order("u_updated_date desc")
         p = Axlsx::Package.new
         wb = p.workbook
         img_path = File.expand_path(Rails.root+'app/assets/images/lss_logo.png')
@@ -325,7 +345,7 @@ class ApiController < ApplicationController
           end
         end
       elsif params[:servicetype].delete(' ').upcase == "DAMPER" && params[:reportType].upcase == 'COMPREHENSIVE'
-        @records  = Lsspdfasset.where(u_facility_id: params[:facility_id], u_report_type: ["DAMPERREPAIR" ,"DAMPERINSPECTION"], :u_delete => false).order("updated_at desc")
+        @records  = Lsspdfasset.where(u_facility_id: params[:facility_id], u_report_type: ["DAMPERREPAIR" ,"DAMPERINSPECTION"], :u_delete => false).order("u_updated_date desc")
         p, wb, img_path = initialize_spreadsheet
         facility_name, tech, date, damper_inspection_para, damper_repair_para = initialize_damper_params
         wb.styles do |s|
@@ -382,7 +402,7 @@ class ApiController < ApplicationController
         end
         records_ids = records.collect(&:ids).flatten	
      	  #get_ids = job.unique_statement_records(params[:facility_id], report_type)   
-        records = Lsspdfasset.where(id: records_ids).order("updated_at desc")
+        records = Lsspdfasset.where(id: records_ids).order("u_updated_date desc")
         p = Axlsx::Package.new
         wb = p.workbook
         img_path = File.expand_path(Rails.root+'app/assets/images/lss_logo.png')
@@ -431,7 +451,7 @@ class ApiController < ApplicationController
 	      report_type = ["DAMPERREPAIR" ,"DAMPERINSPECTION"]
 	      job = Lsspdfasset.last
         get_ids = job.unique_statement_records(params[:facility_id], report_type)
-        @records = Lsspdfasset.where(id: get_ids).order("updated_at desc")
+        @records = Lsspdfasset.where(id: get_ids).order("u_updated_date desc")
         p, wb, img_path = initialize_spreadsheet
         facility_name, tech, date, damper_inspection_para, damper_repair_para = initialize_damper_params
 	      para = damper_statement_para
@@ -480,7 +500,7 @@ class ApiController < ApplicationController
           end
         end
       elsif params[:servicetype].delete(' ').upcase == "FIRESTOPINSTALLATION"
-        @records = Lsspdfasset.where(u_service_id: params[:serviceid], :u_delete => false)
+        @records = Lsspdfasset.where(u_service_id: params[:serviceid], :u_delete => false).order("u_updated_date desc")
         p = Axlsx::Package.new
         wb = p.workbook
 	      img_path = File.expand_path(Rails.root+'app/assets/images/lss_logo.png')
@@ -525,7 +545,7 @@ class ApiController < ApplicationController
         end
       else
         @records = Lsspdfasset.where(u_facility_sys_id: params[:facilityid], :u_report_type => "DAMPERINSPECTION", :u_delete => false) + 
-                 Lsspdfasset.where(u_facility_sys_id: params[:facilityid], :u_report_type => "DAMPERREPAIR", :u_delete => false)
+                 Lsspdfasset.where(u_facility_sys_id: params[:facilityid], :u_report_type => "DAMPERREPAIR", :u_delete => false).order("u_updated_date desc")
         csv_data = CSV.generate do |csv|
           csv << ["Date", "Asset #", "Facility", "Building", "Floor", "Damper Location", "Damper Type",  "Service Type", "Technician", "Result", "Issues", "Action Taken", "Current Status"]
           @records.each do |record|

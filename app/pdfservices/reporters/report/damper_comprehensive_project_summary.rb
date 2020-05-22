@@ -75,7 +75,7 @@ module Report
     end
 
     def project_summary_table_headings
-      ["Building", "Type", "Pass", "Fail", "Non-Accessible", "Removed", "Total", "% of Total"]
+      ["Building", "Type", "Pass", "Fail", "Non-Accessible", "Total", "% of Total", "Removed"]
     end
 
     def project_summary_table_content
@@ -195,7 +195,7 @@ module Report
       @project_grand_total_data.push($ptotal)
       @project_grand_total_data.push($ftotal)
       @project_grand_total_data.push($natotal)
-      @project_grand_total_data.push($removedtotal)
+      #@project_grand_total_data.push($removedtotal)
       #@project_grand_total_data.push("0")
 
       #@project_grand_total_data.push($ptotal + $ftotal + $natotal + $removedtotal)
@@ -208,6 +208,7 @@ module Report
       else
         @project_grand_total_data.push("100.00%")
       end
+      @project_grand_total_data.push($removedtotal)
 
       @project_final_table_data = []
       @buildingInfo.each do |resultInfo|
@@ -229,7 +230,7 @@ module Report
         end  
         #@project_per = '%.2f%' % ((100 * @project_total.to_f) / (@project_grand_total))
         #@project_final_table_data << [resultInfo["building"], @damper_type, resultInfo["Pass"], resultInfo["Fail"], resultInfo["NA"], resultInfo["Removed"], resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"] + resultInfo["Removed"], @project_per]
-        @project_final_table_data << [resultInfo["building"], @damper_type, resultInfo["Pass"], resultInfo["Fail"], resultInfo["NA"], resultInfo["Removed"], resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"], @project_per]
+        @project_final_table_data << [resultInfo["building"], @damper_type, resultInfo["Pass"], resultInfo["Fail"], resultInfo["NA"],  resultInfo["Pass"] + resultInfo["Fail"] + resultInfo["NA"], @project_per, resultInfo["Removed"]]
       end
 
      
@@ -261,7 +262,7 @@ module Report
     end
 
     def facility_summary_table_headings
-      ["Building", "Pass", "Fail", "Non-Accessible", "Removed", "Total", "% of Total"]
+      ["Building", "Pass", "Fail", "Non-Accessible", "Total", "% of Total", "Removed"]
     end
 
     def facility_summary_table_content
@@ -274,7 +275,7 @@ module Report
 
       new_array = @damper_repair.to_a + @damper_inspection.to_a
       status_counts = new_array.group_by{|i| i[0]}.map{|k,v| [k, v.map(&:last).sum] } 
-      @facility_serviceInfo = status_counts.to_h
+      @facility_serviceInfo = (status_counts.sort).to_h
 
       @facility_buildingInfo = []
       
@@ -359,7 +360,7 @@ module Report
       @facility_grand_total_data.push($bptotal)
       @facility_grand_total_data.push($bftotal)
       @facility_grand_total_data.push($bnatotal)
-      @facility_grand_total_data.push($bremovetotal)
+      #@facility_grand_total_data.push($bremovetotal)
       #@facility_grand_total_data.push("0")
 
       #@facility_grand_total_data.push($bptotal + $bftotal + $bnatotal + $bremovetotal)
@@ -370,6 +371,7 @@ module Report
       else
         @facility_grand_total_data.push("100.00%")
       end
+      @facility_grand_total_data.push($bremovetotal)
 
       @facility_building_table_data = []
       @facility_buildingInfo.each do |facilityvalue|
@@ -385,7 +387,7 @@ module Report
 
         #@facility_per = '%.2f%' % ((100 * @facility_total.to_f) / (@facility_grand_total))
         #@facility_building_table_data << [facilityvalue["building"], facilityvalue["Pass"], facilityvalue["Fail"], facilityvalue["NA"], facilityvalue["Removed"], facilityvalue["Pass"] + facilityvalue["Fail"] + facilityvalue["NA"] + facilityvalue["Removed"], @facility_per]
-        @facility_building_table_data << [facilityvalue["building"], facilityvalue["Pass"], facilityvalue["Fail"], facilityvalue["NA"], facilityvalue["Removed"], facilityvalue["Pass"] + facilityvalue["Fail"] + facilityvalue["NA"], @facility_per]
+        @facility_building_table_data << [facilityvalue["building"], facilityvalue["Pass"], facilityvalue["Fail"], facilityvalue["NA"], facilityvalue["Pass"] + facilityvalue["Fail"] + facilityvalue["NA"], @facility_per, facilityvalue["Removed"]]
       end
       @facility_building_table_data + [['GRAND TOTAL'] + @facility_grand_total_data]
     end 
