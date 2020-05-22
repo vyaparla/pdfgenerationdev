@@ -237,13 +237,13 @@ class ApiController < ApplicationController
       elsif params[:servicetype].delete(' ').upcase == "FIRESTOPSURVEY"
 
 	#To Be Removed
-	   path = Rails.root.to_s + "/testdata.csv"
+#	   path = Rails.root.to_s + "/testdata.csv"
 
 	    #puts path
-  	    CSV.foreach(path) do |row|
+ # 	    CSV.foreach(path) do |row|
 
-            find_asset =  Lsspdfasset.where(:u_asset_id => row[0]).first
-            find_asset.update(:u_updated_date => row[1]) if find_asset.present?
+  #          find_asset =  Lsspdfasset.where(:u_asset_id => row[0]).first
+   #         find_asset.update(:u_updated_date => row[1]) if find_asset.present?
             # puts "Running Queries"
             #row_first = find_asset
             #if row_first.present?
@@ -253,7 +253,7 @@ class ApiController < ApplicationController
            #puts row_first.u_facility_name
            #end
            #puts "After Execution"
-           end
+    #       end
 	#End      
         @records = Lsspdfasset.where(u_service_id: params[:serviceid], :u_delete => false).order("u_updated_date desc")
         p = Axlsx::Package.new
