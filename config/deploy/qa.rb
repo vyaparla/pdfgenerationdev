@@ -1,6 +1,7 @@
 
-server '34.229.178.3', user: 'deploy', roles: %w{web app db} # UAT Server
-set :stage, :staging
+server '54.196.89.5', user: 'deploy', roles: %w{web app db} # VSoft QA  Server
+
+set :stage, :qa
 set :rails_env, :production
 
 # server-based syntax
